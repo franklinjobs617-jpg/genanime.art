@@ -3,7 +3,6 @@ import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { Providers } from "@/components/Providers";
 import ScrollToTop from "@/components/ToTop";
 import FeedbackWidget from "@/components/feedweight";
-import Head from "next/head";
 import Script from "next/script";
 
 const inter = Inter({
@@ -19,7 +18,9 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata = {
-  // ENHANCED SEO KEYWORDS
+  verification: {
+    google: "pEHfl8MakrsZkiDbz3dltBl_McGyAi8BLCvQrLo_eQ4",
+  },
   title: "AI Anime Generator | Anime AI Art & Image Generator 2026 ",
   description:
     "Create stunning anime art with our AI anime generator. Best anime AI art generator & image generator with RTX 8090 speed. Generate waifu, chibi & scenes for free.",
@@ -49,33 +50,33 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${plusJakarta.variable}`}>
-      <Head>
-        <meta name="google-site-verification" content="pEHfl8MakrsZkiDbz3dltBl_McGyAi8BLCvQrLo_eQ4" />
+      <body className="font-sans antialiased selection:bg-indigo-500/30">
+
+        {/* Google Analytics */}
         <Script
-          async
           src="https://www.googletagmanager.com/gtag/js?id=G-9LHJ5181VL"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
           {`
-       window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-9LHJ5181VL');
-  `}
-        </Script>
-
-        <Script id="microsoft-clarity" strategy="afterInteractive">
-          {`
-              (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "uymbouho2n");
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-9LHJ5181VL');
           `}
         </Script>
-      </Head>
-      <body className="font-sans antialiased selection:bg-indigo-500/30">
+
+        {/* Microsoft Clarity */}
+        <Script id="microsoft-clarity" strategy="afterInteractive">
+          {`
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "uymbouho2n");
+          `}
+        </Script>
+
         <Providers>
           {children}
           <ScrollToTop />

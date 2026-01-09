@@ -85,11 +85,7 @@ const faqs = [
     }
 ];
 
-export const metadata = {
-  alternates: {
-    canonical: 'https://genanime.art/pricing',
-  },
-};
+
 
 export default function PremiumPricing() {
     const [isYearly, setIsYearly] = useState(true);

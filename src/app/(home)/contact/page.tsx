@@ -14,11 +14,7 @@ import {
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 
-export const metadata = {
-  alternates: {
-    canonical: 'https://genanime.art/contact',
-  },
-};
+
 
 export default function ContactPage() {
     const [formState, setFormState] = useState({

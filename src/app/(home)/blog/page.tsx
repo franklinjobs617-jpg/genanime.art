@@ -5,11 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
 
-export const metadata = {
-  alternates: {
-    canonical: 'https://genanime.art/blog',
-  },
-};
+
 
 export default function BlogPage() {
     const [copied, setCopied] = useState(false);

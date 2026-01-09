@@ -40,11 +40,6 @@ const sections = [
     { id: "faq", title: "Common FAQ", icon: <HelpCircle className="w-4 h-4" /> },
 ];
 
-export const metadata = {
-  alternates: {
-    canonical: 'https://genanime.art/blog/how-to-make-anime-art-ai-rtx-8090-guide',
-  },
-};
 
 export default function EnhancedBlogGuide() {
     const [openFaq, setOpenFaq] = useState<number | null>(0);

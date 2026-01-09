@@ -32,11 +32,6 @@ interface GalleryItem {
   likes: number;
 }
 
-export const metadata = {
-  alternates: {
-    canonical: 'https://genanime.art/gallery',
-  },
-};
 
 export default function GalleryPage() {
   const router = useRouter();

@@ -19,7 +19,6 @@ export default function WelcomeGuide() {
     localStorage.setItem("has_visited_generator", "true")
   }
 
-  // 防止点击内容区域时关闭弹窗
   const handleContentClick = (e: React.MouseEvent) => {
     e.stopPropagation()
   }

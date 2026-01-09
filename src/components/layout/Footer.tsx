@@ -29,9 +29,6 @@ export default function Footer() {
           {/* 1. Brand Section */}
           <div className="md:col-span-5 space-y-6">
             <Link href="/" className="flex items-center gap-2 text-2xl font-black text-white italic group">
-              <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Sparkles className="w-6 h-6 text-white" />
-              </div>
               Anime<span className="text-indigo-500 font-black not-italic">AI</span>
             </Link>
             <p className="text-sm leading-relaxed max-w-sm text-zinc-500 font-medium">

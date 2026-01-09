@@ -57,8 +57,8 @@ export async function POST(req: NextRequest) {
             size: sizeStr,
         })
 
-        const apiKey = process.env.DOUBAO_API_KEY as string
-        const endpointId = process.env.DOUBAO_ENDPOINT_ID as string
+        const apiKey = "3a4b60e4-f692-4210-b26e-a03c636fc804"
+        const endpointId = "doubao-seedream-4-5-251128"
 
         if (!apiKey || !endpointId) {
             throw new Error("Missing DOUBAO_API_KEY or DOUBAO_ENDPOINT_ID")

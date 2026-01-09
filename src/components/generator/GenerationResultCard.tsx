@@ -50,7 +50,6 @@ export default function GenerationResultCard({
         type: 'success' | 'loading' | 'error';
     } | null>(null)
 
-    // 显示通知的辅助函数
     const showToast = (message: string, type: 'success' | 'loading' | 'error' = 'success') => {
         setNotification({ message, type })
         if (type !== 'loading') {
@@ -58,7 +57,6 @@ export default function GenerationResultCard({
         }
     }
 
-    // 关闭菜单监听
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {

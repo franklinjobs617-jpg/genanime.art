@@ -50,6 +50,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${plusJakarta.variable}`}>
       <Head>
+        <meta name="google-site-verification" content="pEHfl8MakrsZkiDbz3dltBl_McGyAi8BLCvQrLo_eQ4" />
         <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-9LHJ5181VL"

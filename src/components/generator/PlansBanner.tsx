@@ -10,7 +10,6 @@ interface PlansBannerProps {
 export default function PlansBanner({ isGuest }: PlansBannerProps) {
     return (
         <div className="w-full bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-            {/* Desktop Layout */}
             <div className="hidden lg:flex items-center justify-between px-5 py-4">
                 <div className="flex items-center gap-4">
                     <div className="w-10 h-10 bg-amber-500/10 rounded-lg flex items-center justify-center">
@@ -35,7 +34,6 @@ export default function PlansBanner({ isGuest }: PlansBannerProps) {
                 </Link>
             </div>
 
-            {/* Mobile Layout */}
             <div className="lg:hidden p-5">
                 <div className="flex flex-col items-center text-center gap-3">
                     <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center">

@@ -8,7 +8,6 @@ export default function WelcomeGuide() {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    // 检查本地存储
     const hasVisited = localStorage.getItem("has_visited_generator")
     if (!hasVisited) {
       setShow(true)

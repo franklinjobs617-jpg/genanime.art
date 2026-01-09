@@ -12,7 +12,6 @@ import {
 import { PROMPTS_DATA } from "./data";
 import Image from "next/image";
 
-// 独立的图片组件，处理加载失败和 WebP 优化
 const PromptCardImage = ({ item }: { item: any }) => {
   const [src, setSrc] = useState(`/images/prompts/${item.imageName}.webp`);
 

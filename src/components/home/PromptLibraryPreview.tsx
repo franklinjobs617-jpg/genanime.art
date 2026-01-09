@@ -9,8 +9,8 @@ const featuredPrompts = [
   {
     id: 1,
     // 关键词: ai generated animated sprite (针对游戏开发者)
-    prompt: "Game asset, 2D sprite sheet, fantasy knight character, idle animation, running frames, flat shading, transparent background, clean lines, ai generated animated sprite style",
-    image: "/prompt-example-sprite.webp", 
+    prompt: "Exquisite anime illustration in a retro-futuristic pop art style, a vibrant space cafe on a floating asteroid. 1980s anime aesthetic combined with modern high-detail rendering. Bold flat colors, halftone patterns, and thick clean outlines. A stylish space traveler drinking a glowing cocktail. Background features colorful planets, neon signs, and retro spaceships. High energy, vibrant color palette (pink, yellow, teal), 8k, masterpiece, unique and eye-catching.",
+    image: "/prompt-example-sprite.webp",
     tags: ["Game Assets", "Sprite Sheet", "2D Art"]
   },
   {
@@ -65,10 +65,10 @@ export default function PromptLibraryPreview() {
             >
               <div className="relative h-56 w-full overflow-hidden">
                 {/* 实际项目中请使用 next/image */}
-                <img 
-                  src={item.image} 
-                  alt={`AI generated anime art: ${item.tags.join(', ')}`} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" 
+                <img
+                  src={item.image}
+                  alt={`AI generated anime art: ${item.tags.join(', ')}`}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 <div className="absolute bottom-4 left-4 flex flex-wrap gap-2">
@@ -81,9 +81,9 @@ export default function PromptLibraryPreview() {
               </div>
               <div className="p-6 flex flex-col h-full">
                 <div className="flex-grow">
-                   <p className="text-zinc-400 text-sm italic line-clamp-3 bg-zinc-950/50 p-3 rounded-lg border border-white/5">
+                  <p className="text-zinc-400 text-sm italic line-clamp-3 bg-zinc-950/50 p-3 rounded-lg border border-white/5">
                     "{item.prompt}"
-                   </p>
+                  </p>
                 </div>
                 <Link href={`/prompt-library/${item.id}`} className="mt-5 inline-flex items-center gap-2 text-purple-400 font-semibold group-hover:text-pink-400 transition-colors">
                   Try this Prompt <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -93,15 +93,15 @@ export default function PromptLibraryPreview() {
           ))}
         </div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-16 text-center"
         >
-          <Link 
-            href="/prompt-library" 
+          <Link
+            href="/prompt-library"
             className="inline-flex items-center gap-3 px-8 py-4 bg-white text-black hover:bg-zinc-200 rounded-full text-lg font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] active:scale-98"
           >
             <Lightbulb className="w-5 h-5" />

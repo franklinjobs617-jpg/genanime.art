@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Quote } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation"; // 1. 导入 useRouter
 
 const originalCards = [
   {
@@ -160,6 +161,7 @@ const TypewriterInput = ({ text }: { text: string }) => {
 };
 
 export default function FeatureSection() {
+  const router = useRouter(); // 2. 初始化 Router
   const [activeIndex, setActiveIndex] = useState(
     Math.floor(originalCards.length / 2)
   );
@@ -180,7 +182,6 @@ export default function FeatureSection() {
   const CARD_WIDTH_EXPANDED = 650;
   const GAP = 24;
 
-  // ✅ 左右点击平滑动画计算 translateX
   const translateX = (() => {
     if (containerWidth === 0) return 0;
     let offset = 0;
@@ -197,6 +198,14 @@ export default function FeatureSection() {
       setActiveIndex((prev) => prev + 1);
     else if (info.offset.x > threshold && activeIndex > 0)
       setActiveIndex((prev) => prev - 1);
+  };
+
+  // 3. 实现跳转函数
+  const handleGenerate = (prompt: string) => {
+    // 将 prompt 进行 URL 编码，以确保特殊字符传输正确
+    // 假设你的生成页面路径是 /generator，并且接收一个名为 prompt 的查询参数
+    // 例如：/generator?prompt=Hello%20World
+    router.push(`/generator?prompt=${encodeURIComponent(prompt)}`);
   };
 
   return (
@@ -248,7 +257,11 @@ export default function FeatureSection() {
                     {card.prompt}
                   </p>
                 </div>
-                <button className="w-full h-12 bg-[#1a1a1a] active:bg-black text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+                {/* 4. 绑定移动端按钮事件 */}
+                <button
+                  onClick={() => handleGenerate(card.prompt)}
+                  className="w-full h-12 bg-[#1a1a1a] active:bg-black text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+                >
                   <Sparkles className="w-4 h-4 text-purple-400" /> Generate with
                   this Prompt
                 </button>
@@ -275,7 +288,6 @@ export default function FeatureSection() {
         >
           {originalCards.map((card, index) => {
             const isActive = index === activeIndex;
-            // 渲染优化：只渲染可见范围
             if (Math.abs(activeIndex - index) > 5)
               return (
                 <div
@@ -305,11 +317,10 @@ export default function FeatureSection() {
                 />
 
                 <div
-                  className={`absolute bottom-8 left-8 transition-all duration-300 ${
-                    isActive
+                  className={`absolute bottom-8 left-8 transition-all duration-300 ${isActive
                       ? "opacity-0 translate-y-4"
                       : "opacity-100 translate-y-0"
-                  }`}
+                    }`}
                 >
                   <span className="text-white text-2xl font-bold leading-tight drop-shadow-lg">
                     {card.title.split(" ").slice(0, 2).join("\n")}
@@ -339,7 +350,6 @@ export default function FeatureSection() {
               exit={{ opacity: 0, y: -10, scale: 0.98 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
             >
-              {/* Top Accent */}
               <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500" />
               <div className="p-6 flex flex-col">
                 <div className="mb-3 flex items-center gap-2">
@@ -357,11 +367,20 @@ export default function FeatureSection() {
                   Generates a complete anime illustration in seconds.
                 </p>
                 <div className="flex justify-between items-center pt-4 border-t border-zinc-100">
-                  <button className="px-4 py-2 rounded-full bg-zinc-50 border border-zinc-200 text-zinc-600 text-xs font-semibold hover:bg-zinc-100 hover:text-purple-600 transition-colors">
+                  <button
+                    onClick={() => handleGenerate(originalCards[activeIndex].prompt)}
+                    className="px-4 py-2 rounded-full bg-zinc-50 border border-zinc-200 text-zinc-600 text-xs font-semibold hover:bg-zinc-100 hover:text-purple-600 transition-colors"
+                  >
                     Customize Prompt
                   </button>
                   <div className="flex flex-col items-end gap-1">
-                    <button className="flex items-center gap-2 px-6 py-2.5 bg-[#111] hover:bg-black text-white text-sm font-bold rounded-full transition-all active:scale-95 shadow-lg">
+                    {/* 5. 绑定桌面端按钮事件 */}
+                    <button
+                      onClick={() =>
+                        handleGenerate(originalCards[activeIndex].prompt)
+                      }
+                      className="flex items-center gap-2 px-6 py-2.5 bg-[#111] hover:bg-black text-white text-sm font-bold rounded-full transition-all active:scale-95 shadow-lg"
+                    >
                       <Sparkles className="w-4 h-4 text-purple-400" />
                       Generate Image Now
                     </button>

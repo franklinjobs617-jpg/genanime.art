@@ -237,11 +237,43 @@ export const PROMPTS_DATA = [
     },
 
     {
-        id: 36,
-        imageName: "kyoto_ani_school_life_36",
+        id: 35,
+        imageName: "cherry_blossom_sunset_dream",
         alt: "High-quality anime illustration in Kyoto Animation style featuring a school life scene",
         originalPrompt: "Kyoto Animation Style, soft lighting, detailed eyes, expressive characters, high school classroom, sunset glow through windows",
         prompt: "Kyoto Animation Style, soft lighting, detailed eyes, expressive characters, high school classroom, sunset glow through windows, masterpiece, best quality, ultra-detailed, highres, 8k, cinematic lighting, sharp focus, intricate details, beautiful face, expressive eyes, soft skin texture",
+        tags: ["School Life", "Kyoto Ani", "Slice of Life"],
+        ratio: "16:9",
+        likes: "6.8k"
+    },
+    {
+        id: 37,
+        imageName: "neon_rainy_city_reflection",
+        alt: "Top-tier anime illustration of a girl with an umbrella in a rainy neon-lit Tokyo alley.",
+        originalPrompt: "Kyoto Animation Style, soft lighting, detailed eyes, expressive characters, high school classroom, sunset glow through windows",
+        prompt: "Top-tier anime illustration, a girl with an umbrella walking through a narrow Tokyo alleyway on a rainy night. Vibrant neon signs reflecting on wet pavement and puddles. Intricate details of raindrops, glowing lights, and urban textures. Cinematic lighting, deep shadows, teal and orange color palette. High-quality visuals, 8k, masterpiece, atmospheric, trending on ArtStation.",
+        tags: ["School Life", "Kyoto Ani", "Slice of Life"],
+        ratio: "16:9",
+        likes: "6.8k"
+    },
+    {
+        id: 38,
+        imageName: "starry_night_rooftop_view",
+        alt: "Breathtaking anime scene of a person on a rooftop overlooking a glowing city under a starry sky.",
+        originalPrompt: "Kyoto Animation Style, soft lighting, detailed eyes, expressive characters, high school classroom, sunset glow through windows",
+        prompt: "Breathtaking anime scene, a person standing on a rooftop overlooking a vast, glowing city under a magnificent starry sky with a giant comet. Hyper-detailed clouds, shimmering city lights, deep blue and purple night sky. Cinematic wide shot, emotional and peaceful atmosphere. Makoto Shinkai inspired, 8k, masterpiece, ultra-high resolution, stunning visuals.",
+        tags: ["School Life", "Kyoto Ani", "Slice of Life"],
+        ratio: "16:9",
+        likes: "6.8k"
+    },
+
+
+    {
+        id: 40,
+        imageName: "library_sunlight_dust",
+        alt: "Serene anime illustration of a girl reading in a library with sunlight and floating dust particles.",
+        originalPrompt: "Kyoto Animation Style, soft lighting, detailed eyes, expressive characters, high school classroom, sunset glow through windows",
+        prompt: "Serene anime illustration, a girl reading a book in a sun-drenched ancient library. Tyndall effect (God rays) piercing through large windows, illuminating floating dust particles. Intricate details of wooden bookshelves, thousands of books, and soft textures. Peaceful and nostalgic atmosphere, soft lighting, high-quality visuals, 8k, masterpiece, Kyoto Animation style.",
         tags: ["School Life", "Kyoto Ani", "Slice of Life"],
         ratio: "16:9",
         likes: "6.8k"

@@ -95,11 +95,7 @@ export default function CoreFeatures() {
               <p className="text-zinc-500 text-sm">Access premium models like Animagine XL & Pony Diffusion V6.</p>
             </div>
 
-            {/* 
-               修改点说明：
-               1. 添加了 'relative' 类：这是必须的，否则 fill 属性会让图片定位乱跑。
-               2. 这里的 h-64 决定了图片区域的高度，你可以根据需要调整 (比如 h-48 或 h-72)。
-            */}
+
             <div className="mt-6 w-full h-64 relative bg-zinc-800/50 rounded-xl border border-white/5 overflow-hidden group-hover:opacity-80 transition-opacity">
               <Image
                 src="/features/model-detail.png" /* 确保这里是你的大眼图片路径 */

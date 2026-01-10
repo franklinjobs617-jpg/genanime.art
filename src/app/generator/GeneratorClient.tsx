@@ -5,14 +5,22 @@ import { useSearchParams } from "next/navigation"
 import { useAuth } from "@/context/AuthContext"
 import RedesignedSidebar from "@/components/generator/RedesignedSidebar"
 import PromptConsole from "@/components/generator/PromptConsole"
-import PlansBanner from "@/components/generator/PlansBanner"
-import GenerationResultCard from "@/components/generator/GenerationResultCard"
 import WelcomeGuide from "@/components/generator/WelcomeGuide"
-import LoginModal from "@/components/LoginModel"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Settings, Coins, Sparkles, Home } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
+import dynamic from "next/dynamic"
+
+const PlansBanner = dynamic(() => import("@/components/generator/PlansBanner"), {
+    loading: () => <div className="h-32 bg-white/5 rounded-2xl animate-pulse" />,
+})
+const GenerationResultCard = dynamic(() => import("@/components/generator/GenerationResultCard"), {
+    ssr: false,
+})
+const LoginModal = dynamic(() => import("@/components/LoginModel"), {
+    ssr: false,
+})
 
 const GUEST_FREE_GENERATIONS = 2
 const COST_PER_GENERATION = 30

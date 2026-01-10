@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import Masonry from "react-masonry-css";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 // --- 类型定义 ---
 interface GalleryItem {
@@ -656,11 +657,12 @@ export default function GalleryPage() {
               <div
                 className={`relative w-full ${item.aspect} rounded-[20px] overflow-hidden bg-[#121217] border border-white/5 group-hover:border-pink-500/30 transition-all duration-500 shadow-lg`}
               >
-                <img
+                <Image
                   src={item.image}
                   alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 group-hover:brightness-110"
-                  loading="lazy"
+                  fill
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-110 group-hover:brightness-110"
+                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 />
 
                 {/* 悬浮遮罩 */}

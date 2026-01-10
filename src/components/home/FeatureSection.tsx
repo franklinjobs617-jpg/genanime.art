@@ -3,7 +3,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Quote } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation"; // 1. 导入 useRouter
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const originalCards = [
   {
@@ -233,10 +234,12 @@ export default function FeatureSection() {
           >
             <div className="bg-[#121212] rounded-[32px] overflow-hidden border border-white/10 shadow-2xl relative">
               <div className="relative aspect-[4/5] w-full">
-                <img
+                <Image
                   src={card.image}
                   alt={card.title}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                 />
                 <div className="absolute top-4 left-4">
                   <span className="bg-black/60 backdrop-blur-xl text-white text-[11px] font-bold px-3 py-1.5 rounded-full border border-white/10 tracking-wide">
@@ -309,17 +312,19 @@ export default function FeatureSection() {
                 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
-                <img
+                <Image
                   src={card.image}
                   alt={card.title}
-                  className="w-full h-full object-cover select-none pointer-events-none"
+                  fill
+                  className="object-cover select-none pointer-events-none"
                   draggable={false}
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
 
                 <div
                   className={`absolute bottom-8 left-8 transition-all duration-300 ${isActive
-                      ? "opacity-0 translate-y-4"
-                      : "opacity-100 translate-y-0"
+                    ? "opacity-0 translate-y-4"
+                    : "opacity-100 translate-y-0"
                     }`}
                 >
                   <span className="text-white text-2xl font-bold leading-tight drop-shadow-lg">

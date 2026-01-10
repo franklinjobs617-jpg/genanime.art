@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function CoreFeatures() {
   return (
@@ -25,7 +26,7 @@ export default function CoreFeatures() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="md:col-span-2 bg-zinc-900/50 border border-white/5 rounded-3xl p-8 md:p-12 relative overflow-hidden group hover:border-white/10 transition-colors"
+            className="md:col-span-2 bg-zinc-900 border border-white/5 rounded-3xl p-8 md:p-12 relative overflow-hidden group hover:border-white/10 transition-colors"
           >
             <div className="relative z-10 max-w-md">
               <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
@@ -45,10 +46,12 @@ export default function CoreFeatures() {
             {/* Image Area: Generation Engine Graphic */}
             <div className="absolute right-0 bottom-0 w-1/2 h-full bg-gradient-to-l from-purple-900/20 to-transparent pointer-events-none" />
             <div className="absolute bottom-6 right-6 w-48 h-32 bg-zinc-800/50 rounded-xl border border-white/5 overflow-hidden group-hover:scale-105 transition-transform duration-500 shadow-2xl">
-              <img
+              <Image
                 src="/features/generation-engine.png"
                 alt="High Speed Generation"
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
             </div>
           </motion.div>
@@ -69,10 +72,12 @@ export default function CoreFeatures() {
             </div>
 
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[60%] bg-zinc-800 rounded-t-3xl border-t border-x border-white/10 overflow-hidden shadow-2xl group-hover:translate-y-[-4px] transition-transform duration-500">
-              <img
+              <Image
                 src="/features/mobile-studio.png"
                 alt="Mobile Studio Mockup"
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-purple-900/30 to-transparent" />
@@ -89,11 +94,19 @@ export default function CoreFeatures() {
               <h3 className="text-xl font-bold text-white mb-2">Advanced Models</h3>
               <p className="text-zinc-500 text-sm">Access premium models like Animagine XL & Pony Diffusion V6.</p>
             </div>
-            <div className="mt-6 w-full h-64 bg-zinc-800/50 rounded-xl border border-white/5 overflow-hidden group-hover:opacity-80 transition-opacity">
-              <img
-                src="/features/model-detail.png"
+
+            {/* 
+               修改点说明：
+               1. 添加了 'relative' 类：这是必须的，否则 fill 属性会让图片定位乱跑。
+               2. 这里的 h-64 决定了图片区域的高度，你可以根据需要调整 (比如 h-48 或 h-72)。
+            */}
+            <div className="mt-6 w-full h-64 relative bg-zinc-800/50 rounded-xl border border-white/5 overflow-hidden group-hover:opacity-80 transition-opacity">
+              <Image
+                src="/features/model-detail.png" /* 确保这里是你的大眼图片路径 */
                 alt="Advanced Models Showcase"
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover object-center" /* object-cover 会填满盒子但可能裁切，object-center 确保居中 */
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
             </div>
           </motion.div>
@@ -111,16 +124,18 @@ export default function CoreFeatures() {
             </div>
             {/* Image Area: Commercial Badge */}
             <div className="mt-6 w-full h-32 bg-zinc-800/50 rounded-xl border border-white/5 overflow-hidden flex items-center justify-center bg-gradient-to-br from-zinc-800 to-zinc-900">
-              <img
+              <Image
                 src="/features/commercial-rights.png"
                 alt="Commercial Rights Badge"
+                width={200}
+                height={160}
                 className="w-auto h-[80%] object-contain drop-shadow-2xl"
               />
             </div>
           </motion.div>
 
         </div>
-      </div>
-    </section>
+      </div >
+    </section >
   );
 }

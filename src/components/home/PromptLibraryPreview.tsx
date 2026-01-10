@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Lightbulb, ArrowRight, Sparkles, Tag } from "lucide-react";
 
+import Image from "next/image";
+
 const featuredPrompts = [
   {
     id: 1,
@@ -71,10 +73,12 @@ export default function PromptLibraryPreview() {
             >
               {/* 图片区域 - 移除全遮罩，保持通透 */}
               <div className="relative h-64 w-full overflow-hidden bg-zinc-800">
-                <img
+                <Image
                   src={item.image}
                   alt={`AI generated art`}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                 />
 
                 {/* 仅在底部保留极小的渐变，让图片主体不被遮挡 */}

@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 
+import Image from "next/image";
+
 const steps = [
   {
     id: "01",
@@ -52,10 +54,12 @@ export default function HowItWorks() {
             >
               {/* 视觉展示区 (Image Area) */}
               <div className="relative aspect-[4/3] w-full bg-zinc-900 rounded-2xl overflow-hidden border border-white/10 mb-8 shadow-2xl group-hover:border-purple-500/30 transition-all duration-500">
-                <img
+                <Image
                   src={`/screenshots/step${index + 1}-${index === 0 ? 'prompt' : index === 1 ? 'model' : 'result'}.png`}
                   alt={step.title}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                 />
 
                 <div className="absolute inset-0 bg-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />

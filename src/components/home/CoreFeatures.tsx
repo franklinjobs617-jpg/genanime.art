@@ -47,7 +47,7 @@ export default function CoreFeatures() {
             <div className="absolute right-0 bottom-0 w-1/2 h-full bg-gradient-to-l from-purple-900/20 to-transparent pointer-events-none" />
             <div className="absolute bottom-6 right-6 w-48 h-32 bg-zinc-800/50 rounded-xl border border-white/5 overflow-hidden group-hover:scale-105 transition-transform duration-500 shadow-2xl">
               <Image
-                src="/features/generation-engine.png"
+                src="/features/generation-engine.webp"
                 alt="High Speed Generation"
                 fill
                 className="object-cover"
@@ -56,7 +56,6 @@ export default function CoreFeatures() {
             </div>
           </motion.div>
 
-          {/* Card 2: 移动端适配 (占据右上长条 1x2) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -73,7 +72,7 @@ export default function CoreFeatures() {
 
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[60%] bg-zinc-800 rounded-t-3xl border-t border-x border-white/10 overflow-hidden shadow-2xl group-hover:translate-y-[-4px] transition-transform duration-500">
               <Image
-                src="/features/mobile-studio.png"
+                src="/features/mobile-studio.webp"
                 alt="Mobile Studio Mockup"
                 fill
                 className="object-cover"
@@ -98,10 +97,10 @@ export default function CoreFeatures() {
 
             <div className="mt-6 w-full h-64 relative bg-zinc-800/50 rounded-xl border border-white/5 overflow-hidden group-hover:opacity-80 transition-opacity">
               <Image
-                src="/features/model-detail.png" /* 确保这里是你的大眼图片路径 */
+                src="/features/model-detail.webp"
                 alt="Advanced Models Showcase"
                 fill
-                className="object-cover object-center" /* object-cover 会填满盒子但可能裁切，object-center 确保居中 */
+                className="object-cover object-center"
                 sizes="(max-width: 768px) 100vw, 33vw"
               />
             </div>
@@ -121,7 +120,7 @@ export default function CoreFeatures() {
             {/* Image Area: Commercial Badge */}
             <div className="mt-6 w-full h-32 bg-zinc-800/50 rounded-xl border border-white/5 overflow-hidden flex items-center justify-center bg-gradient-to-br from-zinc-800 to-zinc-900">
               <Image
-                src="/features/commercial-rights.png"
+                src="/features/commercial-rights.webp"
                 alt="Commercial Rights Badge"
                 width={200}
                 height={160}

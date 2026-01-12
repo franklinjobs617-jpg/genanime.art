@@ -21,7 +21,6 @@ export default function CoreFeatures() {
         {/* Bento Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6 h-auto md:h-[800px]">
 
-          {/* Card 1: 核心体验 - 速度 & 质量 (占据左上大块 2x1) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -93,7 +92,6 @@ export default function CoreFeatures() {
               <h3 className="text-xl font-bold text-white mb-2">Advanced Models</h3>
               <p className="text-zinc-500 text-sm">Access premium models like Animagine XL & Pony Diffusion V6.</p>
             </div>
-
 
             <div className="mt-6 w-full h-64 relative bg-zinc-800/50 rounded-xl border border-white/5 overflow-hidden group-hover:opacity-80 transition-opacity">
               <Image

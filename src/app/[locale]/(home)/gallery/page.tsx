@@ -21,6 +21,7 @@ import {
 import Masonry from "react-masonry-css";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 // --- 类型定义 ---
 interface GalleryItem {
@@ -36,6 +37,7 @@ interface GalleryItem {
 
 export default function GalleryPage() {
   const router = useRouter();
+  const t = useTranslations('GalleryPage');
   const [search, setSearch] = useState("");
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
   const [copied, setCopied] = useState(false);
@@ -47,22 +49,22 @@ export default function GalleryPage() {
   // 顶部模式
   const modes = [
     {
-      label: "Image Generation",
+      label: t('modes.generation'),
       icon: <ImageIcon className="w-5 h-5" />,
       active: true,
       href: "/generator",
       disabled: false,
     },
     {
-      label: "AI Video",
+      label: t('modes.video'),
       icon: <Video className="w-5 h-5" />,
       active: false,
       href: "#",
-      badge: "Soon",
+      badge: t('modes.soon'),
       disabled: true,
     },
     {
-      label: "Upscaler",
+      label: t('modes.upscaler'),
       icon: <Maximize2 className="w-5 h-5" />,
       active: false,
       href: "#",
@@ -532,9 +534,9 @@ export default function GalleryPage() {
             </div>
             <div className="text-center space-y-2">
               <h3 className="text-xl font-bold text-white tracking-tight">
-                Loading Engine...
+                {t('loading.title')}
               </h3>
-              <p className="text-zinc-500 text-sm">Preparing workspace</p>
+              <p className="text-zinc-500 text-sm">{t('loading.subtitle')}</p>
             </div>
           </motion.div>
         )}
@@ -551,16 +553,14 @@ export default function GalleryPage() {
         <div className="relative z-10 w-full max-w-4xl text-center space-y-12">
           <div className="space-y-6">
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white uppercase italic leading-[0.9]">
-              Create{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
-                Waifu
-              </span>{" "}
-              Art
+              {t.rich('title', {
+                span1: (chunks) => <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">{chunks}</span>
+              })}
             </h1>
             <p className="text-zinc-400 text-lg md:text-xl font-medium max-w-2xl mx-auto tracking-tight">
-              Generate high-quality <b>Anime Waifu Art</b>,{" "}
-              <b>Cyberpunk Wallpapers</b>, and <b>Chibi Character Designs</b> in
-              seconds.
+              {t.rich('subtitle', {
+                b: (chunks) => <b>{chunks}</b>
+              })}
             </p>
           </div>
 
@@ -573,7 +573,7 @@ export default function GalleryPage() {
               </div>
               <input
                 type="text"
-                placeholder="Try 'Business Woman Anime Art' or 'Cyberpunk'..."
+                placeholder={t('searchPlaceholder')}
                 className="flex-1 bg-transparent border-none outline-none text-base text-white placeholder:text-zinc-600 py-3"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -584,7 +584,7 @@ export default function GalleryPage() {
                 className="bg-white text-black hover:bg-zinc-200 px-6 py-3 rounded-[20px] text-sm font-black transition-all flex items-center gap-2 shrink-0 hover:scale-[1.02] active:scale-95"
               >
                 <Sparkles className="w-4 h-4 fill-black" />
-                Generate
+                {t('generateButton')}
               </button>
             </div>
           </div>
@@ -625,10 +625,10 @@ export default function GalleryPage() {
             </div>
             <div>
               <h2 className="text-xl font-black tracking-tight uppercase text-white">
-                Trending Creations
+                {t('trendingTitle')}
               </h2>
               <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest mt-0.5">
-                Explore Waifus & Wallpapers
+                {t('trendingSubtitle')}
               </p>
             </div>
           </div>
@@ -659,7 +659,7 @@ export default function GalleryPage() {
               >
                 <Image
                   src={item.image}
-                  alt={item.title}
+                  alt={t(`galleryItems.${item.id}` as any) || item.title}
                   fill
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-110 group-hover:brightness-110"
                   sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
@@ -671,7 +671,7 @@ export default function GalleryPage() {
                     <div className="flex justify-between items-start mb-3">
                       <div>
                         <h3 className="text-sm font-bold text-white line-clamp-1">
-                          {item.title}
+                          {t(`galleryItems.${item.id}` as any) || item.title}
                         </h3>
                         <p className="text-[10px] text-zinc-400 font-black uppercase tracking-widest mt-0.5">
                           @{item.author}
@@ -738,7 +738,7 @@ export default function GalleryPage() {
               <div className="flex-1 bg-black/50 flex items-center justify-center p-4 relative group">
                 <img
                   src={selectedImage.image}
-                  alt={selectedImage.title}
+                  alt={t(`galleryItems.${selectedImage.id}` as any) || selectedImage.title}
                   className="max-w-full max-h-[50vh] md:max-h-[85vh] object-contain shadow-2xl"
                 />
               </div>
@@ -748,7 +748,7 @@ export default function GalleryPage() {
                   <div className="flex items-start justify-between">
                     <div>
                       <h2 className="text-2xl font-bold text-white mb-1 leading-tight">
-                        {selectedImage.title}
+                        {t(`galleryItems.${selectedImage.id}` as any) || selectedImage.title}
                       </h2>
                       <div className="flex items-center gap-2 text-zinc-400">
                         <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 flex items-center justify-center text-[10px] text-white font-bold">

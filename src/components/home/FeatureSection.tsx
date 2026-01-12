@@ -5,6 +5,7 @@ import { Sparkles, Quote } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const originalCards = [
   {
@@ -48,7 +49,7 @@ const originalCards = [
     tags: ["Img2Img", "Filter"],
   },
   {
-    id: "anime-portrait",
+    id: "portrait",
     title: "Anime Portrait Generator",
     image: "/feature-portrait.webp",
     prompt:
@@ -56,7 +57,7 @@ const originalCards = [
     tags: ["Portrait", "Face", "Clean"],
   },
   {
-    id: "anime-couple",
+    id: "couple",
     title: "Anime Couple Art",
     image: "/feature-couple.webp",
     prompt:
@@ -64,7 +65,7 @@ const originalCards = [
     tags: ["Couple", "Romance"],
   },
   {
-    id: "anime-action",
+    id: "action",
     title: "Anime Action Scene",
     image: "/feature-action.webp",
     prompt:
@@ -72,7 +73,7 @@ const originalCards = [
     tags: ["Action", "Dynamic"],
   },
   {
-    id: "anime-emoticons",
+    id: "emoticons",
     title: "Anime Emoticons",
     image: "/feature-emoticons.webp",
     prompt:
@@ -80,7 +81,7 @@ const originalCards = [
     tags: ["Emoticons", "Kawaii"],
   },
   {
-    id: "anime-cyberpunk",
+    id: "cyberpunk",
     title: "Cyberpunk Anime Art",
     image: "/feature-cyberpunk.webp",
     prompt:
@@ -88,7 +89,7 @@ const originalCards = [
     tags: ["Cyberpunk", "Sci-Fi"],
   },
   {
-    id: "anime-school",
+    id: "school",
     title: "Anime School Scene",
     image: "/feature-school.webp",
     prompt:
@@ -96,7 +97,7 @@ const originalCards = [
     tags: ["School", "Slice of Life"],
   },
   {
-    id: "anime-idol",
+    id: "idol",
     title: "Anime Idol Generator",
     image: "/feature-idol.webp",
     prompt:
@@ -104,7 +105,7 @@ const originalCards = [
     tags: ["Idol", "Music"],
   },
   {
-    id: "anime-sticker-pack",
+    id: "sticker",
     title: "Anime Sticker Pack",
     image: "/feature-sticker.webp",
     prompt:
@@ -112,7 +113,7 @@ const originalCards = [
     tags: ["Sticker", "Emoji"],
   },
   {
-    id: "fantasy-mage",
+    id: "mage",
     title: "Fantasy Mage Generator",
     image: "/feature-mage.webp",
     prompt:
@@ -120,7 +121,7 @@ const originalCards = [
     tags: ["Fantasy", "Magic", "Mage"],
   },
   {
-    id: "medieval-knight",
+    id: "knight",
     title: "Medieval Knight Anime",
     image: "/feature-knight.webp",
     prompt:
@@ -128,7 +129,7 @@ const originalCards = [
     tags: ["Medieval", "Knight", "Fantasy"],
   },
   {
-    id: "christmas-anime",
+    id: "christmas",
     title: "Christmas Anime Scene",
     image: "/feature-christmas.webp",
     prompt:
@@ -163,6 +164,7 @@ const TypewriterInput = ({ text }: { text: string }) => {
 
 export default function FeatureSection() {
   const router = useRouter(); // 2. 初始化 Router
+  const t = useTranslations('FeatureSection');
   const [activeIndex, setActiveIndex] = useState(
     Math.floor(originalCards.length / 2)
   );
@@ -214,14 +216,12 @@ export default function FeatureSection() {
       {/* ===================== TITLE & SUBTITLE ===================== */}
       <div className="container mx-auto px-6 mb-12 md:mb-0 text-center">
         <h1 className="text-4xl md:text-7xl font-bold text-white tracking-tight mb-4">
-          Create Stunning{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
-            Anime Illustrations
-          </span>
+          {t.rich('title', {
+            span1: (chunks) => <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">{chunks}</span>
+          })}
         </h1>
         <p className="text-zinc-400 text-sm md:text-lg max-w-2xl mx-auto font-medium">
-          From Waifu to Cyberpunk, transform your ideas into high-quality anime
-          illustrations in seconds – free, no login required.
+          {t('subtitle')}
         </p>
       </div>
 
@@ -236,7 +236,7 @@ export default function FeatureSection() {
               <div className="relative aspect-[4/5] w-full">
                 <Image
                   src={card.image}
-                  alt={card.title}
+                  alt={t(`cards.${card.id}` as any)}
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 33vw"
@@ -252,7 +252,7 @@ export default function FeatureSection() {
                 <div className="flex items-center gap-2 mb-3">
                   <Quote className="w-4 h-4 text-purple-500 fill-purple-500 rotate-180" />
                   <h3 className="text-zinc-900 font-bold text-lg tracking-tight">
-                    {card.title}
+                    {t(`cards.${card.id}` as any)}
                   </h3>
                 </div>
                 <div className="bg-zinc-50 p-3 rounded-xl border border-zinc-100 mb-5">
@@ -265,8 +265,7 @@ export default function FeatureSection() {
                   onClick={() => handleGenerate(card.prompt)}
                   className="w-full h-12 bg-[#1a1a1a] active:bg-black text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
                 >
-                  <Sparkles className="w-4 h-4 text-purple-400" /> Generate with
-                  this Prompt
+                  <Sparkles className="w-4 h-4 text-purple-400" /> {t('buttons.generate')}
                 </button>
               </div>
             </div>
@@ -314,7 +313,7 @@ export default function FeatureSection() {
               >
                 <Image
                   src={card.image}
-                  alt={card.title}
+                  alt={t(`cards.${card.id}` as any)}
                   fill
                   className="object-cover select-none pointer-events-none"
                   draggable={false}
@@ -327,8 +326,8 @@ export default function FeatureSection() {
                     : "opacity-100 translate-y-0"
                     }`}
                 >
-                  <span className="text-white text-2xl font-bold leading-tight drop-shadow-lg">
-                    {card.title.split(" ").slice(0, 2).join("\n")}
+                  <span className="text-white text-2xl font-bold leading-tight drop-shadow-lg whitespace-pre-line">
+                    {t(`cards.${card.id}` as any).split(" ").slice(0, 2).join("\n")}
                   </span>
                 </div>
               </motion.div>
@@ -387,7 +386,7 @@ export default function FeatureSection() {
                       className="flex items-center gap-2 px-6 py-2.5 bg-[#111] hover:bg-black text-white text-sm font-bold rounded-full transition-all active:scale-95 shadow-lg"
                     >
                       <Sparkles className="w-4 h-4 text-purple-400" />
-                      Generate Image Now
+                      {t('buttons.generate')}
                     </button>
                     <span className="text-[10px] text-zinc-400">
                       Free · No login required

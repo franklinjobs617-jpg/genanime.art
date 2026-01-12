@@ -1,0 +1,118 @@
+{
+    "Metadata": {
+        "title": "AI Anime Generator | Free Anime AI Art & Image Generator 2026",
+        "description": "Create stunning anime art with our AI anime generator. Best anime AI art generator & image generator with RTX 8090 speed. Generate waifu, chibi & scenes for free. Create anime girl images instantly."
+    },
+    "Hero": {
+        "titleLine1": "Best Anime",
+        "titleLine2": "AI Generator",
+        "description": "Create <span1>waifu, chibi, & pony art</span1> in seconds with the world's most advanced models.",
+        "searchPlaceholder": "Describe your dream... e.g. silver hair, cyberpunk",
+        "features": {
+            "noSignUp": "No sign-up",
+            "noWatermark": "No watermark",
+            "quality": "4K Quality"
+        },
+        "buttons": {
+            "startCreating": "Start Creating",
+            "imageToImage": "Image to Image"
+        }
+    },
+    "FeatureSection": {
+        "title": "Create Stunning <span1>Anime Illustrations</span1>",
+        "subtitle": "From Waifu to Cyberpunk, transform your ideas into high-quality anime illustrations in seconds – free, no login required.",
+        "cards": {
+            "waifu": "Anime Waifu Generator",
+            "pony": "Pony Diffusion Style",
+            "animagine": "Animagine XL Model",
+            "chibi": "Cute Chibi Maker",
+            "photo": "Photo to Anime",
+            "portrait": "Anime Portrait Generator",
+            "couple": "Anime Couple Art",
+            "action": "Anime Action Scene",
+            "emoticons": "Anime Emoticons",
+            "cyberpunk": "Cyberpunk Anime Art",
+            "school": "Anime School Scene",
+            "idol": "Anime Idol Generator",
+            "sticker": "Anime Sticker Pack",
+            "mage": "Fantasy Mage Generator",
+            "knight": "Medieval Knight Anime",
+            "christmas": "Christmas Anime Scene"
+        },
+        "buttons": {
+            "generate": "Generate with this Prompt"
+        }
+    },
+    "GalleryPage": {
+        "title": "Create <span1>Waifu</span1> Art",
+        "subtitle": "Generate high-quality <b>Anime Waifu Art</b>, <b>Cyberpunk Wallpapers</b>, and <b>Chibi Character Designs</b> in seconds.",
+        "searchPlaceholder": "Try 'Business Woman Anime Art' or 'Cyberpunk'...",
+        "generateButton": "Generate",
+        "trendingTitle": "Trending Creations",
+        "trendingSubtitle": "Explore Waifus & Wallpapers",
+        "loading": {
+            "title": "Loading Engine...",
+            "subtitle": "Preparing workspace"
+        },
+        "modes": {
+            "generation": "Image Generation",
+            "video": "AI Video",
+            "upscaler": "Upscaler",
+            "soon": "Soon"
+        },
+        "promptLibrary": {
+            "title": "Prompt <span1>Library</span1>",
+            "searchPlaceholder": "Search styles, characters...",
+            "popularTags": "Popular Tags",
+            "copyPrompt": "Copy Prompt",
+            "copied": "Copied",
+            "generateButton": "Generate with this Style",
+            "tags": {
+                "Anime": "Anime",
+                "Girl": "Girl",
+                "Cyberpunk": "Cyberpunk",
+                "Kawaii": "Kawaii",
+                "Landscape": "Landscape",
+                "Portrait": "Portrait"
+            }
+        },
+        "galleryItems": {
+            "1": "Business Woman Anime Art - Office Style",
+            "2": "Anime Waifu Art - School Girl",
+            "3": "Cyberpunk Anime Wallpaper - Futuristic",
+            "4": "Chibi Character Design - Cute & Kawaii",
+            "5": "Fantasy Elf Archer - Character Art",
+            "6": "Idol Concert Stage - Music Performance",
+            "7": "Ghibli Scenery Art - Nostalgic Countryside",
+            "8": "3D Cinematic Render - Cute Anime Girl",
+            "9": "Magical Girl Concept - Character Sheet",
+            "10": "Cozy Storybook Illustration - Cottage Style",
+            "11": "Clinical Anime Art - Hospital Uniform",
+            "12": "Dramatic Lighting Portrait - Anime Girl",
+            "13": "Retro 80s Aesthetic - City Pop Vibe",
+            "14": "Epic Aerial View - Anime Character",
+            "15": "Dreamy Pastel Aesthetics - Soft & Elegant",
+            "16": "Flying Witch Scenery - Ghibli Style",
+            "17": "Classic Manga Style - Black and White",
+            "18": "Lush Forest Meadow - Studio Ghibli Style",
+            "19": "Full Body Masterpiece - Character Design",
+            "20": "Kawaii Magical Girl - Pink Hair",
+            "21": "3D Cartoon Action Scene - Corridor",
+            "22": "Anime Figure Setup - PVC Collection",
+            "23": "Dynamic Action Rush - Anime Battle",
+            "24": "Neon Street Cyberpunk - Rain & Lights",
+            "25": "Silver Holy Knight - Fantasy Armor",
+            "26": "Celestial Mage - Star Magic",
+            "27": "Premium Waifu Portrait - Flowing White Hair",
+            "28": "Pony Style Art - Vibrant Colors",
+            "29": "Animagine XL Quality - Future Library",
+            "30": "Midnight Romantic Couple - Fireworks",
+            "31": "High School Afternoons - Sunset Vibe",
+            "32": "Classic Anime Portrait - Soft Expression",
+            "33": "Kawaii Sticker Set - Cute Mascot",
+            "34": "Chibi Emote Pack - Cute Expressions",
+            "35": "Cosplay Event Banner - Pro Photography",
+            "36": "Upper Body Masterpiece - Intricate Design"
+        }
+    }
+}

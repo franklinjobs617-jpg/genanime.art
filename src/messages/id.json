@@ -1,0 +1,118 @@
+{
+    "Metadata": {
+        "title": "AI Pembuat Gambar Anime Girl | Generator Seni Anime Gratis 2026",
+        "description": "Buat gambar anime girl yang menakjubkan dengan AI generator kami. Pembuat gambar anime AI terbaik & generator seni dengan kecepatan tinggi. Buat waifu, chibi & pemandangan gratis."
+    },
+    "Hero": {
+        "titleLine1": "Pembuat",
+        "titleLine2": "Gambar Anime AI",
+        "description": "Buat <span1>waifu, chibi, & seni pony</span1> dalam hitungan detik dengan model tercanggih di dunia.",
+        "searchPlaceholder": "Jelaskan impianmu... contoh: rambut perak, cyberpunk",
+        "features": {
+            "noSignUp": "Tanpa Daftar",
+            "noWatermark": "Tanpa Watermark",
+            "quality": "Kualitas 4K"
+        },
+        "buttons": {
+            "startCreating": "Mulai Membuat",
+            "imageToImage": "Gambar ke Gambar"
+        }
+    },
+    "FeatureSection": {
+        "title": "Buat Ilustrasi <span1>Anime Menakjubkan</span1>",
+        "subtitle": "Dari Waifu hingga Cyberpunk, ubah ide Anda menjadi gambar anime berkualitas tinggi dalam hitungan detik – gratis, tanpa login.",
+        "cards": {
+            "waifu": "Generator Waifu Anime",
+            "pony": "Gaya Pony Diffusion",
+            "animagine": "Model Animagine XL",
+            "chibi": "Pembuat Chibi Lucu",
+            "photo": "Foto ke Anime",
+            "portrait": "Generator Potret Anime",
+            "couple": "Seni Pasangan Anime",
+            "action": "Adegan Aksi Anime",
+            "emoticons": "Emotikon Anime",
+            "cyberpunk": "Seni Anime Cyberpunk",
+            "school": "Adegan Sekolah Anime",
+            "idol": "Generator Idola Anime",
+            "sticker": "Paket Stiker Anime",
+            "mage": "Generator Penyihir Fantasi",
+            "knight": "Anime Ksatria Abad Pertengahan",
+            "christmas": "Adegan Natal Anime"
+        },
+        "buttons": {
+            "generate": "Buat dengan Prompt Ini"
+        }
+    },
+    "GalleryPage": {
+        "title": "Buat Seni <span1>Waifu</span1>",
+        "subtitle": "Hasilkan <b>Gambar Anime Waifu</b> berkualitas tinggi, <b>Wallpaper Cyberpunk</b>, dan <b>Desain Karakter Chibi</b> dalam hitungan detik.",
+        "searchPlaceholder": "Coba 'Gambar Anime Wanita Karir' atau 'Cyberpunk'...",
+        "generateButton": "Buat Gambar",
+        "trendingTitle": "Karya Tren",
+        "trendingSubtitle": "Jelajahi Waifu & Wallpaper",
+        "loading": {
+            "title": "Memuat Mesin...",
+            "subtitle": "Menyiapkan ruang kerja"
+        },
+        "modes": {
+            "generation": "Pembuatan Gambar",
+            "video": "Video AI",
+            "upscaler": "Upscaler",
+            "soon": "Segera"
+        },
+        "promptLibrary": {
+            "title": "Pustaka <span1>Prompt</span1>",
+            "searchPlaceholder": "Cari gaya, karakter...",
+            "popularTags": "Tag Populer",
+            "copyPrompt": "Salin Prompt",
+            "copied": "Berhasil!",
+            "generateButton": "Buat dengan Gaya Ini",
+            "tags": {
+                "Anime": "Anime",
+                "Girl": "Gadis",
+                "Cyberpunk": "Siberpunk",
+                "Kawaii": "Lucu",
+                "Landscape": "Pemandangan",
+                "Portrait": "Potret"
+            }
+        },
+        "galleryItems": {
+            "1": "Gambar Anime Wanita Karir - Seni Kantor",
+            "2": "Seni Waifu Anime - Gadis Sekolah",
+            "3": "Wallpaper Anime Cyberpunk - Estetika Futuristik",
+            "4": "Desain Karakter Chibi - Lucu & Kawaii",
+            "5": "Pemanah Elf Fantasi - Seni Karakter",
+            "6": "Seni Idola Anime - Konser Musik",
+            "7": "Pemandangan Gaya Ghibli - Pedesaan Nostalgia",
+            "8": "Render 3D Gaya Pixar - Karakter Anime Lucu",
+            "9": "Konsep Gadis Penyihir - Lembar Referensi Karakter",
+            "10": "Ilustrasi Pondok Nyaman - Gaya Buku Cerita",
+            "11": "Seni Anime Perawat Klinis - Seragam Rumah Sakit",
+            "12": "Potret Pencahayaan Dramatis - Gadis Anime",
+            "13": "Estetika Retro 80-an - Vibe City Pop",
+            "14": "Pemandangan Udara Epik - Karakter Anime",
+            "15": "Aesthetic Pastel Mimpi - Lembut & Anggun",
+            "16": "Pemandangan Penyihir Terbang - Gaya Ghibli",
+            "17": "Ilustrasi Gaya Manga Klasik - Seni Hitam Putih",
+            "18": "Padang Rumput Hutan Subur - Gaya Studio Ghibli",
+            "19": "Karya Seni Full Body - Desain Karakter",
+            "20": "Gadis Penyihir Kawaii - Rambut Pink",
+            "21": "Adegan Kartun 3D Aksi - Koridor Sempit",
+            "22": "Setup Figur Anime PVC - Koleksi Kerajinan",
+            "23": "Aksi Dinamis Katana - Pertempuran Anime",
+            "24": "Jalanan Neon Cyberpunk - Hujan & Lampu",
+            "25": "Ksatria Suci Perak - Armor Emas Fantasi",
+            "26": "Penyihir Surgawi - Mantra Sihir Bintang",
+            "27": "Potret Waifu Premium - Rambut Putih Mengalir",
+            "28": "Seni Gaya Pony Diffusion - Warna Cerah",
+            "29": "Kualitas Animagine XL - Perpustakaan Masa Depan",
+            "30": "Pasangan Romantis Tengah Malam - Kembang Api",
+            "31": "Sore Hari di Sekolah Menengah - Cahaya Matahari Terbenam",
+            "32": "Potret Anime Klasik - Ekspresi Lembut",
+            "33": "Set Stiker Kawaii - Karakter Maskot Lucu",
+            "34": "Paket Emote Chibi - Ekspresi Lucu",
+            "35": "Banner Acara Cosplay - Fotografi Profesional",
+            "36": "Karya Seni Portret Tubuh Atas - Desain Rumit"
+        }
+    }
+}

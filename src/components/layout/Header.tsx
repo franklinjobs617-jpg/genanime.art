@@ -13,6 +13,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Header() {
   const { user, isLoading, login, logout } = useAuth();
@@ -109,6 +110,7 @@ export default function Header() {
         <div className="flex items-center gap-3 lg:gap-6 relative z-[70]">
           {/* Desktop Actions */}
           <div className="hidden lg:flex items-center gap-4">
+            <LanguageSwitcher />
             {isLoading ? (
               <div className="w-8 h-8 rounded-full bg-zinc-800 animate-pulse border border-white/10"></div>
             ) : user ? (
@@ -237,6 +239,9 @@ export default function Header() {
                   </button>
                 )}
               </div>
+
+              {/* Mobile Language Switcher */}
+              <LanguageSwitcher isMobile={true} />
             </nav>
 
             {/* 底部版权或简单信息 */}

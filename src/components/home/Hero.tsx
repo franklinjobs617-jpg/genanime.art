@@ -3,11 +3,13 @@
 import { motion } from "framer-motion";
 import { PenTool, ImagePlus, Search, Sparkles, ArrowRight } from "lucide-react";
 import AnimatedBackground from "./AnimatedBackground";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import Link from "next/link";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function Hero() {
+  const t = useTranslations('Hero');
   const router = useRouter();
   const [inputValue, setInputValue] = useState("");
   const styleTags = ["Waifu", "Chibi", "Pony Diffusion", "Animagine XL", "Niji Style"];
@@ -49,7 +51,7 @@ export default function Hero() {
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Describe your dream... e.g. silver hair, cyberpunk"
+              placeholder={t('searchPlaceholder')}
               className="flex-1 bg-transparent border-none outline-none text-white placeholder-zinc-600 text-sm font-medium h-10"
             />
             <button type="submit" className="p-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-white transition-all shadow-lg shadow-indigo-600/20">
@@ -79,9 +81,9 @@ export default function Hero() {
             animate={{ opacity: 1, x: 0 }}
             className="text-6xl md:text-[100px] font-black text-white leading-[0.9] mb-8 tracking-tighter"
           >
-            Best Anime <br />
+            {t('titleLine1')} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 drop-shadow-[0_10px_10px_rgba(99,102,241,0.2)]">
-              AI Generator
+              {t('titleLine2')}
             </span>
           </motion.h1>
 
@@ -92,27 +94,29 @@ export default function Hero() {
             className="space-y-8"
           >
             <p className="text-zinc-400 text-lg md:text-2xl max-w-2xl font-medium leading-relaxed">
-              Create <span className="text-white border-b-2 border-indigo-500/50 pb-1">waifu, chibi, & pony art</span> in seconds with the world's most advanced models.
+              {t.rich('description', {
+                span1: (chunks) => <span className="text-white border-b-2 border-indigo-500/50 pb-1">{chunks}</span>
+              })}
             </p>
 
             <div className="flex flex-wrap gap-6 text-sm font-bold text-zinc-500 uppercase tracking-widest">
-              <span className="flex items-center gap-2"><Sparkles className="w-4 h-4 text-indigo-500" /> No sign-up</span>
-              <span className="flex items-center gap-2"><Sparkles className="w-4 h-4 text-purple-500" /> No watermark</span>
-              <span className="flex items-center gap-2"><Sparkles className="w-4 h-4 text-pink-500" /> 4K Quality</span>
+              <span className="flex items-center gap-2"><Sparkles className="w-4 h-4 text-indigo-500" /> {t('features.noSignUp')}</span>
+              <span className="flex items-center gap-2"><Sparkles className="w-4 h-4 text-purple-500" /> {t('features.noWatermark')}</span>
+              <span className="flex items-center gap-2"><Sparkles className="w-4 h-4 text-pink-500" /> {t('features.quality')}</span>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-5">
               <Link href="/generator" className="group">
                 <div className="flex items-center justify-center gap-3 px-10 py-5 bg-white text-black rounded-2xl font-black text-lg transition-all duration-300 hover:bg-indigo-500 hover:text-white transform hover:scale-105 shadow-2xl">
                   <PenTool className="w-5 h-5" />
-                  <span>Start Creating</span>
+                  <span>{t('buttons.startCreating')}</span>
                 </div>
               </Link>
 
               <Link href="/generator?mode=upload" className="group">
                 <div className="flex items-center justify-center gap-3 px-10 py-5 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 text-white rounded-2xl font-black text-lg transition-all duration-300 transform hover:scale-105">
                   <ImagePlus className="w-5 h-5" />
-                  <span>Image to Image</span>
+                  <span>{t('buttons.imageToImage')}</span>
                 </div>
               </Link>
             </div>

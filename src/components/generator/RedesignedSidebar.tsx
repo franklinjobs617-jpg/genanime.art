@@ -52,13 +52,13 @@ export default function RedesignedSidebar({
         {
             value: "Retro Cel 1990s",
             label: "Retro 90s",
-            img: "artStyles/style_retro_cel_90s.webp",
+            img: "/artStyles/style_retro_cel_90s.webp",
             description: "Classic 90s anime cel-shaded look"
         },
         {
             value: "Elite Game Splash",
             label: "Game Art",
-            img: "artStyles/style_game_splash_elite.webp",
+            img: "/artStyles/style_game_splash_elite.webp",
             description: "Dynamic game splash art style"
         },
         {

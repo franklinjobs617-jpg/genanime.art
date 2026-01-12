@@ -1,0 +1,141 @@
+{
+    "Metadata": {
+        "title": "KI Anime Generator | Kostenloser KI Bilder & Kunst Generator 2026",
+        "description": "Erstelle atemberaubende Anime-Kunst mit unserem KI-Generator. Bester KI-Anime-Kunstgenerator & Bildgenerator mit RTX 8090-Geschwindigkeit. Erstelle Waifus, Chibis & Szenen kostenlos. KI Mädchen erstellen leicht gemacht.",
+        "keywords": [
+            "KI Anime Generator",
+            "Anime KI Kunst Generator",
+            "Anime KI Bildgenerator",
+            "KI Bilder erstellen anime",
+            "KI Mädchen erstellen",
+            "Kostenloser KI Anime Generator",
+            "Anime KI Kunst erstellen",
+            "Waifu KI Generator",
+            "Bester KI Anime Generator"
+        ]
+    },
+    "Hero": {
+        "titleLine1": "Bester Anime",
+        "titleLine2": "KI Generator",
+        "description": "Erstelle <span1>Waifus, Chibis & Pony-Kunst</span1> in Sekunden mit den weltweit fortschrittlichsten Modellen.",
+        "searchPlaceholder": "Beschreibe deinen Traum... z.B. silbernes Haar, Cyberpunk",
+        "features": {
+            "noSignUp": "Ohne Anmeldung",
+            "noWatermark": "Kein Wasserzeichen",
+            "quality": "4K Qualität"
+        },
+        "buttons": {
+            "startCreating": "Jetzt Erstellen",
+            "imageToImage": "Bild-zu-Bild"
+        }
+    },
+    "FeatureSection": {
+        "title": "Erstelle atemberaubende <span1>Anime-Illustrationen</span1>",
+        "subtitle": "Von Waifu bis Cyberpunk – verwandle deine Ideen in Sekunden in hochwertige Anime-Illustrationen. Kostenlos und ohne Login.",
+        "cards": {
+            "waifu": "Anime Waifu Generator",
+            "pony": "Pony Diffusion Stil",
+            "animagine": "Animagine XL Modell",
+            "chibi": "Süßer Chibi-Maker",
+            "photo": "Foto-zu-Anime",
+            "portrait": "Anime Porträt Generator",
+            "couple": "Anime Paar-Kunst",
+            "action": "Anime Action-Szene",
+            "emoticons": "Anime Emoticons",
+            "cyberpunk": "Cyberpunk Anime Kunst",
+            "school": "Anime Schul-Szene",
+            "idol": "Anime Idol Generator",
+            "sticker": "Anime Sticker-Paket",
+            "mage": "Fantasy Magier Generator",
+            "knight": "Mittelalterlicher Ritter Anime",
+            "christmas": "Weihnachts-Anime Szene"
+        },
+        "buttons": {
+            "generate": "Mit diesem Prompt generieren"
+        }
+    },
+    "GalleryPage": {
+        "title": "<span1>Waifu</span1> Kunst erstellen",
+        "subtitle": "Generiere hochwertige <b>Anime Waifu Kunst</b>, <b>Cyberpunk Wallpaper</b> und <b>Chibi Charakter Designs</b> in Sekunden.",
+        "searchPlaceholder": "Suche nach 'Business Frau Anime' oder 'Cyberpunk'...",
+        "generateButton": "Generieren",
+        "trendingTitle": "Beliebte Kreationen",
+        "trendingSubtitle": "Entdecke Waifus & Wallpaper",
+        "loading": {
+            "title": "Engine wird geladen...",
+            "subtitle": "Arbeitsbereich wird vorbereitet"
+        },
+        "modes": {
+            "generation": "Bilderzeugung",
+            "video": "KI Video",
+            "upscaler": "Upscaler",
+            "soon": "Demnächst"
+        }
+    },
+    "promptLibrary": {
+        "title": "Prompt <span1>Bibliothek</span1>",
+        "searchPlaceholder": "Suche Stile, Charaktere...",
+        "popularTags": "Beliebte Tags",
+        "copyPrompt": "Prompt kopieren",
+        "copied": "Kopiert!",
+        "generateButton": "Mit diesem Stil generieren",
+        "tags": {
+            "Anime": "Anime",
+            "Girl": "Mädchen",
+            "Cyberpunk": "Cyberpunk",
+            "Kawaii": "Kawaii",
+            "Landscape": "Landschaft",
+            "Portrait": "Porträt"
+        }
+    },
+    "galleryItems": {
+        "1": "Business Frau Anime Kunst - Büro Stil",
+        "2": "Anime Waifu Kunst - Schulmädchen",
+        "3": "Cyberpunk Anime Wallpaper - Futuristisch",
+        "4": "Chibi Charakter Design - Süß & Kawaii",
+        "5": "Fantasy Elfen Bogenschütze - Charakterkunst",
+        "6": "Idol Konzert Bühne - Musik Performance",
+        "7": "Ghibli Szenerie Kunst - Nostalgische Landschaft",
+        "8": "3D Kinoreife Darstellung - Süßes Anime Mädchen",
+        "9": "Magical Girl Konzept - Charakterblatt",
+        "10": "Gemütliche Bilderbuch Illustration - Landhausstil",
+        "11": "Klinische Anime Kunst - Krankenhausuniform",
+        "12": "Dramatische Beleuchtung Porträt - Anime Mädchen",
+        "13": "Retro 80er Ästhetik - City Pop Vibe",
+        "14": "Epische Luftaufnahme - Anime Charakter",
+        "15": "Traumhafte Pastell-Ästhetik - Sanft & Elegant",
+        "16": "Fliegende Hexe Szenerie - Ghibli Stil",
+        "17": "Klassischer Manga Stil - Schwarz-Weiß",
+        "18": "Üppige Waldwiese - Studio Ghibli Stil",
+        "19": "Ganzkörper-Meisterwerk - Charakterdesign",
+        "20": "Kawaii Magical Girl - Rosa Haare",
+        "21": "3D Cartoon Action Szene - Korridor",
+        "22": "Anime Figur Setup - PVC Sammlung",
+        "23": "Dynamischer Action Rush - Anime Kampf",
+        "24": "Neonstraße Cyberpunk - Regen & Licht",
+        "25": "Silberner Heiliger Ritter - Fantasy Rüstung",
+        "26": "Himmlischer Magier - Sternenmagie",
+        "27": "Premium Waifu Porträt - Fließendes weißes Haar",
+        "28": "Pony Stil Kunst - Leuchtende Farben",
+        "29": "Animagine XL Qualität - Zukunftsbibliothek",
+        "30": "Mitternachts Romantik Paar - Feuerwerk",
+        "31": "Highschool Nachmittage - Sonnenuntergang Vibe",
+        "32": "Klassisches Anime Porträt - Sanfter Ausdruck",
+        "33": "Kawaii Sticker Set - Süßes Maskottchen",
+        "34": "Chibi Emote Pack - Süße Ausdrücke",
+        "35": "Cosplay Event Banner - Profi-Fotografie",
+        "36": "Oberkörper Meisterwerk - Komplexes Design"
+    },
+    "Schema": {
+        "websiteName": "AnimeAI - KI Anime Generator",
+        "alternateName": "Anime KI Kunst Generator",
+        "description": "Erstelle atemberaubende Anime-Kunst mit unserem KI-Generator. Bester KI-Anime-Kunstgenerator & Bildgenerator mit RTX 8090-Geschwindigkeit.",
+        "orgDescription": "Führende KI-gestützte Plattform für Anime-Kunst",
+        "webAppName": "AnimeAI Generator",
+        "webAppDescription": "Kostenloser KI-Anime-Kunstgenerator - Erstellen Sie atemberaubende Anime-Illustrationen, Waifus und Chibi-Charaktere mit fortschrittlicher KI-Technologie",
+        "breadcrumbHome": "Startseite",
+        "breadcrumbGenerator": "Generator",
+        "breadcrumbGallery": "Galerie",
+        "breadcrumbLibrary": "Prompt-Bibliothek"
+    }
+}

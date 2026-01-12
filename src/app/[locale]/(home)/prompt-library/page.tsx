@@ -15,6 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import { PROMPTS_DATA } from "./data";
 import Image from "next/image";
+import { useTranslations, useLocale } from "next-intl";
 
 // --- 辅助函数：根据数据中的比例返回对应的 Tailwind 类名 ---
 const getAspectRatioClass = (ratio: string) => {
@@ -42,12 +43,20 @@ const PromptCardImage = ({
   onClick: () => void;
 }) => {
   const [src, setSrc] = useState(`/images/prompts/${item.imageName}.webp`);
+  const locale = useLocale();
+
+  // Optimized Alt for SEO
+  const localizedAlt = locale === 'id'
+    ? `Gambar Anime: ${item.alt}`.replace('High-quality anime illustration of', 'Ilustrasi anime berkualitas tinggi')
+    : locale === 'de'
+      ? `Anime Bild: ${item.alt}`.replace('High-quality anime illustration of', 'Hochwertige Anime-Illustration von')
+      : item.alt || item.imageName;
 
   return (
     <div className="relative w-full h-full cursor-zoom-in bg-gray-900" onClick={onClick}>
       <Image
         src={src}
-        alt={item.alt || item.imageName}
+        alt={localizedAlt}
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         className="object-cover group-hover:scale-110 transition-transform duration-700"
@@ -70,6 +79,7 @@ const PromptCardImage = ({
 
 export default function PromptLibrary() {
   const router = useRouter();
+  const t = useTranslations('promptLibrary');
   const [copiedId, setCopiedId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
@@ -178,11 +188,11 @@ export default function PromptLibrary() {
               <div className="p-6 bg-[#0a0a0a] border-t border-white/10 z-20">
                 <div className="flex flex-col gap-3">
                   <button onClick={() => handleTryStyle(selectedItem.prompt)} className="w-full py-3.5 rounded-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 transition shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2 text-white">
-                    <Sparkles size={18} fill="currentColor" /> Generate with this Style
+                    <Sparkles size={18} fill="currentColor" /> {t('generateButton')}
                   </button>
                   <div className="flex gap-3">
                     <button onClick={() => handleCopy(selectedItem.prompt, selectedItem.id)} className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold border transition ${copiedId === selectedItem.id ? "bg-green-500/10 border-green-500/50 text-green-400" : "bg-white/5 border-white/10 hover:bg-white/10 text-gray-300"}`}>
-                      {copiedId === selectedItem.id ? <Check size={18} /> : <Copy size={18} />} {copiedId === selectedItem.id ? "Copied" : "Copy Prompt"}
+                      {copiedId === selectedItem.id ? <Check size={18} /> : <Copy size={18} />} {copiedId === selectedItem.id ? t('copied') : t('copyPrompt')}
                     </button>
                   </div>
                 </div>
@@ -196,7 +206,9 @@ export default function PromptLibrary() {
       <div className="pt-24 pb-20 px-4 md:px-8 max-w-[1600px] mx-auto">
         <header className="max-w-3xl mx-auto text-center mb-16">
           <h1 className="text-3xl md:text-6xl font-extrabold mb-6 tracking-tight">
-            Prompt <span className="bg-gradient-to-r from-purple-400 to-pink-600 text-transparent bg-clip-text">Library</span>
+            {t.rich('title', {
+              span1: (chunks: React.ReactNode) => <span className="bg-gradient-to-r from-purple-400 to-pink-600 text-transparent bg-clip-text">{chunks}</span>
+            })}
           </h1>
 
           <div className="relative max-w-2xl mx-auto group mb-8">
@@ -205,7 +217,7 @@ export default function PromptLibrary() {
               <Search className="ml-4 text-gray-500 shrink-0" size={20} />
               <input
                 type="text"
-                placeholder="Search styles, characters..."
+                placeholder={t('searchPlaceholder')}
                 className="w-full bg-transparent border-none focus:outline-none focus:ring-0 text-white px-3 md:px-4 py-2 text-sm md:text-lg placeholder-gray-600"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -217,34 +229,23 @@ export default function PromptLibrary() {
           </div>
 
           <div className="flex flex-wrap justify-center gap-2 relative z-10">
-            {["Cyberpunk", "Ghibli", "Samurai", "Kawaii", "Landscape"].map((tag) => (
+            {["Anime", "Girl", "Cyberpunk", "Kawaii", "Landscape", "Portrait"].map((tag) => (
               <button key={tag} onClick={() => setSearchQuery(tag)} className="px-3 py-1 rounded-full bg-white/5 border border-white/5 text-[11px] md:text-xs text-gray-300 hover:border-purple-500 hover:text-purple-400 transition">
-                {tag}
+                {t(`tags.${tag}` as any) || tag}
               </button>
             ))}
           </div>
         </header>
 
         <main>
-          {/* 
-            === 核心修改：瀑布流布局 (Masonry Layout) ===
-            1. 使用 columns-2 md:columns-3 ... 代替 grid-cols
-            2. 使用 gap-4 控制列间距
-            3. space-y-4 控制垂直间距 (备选，或在 Item 上加 mb-4)
-          */}
+
           <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 space-y-4 mx-auto">
             {filteredPrompts.map((item) => (
               <div
                 key={item.id}
-                // break-inside-avoid: 防止卡片在列之间被切断
-                // mb-4: 每个卡片底部的间距
                 className="break-inside-avoid mb-4 group relative bg-[#0f0f0f] border border-white/5 rounded-2xl overflow-hidden hover:border-purple-500/40 transition-all duration-300 flex flex-col"
               >
-                {/* 
-                  动态宽高比容器 
-                  getAspectRatioClass(item.ratio) 会根据图片比例返回 'aspect-video' 或 'aspect-[2/3]' 等
-                  这样横图就是横的，竖图就是竖的。
-                */}
+
                 <div className={`relative w-full ${getAspectRatioClass(item.ratio)} overflow-hidden bg-[#151515]`}>
                   <PromptCardImage
                     item={item}
@@ -262,14 +263,12 @@ export default function PromptLibrary() {
                   </div>
                 </div>
 
-                {/* 底部信息 (跟之前保持一致，但高度是自适应的) */}
                 <div className="p-3 md:p-4 flex flex-col bg-gradient-to-b from-transparent to-[#0a0a0a] cursor-pointer" onClick={() => setSelectedItem(item)}>
                   <div className="mb-2 flex items-center gap-1.5">
                     <ImageIcon size={10} className="text-purple-500" />
                     <span className="text-[9px] md:text-[10px] font-bold text-gray-500 uppercase truncate">{item.imageName}</span>
                   </div>
 
-                  {/* Prompt: 横图因为比较矮，为了不占太多位置，可以限制行数 */}
                   <div className="w-full">
                     <p className="text-gray-400 text-[10px] md:text-xs leading-relaxed font-mono line-clamp-2 italic bg-white/5 p-2 rounded border border-white/5">
                       {item.prompt}

@@ -1,7 +1,18 @@
 {
     "Metadata": {
         "title": "AI Pembuat Gambar Anime Girl | Generator Seni Anime Gratis 2026",
-        "description": "Buat gambar anime girl yang menakjubkan dengan AI generator kami. Pembuat gambar anime AI terbaik & generator seni dengan kecepatan tinggi. Buat waifu, chibi & pemandangan gratis."
+        "description": "Buat gambar anime girl yang menakjubkan dengan AI generator kami. Pembuat gambar anime AI terbaik & generator seni dengan kecepatan tinggi. Buat waifu, chibi & pemandangan gratis.",
+        "keywords": [
+            "generator video ai anime",
+            "generator seni ai anime",
+            "generator gambar ai anime",
+            "generator seni ai",
+            "waifu ai gratis",
+            "buat anime ai",
+            "seni anime ai rtx 8090",
+            "gambar anime ai",
+            "desain karakter anime ai"
+        ]
     },
     "Hero": {
         "titleLine1": "Pembuat",
@@ -114,5 +125,17 @@
             "35": "Banner Acara Cosplay - Fotografi Profesional",
             "36": "Karya Seni Portret Tubuh Atas - Desain Rumit"
         }
+    },
+    "Schema": {
+        "websiteName": "AnimeAI - Generator Anime AI",
+        "alternateName": "Generator Seni Anime AI",
+        "description": "Buat seni anime yang menakjubkan dengan generator AI anime kami. Generator gambar anime AI terbaik dengan kecepatan RTX 8090.",
+        "orgDescription": "Platform generator seni anime bertenaga AI terkemuka",
+        "webAppName": "AnimeAI Generator",
+        "webAppDescription": "Generator seni anime AI gratis - Buat ilustrasi anime, waifu, karakter chibi yang menakjubkan dengan teknologi AI canggih",
+        "breadcrumbHome": "Beranda",
+        "breadcrumbGenerator": "Generator",
+        "breadcrumbGallery": "Galeri",
+        "breadcrumbLibrary": "Pustaka Prompt"
     }
 }

@@ -37,15 +37,7 @@ const CallToAction = dynamic(() => import("@/components/home/CallToAction"), {
   ssr: true
 });
 
-export const metadata = {
-  title: "AI Anime Generator | Free Anime AI Art & Image Generator 2026",
-  description:
-    "Generate stunning anime art with our free AI anime generator. Best anime AI art generator with 2026 . Create waifu, chibi & scenes for free.",
 
-  alternates: {
-    canonical: "https://genanime.art/",
-  },
-};
 
 export default function HomePage() {
   return (

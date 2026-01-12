@@ -9,6 +9,7 @@ import { Globe, Check, ChevronDown } from "lucide-react";
 const languages = [
     { code: "en", label: "English" },
     { code: "id", label: "Indonesia" },
+    { code: "de", label: "Deutsch" },
 ];
 
 export default function LanguageSwitcher({ isMobile = false }: { isMobile?: boolean }) {

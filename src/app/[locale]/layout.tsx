@@ -36,26 +36,18 @@ export async function generateMetadata(props: {
     },
     title: t('title'),
     description: t('description'),
-    keywords: [
-      "ai video generator anime opening",
-      "anime ai art generator",
-      "anime ai image generator",
-      "ai art generator anime",
-      "ai image generator anime",
-      "anime art ai generated rtx 8090",
-      "ai animal generator",
-      "ai anime generator",
-      "ai animation generator",
-      "anime ai generator",
-      "anime ai art generator",
-      "anime ai image generator",
-    ],
+    keywords: t.raw('keywords'),
     alternates: {
-      canonical: "https://genanime.art/",
+      canonical: `/${locale === 'en' ? '' : locale}`,
+      languages: {
+        'en': '/',
+        'id': '/id',
+        'de': '/de'
+      },
     },
     openGraph: {
       type: 'website',
-      locale: locale === 'en' ? 'en_US' : locale === 'id' ? 'id_ID' : 'ru_RU',
+      locale: locale === 'en' ? 'en_US' : locale === 'id' ? 'id_ID' : locale === 'de' ? 'de_DE' : 'ru_RU',
       url: 'https://genanime.art/',
       siteName: 'AnimeAI - AI Anime Generator',
       title: t('title'),
@@ -98,6 +90,7 @@ export default async function RootLayout(props: {
   const { locale } = params;
   const { children } = props;
   const messages = await getMessages();
+  const st = await getTranslations({ locale, namespace: 'Schema' });
 
   return (
     <html lang={locale} className={`${inter.variable} ${plusJakarta.variable}`}>
@@ -137,10 +130,10 @@ export default async function RootLayout(props: {
               __html: JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "WebSite",
-                "name": "AnimeAI - AI Anime Generator",
-                "alternateName": "Anime AI Art Generator",
+                "name": st('websiteName'),
+                "alternateName": st('alternateName'),
                 "url": "https://genanime.art",
-                "description": "Create stunning anime art with our AI anime generator. Best anime AI art generator & image generator with RTX 8090 speed.",
+                "description": st('description'),
                 "potentialAction": {
                   "@type": "SearchAction",
                   "target": {
@@ -161,10 +154,10 @@ export default async function RootLayout(props: {
               __html: JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "Organization",
-                "name": "AnimeAI",
+                "name": st('websiteName'),
                 "url": "https://genanime.art",
                 "logo": "https://genanime.art/logo.png",
-                "description": "Leading AI-powered anime art generator platform",
+                "description": st('orgDescription'),
                 "sameAs": [
                   "https://twitter.com/AnimeAI",
                   "https://www.facebook.com/AnimeAI"
@@ -186,16 +179,16 @@ export default async function RootLayout(props: {
               __html: JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "WebApplication",
-                "name": "AnimeAI Generator",
+                "name": st('webAppName'),
                 "url": "https://genanime.art/generator",
-                "description": "Free AI anime art generator - Create stunning anime illustrations, waifu, chibi characters with advanced AI technology",
+                "description": st('webAppDescription'),
                 "applicationCategory": "DesignApplication",
                 "operatingSystem": "Any",
                 "offers": {
                   "@type": "Offer",
                   "price": "0",
                   "priceCurrency": "USD",
-                  "description": "Free tier with 2 generations"
+                  "description": "Free tier available"
                 },
                 "aggregateRating": {
                   "@type": "AggregateRating",
@@ -203,15 +196,7 @@ export default async function RootLayout(props: {
                   "ratingCount": "15420",
                   "bestRating": "5",
                   "worstRating": "1"
-                },
-                "featureList": [
-                  "AI-powered anime art generation",
-                  "Multiple anime styles (Vibrant, Retro 90s, Cyberpunk, Makoto Shinkai)",
-                  "Custom aspect ratios (1:1, 2:3, 16:9)",
-                  "High-resolution output (up to 8K)",
-                  "Free tier available",
-                  "Fast generation with RTX 8090 speed"
-                ]
+                }
               })
             }}
           />
@@ -228,25 +213,25 @@ export default async function RootLayout(props: {
                   {
                     "@type": "ListItem",
                     "position": 1,
-                    "name": "Home",
+                    "name": st('breadcrumbHome'),
                     "item": "https://genanime.art"
                   },
                   {
                     "@type": "ListItem",
                     "position": 2,
-                    "name": "Generator",
+                    "name": st('breadcrumbGenerator'),
                     "item": "https://genanime.art/generator"
                   },
                   {
                     "@type": "ListItem",
                     "position": 3,
-                    "name": "Gallery",
+                    "name": st('breadcrumbGallery'),
                     "item": "https://genanime.art/gallery"
                   },
                   {
                     "@type": "ListItem",
                     "position": 4,
-                    "name": "Prompt Library",
+                    "name": st('breadcrumbLibrary'),
                     "item": "https://genanime.art/prompt-library"
                   }
                 ]

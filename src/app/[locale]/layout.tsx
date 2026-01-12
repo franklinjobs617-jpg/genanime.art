@@ -6,8 +6,6 @@ import FeedbackWidget from "@/components/feedweight";
 import Script from "next/script";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 
 
 const inter = Inter({
@@ -240,9 +238,7 @@ export default async function RootLayout(props: {
           />
 
           <Providers>
-            <Header />
             {children}
-            <Footer />
             <ScrollToTop />
             <FeedbackWidget />
           </Providers>

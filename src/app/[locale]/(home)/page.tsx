@@ -1,41 +1,28 @@
 import dynamic from 'next/dynamic';
 import Hero from "@/components/home/Hero";
 
-// Lazy load below-the-fold components with loading states
+// Lazy load below-the-fold components
 const FeatureSection = dynamic(() => import("@/components/home/FeatureSection"), {
-  loading: () => <div className="h-screen bg-[#050505]" />,
-  ssr: true
+  loading: () => <div className="min-h-[400px] bg-[#050505]" />
 });
 
 const HowItWorks = dynamic(() => import("@/components/home/HowItWorks"), {
-  loading: () => <div className="h-screen bg-[#050505]" />,
-  ssr: true
+  loading: () => <div className="min-h-[400px] bg-[#050505]" />
 });
 
 const PromptLibraryPreview = dynamic(() => import("@/components/home/PromptLibraryPreview"), {
-  loading: () => <div className="h-screen bg-[#050505]" />,
-  ssr: true
+  loading: () => <div className="min-h-[600px] bg-[#050505]" />
 });
 
 const CoreFeatures = dynamic(() => import("@/components/home/CoreFeatures"), {
-  loading: () => <div className="h-screen bg-[#050505]" />,
-  ssr: true
+  loading: () => <div className="min-h-[600px] bg-[#050505]" />
 });
 
-const SEOContentSection = dynamic(() => import("@/components/home/SEOContentSection"), {
-  loading: () => <div className="min-h-[400px] bg-[#050505]" />,
-  ssr: true
-});
+const SEOContentSection = dynamic(() => import("@/components/home/SEOContentSection"));
 
-const FAQSection = dynamic(() => import("@/components/home/FAQSection"), {
-  loading: () => <div className="min-h-[600px] bg-[#050505]" />,
-  ssr: true
-});
+const FAQSection = dynamic(() => import("@/components/home/FAQSection"));
 
-const CallToAction = dynamic(() => import("@/components/home/CallToAction"), {
-  loading: () => <div className="h-96 bg-[#050505]" />,
-  ssr: true
-});
+const CallToAction = dynamic(() => import("@/components/home/CallToAction"));
 
 
 

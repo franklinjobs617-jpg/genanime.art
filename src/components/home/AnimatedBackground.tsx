@@ -35,7 +35,7 @@ export default function AnimatedBackground() {
             fill
             className="object-cover object-center saturate-125 contrast-110"
             priority={true}
-            quality={90}
+            quality={75}
             sizes="100vw"
           />
         </motion.div>

@@ -30,11 +30,9 @@ const featuredPrompts = [
 export default function PromptLibraryPreview() {
   return (
     <section id="prompt-library" className="py-20 lg:py-28 bg-[#050505] text-white overflow-hidden">
-      {/* 背景装饰光 (可选) */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-purple-900/10 blur-[120px] pointer-events-none" />
 
       <div className="container mx-auto px-4 max-w-7xl relative z-10">
-        {/* Title Section */}
         <div className="text-center mb-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -71,14 +69,14 @@ export default function PromptLibraryPreview() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group bg-[#111] border border-white/5 rounded-3xl overflow-hidden hover:border-purple-500/30 transition-all duration-500 flex flex-col h-full shadow-lg hover:shadow-purple-900/10"
             >
-              {/* 图片区域 - 移除全遮罩，保持通透 */}
               <div className="relative h-64 w-full overflow-hidden bg-zinc-800">
                 <Image
                   src={item.image}
                   alt={`AI generated art`}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                  sizes="(max-width: 768px) 100vw, 33vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  quality={75}
                 />
 
                 {/* 仅在底部保留极小的渐变，让图片主体不被遮挡 */}

@@ -37,6 +37,7 @@ export default function AnimatedBackground() {
             priority={true}
             quality={75}
             sizes="100vw"
+            unoptimized={false}
           />
         </motion.div>
       </AnimatePresence>

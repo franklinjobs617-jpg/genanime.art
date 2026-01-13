@@ -50,7 +50,8 @@ export default function CoreFeatures() {
                 alt="High Speed Generation"
                 fill
                 className="object-cover"
-                sizes="(max-width: 768px) 100vw, 33vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                quality={75}
               />
             </div>
           </motion.div>
@@ -75,7 +76,8 @@ export default function CoreFeatures() {
                 alt="Mobile Studio Mockup"
                 fill
                 className="object-cover"
-                sizes="(max-width: 768px) 100vw, 33vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                quality={75}
               />
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-purple-900/30 to-transparent" />
@@ -99,7 +101,8 @@ export default function CoreFeatures() {
                 alt="Advanced Models Showcase"
                 fill
                 className="object-cover object-center"
-                sizes="(max-width: 768px) 100vw, 33vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                quality={75}
               />
             </div>
           </motion.div>

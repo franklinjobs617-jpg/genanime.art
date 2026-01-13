@@ -240,6 +240,7 @@ export default function FeatureSection() {
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 33vw"
+                  quality={75}
                 />
                 <div className="absolute top-4 left-4">
                   <span className="bg-black/60 backdrop-blur-xl text-white text-[11px] font-bold px-3 py-1.5 rounded-full border border-white/10 tracking-wide">
@@ -317,7 +318,8 @@ export default function FeatureSection() {
                   fill
                   className="object-cover select-none pointer-events-none"
                   draggable={false}
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  quality={75}
                 />
 
                 <div

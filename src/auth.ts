@@ -3,12 +3,8 @@ import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import { prisma } from "@/lib/prisma";
 import { setGlobalDispatcher, ProxyAgent } from "undici";
+import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET } from "@/config/secrets.local";
 
-// 1. 开发环境网络代理
-if (process.env.NODE_ENV === "development") {
-  const dispatcher = new ProxyAgent("http://127.0.0.1:7890"); // 替换为你的 VPN 端口
-  setGlobalDispatcher(dispatcher);
-}
 
 // 将站点类型固定为 4
 const CURRENT_SITE_TYPE = "4";
@@ -17,8 +13,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   providers: [
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
       authorization: {
         params: {
           prompt: "consent",
@@ -28,7 +24,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  secret: process.env.AUTH_SECRET,
+  secret: NEXTAUTH_SECRET,
   trustHost: true,
 
   callbacks: {
@@ -50,7 +46,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               accessToken: account.access_token,
               picture: user.image,
               name: user.name,
-              // 注意：这里更新的是 googleUserId。如果数据库此列已有值且不想改变，可移除此行
             },
             create: {
               email: email,

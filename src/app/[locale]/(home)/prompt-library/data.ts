@@ -258,5 +258,18 @@ export const PROMPTS_DATA = [
         tags: ["Library", "Atmosphere", "Reading"],
         ratio: "16:9",
         likes: "6.8k"
+    },
+    {
+        id:41,
+        imageName:"Ink_Style_White_Hair_Rose_Girl_01",
+        alt:`Core: 1girl, short white hair, glowing green eyes, holding a single red rose, white button-up shirt, black pencil skirt, black pantyhose, sitting on a windowsill, window view.
+Style: Monochrome background, black and white style, ink wash style, sumi-e influence, selective color (red rose and green eyes), high contrast, minimalist, cinematic lighting, melancholy atmosphere, aesthetic, sharp focus, masterpiece.`,
+originalPrompt:`Core: 1girl, short white hair, glowing green eyes, holding a single red rose, white button-up shirt, black pencil skirt, black pantyhose, sitting on a windowsill, window view.
+Style: Monochrome background, black and white style, ink wash style, sumi-e influence, selective color (red rose and green eyes), high contrast, minimalist, cinematic lighting, melancholy atmosphere, aesthetic, sharp focus, masterpiece.`,
+prompt:`Core: 1girl, short white hair, glowing green eyes, holding a single red rose, white button-up shirt, black pencil skirt, black pantyhose, sitting on a windowsill, window view.
+Style: Monochrome background, black and white style, ink wash style, sumi-e influence, selective color (red rose and green eyes), high contrast, minimalist, cinematic lighting, melancholy atmosphere, aesthetic, sharp focus, masterpiece.`,
+          tags: ["Library", "Atmosphere", "Reading"],
+        ratio: "2:3",
+        likes: "6.8k",
     }
 ];

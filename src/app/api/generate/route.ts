@@ -1,135 +1,140 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { addWatermark } from "@/lib/watermark"
-import OpenAI from "openai"
+import { type NextRequest, NextResponse } from "next/server";
+import { addWatermark } from "@/lib/watermark";
+import OpenAI from "openai";
+import { prisma } from "@/lib/prisma";
+
+const COST_PER_IMAGE = 2; // 单价
 
 const STYLE_PROMPTS: Record<string, string> = {
-    "Vibrant V6 Core":
-        "official art, unity 8k wallpaper, ultra detailed, beautiful and aesthetic, masterpiece, best quality, vibrant colors, cinematic lighting",
-    "Retro Cel 1990s":
-        "1990s anime style, retro anime, cel shading, screen shot, vhs effect, noise, vintage aesthetic, sailor moon style",
-    "Elite Game Splash":
-        "game splash art, genshin impact style, honkai star rail style, super detailed, dynamic pose, elemental effects, character design",
-    "Makoto Ethereal":
-        "makoto shinkai style, kimi no na wa style, clouds, blue sky, lens flare, breathtaking scenery, highly detailed",
-    "Cyberpunk Trigger":
-        "studio trigger style, cyberpunk edgerunners style, neon lights, chromatic aberration, bold lines, vivid colors",
-    "Pastel Luxe Art":
-        "pastel colors, soft lighting, thick coating, painterly, dreamlike, ethereal, illustration, feminine",
-}
+  "Vibrant Anime":
+    "official art, unity 8k wallpaper, ultra detailed, vibrant colors, aesthetic masterpiece",
+  "Retro 90s": "1990s anime style, cel shaded, vintage aesthetic, vhs noise",
+  "Elite Game Splash":
+    "game splash art, genshin impact style, honkai star rail style, dynamic pose",
+  "Makoto Ethereal":
+    "makoto shinkai style, kimi no na wa style, breathtaking scenery, highly detailed",
+  "Cyberpunk Trigger":
+    "studio trigger style, neon lights, bold lines, vivid colors",
+  "Pastel Luxe Art": "pastel colors, soft lighting, painterly, dreamlike",
+};
 
 export async function POST(req: NextRequest) {
-    try {
-        const body = await req.json()
-        const { prompt, style, ratio, quantity = 1, isPremium } = body
+  try {
+    const body = await req.json();
+    const { prompt, style, ratio, quantity = 1, googleUserId, negativePrompt } = body;
 
-        if (!prompt || !prompt.trim()) {
-            return NextResponse.json({ success: false, error: "提示词不能为空" }, { status: 400 })
-        }
+    if (!prompt?.trim())
+      return NextResponse.json(
+        { success: false, error: "Prompt is required" },
+        { status: 400 }
+      );
 
-        const styleSuffix = STYLE_PROMPTS[style] || STYLE_PROMPTS["Vibrant V6 Core"]
-        const finalPrompt = `${prompt}, ${styleSuffix}`
+    const isGuest = !googleUserId;
+    const cookies = req.cookies;
+    const guestCount = Number(cookies.get("guest_gen_count")?.value || "0");
+    const GUEST_DAILY_LIMIT = 2;
 
-        let width = 1920
-        let height = 1920
+    if (isGuest) {
+      if (guestCount >= GUEST_DAILY_LIMIT) {
+        return NextResponse.json(
+          { success: false, error: "Free limit reached" },
+          { status: 429 }
+        );
+      }
+    }
 
-        // 根据模型限制调整分辨率 (Doubao模型通常最大支持边长为 2048 或特定比例，此处保留你的逻辑)
-        if (ratio === "2:3") {
-            width = 1536
-            height = 2304
-        } else if (ratio === "3:2") {
-            width = 2304
-            height = 1536
-        } else if (ratio === "16:9") {
-            width = 2560
-            height = 1440
-        } else if (ratio === "9:16") {
-            width = 1440
-            height = 2560
-        }
-
-        const sizeStr = `${width}x${height}`
-
-        console.log("[Generate API] Processing:", {
-            prompt,
-            style,
-            ratio,
-            count: quantity,
-            size: sizeStr,
-        })
-
-        const apiKey = "3a4b60e4-f692-4210-b26e-a03c636fc804"
-        const endpointId = "doubao-seedream-4-5-251128"
-
-        if (!apiKey || !endpointId) {
-            throw new Error("Missing DOUBAO_API_KEY or DOUBAO_ENDPOINT_ID")
-        }
-
-        const client = new OpenAI({
-            apiKey: apiKey,
-            baseURL: "https://ark.cn-beijing.volces.com/api/v3",
-        })
-
-
-        const promises = Array.from({ length: quantity }).map(() =>
-            client.images.generate({
-                model: endpointId,
-                prompt: finalPrompt,
-                n: 1, // 强制每次只请求 1 张，因为上游限制
-                size: sizeStr as any,
-                response_format: "b64_json",
-                watermark: false,
-            } as any)
+    let user: any = null;
+    if (!isGuest) {
+      user = await prisma.user.findUnique({ where: { googleUserId } });
+      if (!user)
+        return NextResponse.json(
+          { success: false, error: "User not found" },
+          { status: 404 }
         );
 
-        // 并发执行所有请求 (Promise.all 会等待所有请求完成)
-        const responses = await Promise.all(promises);
-
-        const imageUrls: string[] = []
-
-        // 处理所有返回结果
-        for (const response of responses) {
-            if (response.data) {
-                for (const item of response.data) {
-                    const base64Data = item.b64_json
-                    if (!base64Data) continue
-
-                    let imageBuffer: Buffer = Buffer.from(base64Data, "base64")
-
-                    // Apply watermark if not premium
-                    if (!isPremium) {
-                        try {
-                            imageBuffer = await addWatermark(imageBuffer, "AnimeAI Generator")
-                        } catch (wmError) {
-                            console.error("Watermark failed:", wmError)
-
-                        }
-                    }
-
-                    const finalBase64 = imageBuffer.toString("base64")
-                    imageUrls.push(`data:image/jpeg;base64,${finalBase64}`)
-                }
-            }
-        }
-        // --- 核心修改结束 ---
-
-        if (imageUrls.length === 0) {
-            throw new Error("No image data received from API")
-        }
-
-        return NextResponse.json({
-            success: true,
-            images: imageUrls,
-            creditsRemaining: isPremium ? 9999 : 1000,
-        })
-    } catch (error) {
-        console.error("[Generate API] Error:", error)
-
+      const totalCost = quantity * COST_PER_IMAGE;
+      if (Number(user.credits) < totalCost) {
         return NextResponse.json(
-            {
-                success: false,
-                error: error instanceof Error ? error.message : "生成图片失败",
-            },
-            { status: 500 },
-        )
+          { success: false, error: "Insufficient credits" },
+          { status: 403 }
+        );
+      }
     }
+
+    const styleSuffix = STYLE_PROMPTS[style] || STYLE_PROMPTS["Vibrant Anime"];
+    let finalPrompt = `${prompt}, ${styleSuffix}`;
+    if (negativePrompt?.trim()) {
+      finalPrompt += `, negative prompt: ${negativePrompt}`;
+    }
+
+    let sizeStr = "1920x1920"; // 默认 1:1
+    if (ratio === "9:16") {
+      sizeStr = "1440x2560";
+    } else if (ratio === "16:9") {
+      sizeStr = "2560x1440";
+    } else if (ratio === "2:3") {
+      sizeStr = "1536x2400";
+    } else if (ratio === "3:2") {
+      sizeStr = "2400x1536";
+    }
+
+    const effectiveQuantity = isGuest ? 1 : quantity;
+
+    const client = new OpenAI({
+      apiKey: "3a4b60e4-f692-4210-b26e-a03c636fc804",
+      baseURL: "https://ark.cn-beijing.volces.com/api/v3",
+    });
+
+    const promises = Array.from({ length: effectiveQuantity }).map(() =>
+      client.images.generate({
+        model: "doubao-seedream-4-5-251128",
+        prompt: finalPrompt,
+        size: sizeStr as any,
+        response_format: "b64_json",
+      } as any)
+    );
+
+    const responses = await Promise.all(promises);
+    const imageUrls: string[] = [];
+
+    const isPremium = !isGuest && Number(user.credits) > 100;
+
+    for (const res of responses) {
+      const base64 = res.data?.[0]?.b64_json;
+      if (!base64) continue;
+
+      let buffer: any = Buffer.from(base64, "base64");
+      if (!isPremium) {
+        try {
+          buffer = await addWatermark(buffer, "GenAnime.art");
+        } catch (e) {
+          console.error("Watermark error:", e);
+        }
+      }
+      imageUrls.push(`data:image/png;base64,${buffer.toString("base64")}`);
+    }
+
+    if (!isGuest) {
+      const totalCost = quantity * COST_PER_IMAGE;
+      await prisma.user.update({
+        where: { googleUserId },
+        data: { credits: (Number(user.credits) - totalCost).toString() },
+      });
+    }
+
+    const res = NextResponse.json({ success: true, images: imageUrls });
+    if (isGuest) {
+      res.cookies.set("guest_gen_count", String(guestCount + 1), {
+        maxAge: 60 * 60 * 24,
+        path: "/",
+      });
+    }
+    return res;
+  } catch (error: any) {
+    console.error("[API Error]:", error);
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
+  }
 }

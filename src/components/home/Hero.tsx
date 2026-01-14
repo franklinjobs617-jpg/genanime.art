@@ -15,6 +15,7 @@ export default function Hero() {
   const styleTags = ["Waifu", "Chibi", "Pony Diffusion", "Animagine XL", "Niji Style"];
 
   const handleTagClick = (tag: string) => {
+    setInputValue(tag);
     router.push(`/generator?prompt=${encodeURIComponent(tag)}`);
   };
 
@@ -106,12 +107,15 @@ export default function Hero() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-5">
-              <Link href="/generator" className="group">
-                <div className="flex items-center justify-center gap-3 px-10 py-5 bg-white text-black rounded-2xl font-black text-lg transition-all duration-300 hover:bg-indigo-500 hover:text-white transform hover:scale-105 shadow-2xl">
+              <button
+                onClick={() => router.push("/generator")}
+                className="group"
+              >
+                <div className="flex items中心 justify-center gap-3 px-10 py-5 bg-white text-black rounded-2xl font-black text-lg transition-all duration-300 hover:bg-indigo-500 hover:text-white transform hover:scale-105 shadow-2xl">
                   <PenTool className="w-5 h-5" />
                   <span>{t('buttons.startCreating')}</span>
                 </div>
-              </Link>
+              </button>
 
               <Link href="/generator?mode=upload" className="group">
                 <div className="flex items-center justify-center gap-3 px-10 py-5 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 text-white rounded-2xl font-black text-lg transition-all duration-300 transform hover:scale-105">

@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/stripePayment.html', 
+        destination: '/stripePayment',
+      },
+    ];
+  },
 };
 
 export default withNextIntl(nextConfig);

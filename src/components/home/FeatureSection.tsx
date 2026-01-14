@@ -261,7 +261,6 @@ export default function FeatureSection() {
                     {card.prompt}
                   </p>
                 </div>
-                {/* 4. 绑定移动端按钮事件 */}
                 <button
                   onClick={() => handleGenerate(card.prompt)}
                   className="w-full h-12 bg-[#1a1a1a] active:bg-black text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
@@ -275,7 +274,6 @@ export default function FeatureSection() {
         <div className="w-2 shrink-0"></div>
       </div>
 
-      {/* ===================== DESKTOP VIEW ===================== */}
       <div
         ref={containerRef}
         className="hidden md:flex w-full h-[750px] flex-col justify-center relative"

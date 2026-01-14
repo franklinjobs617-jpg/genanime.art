@@ -2,7 +2,7 @@
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://h5v2_rds:h5v2_rds%23%40%23KmLnO%25st@rm-t4n660m985q39e7ndro.mysql.singapore.rds.aliyuncs.com:3306/h5_v2"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -11,7 +11,7 @@ generator client {
 
 model user {
   id            Int      @id @default(autoincrement())
-  googleUserId  String?  @unique @map("google_user_id") 
+   googleUserId   String?   @unique @map("google_user_id") 
   email         String?
   name          String?
   givenName     String?  @map("given_name")
@@ -20,9 +20,11 @@ model user {
   credits       String   @default("5")
   accessToken   String?  @db.Text @map("access_token")
   ip            String?  @default("0.0.0.0")
-  type          String   @default("1")
+  type          String   @default("1") // 对应网站类型：1.removermarca 2.genanime 等
   createTime    DateTime @default(now()) @map("create_time")
   updateTime    DateTime @updatedAt @map("update_time")
-  @@unique([email, type], name: "email_type") 
+
+  // 【关键】联合唯一索引：保证同一个 email + type 组合只有一条记录
+   @@unique([email, type], name: "email_type") 
   @@map("google_user")
 }

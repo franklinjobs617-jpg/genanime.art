@@ -1,10 +1,14 @@
 // src/auth.ts
-import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
-import { prisma } from "@/lib/prisma";
+import NextAuth from "next-auth"
+import Google from "next-auth/providers/google"
+import { prisma } from "@/lib/prisma"
 import { setGlobalDispatcher, ProxyAgent } from "undici";
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET } from "@/config/secrets";
 
+// 1. 开发环境网络代理
+if (process.env.NODE_ENV === "development") {
+    const dispatcher = new ProxyAgent("http://127.0.0.1:7890"); // 替换为你的 VPN 端口
+    setGlobalDispatcher(dispatcher);
+}
 
 // 将站点类型固定为 4
 const CURRENT_SITE_TYPE = "4";
@@ -13,18 +17,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   providers: [
     Google({
-      clientId: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       authorization: {
         params: {
           prompt: "consent",
           access_type: "offline",
-          response_type: "code",
-        },
-      },
+          response_type: "code"
+        }
+      }
     }),
   ],
-  secret: NEXTAUTH_SECRET,
+  secret: process.env.AUTH_SECRET,
   trustHost: true,
 
   callbacks: {
@@ -39,13 +43,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             where: {
               email_type: {
                 email: email,
-                type: CURRENT_SITE_TYPE,
-              },
+                type: CURRENT_SITE_TYPE
+              }
             },
             update: {
               accessToken: account.access_token,
               picture: user.image,
               name: user.name,
+              // 注意：这里更新的是 googleUserId。如果数据库此列已有值且不想改变，可移除此行
             },
             create: {
               email: email,
@@ -56,8 +61,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               familyName: (profile as any)?.family_name,
               picture: user.image,
               accessToken: account.access_token,
-              credits: "5",
-              ip: "0.0.0.0",
+              credits: "5", 
+              ip: "0.0.0.0"
             },
           });
 
@@ -73,18 +78,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     // 💡 JWT 回调：从数据库取出 UUID 放入 Token
     async jwt({ token, user, account }) {
       if (token.email) {
-        const dbUser: any = await prisma.user.findUnique({
+        const dbUser:any= await prisma.user.findUnique({
           where: {
             email_type: {
               email: token.email,
-              type: CURRENT_SITE_TYPE,
-            },
-          },
+              type: CURRENT_SITE_TYPE
+            }
+          }
         });
 
         if (dbUser) {
-          token.dbId = dbUser.id;
-          token.googleUserId = dbUser.googleUserId;
+          token.dbId = dbUser.id; // 数字 ID (464)
+          token.googleUserId = dbUser.googleUserId; 
           token.credits = dbUser.credits;
           token.siteType = dbUser.type;
         }
@@ -95,11 +100,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }: any) {
       if (token && session.user) {
         session.user.id = token.dbId;
-        session.user.googleUserId = token.googleUserId;
+        session.user.googleUserId = token.googleUserId; 
         session.user.credits = token.credits;
         session.user.siteType = token.siteType;
       }
       return session;
-    },
+    }
   },
-});
+})

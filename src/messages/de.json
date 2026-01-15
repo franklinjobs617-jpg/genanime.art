@@ -12,6 +12,20 @@
             "Waifu KI Generator"
         ]
     },
+    "Navigation": {
+        "home": "Startseite",
+        "gallery": "Galerie",
+        "generator": "Generator",
+        "pricing": "Preise",
+        "blog": "Blog",
+        "promptLibrary": "Prompt-Bibliothek",
+        "aiGuide": "KI-Anleitung",
+        "login": "Anmelden",
+        "signUp": "Registrieren",
+        "faq": "FAQ",
+        "privacy": "Datenschutz",
+        "terms": "Nutzungsbedingungen"
+    },
     "Hero": {
         "titleLine1": "Bester Anime",
         "titleLine2": "KI Generator",
@@ -135,5 +149,101 @@
         "breadcrumbGenerator": "Generator",
         "breadcrumbGallery": "Galerie",
         "breadcrumbLibrary": "Prompt-Bibliothek"
+    },
+    "CoreFeatures": {
+        "title": "Alles was Sie brauchen, um",
+        "subtitle": "Anime-Kreation zu meistern.",
+        "engine": {
+            "title": "Professionelle",
+            "highlight": "Generierungs-Engine",
+            "description": "Angetrieben von modernsten GPU-Clustern. Erleben Sie blitzschnelle Generierungsgeschwindigkeiten ohne Kompromisse bei den feinen Details Ihrer Kunstwerke.",
+            "tag1": "Schnelle Generierung",
+            "tag2": "Hohe Auflösung",
+            "tag3": "Kostenlos starten"
+        },
+        "mobile": {
+            "title": "Mobiles Studio",
+            "description": "Ihr kreatives Studio in der Hosentasche. Vollständig optimiert für iOS- und Android-Geräte."
+        },
+        "models": {
+            "title": "Erweiterte Modelle",
+            "description": "Zugriff auf Premium-Modelle wie Animagine XL und Pony Diffusion V6."
+        },
+        "commercial": {
+            "title": "Kommerzielle Rechte",
+            "description": "Vollständiges Eigentum an Ihren Kreationen für kommerzielle Projekte."
+        }
+    },
+    "HowItWorks": {
+        "title": "Professionelle Anime-Kunst",
+        "subtitle": "in 3 einfachen Schritten",
+        "description": "Optimierter Workflow für Anfänger und Profi-Kreative.",
+        "steps": {
+            "step1": {
+                "title": "Beschreiben Sie Ihre Vision",
+                "description": "Geben Sie einen Prompt ein oder nutzen Sie unseren intelligenten Assistenten für die perfekte Beschreibung."
+            },
+            "step2": {
+                "title": "Premium-Modell wählen",
+                "description": "Wählen Sie aus unserer kuratierten Liste hochwertiger Anime-Modelle und -Stile."
+            },
+            "step3": {
+                "title": "Generieren & Verfeinern",
+                "description": "Erhalten Sie sofort hochauflösende Ergebnisse. Vergrößern, variieren oder laden Sie Ihr Meisterwerk herunter."
+            }
+        }
+    },
+    "CallToAction": {
+        "title": "Bereit, Ihr",
+        "highlight": "Meisterwerk zu erschaffen?",
+        "description": "Schließen Sie sich Tausenden von Kreativen an, die ihre Fantasie Wirklichkeit werden lassen.",
+        "subdescription": "Beginnen Sie in Sekunden mit der Erstellung professioneller Anime-Kunst.",
+        "button": "Jetzt Generieren",
+        "note": "Keine Kreditkarte erforderlich"
+    },
+    "FAQ": {
+        "title": "Häufig gestellte Fragen",
+        "items": [
+            {
+                "q": "Ist dies der beste KI-Anime-Generator für Anfänger?",
+                "a": "Ja! Unsere Benutzeroberfläche ist für jeden konzipiert. Sie können unseren KI-Anime-Generator verwenden, um Charaktere oder Szenen ohne technische Kenntnisse zu erstellen. Einfach Ihre Idee eingeben und generieren."
+            },
+            {
+                "q": "Kann ich die KI-generierten Anime-Kunstwerke kommerziell nutzen?",
+                "a": "Absolut. Ob Sie eine 'KI-generierte Anime-Geschäftsfrau' für eine Präsentation oder Assets für ein Spiel erstellen – Sie besitzen die kommerziellen Rechte an Ihren Kreationen in unseren bezahlten Plänen."
+            },
+            {
+                "q": "Wie funktioniert die KI-generierte animierte Sprite-Funktion?",
+                "a": "Unser spezialisierter Modus ermöglicht es Ihnen, Charakterbögen mit transparenten Hintergründen zu generieren. Er gewährleistet Konsistenz über verschiedene Posen hinweg – perfekt für 2D-Spieleentwicklung."
+            },
+            {
+                "q": "Welche Technologie treibt Ihren Anime-KI-Generator an?",
+                "a": "Wir verwenden ein maßgeschneidertes, hochauflösendes KI-Modell, das speziell für Anime-Ästhetik optimiert ist. Es zeichnet sich durch das Verständnis komplexer Prompts oder komplizierter mechanischer Details aus und übertrifft generische Standardmodelle."
+            }
+        ]
+    },
+    "SEOContent": {
+        "features": [
+            {
+                "title": "Hochauflösende Anime-Kunst",
+                "description": "Generieren Sie professionelle Illustrationen mit perfekter Beleuchtung. Der beste KI-Anime-Kunstgenerator für Kreative.",
+                "label": "Jetzt verfügbar"
+            },
+            {
+                "title": "Charakterdesign",
+                "description": "Erstellen Sie konsistente Charaktere von Kopf bis Fuß. Ideal für KI-generierte Anime-Geschäftsfrauen oder Fantasy-Helden.",
+                "label": "Jetzt verfügbar"
+            },
+            {
+                "title": "KI-Anime-Videogenerator",
+                "description": "Demnächst: Erstellen Sie professionelle Anime-Openings und dynamische Bewegungsclips direkt aus Ihren Text-Prompts.",
+                "label": "Demnächst",
+                "button": "Benachrichtigung erhalten"
+            }
+        ],
+        "seoTitle": "Führend in der",
+        "seoHighlight": "KI-Anime-Revolution",
+        "seoParagraph1": "Unsere Plattform ist der vielseitigste KI-Anime-Kunstgenerator. Wir spezialisieren uns auf hochauflösende Bilderstellung, von KI-generierten animierten Sprite-Bögen bis hin zu professionellen Charakterdesigns. Ob Sie eine KI-generierte Anime-Geschäftsfrau in voller Länge oder ein individuelles Maskottchen benötigen – wir haben Sie abgedeckt.",
+        "seoParagraph2": "Die Zukunft ist Bewegung. Wir entwickeln aktiv unser KI-Videogenerator-Modul für Anime-Openings. Bald können Sie Ihre statischen KI-generierten Anime-Kreationen in kinoreife Sequenzen verwandeln. Treten Sie unserer Warteliste bei, um als Erster die Kraft der KI-Animationsgenerator-Technologie zu erleben."
     }
 }

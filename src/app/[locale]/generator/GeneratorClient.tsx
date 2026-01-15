@@ -466,11 +466,8 @@ export default function GeneratorClient() {
               setNegativePrompt={setNegativePrompt}
               isGenerating={isGenerating}
               onGenerate={handleGenerate}
-              credits={Number(user?.credits || 0)}
-              activeQuantity={activeQuantity}
               canGenerate={canGenerate()}
               isGuest={!user}
-              remainingGuestGenerations={remainingGuest}
               // Image Ref
               image={image}
               setImage={setImage}

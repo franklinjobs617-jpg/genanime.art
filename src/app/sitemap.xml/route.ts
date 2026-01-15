@@ -14,23 +14,23 @@ const siteMapData = {
   translatedPages: [
     { url: "", changefreq: "daily", priority: 1.0 },
     { url: "/generator", changefreq: "daily", priority: 0.9 },
-    { url: "/gallery", changefreq: "daily", priority: 0.9 },
-    { url: "/prompt-library", changefreq: "daily", priority: 0.8 },
-    { url: "/pricing", changefreq: "weekly", priority: 0.7 },
-    { url: "/blog", changefreq: "daily", priority: 0.8 },
-    {
-      url: "/blog/how-to-make-anime-art-ai-rtx-8090-guide",
-      changefreq: "monthly",
-      priority: 0.7,
-    },
 
-    { url: "/contact", changefreq: "monthly", priority: 0.6 },
-    { url: "/support", changefreq: "monthly", priority: 0.5 },
-    { url: "/terms", changefreq: "yearly", priority: 0.3 },
-    { url: "/privacy", changefreq: "yearly", priority: 0.3 },
   ] as Page[],
 
-  englishOnlyPages: [] as Page[],
+  englishOnlyPages: [{ url: "/gallery", changefreq: "daily", priority: 0.9 },
+  { url: "/prompt-library", changefreq: "daily", priority: 0.8 },
+  { url: "/pricing", changefreq: "weekly", priority: 0.7 },
+  { url: "/blog", changefreq: "daily", priority: 0.8 },
+  {
+    url: "/blog/how-to-make-anime-art-ai-rtx-8090-guide",
+    changefreq: "monthly",
+    priority: 0.7,
+  },
+
+  { url: "/contact", changefreq: "monthly", priority: 0.6 },
+  { url: "/support", changefreq: "monthly", priority: 0.5 },
+  { url: "/terms", changefreq: "yearly", priority: 0.3 },
+  { url: "/privacy", changefreq: "yearly", priority: 0.3 },] as Page[],
 };
 
 export async function GET(request: NextRequest) {

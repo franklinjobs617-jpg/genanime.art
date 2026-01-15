@@ -22,7 +22,7 @@ export default function PlansBanner({ isGuest, onLogin }: PlansBannerProps) {
                         </p>
                         <p className="text-xs text-zinc-500">
                             {isGuest
-                                ? "New users get 100 free credits to start creating"
+                                ? "Choose a plan to continue creating art after your trials"
                                 : "Upgrade for priority generations and more credits"}
                         </p>
                     </div>
@@ -30,7 +30,7 @@ export default function PlansBanner({ isGuest, onLogin }: PlansBannerProps) {
                 {isGuest ? (
                     <button
                         onClick={onLogin}
-                        className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-sm font-medium rounded-lg transition-colors"
+                        className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-lg transition-colors border border-white/10"
                     >
                         Sign In
                     </button>
@@ -54,7 +54,7 @@ export default function PlansBanner({ isGuest, onLogin }: PlansBannerProps) {
                             {isGuest ? "Sign in to get more credits" : "You're on the free plan"}
                         </p>
                         <p className="text-xs text-zinc-500 leading-relaxed">
-                            {isGuest ? "New users get 100 free credits" : "Upgrade for priority generations and more"}
+                            {isGuest ? "New users get 10 free credits" : "Upgrade for priority generations and more"}
                         </p>
                     </div>
                     {isGuest ? (

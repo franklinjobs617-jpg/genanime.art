@@ -24,39 +24,39 @@ export default function EmptyState({ onUsePrompt }: EmptyStateProps) {
                 className="w-full max-w-2xl flex flex-col items-center gap-8"
             >
                 {/* 1. 极其克制的图标展示 - 类似 Discord/Terminal 的感觉 */}
-                <div className="w-16 h-16 rounded-full bg-zinc-800/50 flex items-center justify-center border border-zinc-700/50">
-                    <Terminal className="w-6 h-6 text-zinc-400" />
+                <div className="w-16 h-16 rounded-3xl bg-[#09090b] flex items-center justify-center border border-white/10 shadow-2xl">
+                    <Terminal className="w-6 h-6 text-indigo-500" />
                 </div>
 
                 {/* 2. 标题 - 极简，甚至可以不要，这里保留作为引导 */}
                 <div className="text-center space-y-2">
-                    <h3 className="text-lg font-medium text-zinc-200">
+                    <h3 className="text-2xl font-bold text-white tracking-tight">
                         What will you imagine?
                     </h3>
-                    <p className="text-sm text-zinc-500">
-                        Type /imagine or select a sample below
+                    <p className="text-sm text-zinc-500 font-medium">
+                        Type a prompt or try a sample below
                     </p>
                 </div>
 
                 {/* 3. 提示词胶囊 (MJ 风格的核心) */}
-                <div className="flex flex-wrap justify-center gap-2.5 w-full">
+                <div className="flex flex-wrap justify-center gap-3 w-full">
                     {STARTER_PROMPTS.map((prompt, idx) => (
                         <button
                             key={idx}
                             onClick={() => onUsePrompt(prompt)}
                             className="
-                                group relative flex items-center gap-3 px-4 py-2.5 rounded-full
-                                bg-zinc-900 border border-zinc-800
-                                hover:bg-zinc-800 hover:border-zinc-600 hover:text-white
-                                transition-all duration-200 ease-out
+                                group relative flex items-center gap-3 px-5 py-3 rounded-2xl
+                                bg-[#09090b] border border-white/5
+                                hover:bg-white/5 hover:border-white/10 hover:shadow-[0_0_20px_rgba(79,70,229,0.1)]
+                                transition-all duration-300 ease-out
                                 max-w-full
                             "
                         >
                             {/* 图标：很小，不起眼 */}
-                            <ImageIcon className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400 transition-colors shrink-0" />
+                            <ImageIcon className="w-3.5 h-3.5 text-zinc-600 group-hover:text-indigo-400 transition-colors shrink-0" />
 
                             {/* 文字：使用 mono 字体模仿代码/参数感 */}
-                            <span className="text-[13px] font-mono text-zinc-400 group-hover:text-zinc-200 truncate transition-colors">
+                            <span className="text-sm font-medium text-zinc-400 group-hover:text-zinc-100 truncate transition-colors">
                                 {prompt}
                             </span>
                         </button>

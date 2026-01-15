@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import RedesignedSidebar from "@/components/generator/RedesignedSidebar";
@@ -14,13 +14,15 @@ import {
   Home,
   History,
   Loader2,
+  Trash2,
+  Trash,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import LoadingSkeleton from "@/components/generator/LoadingSkeleton";
-import EmptyState from "@/components/generator/EmptyState";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { toast, Toaster } from "react-hot-toast";
+import ShowcaseGallery from "@/components/generator/ShowcaseGallery";
 
 // 动态加载组件以优化性能
 const PlansBanner = dynamic(
@@ -31,11 +33,13 @@ const PlansBanner = dynamic(
     ),
   }
 );
-const GenerationResultCard = dynamic(
-  () => import("@/components/generator/GenerationResultCard"),
-  {
-    ssr: false,
-  }
+const HistoryRow = dynamic(
+  () => import("@/components/generator/HistoryRow"),
+  { ssr: false }
+);
+const ImageDetailModal = dynamic(
+  () => import("@/components/generator/ImageDetailModal"),
+  { ssr: false }
 );
 const LoginModal = dynamic(() => import("@/components/LoginModel"), {
   ssr: false,
@@ -70,15 +74,20 @@ export default function GeneratorClient() {
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [history, setHistory] = useState<any[]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [guestGenerations, setGuestGenerations] = useState(0);
+  const [selectedDetailItem, setSelectedDetailItem] = useState<any | null>(null);
+  const [highlightPrompt, setHighlightPrompt] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // --- 计算属性 ---
   const currentTotalCost = useMemo(
     () => COST_PER_IMAGE * activeQuantity,
     [activeQuantity]
   );
+
   const remainingGuest = useMemo(
     () => GUEST_FREE_LIMIT - guestGenerations,
     [guestGenerations]
@@ -130,7 +139,6 @@ export default function GeneratorClient() {
         return;
       }
     } else if ((Number(user.credits) || 0) < currentTotalCost) {
-      // Show elegant credit alert instead of simple toast
       toast.custom((t) => (
         <div className="bg-zinc-900 border border-amber-500/30 rounded-xl p-4 shadow-2xl max-w-md">
           <div className="flex items-start gap-3">
@@ -138,9 +146,7 @@ export default function GeneratorClient() {
               <Coins className="w-5 h-5 text-amber-500" />
             </div>
             <div className="flex-1">
-              <h4 className="text-sm font-semibold text-white mb-1">
-                Insufficient Credits
-              </h4>
+              <h4 className="text-sm font-semibold text-white mb-1">Insufficient Credits</h4>
               <p className="text-xs text-zinc-400 mb-3">
                 You need {currentTotalCost} credits. You have {Number(user.credits) || 0}.
               </p>
@@ -154,12 +160,7 @@ export default function GeneratorClient() {
                 Get More Credits →
               </button>
             </div>
-            <button
-              onClick={() => toast.dismiss(t.id)}
-              className="text-zinc-500 hover:text-zinc-400"
-            >
-              ✕
-            </button>
+            <button onClick={() => toast.dismiss(t.id)} className="text-zinc-500 hover:text-zinc-400">✕</button>
           </div>
         </div>
       ), { duration: 6000 });
@@ -179,17 +180,15 @@ export default function GeneratorClient() {
           style: activeStyle,
           ratio: activeRatio,
           quantity: activeQuantity,
-          googleUserId: user?.googleUserId, // 透传 UUID 给后端扣费
+          googleUserId: user?.googleUserId,
         }),
       });
 
       if (!response.ok) throw new Error("Generation failed");
 
       const data = await response.json();
-      const urls =
-        data.images || (Array.isArray(data.urls) ? data.urls : [data.url]);
+      const urls = data.images || (Array.isArray(data.urls) ? data.urls : [data.url]);
 
-      // 更新历史记录
       const newEntry = {
         id: Date.now().toString(),
         urls,
@@ -200,13 +199,12 @@ export default function GeneratorClient() {
       };
       setHistory((prev) => [newEntry, ...prev]);
 
-      // 扣除次数/刷新积分
       if (!user) {
         const newCount = guestGenerations + 1;
         setGuestGenerations(newCount);
         localStorage.setItem("guest_generations", newCount.toString());
       } else {
-        await refreshUser(); // 💡 成功后立即静默刷新积分
+        await refreshUser();
       }
 
       toast.success("Art generated successfully!", { id: toastId });
@@ -216,28 +214,43 @@ export default function GeneratorClient() {
     } finally {
       setIsGenerating(false);
     }
-  }, [
-    activePrompt,
-    activeStyle,
-    activeRatio,
-    activeQuantity,
-    isGenerating,
-    user,
-    guestGenerations,
-    currentTotalCost,
-    refreshUser,
-  ]);
+  }, [activePrompt, activeStyle, activeRatio, activeQuantity, isGenerating, user, guestGenerations, currentTotalCost, refreshUser]);
 
-  // 重新生成逻辑
   const handleRegenerate = (prompt: string, style: string, ratio: string) => {
     setActivePrompt(prompt);
     setActiveStyle(style);
     setActiveRatio(ratio);
-    // 给状态更新留一点时间
     setTimeout(() => handleGenerate(), 100);
   };
 
-  // 历史按天分组
+  const handlePickShowcase = (item: { prompt: string; style: string; ratio: string }, quick?: boolean) => {
+    setActivePrompt(item.prompt);
+    setActiveStyle(item.style);
+    setActiveRatio(item.ratio);
+
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    setHighlightPrompt(true);
+    setTimeout(() => setHighlightPrompt(false), 2000);
+
+    if (quick) {
+      setTimeout(() => handleGenerate(), 100);
+    }
+  };
+
+  const handleToggleSelect = (id: string) => {
+    setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+  };
+
+  const handleBatchDelete = () => {
+    if (selectedIds.length === 0) return;
+    setHistory(prev => prev.filter(item => !selectedIds.includes(item.id)));
+    setSelectedIds([]);
+    toast.success(`Removed ${selectedIds.length} items from history`);
+  };
+
   const groupedHistory = useMemo(() => {
     const today = new Date().setHours(0, 0, 0, 0);
     return {
@@ -246,238 +259,169 @@ export default function GeneratorClient() {
     };
   }, [history]);
 
-  // 新增：轮播选中回调
-  const handlePickShowcase = (item: { prompt: string; style: string; ratio: string }, quick?: boolean) => {
-    setActivePrompt(item.prompt);
-    setActiveStyle(item.style);
-    setActiveRatio(item.ratio);
-    if (quick) {
-      setTimeout(() => handleGenerate(), 100);
-    }
-  };
-
   return (
-    <div className="flex h-[100dvh] bg-[#050507] text-zinc-100 overflow-hidden font-sans">
+    <div className="flex h-[100dvh] bg-[#09090b] text-zinc-100 overflow-hidden font-sans selection:bg-indigo-500/30">
       <Toaster position="bottom-right" reverseOrder={false} />
       <WelcomeGuide />
-      <LoginModal
-        open={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        onLogin={login}
-      />
-      <aside className="hidden lg:flex flex-col w-[300px] border-r border-white/5 bg-[#08080a] shadow-2xl">
+      <LoginModal open={showLoginModal} onClose={() => setShowLoginModal(false)} onLogin={login} />
+
+      <aside className="hidden lg:flex flex-col w-[320px] border-r border-white/5 bg-[#09090b] shadow-2xl relative z-20">
         <RedesignedSidebar
-          activeStyle={activeStyle}
-          setActiveStyle={setActiveStyle}
-          activeRatio={activeRatio}
-          setActiveRatio={setActiveRatio}
-          activeQuantity={activeQuantity}
-          setActiveQuantity={setActiveQuantity}
-          activeModel={activeModel}
-          setActiveModel={setActiveModel}
-          // Advanced Settings
-          cfgScale={cfgScale}
-          setCfgScale={setCfgScale}
-          steps={steps}
-          setSteps={setSteps}
-          seed={seed}
-          setSeed={setSeed}
-          isRandomSeed={isRandomSeed}
-          setIsRandomSeed={setIsRandomSeed}
+          activeStyle={activeStyle} setActiveStyle={setActiveStyle}
+          activeRatio={activeRatio} setActiveRatio={setActiveRatio}
+          activeQuantity={activeQuantity} setActiveQuantity={setActiveQuantity}
+          activeModel={activeModel} setActiveModel={setActiveModel}
+          cfgScale={cfgScale} setCfgScale={setCfgScale}
+          steps={steps} setSteps={setSteps}
+          seed={seed} setSeed={setSeed}
+          isRandomSeed={isRandomSeed} setIsRandomSeed={setIsRandomSeed}
         />
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col relative overflow-hidden bg-[#050507]">
-        {/* --- Header --- */}
-        <header className="flex items-center justify-between px-6 h-16 border-b border-white/5 bg-[#08080a]/80 backdrop-blur-2xl z-40">
+      <main className="flex-1 flex flex-col relative overflow-hidden bg-[#09090b]">
+        {/* Ambient Effects */}
+        <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-indigo-900/10 via-[#09090b]/50 to-[#09090b] pointer-events-none" />
+        <div className="absolute top-[-200px] right-[-200px] w-[600px] h-[600px] bg-indigo-600/5 blur-[120px] rounded-full pointer-events-none" />
+
+        <header className="flex items-center justify-between px-4 md:px-8 h-20 bg-transparent z-40">
           <div className="flex items-center gap-4">
             <Sheet open={mobileSheetOpen} onOpenChange={setMobileSheetOpen}>
               <SheetTrigger asChild>
-                <button className="lg:hidden p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all border border-white/5">
+                <button className="lg:hidden p-2.5 bg-zinc-800/50 hover:bg-zinc-800 rounded-xl transition-all border border-white/5">
                   <Settings className="w-5 h-5 text-zinc-400" />
                 </button>
               </SheetTrigger>
-              <SheetContent
-                side="left"
-                className="w-[300px] p-0 bg-[#08080a] border-r border-white/10"
-              >
+              <SheetContent side="left" className="w-[300px] p-0 bg-[#09090b] border-r border-white/10">
                 <RedesignedSidebar
-                  activeStyle={activeStyle}
-                  setActiveStyle={setActiveStyle}
-                  activeRatio={activeRatio}
-                  setActiveRatio={setActiveRatio}
-                  activeQuantity={activeQuantity}
-                  setActiveQuantity={setActiveQuantity}
-                  activeModel={activeModel}
-                  setActiveModel={setActiveModel}
-                  // Advanced Settings
-                  cfgScale={cfgScale}
-                  setCfgScale={setCfgScale}
-                  steps={steps}
-                  setSteps={setSteps}
-                  seed={seed}
-                  setSeed={setSeed}
-                  isRandomSeed={isRandomSeed}
-                  setIsRandomSeed={setIsRandomSeed}
+                  activeStyle={activeStyle} setActiveStyle={setActiveStyle}
+                  activeRatio={activeRatio} setActiveRatio={setActiveRatio}
+                  activeQuantity={activeQuantity} setActiveQuantity={setActiveQuantity}
+                  activeModel={activeModel} setActiveModel={setActiveModel}
+                  cfgScale={cfgScale} setCfgScale={setCfgScale}
+                  steps={steps} setSteps={setSteps}
+                  seed={seed} setSeed={setSeed}
+                  isRandomSeed={isRandomSeed} setIsRandomSeed={setIsRandomSeed}
                 />
               </SheetContent>
             </Sheet>
-
-            <Link
-              href="/"
-              className="flex items-center gap-3 hover:opacity-80 transition-opacity"
-            >
-              <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/20">
-                <Sparkles className="w-5 h-5 text-white" />
-              </div>
-              <span className="hidden sm:block text-xl font-black tracking-tighter">
-                GEN<span className="text-indigo-400">ANIME</span>
-              </span>
-            </Link>
+            <nav className="hidden md:flex items-center gap-2 text-sm font-medium text-zinc-500">
+              <Link href="/" className="hover:text-white transition-colors flex items-center gap-2">
+                <Home className="w-4 h-4" /> Home
+              </Link>
+              <span className="text-zinc-700">/</span>
+              <span className="text-indigo-400 font-bold tracking-tight">Generator</span>
+            </nav>
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Credits Display */}
-            <div className="flex items-center gap-2.5 px-4 py-2 bg-white/5 rounded-2xl border border-white/10">
+            <div className="flex items-center gap-2.5 px-4 py-2 bg-zinc-800/50 backdrop-blur-md rounded-full border border-white/5 hover:bg-zinc-800 transition-colors cursor-help">
               <Coins className="w-4 h-4 text-amber-400" />
-              <span className="text-sm font-black tabular-nums">
+              <span className="text-sm font-bold tabular-nums text-zinc-200">
                 {user ? user.credits : `${remainingGuest}/${GUEST_FREE_LIMIT}`}
               </span>
             </div>
-
             {authLoading ? (
-              <div className="w-9 h-9 rounded-full bg-zinc-800 animate-pulse" />
+              <div className="w-10 h-10 rounded-full bg-zinc-800 animate-pulse" />
             ) : user ? (
-              <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-indigo-500/30 hover:border-indigo-500 transition-all cursor-pointer">
-                <img
-                  src={user.picture || "/default-avatar.png"}
-                  alt={user.name}
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/10 hover:border-indigo-500 transition-all cursor-pointer shadow-lg">
+                <img src={user.picture || "/default-avatar.png"} alt={user.name} className="w-full h-full object-cover" />
               </div>
             ) : (
-              <button
-                onClick={login}
-                className="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-indigo-600/30"
-              >
-                Login
-              </button>
+              <button onClick={login} className="px-6 py-2.5 bg-white text-black hover:bg-zinc-200 text-xs font-bold uppercase tracking-wider rounded-full transition-all shadow-lg hover:shadow-xl hover:scale-105">Login</button>
             )}
           </div>
         </header>
 
-        {/* Scrollable Content Area */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar relative pb-[180px]">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[400px] bg-indigo-600/5 blur-[120px] pointer-events-none" />
+        <div ref={scrollContainerRef} className="flex-1 overflow-y-auto custom-scrollbar relative px-4 md:px-8 lg:px-12 pt-6">
+          <div className="w-full max-w-none pb-20 space-y-8">
+            <div className="flex flex-col gap-4">
+              <PromptConsole
+                activePrompt={activePrompt} setActivePrompt={setActivePrompt}
+                negativePrompt={negativePrompt} setNegativePrompt={setNegativePrompt}
+                isGenerating={isGenerating} onGenerate={handleGenerate}
+                canGenerate={canGenerate()} isGuest={!user}
+                guestGenerations={guestGenerations} guestLimit={GUEST_FREE_LIMIT}
+                image={image} setImage={setImage}
+                imagePreview={imagePreview} setImagePreview={setImagePreview}
+                highlight={highlightPrompt}
+              />
+              <AnimatePresence>
+                {((!user && guestGenerations > 0) || (user && Number(user.credits) < 50)) && (
+                  <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="w-full overflow-hidden shadow-xl border border-indigo-500/10 rounded-2xl">
+                    <PlansBanner isGuest={!user} onLogin={() => setShowLoginModal(true)} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
-          <div className="max-w-4xl mx-auto px-6 py-10 space-y-10">
-            {/* Breadcrumbs */}
-            <nav className="flex items-center gap-2 mb-6 text-xs font-medium text-zinc-500">
-              <Link href="/" className="hover:text-white transition-colors">Home</Link>
-              <span className="text-zinc-700">/</span>
-              <span className="text-purple-400">Generator</span>
-            </nav>
-
-            {/* Banner for low credits */}
-            <AnimatePresence>
-              {((!user && guestGenerations > 0) || (user && Number(user.credits) < 50)) && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="rounded-2xl overflow-hidden shadow-2xl border border-amber-500/20"
-                >
-                  <PlansBanner
-                    isGuest={!user}
-                    onLogin={() => setShowLoginModal(true)}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Results History */}
-            <div className="space-y-10">
-              {/* Enhanced Loading State */}
+            <div className="space-y-12">
               <AnimatePresence>
                 {isGenerating && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                  >
+                  <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="mb-8">
                     <LoadingSkeleton />
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              {/* Render Lists */}
               {[
-                { title: "Today's Gallery", data: groupedHistory.today },
-                { title: "Archived Creations", data: groupedHistory.older },
-              ].map(
-                (group) =>
-                  group.data.length > 0 && (
-                    <div key={group.title} className="space-y-6">
-                      <div className="flex items-center gap-4">
-                        <div className="h-px flex-1 bg-gradient-to-r from-transparent to-white/5" />
-                        <h3 className="text-xs font-semibold text-zinc-500 flex items-center gap-2">
-                          <History className="w-3.5 h-3.5" /> {group.title}
-                        </h3>
-                        <div className="h-px flex-1 bg-gradient-to-l from-transparent to-white/5" />
+                { title: "Today's Creations", data: groupedHistory.today },
+                { title: "Archive", data: groupedHistory.older },
+              ].map((group) => group.data.length > 0 && (
+                <div key={group.title} className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <h3 className="text-lg font-bold text-white flex items-center gap-2 tracking-tight">
+                      <History className="w-5 h-5 text-indigo-500" /> {group.title}
+                    </h3>
+                    <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
+                  </div>
+                  {selectedIds.length > 0 && group.title === "Today's Creations" && (
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl mb-6">
+                      <span className="text-sm font-bold text-indigo-400">{selectedIds.length} items selected</span>
+                      <div className="flex gap-2">
+                        <button onClick={() => setSelectedIds([])} className="px-4 py-2 bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white rounded-xl text-xs font-bold transition-all">Cancel</button>
+                        <button onClick={handleBatchDelete} className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-lg shadow-red-500/20"><Trash2 className="w-4 h-4" /> Delete</button>
                       </div>
+                    </motion.div>
+                  )}
+                  <div className="flex flex-col">
+                    {group.data.map((item) => (
+                      <HistoryRow
+                        key={item.id} item={item}
+                        onRegenerate={() => handleRegenerate(item.prompt, item.style, item.ratio)}
+                        onDelete={(id) => {
+                          setHistory(prev => prev.filter(h => h.id !== id));
+                          toast.success("Creation removed");
+                        }}
+                        onViewDetail={(item) => setSelectedDetailItem(item)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
 
-                      <div className="grid grid-cols-1 gap-8">
-                        {group.data.map((item) => (
-                          <GenerationResultCard
-                            key={item.id}
-                            urls={item.urls}
-                            prompt={item.prompt}
-                            style={item.style}
-                            ratio={item.ratio}
-                            onRegenerate={() =>
-                              handleRegenerate(
-                                item.prompt,
-                                item.style,
-                                item.ratio
-                              )
-                            }
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )
-              )}
-
-              {/* Empty State */}
               {!isGenerating && history.length === 0 && (
-                <EmptyState onUsePrompt={setActivePrompt} />
+                <div className="mt-8">
+                  <ShowcaseGallery onSelect={(item) => handlePickShowcase(item, false)} />
+                </div>
               )}
             </div>
           </div>
         </div>
 
-        {/* Floating Command Bar Container */}
-        <div className="absolute bottom-0 left-0 right-0 z-30 p-6 bg-gradient-to-t from-[#050507] via-[#050507]/90 to-transparent pointer-events-none">
-          <div className="max-w-4xl mx-auto pointer-events-auto">
-            <PromptConsole
-              activePrompt={activePrompt}
-              setActivePrompt={setActivePrompt}
-              negativePrompt={negativePrompt}
-              setNegativePrompt={setNegativePrompt}
-              isGenerating={isGenerating}
-              onGenerate={handleGenerate}
-              canGenerate={canGenerate()}
-              isGuest={!user}
-              // Image Ref
-              image={image}
-              setImage={setImage}
-              imagePreview={imagePreview}
-              setImagePreview={setImagePreview}
-            />
-
-          </div>
-        </div>
-      </main >
-    </div >
+        <ImageDetailModal
+          isOpen={!!selectedDetailItem} onClose={() => setSelectedDetailItem(null)} item={selectedDetailItem}
+          onRegenerate={() => {
+            if (selectedDetailItem) {
+              handleRegenerate(selectedDetailItem.prompt, selectedDetailItem.style, selectedDetailItem.ratio);
+              setSelectedDetailItem(null);
+            }
+          }}
+          onDelete={(id) => {
+            setHistory(prev => prev.filter(h => h.id !== id));
+            toast.success("Creation removed");
+          }}
+        />
+      </main>
+    </div>
   );
 }

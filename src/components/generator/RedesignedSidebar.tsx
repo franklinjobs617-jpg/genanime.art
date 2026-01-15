@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronDown, RotateCcw, Sparkles, Sliders, Dna, Layers, Zap } from "lucide-react"
+import { ChevronDown, RotateCcw, Sparkles, Sliders, Dna, Layers, Zap, Image as ImageIcon } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 interface SidebarProps {
@@ -95,6 +95,32 @@ export default function RedesignedSidebar({
     return (
         <div className="w-full h-full flex flex-col bg-[#09090b] text-zinc-200 border-r border-white/5">
             <div className="flex-1 overflow-y-auto custom-scrollbar p-5 space-y-8">
+                {/* 0. Creation Mode Selector */}
+                <div className="space-y-4">
+                    <label className="flex items-center text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+                        <Layers className="w-3 h-3 mr-2 text-indigo-400" />
+                        Generation Mode
+                    </label>
+                    <div className="grid grid-cols-2 gap-2 p-1 bg-white/[0.02] border border-white/5 rounded-xl">
+                        <button
+                            className="flex items-center justify-center gap-2 py-2 text-[11px] font-bold rounded-lg bg-indigo-500/10 text-indigo-300 ring-1 ring-indigo-500/20 shadow-sm"
+                        >
+                            <Sparkles className="w-3 h-3" />
+                            Text - Image
+                        </button>
+                        <div
+                            className="relative flex items-center justify-center gap-2 py-2 text-[11px] font-bold rounded-lg text-zinc-600 cursor-not-allowed group/cs"
+                        >
+                            <ImageIcon className="w-3 h-3 opacity-40" />
+                            <span>Image - Prompt</span>
+
+                            {/* Coming Soon Tooltip/Badge */}
+                            <div className="absolute -top-1 -right-1 px-1.5 py-0.5 bg-zinc-800 text-[8px] text-zinc-400 rounded-md border border-white/5 shadow-xl font-black uppercase tracking-tighter">
+                                SOON
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 {/* 1. Model Selector */}
                 <div className="space-y-4">

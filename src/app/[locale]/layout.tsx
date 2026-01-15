@@ -1,6 +1,6 @@
 import "../globals.css";
 import "../nprogress.css";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans, Outfit } from "next/font/google";
 import { Providers } from "@/components/Providers";
 import ScrollToTop from "@/components/ToTop";
 import FeedbackWidget from "@/components/feedweight";
@@ -21,6 +21,12 @@ const inter = Inter({
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-plus-jakarta",
+  display: "swap",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
   display: "swap",
 });
 
@@ -96,7 +102,7 @@ export default async function RootLayout(props: {
   const st = await getTranslations({ locale, namespace: 'Schema' });
 
   return (
-    <html lang={locale} className={`${inter.variable} ${plusJakarta.variable}`}>
+    <html lang={locale} className={`${inter.variable} ${plusJakarta.variable} ${outfit.variable}`}>
       <body className="font-sans bg-[#050505] text-white antialiased selection:bg-indigo-500/30">
         <NextIntlClientProvider messages={messages}>
           {/* Google Analytics */}

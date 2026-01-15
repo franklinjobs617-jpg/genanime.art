@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function LoadingSkeleton() {
     return (
-        <div className="relative aspect-square rounded-3xl overflow-hidden bg-black/40 border border-white/5 group">
+        <div className="relative aspect-square rounded-[32px] overflow-hidden bg-[#09090b] border border-white/5 shadow-2xl group">
 
             {/* 1. 动态扫描光束 (Scanning Beam) */}
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-indigo-500/10 to-transparent translate-y-[-100%] animate-[scan_2.5s_ease-in-out_infinite]" />

@@ -91,6 +91,7 @@ export async function POST(req: NextRequest) {
         prompt: finalPrompt,
         size: sizeStr as any,
         response_format: "b64_json",
+        watermark: false
       } as any)
     );
 

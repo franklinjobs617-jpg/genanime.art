@@ -123,19 +123,37 @@
         }
     },
     "promptLibrary": {
+        "guideSection": {
+            "title": "Meistern Sie die Kunst der Anime-Prompts",
+            "subtitle": "Hören Sie auf zu raten. Nutzen Sie diese bewährte Formel, um jedes Mal atemberaubende Anime-Kunst zu generieren.",
+            "formulaTitle": "Die Goldene Prompt-Formel",
+            "qualityBoosters": "Qualitäts-Booster",
+            "qualityDesc": "Beginnen oder beenden Sie Ihren Prompt immer mit diesen Tags, um die besten Rendering-Fähigkeiten der KI zu erzwingen.",
+            "negativePrompts": "Negative Prompts (Was zu vermeiden ist)",
+            "negativeDesc": "Sagen Sie der KI, was sie NICHT generieren soll. Entscheidend für die Korrektur von Händen und die Vermeidung unscharfer Bilder.",
+            "lighting": "Beleuchtung & Atmosphäre",
+            "lightingDesc": "Die Beleuchtung macht den Unterschied zwischen einer flachen Zeichnung und einem filmischen Meisterwerk."
+        },
         "title": "Prompt <span1>Bibliothek</span1>",
         "searchPlaceholder": "Suche Stile, Charaktere...",
+        "seoDescription": "Entdecken Sie eine riesige Sammlung hochwertiger KI-Anime-Kunst-Prompts. Von Cyberpunk-Ästhetik bis zu Kawaii-Porträts – finden Sie die perfekten Text-zu-Bild-Prompts für Stable Diffusion, Midjourney und unseren eigenen KI-Generator.",
         "popularTags": "Beliebte Tags",
         "copyPrompt": "Prompt kopieren",
         "copied": "Kopiert!",
         "generateButton": "Mit diesem Stil generieren",
+        "featuresTitle": "Warum unsere Anime-Prompts nutzen?",
+        "featuresDesc": "Wir kuratieren die besten Prompts, um hohe Konsistenz und schöne Ästhetik für Ihre KI-Generierungen zu gewährleisten.",
+        "guideTitle": "Anleitung: Den perfekten Anime-Prompt schreiben",
+        "guideDesc": "Atemberaubende KI-Kunst zu erschaffen ist keine Magie – es ist eine Formel. Um die besten Ergebnisse zu erzielen, strukturieren Sie Ihre Prompts nach diesem einfachen Rahmen:",
         "tags": {
             "Anime": "Anime",
             "Girl": "Mädchen",
             "Cyberpunk": "Cyberpunk",
             "Kawaii": "Kawaii",
             "Landscape": "Landschaft",
-            "Portrait": "Porträt"
+            "Portrait": "Porträt",
+            "Mecha": "Mecha",
+            "Watercolor": "Aquarell"
         }
     },
     "Schema": {

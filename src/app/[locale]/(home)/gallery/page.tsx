@@ -73,6 +73,49 @@ export default function GalleryPage() {
   ];
 
   const baseImages: GalleryItem[] = [
+    {
+      id: "u1",
+      title: "Ethereal Starlight Soul",
+      author: "ManusArt",
+      image: "/gallery/anime_ethereal_light.webp",
+      aspect: "aspect-[3/4]",
+      likes: 12500,
+      prompt:
+        "An ultra-detailed, breathtaking anime illustration of an ethereal girl with a surreal aesthetic. She has translucent, glowing skin and crystalline eyes that seem to hold infinite depth. Her hair is composed of flowing starlight and liquid gold. She is floating in a dark void surrounded by broken floating glass shards that reflect a vibrant cosmic nebula. The scene features extreme cinematic lighting with strong Tyndall effects (god rays) and slight chromatic aberration. The art style combines emotional character design with hyper-realistic, atmospheric environmental lighting.",
+    },
+
+    {
+      id: "u2",
+      title: "Zen Solitude at Dawn",
+      author: "ManusArt",
+      image: "/gallery/anime_zen_solitude.webp",
+      aspect: "aspect-[4/3]",
+      likes: 9800,
+      prompt:
+        "A cinematic, wide-shot digital illustration in a high-end semi-realistic anime style. A lone samurai girl stands on a vast frozen lake at dawn. The composition is minimalist and moody. The color palette is muted and desaturated, featuring a single, striking splash of crimson red on her outfit. Intricate details include falling cherry blossoms encased within the ice and soft morning mist swirling around. There is a sharp focus on the reflection in her blade. The atmosphere is melancholic yet beautiful, with hyper-detailed textures and dramatic lighting.",
+    },
+
+    {
+      id: "u3",
+      title: "Cyber Noir Ramen Night",
+      author: "ManusArt",
+      image: "/gallery/anime_cyber_noir.webp",
+      aspect: "aspect-[3/4]",
+      likes: 11200,
+      prompt:
+        "An anime-style digital art masterpiece featuring a serene girl floating gently amidst a sea of glowing lilies. The scene has a dreamlike quality with vibrant yet harmonious colors and soft painterly brushstrokes. Sunlight filters through the scene as if underwater, with pearl-like bubbles rising. She wears a flowing silk dress. The image is high resolution with an ethereal atmosphere, reminiscent of soft, expressive character art.",
+    },
+
+    {
+      id: "u4",
+      title: "Floral Dream Submergence",
+      author: "ManusArt",
+      image: "/gallery/anime_floral_dream.webp",
+      aspect: "aspect-[3/4]",
+      likes: 10500,
+      prompt:
+        "A cinematic dark cyberpunk noir illustration of an anime girl with subtle mechanical enhancements. She is sitting in a neon-drenched ramen shop with heavy rain falling outside the window. Steam rises from the bowl, and neon signs reflect vividly in her eyes. The style features high contrast, deep shadows, and volumetric fog. The image is highly detailed, moody, and has a sleek, aesthetic anime character design.",
+    },
     // 1. 核心商业/职场关键词 (Business Woman)
     {
       id: "1",
@@ -178,7 +221,7 @@ export default function GalleryPage() {
       author: "ConceptArtist",
       image:
         "/gallery/anime-magical-girl-character-reference-sheet-opal-jellyfish-fantasy.webp",
-      aspect: "aspect-video", // 设定图通常较宽
+      aspect: "aspect-[3/4]", // 设定图通常较宽
       likes: 1450,
       prompt:
         "character reference sheet, magical girl, opal jellyfish theme, front view, back view, side view, detailed costume design, frills, staff, accessories breakdown, anime character design, flat color",
@@ -354,7 +397,7 @@ export default function GalleryPage() {
       title: "Neon Street Cyberpunk",
       author: "CyberVibe",
       image: "/gallery/cyberpunk-street.webp",
-      aspect: "aspect-[9/16]",
+      aspect: "aspect-[4/3]",
       likes: 4200,
       prompt:
         "cyberpunk anime girl, techwear outfit, standing in a rainy neon street, pink and cyan lighting, reflections on puddles, futuristic headphones, robotic arm detail, cinematic atmosphere, hyper-detailed background, 8k, bokeh effect",
@@ -374,7 +417,7 @@ export default function GalleryPage() {
       title: "Celestial Mage",
       author: "MagicCaster",
       image: "/gallery/celestial-mage.webp",
-      aspect: "aspect-[3/4]",
+      aspect: "aspect-video",
       likes: 3400,
       prompt:
         "anime mage girl, casting a celestial spell, glowing runes, sparkling magical energy, starry night sky background, flowing purple robe, intricate staff, ethereal glow, vibrant colors, majestic composition, 8k resolution",
@@ -384,7 +427,7 @@ export default function GalleryPage() {
       title: "Premium Waifu Portrait",
       author: "WaifuDesigner",
       image: "/gallery/premium-waifu.webp",
-      aspect: "aspect-[2/3]",
+      aspect: "aspect-[3/2]",
       likes: 4800,
       prompt:
         "ultimate waifu portrait, beautiful anime girl, long flowing white hair, sapphire eyes, elegant white dress, cherry blossom garden background, soft natural lighting, masterpiece, high fidelity, 4k, digital illustration, extremely detailed face",
@@ -464,7 +507,7 @@ export default function GalleryPage() {
       title: "Cosplay Event Banner",
       author: "EventPro",
       image: "/gallery/anime-convention-cosplayer-matching-rollup-banner-4k-photo.webp",
-      aspect: "aspect-[1/2]",
+      aspect: "aspect-[3/4]",
       likes: 2450,
       prompt:
         "anime convention poster, high quality photo of a cosplayer, matching rollup banner design, 4k photo, vibrant event lighting, professional photography, costume detail, convention background blur",

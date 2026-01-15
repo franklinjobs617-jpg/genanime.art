@@ -28,9 +28,18 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative w-full h-screen overflow-hidden bg-[#030305] font-sans selection:bg-indigo-500/30">
+    // 修改 1: 
+    // - 移除 overflow-hidden / overflow-x-hidden
+    // - 保持 min-h-screen 确保至少占满一屏
+    // - 使用 relative 确保内容层级正确
+    <section className="relative w-full min-h-screen bg-[#030305] font-sans selection:bg-indigo-500/30 flex flex-col">
 
-      <div className="absolute inset-0 z-0">
+      {/* 
+         修改 2: 背景层改为 fixed (固定定位)
+         这样当你滚动页面时，背景动画会停留在原地，非常高级，
+         而且不会因为内容过长导致背景不够用。
+      */}
+      <div className="fixed inset-0 z-0">
         <div className="w-full h-full scale-105">
           <AnimatedBackground />
         </div>
@@ -38,14 +47,18 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-t from-[#030305] via-transparent to-transparent z-[1]" />
       </div>
 
-      <div className="relative z-10 container mx-auto px-6 md:px-12 h-full flex flex-col justify-center pt-20">
+      {/* 
+         内容层: 
+         py-24 确保上下有足够呼吸空间，不会被切断
+      */}
+      <div className="relative z-10 container mx-auto px-6 md:px-12 flex-grow flex flex-col justify-center py-24 md:py-32">
         <div className="max-w-4xl">
 
           <motion.form
             onSubmit={handleSubmit}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-10 hidden md:flex items-center gap-3 bg-white/5 backdrop-blur-2xl px-6 py-3 rounded-2xl w-full max-w-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group focus-within:border-indigo-500/50 transition-all"
+            className="mb-8 hidden md:flex items-center gap-3 bg-white/5 backdrop-blur-2xl px-6 py-3 rounded-2xl w-full max-w-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group focus-within:border-indigo-500/50 transition-all"
           >
             <Search className="w-5 h-5 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" />
             <input
@@ -64,7 +77,7 @@ export default function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="flex flex-wrap gap-2 mb-8"
+            className="flex flex-wrap gap-2 mb-6 md:mb-8"
           >
             {styleTags.map((tag, i) => (
               <button
@@ -80,7 +93,7 @@ export default function Hero() {
           <motion.h1
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-6xl md:text-[100px] font-black text-white leading-[0.9] mb-8 tracking-tighter"
+            className="text-5xl sm:text-6xl md:text-[100px] font-black text-white leading-[0.95] md:leading-[0.9] mb-6 md:mb-8 tracking-tighter"
           >
             {t('titleLine1')} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 drop-shadow-[0_10px_10px_rgba(99,102,241,0.2)]">
@@ -92,33 +105,33 @@ export default function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="space-y-8"
+            className="space-y-6 md:space-y-8"
           >
-            <p className="text-zinc-400 text-lg md:text-2xl max-w-2xl font-medium leading-relaxed">
+            <p className="text-zinc-400 text-base md:text-2xl max-w-2xl font-medium leading-relaxed">
               {t.rich('description', {
                 span1: (chunks) => <span className="text-white border-b-2 border-indigo-500/50 pb-1">{chunks}</span>
               })}
             </p>
 
-            <div className="flex flex-wrap gap-6 text-sm font-bold text-zinc-500 uppercase tracking-widest">
+            <div className="flex flex-wrap gap-4 md:gap-6 text-xs md:text-sm font-bold text-zinc-500 uppercase tracking-widest">
               <span className="flex items-center gap-2"><Sparkles className="w-4 h-4 text-indigo-500" /> {t('features.noSignUp')}</span>
               <span className="flex items-center gap-2"><Sparkles className="w-4 h-4 text-purple-500" /> {t('features.noWatermark')}</span>
               <span className="flex items-center gap-2"><Sparkles className="w-4 h-4 text-pink-500" /> {t('features.quality')}</span>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-5">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 pt-2">
               <button
                 onClick={() => router.push("/generator")}
                 className="group"
               >
-                <div className="flex items中心 justify-center gap-3 px-10 py-5 bg-white text-black rounded-2xl font-black text-lg transition-all duration-300 hover:bg-indigo-500 hover:text-white transform hover:scale-105 shadow-2xl">
+                <div className="flex items-center justify-center gap-3 px-8 md:px-10 py-4 md:py-5 bg-white text-black rounded-2xl font-black text-base md:text-lg transition-all duration-300 hover:bg-indigo-500 hover:text-white transform hover:scale-105 shadow-2xl">
                   <PenTool className="w-5 h-5" />
                   <span>{t('buttons.startCreating')}</span>
                 </div>
               </button>
 
               <Link href="/generator?mode=upload" className="group">
-                <div className="flex items-center justify-center gap-3 px-10 py-5 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 text-white rounded-2xl font-black text-lg transition-all duration-300 transform hover:scale-105">
+                <div className="flex items-center justify-center gap-3 px-8 md:px-10 py-4 md:py-5 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 text-white rounded-2xl font-black text-base md:text-lg transition-all duration-300 transform hover:scale-105">
                   <ImagePlus className="w-5 h-5" />
                   <span>{t('buttons.imageToImage')}</span>
                 </div>
@@ -129,7 +142,6 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent z-20" />
     </section>
   );
 }

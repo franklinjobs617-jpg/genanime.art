@@ -5,52 +5,44 @@ import {
   Copy,
   Check,
   Sparkles,
-  Zap,
   Heart,
   Image as ImageIcon,
   Maximize2,
   X,
-  Download,
+  BookOpen,
+  HelpCircle,
+  Terminal,
+  Lightbulb,
+  ArrowRight,
+  Layers,
+  Zap,
+  PenTool
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { PROMPTS_DATA } from "./data";
 import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 
-// --- 辅助函数：根据数据中的比例返回对应的 Tailwind 类名 ---
+// --- 辅助函数 ---
 const getAspectRatioClass = (ratio: string) => {
   switch (ratio) {
-    case "16:9":
-      return "aspect-video"; // 横图
-    case "1:1":
-      return "aspect-square"; // 方图
-    case "3:2":
-      return "aspect-[3/2]"; // 横向长图
-    case "9:16":
-      return "aspect-[9/16]"; // 手机竖屏
-    case "2:3":
-    default:
-      return "aspect-[2/3]"; // 默认竖图
+    case "16:9": return "aspect-video";
+    case "1:1": return "aspect-square";
+    case "3:2": return "aspect-[3/2]";
+    case "9:16": return "aspect-[9/16]";
+    case "2:3": default: return "aspect-[2/3]";
   }
 };
 
 // --- 图片组件 ---
-const PromptCardImage = ({
-  item,
-  onClick
-}: {
-  item: any;
-  onClick: () => void;
-}) => {
+const PromptCardImage = ({ item, onClick }: { item: any; onClick: () => void }) => {
   const [src, setSrc] = useState(`/images/prompts/${item.imageName}.webp`);
   const locale = useLocale();
 
-  // Optimized Alt for SEO
+  // SEO Alt Text Strategy
   const localizedAlt = locale === 'id'
-    ? `Gambar Anime: ${item.alt}`.replace('High-quality anime illustration of', 'Ilustrasi anime berkualitas tinggi')
-    : locale === 'de'
-      ? `Anime Bild: ${item.alt}`.replace('High-quality anime illustration of', 'Hochwertige Anime-Illustration von')
-      : item.alt || item.imageName;
+    ? `Gambar Anime AI: ${item.alt}`
+    : item.alt || `${item.imageName} - AI Anime Art Prompt`;
 
   return (
     <div className="relative w-full h-full cursor-zoom-in bg-gray-900" onClick={onClick}>
@@ -60,14 +52,9 @@ const PromptCardImage = ({
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         className="object-cover group-hover:scale-110 transition-transform duration-700"
-        onError={() => {
-          setSrc(
-            `https://placehold.co/600x400/111/fff?text=${encodeURIComponent(item.imageName)}`
-          );
-        }}
+        onError={() => setSrc(`https://placehold.co/600x400/111/fff?text=${encodeURIComponent(item.imageName)}`)}
         unoptimized={src.startsWith("http")}
       />
-
       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
         <div className="bg-black/50 backdrop-blur-sm p-3 rounded-full text-white/80 border border-white/10">
           <Maximize2 size={20} />
@@ -99,9 +86,7 @@ export default function PromptLibrary() {
   const filteredPrompts = PROMPTS_DATA.filter(
     (item) =>
       item.prompt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.tags.some((tag) =>
-        tag.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+      item.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   useEffect(() => {
@@ -115,7 +100,7 @@ export default function PromptLibrary() {
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-purple-500 selection:text-white">
 
-      {/* --- 灯箱 Modal (保持不变) --- */}
+      {/* --- 灯箱 Modal (保持原有逻辑) --- */}
       {selectedItem && (
         <div
           className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center animate-in fade-in duration-200"
@@ -129,6 +114,7 @@ export default function PromptLibrary() {
             className="flex flex-col lg:flex-row w-full h-full max-w-[1800px] max-h-[95vh] bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden shadow-2xl mx-4 my-4"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Modal Image */}
             <div className="relative w-full lg:flex-1 h-[45vh] lg:h-full bg-[#020202] flex items-center justify-center overflow-hidden group/image">
               <div className="absolute inset-0 opacity-30 blur-3xl scale-110 pointer-events-none">
                 <Image src={`/images/prompts/${selectedItem.imageName}.webp`} alt="bg" fill className="object-cover" unoptimized />
@@ -142,14 +128,11 @@ export default function PromptLibrary() {
                   quality={100}
                   priority
                   unoptimized
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = `https://placehold.co/1200x800/111/fff?text=${selectedItem.imageName}`;
-                  }}
                 />
               </div>
             </div>
 
+            {/* Modal Details */}
             <div className="w-full lg:w-[400px] lg:min-w-[400px] bg-[#0f0f0f] border-l border-white/5 flex flex-col h-full">
               <div className="p-6 md:p-8 border-b border-white/5">
                 <div className="flex items-start justify-between mb-4">
@@ -177,7 +160,7 @@ export default function PromptLibrary() {
                       <Sparkles size={12} /> Optimized Prompt
                     </h3>
                     <div className="bg-[#050505] p-4 rounded-xl border border-white/10 group hover:border-purple-500/30 transition-colors">
-                      <p className="text-gray-300 font-mono text-sm leading-relaxed whitespace-pre-wrap">
+                      <p className="text-gray-300 font-mono text-sm leading-relaxed whitespace-pre-wrap selection:bg-purple-500/30">
                         {selectedItem.prompt}
                       </p>
                     </div>
@@ -190,11 +173,9 @@ export default function PromptLibrary() {
                   <button onClick={() => handleTryStyle(selectedItem.prompt)} className="w-full py-3.5 rounded-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 transition shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2 text-white">
                     <Sparkles size={18} fill="currentColor" /> {t('generateButton')}
                   </button>
-                  <div className="flex gap-3">
-                    <button onClick={() => handleCopy(selectedItem.prompt, selectedItem.id)} className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold border transition ${copiedId === selectedItem.id ? "bg-green-500/10 border-green-500/50 text-green-400" : "bg-white/5 border-white/10 hover:bg-white/10 text-gray-300"}`}>
-                      {copiedId === selectedItem.id ? <Check size={18} /> : <Copy size={18} />} {copiedId === selectedItem.id ? t('copied') : t('copyPrompt')}
-                    </button>
-                  </div>
+                  <button onClick={() => handleCopy(selectedItem.prompt, selectedItem.id)} className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold border transition ${copiedId === selectedItem.id ? "bg-green-500/10 border-green-500/50 text-green-400" : "bg-white/5 border-white/10 hover:bg-white/10 text-gray-300"}`}>
+                    {copiedId === selectedItem.id ? <Check size={18} /> : <Copy size={18} />} {copiedId === selectedItem.id ? t('copied') : t('copyPrompt')}
+                  </button>
                 </div>
               </div>
             </div>
@@ -204,12 +185,18 @@ export default function PromptLibrary() {
 
       {/* --- 主页面 --- */}
       <div className="pt-24 pb-20 px-4 md:px-8 max-w-[1600px] mx-auto">
-        <header className="max-w-3xl mx-auto text-center mb-16">
-          <h1 className="text-3xl md:text-6xl font-extrabold mb-6 tracking-tight">
+
+        {/* Header with SEO Description */}
+        <header className="max-w-4xl mx-auto text-center mb-16">
+          <h1 className="text-3xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight">
             {t.rich('title', {
-              span1: (chunks: React.ReactNode) => <span className="bg-gradient-to-r from-purple-400 to-pink-600 text-transparent bg-clip-text">{chunks}</span>
+              span1: (chunks) => <span className="bg-gradient-to-r from-purple-400 to-pink-600 text-transparent bg-clip-text">{chunks}</span>
             })}
           </h1>
+
+          <p className="text-gray-400 text-base md:text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
+            {t('seoDescription') || "Browse our curated collection of high-quality anime AI art prompts. Perfect for Stable Diffusion, Midjourney, and Niji Journey. Copy, remix, and generate stunning illustrations in seconds."}
+          </p>
 
           <div className="relative max-w-2xl mx-auto group mb-8">
             <div className="absolute inset-0 bg-gradient-to-r from-purple-600/30 to-pink-600/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></div>
@@ -229,7 +216,7 @@ export default function PromptLibrary() {
           </div>
 
           <div className="flex flex-wrap justify-center gap-2 relative z-10">
-            {["Anime", "Girl", "Cyberpunk", "Kawaii", "Landscape", "Portrait"].map((tag) => (
+            {["Anime", "Girl", "Cyberpunk", "Kawaii", "Landscape", "Portrait", "Mecha", "Watercolor"].map((tag) => (
               <button key={tag} onClick={() => setSearchQuery(tag)} className="px-3 py-1 rounded-full bg-white/5 border border-white/5 text-[11px] md:text-xs text-gray-300 hover:border-purple-500 hover:text-purple-400 transition">
                 {t(`tags.${tag}` as any) || tag}
               </button>
@@ -237,22 +224,18 @@ export default function PromptLibrary() {
           </div>
         </header>
 
-        <main>
-
+        {/* --- Masonry Grid --- */}
+        <main className="mb-24">
           <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 space-y-4 mx-auto">
             {filteredPrompts.map((item) => (
               <div
                 key={item.id}
-                className="break-inside-avoid mb-4 group relative bg-[#0f0f0f] border border-white/5 rounded-2xl overflow-hidden hover:border-purple-500/40 transition-all duration-300 flex flex-col"
+                className="break-inside-avoid mb-4 group relative bg-[#0f0f0f] border border-white/5 rounded-2xl overflow-hidden hover:border-purple-500/40 transition-all duration-300 flex flex-col shadow-lg shadow-black/40"
               >
-
                 <div className={`relative w-full ${getAspectRatioClass(item.ratio)} overflow-hidden bg-[#151515]`}>
-                  <PromptCardImage
-                    item={item}
-                    onClick={() => setSelectedItem(item)}
-                  />
+                  <PromptCardImage item={item} onClick={() => setSelectedItem(item)} />
                   <div className="absolute top-2 right-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden md:block">
-                    <button onClick={(e) => handleTryStyle(item.prompt, e)} className="bg-purple-600 text-white p-2 rounded-full shadow-lg hover:bg-purple-500 transition">
+                    <button onClick={(e) => handleTryStyle(item.prompt, e)} className="bg-purple-600 text-white p-2 rounded-full shadow-lg hover:bg-purple-500 transition active:scale-95">
                       <Sparkles size={14} />
                     </button>
                   </div>
@@ -263,21 +246,19 @@ export default function PromptLibrary() {
                   </div>
                 </div>
 
-                <div className="p-3 md:p-4 flex flex-col bg-gradient-to-b from-transparent to-[#0a0a0a] cursor-pointer" onClick={() => setSelectedItem(item)}>
+                <div className="p-3 md:p-4 flex flex-col bg-gradient-to-b from-[#111] to-[#0a0a0a] cursor-pointer" onClick={() => setSelectedItem(item)}>
                   <div className="mb-2 flex items-center gap-1.5">
                     <ImageIcon size={10} className="text-purple-500" />
                     <span className="text-[9px] md:text-[10px] font-bold text-gray-500 uppercase truncate">{item.imageName}</span>
                   </div>
-
                   <div className="w-full">
                     <p className="text-gray-400 text-[10px] md:text-xs leading-relaxed font-mono line-clamp-2 italic bg-white/5 p-2 rounded border border-white/5">
                       {item.prompt}
                     </p>
                   </div>
-
                   <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/5">
                     <span className="text-[10px] text-gray-600 font-bold flex items-center"><Heart size={10} className="mr-1" /> {item.likes}</span>
-                    <button onClick={(e) => handleCopy(item.prompt, item.id, e)} className="text-[10px] font-bold text-gray-400 hover:text-white flex items-center gap-1 bg-white/5 px-2 py-1 rounded">
+                    <button onClick={(e) => handleCopy(item.prompt, item.id, e)} className="text-[10px] font-bold text-gray-400 hover:text-white flex items-center gap-1 bg-white/5 px-2 py-1 rounded transition-colors hover:bg-white/10">
                       {copiedId === item.id ? "Done" : "Copy"}
                     </button>
                   </div>
@@ -286,6 +267,145 @@ export default function PromptLibrary() {
             ))}
           </div>
         </main>
+
+        {/* --- SEO & Educational Content Sections (新增部分) --- */}
+
+        {/* 1. Features Grid */}
+        <section className="mb-24 py-12 border-t border-white/5">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">{t('featuresTitle') || "Why Use Our Anime Prompts?"}</h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">{t('featuresDesc') || "We curate the best prompts to ensure high consistency and beautiful aesthetics for your AI generations."}</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-[#0a0a0a] p-6 rounded-2xl border border-white/5 hover:border-purple-500/20 transition group">
+              <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Layers className="text-purple-400" size={24} />
+              </div>
+              <h3 className="text-lg font-bold mb-2 text-white">Curated Styles</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">From Makoto Shinkai landscapes to 90s retro aesthetics, explore a diverse library of tested anime art styles.</p>
+            </div>
+            <div className="bg-[#0a0a0a] p-6 rounded-2xl border border-white/5 hover:border-purple-500/20 transition group">
+              <div className="w-12 h-12 bg-pink-500/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Zap className="text-pink-400" size={24} />
+              </div>
+              <h3 className="text-lg font-bold mb-2 text-white">Ready to Remix</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">Don't start from scratch. Copy our optimized prompts and simply change the character or setting to fit your needs.</p>
+            </div>
+            <div className="bg-[#0a0a0a] p-6 rounded-2xl border border-white/5 hover:border-purple-500/20 transition group">
+              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Sparkles className="text-blue-400" size={24} />
+              </div>
+              <h3 className="text-lg font-bold mb-2 text-white">High Quality Tags</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">All prompts include "masterpiece", "best quality", and "8k" tags to ensure the AI generates the crispest details.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* 2. How-To Guide / Structure */}
+        {/* --- Advanced Prompting Guide Section --- */}
+        <section className="py-16 bg-[#0a0a0c] border-t border-white/5">
+          <div className="max-w-5xl mx-auto px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
+                {t('guideSection.title')}
+              </h2>
+              <p className="text-gray-400 max-w-2xl mx-auto">
+                {t('guideSection.subtitle')}
+              </p>
+            </div>
+
+            {/* The Formula Visualization */}
+            <div className="bg-[#121214] border border-white/10 rounded-2xl p-6 md:p-8 mb-12 overflow-hidden relative">
+              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-purple-500 to-pink-500"></div>
+              <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <Sparkles className="text-yellow-400" size={20} />
+                {t('guideSection.formulaTitle')}
+              </h3>
+
+              <div className="flex flex-wrap gap-3 font-mono text-sm md:text-base">
+                <div className="bg-yellow-500/10 border border-yellow-500/30 text-yellow-200 px-4 py-3 rounded-lg flex-1 min-w-[140px]">
+                  <span className="block text-[10px] uppercase text-yellow-500/70 font-bold mb-1">1. Quality</span>
+                  masterpiece, best quality, 8k
+                </div>
+                <div className="bg-blue-500/10 border border-blue-500/30 text-blue-200 px-4 py-3 rounded-lg flex-[2] min-w-[200px]">
+                  <span className="block text-[10px] uppercase text-blue-500/70 font-bold mb-1">2. Subject</span>
+                  1girl, white hair, blue eyes, cat ears
+                </div>
+                <div className="bg-green-500/10 border border-green-500/30 text-green-200 px-4 py-3 rounded-lg flex-1 min-w-[140px]">
+                  <span className="block text-[10px] uppercase text-green-500/70 font-bold mb-1">3. Background</span>
+                  cyberpunk city, rain, neon lights
+                </div>
+                <div className="bg-purple-500/10 border border-purple-500/30 text-purple-200 px-4 py-3 rounded-lg flex-1 min-w-[140px]">
+                  <span className="block text-[10px] uppercase text-purple-500/70 font-bold mb-1">4. Style</span>
+                  anime style, cel shading, cinematic lighting
+                </div>
+              </div>
+            </div>
+
+            {/* Magic Tags Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+              {/* Card 1: Quality Boosters */}
+              <div className="bg-[#121214] p-6 rounded-xl border border-white/5 hover:border-purple-500/30 transition">
+                <h4 className="font-bold text-white mb-3 flex items-center gap-2">
+                  <Zap size={16} className="text-yellow-400" />
+                  {t('guideSection.qualityBoosters')}
+                </h4>
+                <p className="text-sm text-gray-400 mb-4">{t('guideSection.qualityDesc')}</p>
+                <div className="bg-black/40 p-3 rounded font-mono text-xs text-gray-300 border border-white/5">
+                  masterpiece, best quality, ultra-detailed, 8k resolution, unity 8k wallpaper
+                </div>
+              </div>
+
+              {/* Card 2: Negative Prompts */}
+              <div className="bg-[#121214] p-6 rounded-xl border border-white/5 hover:border-red-500/30 transition">
+                <h4 className="font-bold text-white mb-3 flex items-center gap-2">
+                  <X size={16} className="text-red-400" />
+                  {t('guideSection.negativePrompts')}
+                </h4>
+                <p className="text-sm text-gray-400 mb-4">{t('guideSection.negativeDesc')}</p>
+                <div className="bg-black/40 p-3 rounded font-mono text-xs text-red-200/70 border border-white/5">
+                  worst quality, low quality, bad anatomy, bad hands, missing fingers, extra digit
+                </div>
+              </div>
+
+              {/* Card 3: Lighting & Atmosphere */}
+              <div className="bg-[#121214] p-6 rounded-xl border border-white/5 hover:border-blue-500/30 transition">
+                <h4 className="font-bold text-white mb-3 flex items-center gap-2">
+                  <Lightbulb size={16} className="text-blue-400" />
+                  {t('guideSection.lighting')}
+                </h4>
+                <p className="text-sm text-gray-400 mb-4">{t('guideSection.lightingDesc')}</p>
+                <div className="bg-black/40 p-3 rounded font-mono text-xs text-gray-300 border border-white/5">
+                  cinematic lighting, tyndall effect, volumetric light, backlighting, bioluminescence
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        {/* 3. FAQ Section */}
+        <section className="mb-12">
+          <div className="flex items-center justify-center gap-2 mb-8">
+            <HelpCircle className="text-gray-500" size={20} />
+            <h2 className="text-2xl font-bold text-white">Frequently Asked Questions</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {[
+              { q: "Can I use these prompts for Midjourney?", a: "Yes! Our prompts are optimized for general Anime models including Midjourney --niji 6, Stable Diffusion (Nai/Holara), and DALL-E 3." },
+              { q: "What is a negative prompt?", a: "Negative prompts tell the AI what NOT to include, such as 'bad hands', 'low quality', or 'extra digits'. This ensures cleaner outputs." },
+              { q: "How do I download the images?", a: "Currently, you can click on any image to open the full-screen view. We recommend generating your own unique variations using the 'Try Style' button." },
+              { q: "Are these images copyright free?", a: "AI generation laws vary by country. Generally, raw AI outputs are public domain, but we recommend checking your local regulations for commercial use." }
+            ].map((faq, i) => (
+              <div key={i} className="bg-[#0a0a0a] p-6 rounded-2xl border border-white/5">
+                <h3 className="font-bold text-white mb-2 text-sm">{faq.q}</h3>
+                <p className="text-xs text-gray-400 leading-relaxed">{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
       </div>
     </div>
   );

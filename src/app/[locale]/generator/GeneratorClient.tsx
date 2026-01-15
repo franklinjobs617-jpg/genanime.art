@@ -474,6 +474,7 @@ export default function GeneratorClient() {
               imagePreview={imagePreview}
               setImagePreview={setImagePreview}
             />
+
           </div>
         </div>
       </main >

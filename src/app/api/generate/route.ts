@@ -2,10 +2,14 @@ import { type NextRequest, NextResponse } from "next/server";
 import { addWatermark } from "@/lib/watermark";
 import OpenAI from "openai";
 import { prisma } from "@/lib/prisma";
+const COST_PER_IMAGE = 2;
 
-const COST_PER_IMAGE = 2; // 单价
+const GLOBAL_QUALITY_BOOSTER = "masterpiece, best quality, aesthetic, breathtaking, 8k uhd, highly detailed, sharp focus, perfect composition, high fidelity, rich textures";
+const GLOBAL_NEGATIVE_PROMPT = "low quality, worst quality, ugly, blurry, pixelated, jpeg artifacts, text, watermark, signature, bad anatomy, bad hands, deformed, amateur";
 
 const STYLE_PROMPTS: Record<string, string> = {
+  "Default": "",
+  "Realism": "photorealistic, raw photo, dslr, soft lighting, highly detailed skin texture, hyper-realistic",
   "Vibrant Anime":
     "official art, unity 8k wallpaper, ultra detailed, vibrant colors, aesthetic masterpiece",
   "Retro 90s": "1990s anime style, cel shaded, vintage aesthetic, vhs noise",
@@ -61,11 +65,31 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const styleSuffix = STYLE_PROMPTS[style] || STYLE_PROMPTS["Vibrant Anime"];
-    let finalPrompt = `${prompt}, ${styleSuffix}`;
-    if (negativePrompt?.trim()) {
-      finalPrompt += `, negative prompt: ${negativePrompt}`;
+    // 1. Base Prompt
+    let finalPrompt = prompt;
+
+    // 2. Add Style Suffix (if not Default)
+    const styleSuffix = STYLE_PROMPTS[style];
+    if (styleSuffix && style !== "Default") {
+      finalPrompt += `, ${styleSuffix}`;
     }
+
+    // 3. Force Global Quality Boosters
+    finalPrompt += `, ${GLOBAL_QUALITY_BOOSTER}`;
+
+    // 4. Build Negative Prompt
+    let finalNegative = GLOBAL_NEGATIVE_PROMPT;
+    if (negativePrompt?.trim()) {
+      finalNegative += `, ${negativePrompt}`;
+    }
+
+    // 5. Realism Special Logic: Exclude anime/cartoon
+    if (style === "Realism") {
+      finalNegative += ", anime, cartoon, illustration, 2d, sketch";
+    }
+
+    // 6. Concatenate Negative Prompt to finalPrompt
+    finalPrompt += `, negative prompt: ${finalNegative}`;
 
     let sizeStr = "1920x1920"; // 默认 1:1
     if (ratio === "9:16") {

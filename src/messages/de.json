@@ -23,6 +23,10 @@
         "login": "Anmelden",
         "signUp": "Registrieren",
         "faq": "FAQ",
+        "contact": "Kontaktiere uns",
+        "support": "Hilfecenter",
+        "models": "KI-Modelle",
+        "ponyDiffusion": "Pony-Diffusion",
         "privacy": "Datenschutz",
         "terms": "Nutzungsbedingungen"
     },

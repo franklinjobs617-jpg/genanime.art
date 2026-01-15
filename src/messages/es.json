@@ -23,6 +23,10 @@
         "login": "Iniciar sesión",
         "signUp": "Registrarse",
         "faq": "FAQ",
+        "contact": "Contáctanos",
+        "support": "Centro de Ayuda",
+        "models": "Modelos IA",
+        "ponyDiffusion": "Pony Diffusion",
         "privacy": "Política de Privacidad",
         "terms": "Términos de Servicio"
     },

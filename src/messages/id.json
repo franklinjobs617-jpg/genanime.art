@@ -23,6 +23,10 @@
         "login": "Masuk",
         "signUp": "Daftar",
         "faq": "FAQ",
+        "contact": "Hubungi Kami",
+        "support": "Pusat Bantuan",
+        "models": "Model AI",
+        "ponyDiffusion": "Pony Diffusion",
         "privacy": "Kebijakan Privasi",
         "terms": "Syarat Layanan"
     },

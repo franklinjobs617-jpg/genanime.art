@@ -54,7 +54,7 @@ export default function GeneratorClient() {
 
   // --- 状态管理 ---
   const [activePrompt, setActivePrompt] = useState("");
-  const [activeStyle, setActiveStyle] = useState("Vibrant Anime");
+  const [activeStyle, setActiveStyle] = useState("Default");
   const [activeRatio, setActiveRatio] = useState("1:1");
   const [activeQuantity, setActiveQuantity] = useState(1);
   const [activeModel, setActiveModel] = useState("Seedream 4.0");
@@ -181,6 +181,7 @@ export default function GeneratorClient() {
           ratio: activeRatio,
           quantity: activeQuantity,
           googleUserId: user?.googleUserId,
+          negativePrompt: negativePrompt,
         }),
       });
 

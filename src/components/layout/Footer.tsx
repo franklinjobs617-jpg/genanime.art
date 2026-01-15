@@ -11,12 +11,16 @@ export default function Footer() {
     product: [
       { name: t('generator'), href: "/generator" },
       { name: t('gallery'), href: "/gallery" },
+      { name: t('promptLibrary'), href: "/prompt-library" },
       { name: t('pricing'), href: "/pricing" },
     ],
     resources: [
       { name: t('blog'), href: "/blog" },
       { name: t('aiGuide'), href: "/blog/how-to-make-anime-art-ai-rtx-8090-guide" },
-      { name: t('faq'), href: "/faq" },
+    ],
+    support: [
+      { name: t('contact'), href: "/contact" },
+      { name: t('support'), href: "/support" },
     ],
     legal: [
       { name: t('privacy'), href: "/privacy" },
@@ -44,7 +48,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="md:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-8">
+          <div className="md:col-span-7 grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="space-y-4">
               <h4 className="text-white font-bold text-sm uppercase tracking-widest">Tools</h4>
               <ul className="space-y-2">
@@ -60,6 +64,17 @@ export default function Footer() {
               <h4 className="text-white font-bold text-sm uppercase tracking-widest">Resources</h4>
               <ul className="space-y-2">
                 {footerLinks.resources.map((link) => (
+                  <li key={link.name}>
+                    <FooterLink href={link.href}>{link.name}</FooterLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="space-y-4">
+              <h4 className="text-white font-bold text-sm uppercase tracking-widest">Support</h4>
+              <ul className="space-y-2">
+                {footerLinks.support.map((link) => (
                   <li key={link.name}>
                     <FooterLink href={link.href}>{link.name}</FooterLink>
                   </li>

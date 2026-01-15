@@ -53,12 +53,22 @@ export default function RedesignedSidebar({
 
     const styles = [
         {
-            value: "Vibrant V6 Core",
+            value: "Default",
+            label: "Free Style",
+            img: "/gallery/anime_zen_solitude.webp", // Use a generic beautiful image
+        },
+        {
+            value: "Realism",
+            label: "Realism",
+            img: "/gallery/anime_cyber_noir.webp",
+        },
+        {
+            value: "Vibrant Anime",
             label: "Vibrant V6",
             img: "/feature-waifu.webp",
         },
         {
-            value: "Retro Cel 1990s",
+            value: "Retro 90s",
             label: "Retro 90s",
             img: "/artStyles/style_retro_cel_90s.webp",
         },

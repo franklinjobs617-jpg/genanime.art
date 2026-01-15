@@ -23,6 +23,10 @@
         "login": "Login",
         "signUp": "Sign Up",
         "faq": "FAQ",
+        "contact": "Contact Us",
+        "support": "Help Center",
+        "models": "AI Models",
+        "ponyDiffusion": "Pony Diffusion",
         "privacy": "Privacy Policy",
         "terms": "Terms of Service"
     },

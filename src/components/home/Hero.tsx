@@ -32,14 +32,13 @@ export default function Hero() {
     // - 移除 overflow-hidden / overflow-x-hidden
     // - 保持 min-h-screen 确保至少占满一屏
     // - 使用 relative 确保内容层级正确
-    <section className="relative w-full min-h-screen bg-[#030305] font-sans selection:bg-indigo-500/30 flex flex-col">
+    <section className="relative w-full min-h-screen bg-[#030305] font-sans selection:bg-indigo-500/30 flex flex-col overflow-hidden">
 
       {/* 
-         修改 2: 背景层改为 fixed (固定定位)
-         这样当你滚动页面时，背景动画会停留在原地，非常高级，
-         而且不会因为内容过长导致背景不够用。
+         修改 2: 背景层改为 absolute (绝对定位)
+         让背景跟随容器滚动。
       */}
-      <div className="fixed inset-0 z-0">
+      <div className="absolute inset-0 z-0">
         <div className="w-full h-full scale-105">
           <AnimatedBackground />
         </div>

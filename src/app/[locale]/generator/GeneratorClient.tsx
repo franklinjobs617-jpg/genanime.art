@@ -16,6 +16,8 @@ import {
   Loader2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import LoadingSkeleton from "@/components/generator/LoadingSkeleton";
+import EmptyState from "@/components/generator/EmptyState";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { toast, Toaster } from "react-hot-toast";
@@ -52,6 +54,20 @@ export default function GeneratorClient() {
   const [activeRatio, setActiveRatio] = useState("1:1");
   const [activeQuantity, setActiveQuantity] = useState(1);
   const [activeModel, setActiveModel] = useState("Seedream 4.0");
+
+  // Advanced Settings State
+  const [cfgScale, setCfgScale] = useState(7.0);
+  const [steps, setSteps] = useState(30);
+  const [seed, setSeed] = useState<number | null>(null);
+  const [isRandomSeed, setIsRandomSeed] = useState(true);
+
+  // Image Reference State
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  // Prompt Console Extra State
+  const [negativePrompt, setNegativePrompt] = useState("");
+
   const [isGenerating, setIsGenerating] = useState(false);
   const [history, setHistory] = useState<any[]>([]);
   const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
@@ -105,21 +121,48 @@ export default function GeneratorClient() {
     }
   }, [history]);
 
-  // --- 核心生成逻辑 ---
   const handleGenerate = useCallback(async () => {
     if (!activePrompt.trim() || isGenerating) return;
 
-    // 1. 登录与次数拦截
     if (!user) {
       if (guestGenerations >= GUEST_FREE_LIMIT) {
-        toast("Free limit reached. Sign in for more credits!", { icon: "🎁" });
         setShowLoginModal(true);
         return;
       }
     } else if ((Number(user.credits) || 0) < currentTotalCost) {
-      toast.error(
-        `Insufficient credits. You need ${currentTotalCost} credits.`
-      );
+      // Show elegant credit alert instead of simple toast
+      toast.custom((t) => (
+        <div className="bg-zinc-900 border border-amber-500/30 rounded-xl p-4 shadow-2xl max-w-md">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+              <Coins className="w-5 h-5 text-amber-500" />
+            </div>
+            <div className="flex-1">
+              <h4 className="text-sm font-semibold text-white mb-1">
+                Insufficient Credits
+              </h4>
+              <p className="text-xs text-zinc-400 mb-3">
+                You need {currentTotalCost} credits. You have {Number(user.credits) || 0}.
+              </p>
+              <button
+                onClick={() => {
+                  toast.dismiss(t.id);
+                  window.location.href = '/pricing';
+                }}
+                className="text-xs font-medium text-amber-400 hover:text-amber-300 transition-colors"
+              >
+                Get More Credits →
+              </button>
+            </div>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              className="text-zinc-500 hover:text-zinc-400"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      ), { duration: 6000 });
       return;
     }
 
@@ -222,8 +265,6 @@ export default function GeneratorClient() {
         onClose={() => setShowLoginModal(false)}
         onLogin={login}
       />
-
-      {/* Desktop Sidebar */}
       <aside className="hidden lg:flex flex-col w-[300px] border-r border-white/5 bg-[#08080a] shadow-2xl">
         <RedesignedSidebar
           activeStyle={activeStyle}
@@ -234,6 +275,15 @@ export default function GeneratorClient() {
           setActiveQuantity={setActiveQuantity}
           activeModel={activeModel}
           setActiveModel={setActiveModel}
+          // Advanced Settings
+          cfgScale={cfgScale}
+          setCfgScale={setCfgScale}
+          steps={steps}
+          setSteps={setSteps}
+          seed={seed}
+          setSeed={setSeed}
+          isRandomSeed={isRandomSeed}
+          setIsRandomSeed={setIsRandomSeed}
         />
       </aside>
 
@@ -261,6 +311,15 @@ export default function GeneratorClient() {
                   setActiveQuantity={setActiveQuantity}
                   activeModel={activeModel}
                   setActiveModel={setActiveModel}
+                  // Advanced Settings
+                  cfgScale={cfgScale}
+                  setCfgScale={setCfgScale}
+                  steps={steps}
+                  setSteps={setSteps}
+                  seed={seed}
+                  setSeed={setSeed}
+                  isRandomSeed={isRandomSeed}
+                  setIsRandomSeed={setIsRandomSeed}
                 />
               </SheetContent>
             </Sheet>
@@ -308,68 +367,45 @@ export default function GeneratorClient() {
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto custom-scrollbar relative">
+        {/* Scrollable Content Area */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar relative pb-[180px]">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[400px] bg-indigo-600/5 blur-[120px] pointer-events-none" />
 
           <div className="max-w-4xl mx-auto px-6 py-10 space-y-10">
-            <section>
-              <div className="flex items-center gap-2 mb-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">
-                <Link href="/" className="hover:text-white transition-colors">
-                  Home
-                </Link>
-                <span className="text-zinc-800">/</span>
-                <span className="text-indigo-400">Generator Studio</span>
-              </div>
-
-              <PromptConsole
-                activePrompt={activePrompt}
-                setActivePrompt={setActivePrompt}
-                isGenerating={isGenerating}
-                onGenerate={handleGenerate}
-                credits={Number(user?.credits || 0)}
-                activeQuantity={activeQuantity}
-                canGenerate={canGenerate()}
-                isGuest={!user}
-                remainingGuestGenerations={remainingGuest}
-              />
-            </section>
+            {/* Breadcrumbs */}
+            <nav className="flex items-center gap-2 mb-6 text-xs font-medium text-zinc-500">
+              <Link href="/" className="hover:text-white transition-colors">Home</Link>
+              <span className="text-zinc-700">/</span>
+              <span className="text-purple-400">Generator</span>
+            </nav>
 
             {/* Banner for low credits */}
             <AnimatePresence>
-              {((!user && guestGenerations > 0) ||
-                (user && Number(user.credits) < 50)) && (
+              {((!user && guestGenerations > 0) || (user && Number(user.credits) < 50)) && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
+                  className="rounded-2xl overflow-hidden shadow-2xl border border-amber-500/20"
                 >
-                  <PlansBanner isGuest={!user} />
+                  <PlansBanner
+                    isGuest={!user}
+                    onLogin={() => setShowLoginModal(true)}
+                  />
                 </motion.div>
               )}
             </AnimatePresence>
 
             {/* Results History */}
             <div className="space-y-10">
-              {/* Loading State */}
+              {/* Enhanced Loading State */}
               <AnimatePresence>
                 {isGenerating && (
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    className="relative rounded-[32px] overflow-hidden bg-zinc-900/40 border border-white/5 aspect-[16/9] flex flex-col items-center justify-center gap-6 shadow-2xl"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
                   >
-                    <div className="relative flex items-center justify-center">
-                      <div className="absolute w-24 h-24 bg-indigo-500/20 blur-2xl animate-pulse rounded-full" />
-                      <Loader2 className="w-12 h-12 text-indigo-500 animate-spin relative z-10" />
-                    </div>
-                    <div className="text-center px-6">
-                      <h4 className="text-lg font-black italic tracking-tight uppercase">
-                        Casting Vision...
-                      </h4>
-                      <p className="text-xs text-zinc-500 mt-2 font-medium tracking-wide">
-                        Our GPU clusters are weaving your pixels together
-                      </p>
-                    </div>
+                    <LoadingSkeleton />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -384,8 +420,8 @@ export default function GeneratorClient() {
                     <div key={group.title} className="space-y-6">
                       <div className="flex items-center gap-4">
                         <div className="h-px flex-1 bg-gradient-to-r from-transparent to-white/5" />
-                        <h3 className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.4em] flex items-center gap-2">
-                          <History className="w-3 h-3" /> {group.title}
+                        <h3 className="text-xs font-semibold text-zinc-500 flex items-center gap-2">
+                          <History className="w-3.5 h-3.5" /> {group.title}
                         </h3>
                         <div className="h-px flex-1 bg-gradient-to-l from-transparent to-white/5" />
                       </div>
@@ -394,7 +430,7 @@ export default function GeneratorClient() {
                         {group.data.map((item) => (
                           <GenerationResultCard
                             key={item.id}
-                            urls={item.urls} // 💡 传递整个数组，支持一次多张图
+                            urls={item.urls}
                             prompt={item.prompt}
                             style={item.style}
                             ratio={item.ratio}
@@ -414,23 +450,36 @@ export default function GeneratorClient() {
 
               {/* Empty State */}
               {!isGenerating && history.length === 0 && (
-                <div className="py-24 flex flex-col items-center text-center bg-white/[0.01] rounded-[48px] border border-dashed border-white/5">
-                  <div className="w-20 h-20 bg-indigo-500/5 rounded-[32px] flex items-center justify-center mb-6 border border-indigo-500/10 shadow-inner">
-                    <Sparkles className="w-10 h-10 text-indigo-500/40" />
-                  </div>
-                  <h3 className="text-xl font-black italic uppercase tracking-tight">
-                    Your Canvas Awaits
-                  </h3>
-                  <p className="text-sm text-zinc-500 mt-3 max-w-xs leading-relaxed font-medium">
-                    The most beautiful anime art starts with a single sentence.
-                    What will you create today?
-                  </p>
-                </div>
+                <EmptyState onUsePrompt={setActivePrompt} />
               )}
             </div>
           </div>
         </div>
-      </main>
-    </div>
+
+        {/* Floating Command Bar Container */}
+        <div className="absolute bottom-0 left-0 right-0 z-30 p-6 bg-gradient-to-t from-[#050507] via-[#050507]/90 to-transparent pointer-events-none">
+          <div className="max-w-4xl mx-auto pointer-events-auto">
+            <PromptConsole
+              activePrompt={activePrompt}
+              setActivePrompt={setActivePrompt}
+              negativePrompt={negativePrompt}
+              setNegativePrompt={setNegativePrompt}
+              isGenerating={isGenerating}
+              onGenerate={handleGenerate}
+              credits={Number(user?.credits || 0)}
+              activeQuantity={activeQuantity}
+              canGenerate={canGenerate()}
+              isGuest={!user}
+              remainingGuestGenerations={remainingGuest}
+              // Image Ref
+              image={image}
+              setImage={setImage}
+              imagePreview={imagePreview}
+              setImagePreview={setImagePreview}
+            />
+          </div>
+        </div>
+      </main >
+    </div >
   );
 }

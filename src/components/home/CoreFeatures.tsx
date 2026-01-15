@@ -2,8 +2,11 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export default function CoreFeatures() {
+  const t = useTranslations('CoreFeatures');
+
   return (
     <section className="py-24 bg-[#050505] relative overflow-hidden">
       {/* 装饰背景光 */}
@@ -12,9 +15,9 @@ export default function CoreFeatures() {
       <div className="container mx-auto px-6 relative z-10">
         <div className="mb-16">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
-            Everything needed to
+            {t('title')}
             <br />
-            <span className="text-zinc-500">master anime creation.</span>
+            <span className="text-zinc-500">{t('subtitle')}</span>
           </h2>
         </div>
 
@@ -29,16 +32,16 @@ export default function CoreFeatures() {
           >
             <div className="relative z-10 max-w-md">
               <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                Professional Grade <span className="text-purple-400">Generation Engine</span>
+                {t('engine.title')} <span className="text-purple-400">{t('engine.highlight')}</span>
               </h3>
               <p className="text-zinc-400 text-base md:text-lg leading-relaxed mb-8">
-                Powered by state-of-the-art GPU clusters. Experience lightning-fast generation speeds without compromising on the intricate details of your artwork.
+                {t('engine.description')}
               </p>
               {/* SEO Tags / Feature Pills */}
               <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-300">Fast Generation</span>
-                <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-300">High Resolution</span>
-                <span className="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-xs text-purple-300">Start for Free</span>
+                <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-300">{t('engine.tag1')}</span>
+                <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-zinc-300">{t('engine.tag2')}</span>
+                <span className="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-xs text-purple-300">{t('engine.tag3')}</span>
               </div>
             </div>
 
@@ -47,7 +50,7 @@ export default function CoreFeatures() {
             <div className="absolute bottom-6 right-6 w-48 h-32 bg-zinc-800/50 rounded-xl border border-white/5 overflow-hidden group-hover:scale-105 transition-transform duration-500 shadow-2xl">
               <Image
                 src="/features/generation-engine.webp"
-                alt="High Speed Generation"
+                alt={t('engine.title')}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -64,16 +67,16 @@ export default function CoreFeatures() {
             className="md:row-span-2 bg-[#0A0A0A] border border-white/5 rounded-3xl p-8 relative overflow-hidden group hover:border-purple-500/20 transition-colors"
           >
             <div className="relative z-10 text-center md:text-left">
-              <h3 className="text-2xl font-bold text-white mb-3">Mobile Studio</h3>
+              <h3 className="text-2xl font-bold text-white mb-3">{t('mobile.title')}</h3>
               <p className="text-zinc-500 text-sm mb-8">
-                Your creative studio in your pocket. Fully optimized for creating on iOS and Android devices.
+                {t('mobile.description')}
               </p>
             </div>
 
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[60%] bg-zinc-800 rounded-t-3xl border-t border-x border-white/10 overflow-hidden shadow-2xl group-hover:translate-y-[-4px] transition-transform duration-500">
               <Image
                 src="/features/mobile-studio.webp"
-                alt="Mobile Studio Mockup"
+                alt={t('mobile.title')}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -91,14 +94,14 @@ export default function CoreFeatures() {
             className="bg-zinc-900/30 border border-white/5 rounded-3xl p-8 flex flex-col justify-between group hover:bg-zinc-900/50 transition-colors"
           >
             <div>
-              <h3 className="text-xl font-bold text-white mb-2">Advanced Models</h3>
-              <p className="text-zinc-500 text-sm">Access premium models like Animagine XL & Pony Diffusion V6.</p>
+              <h3 className="text-xl font-bold text-white mb-2">{t('models.title')}</h3>
+              <p className="text-zinc-500 text-sm">{t('models.description')}</p>
             </div>
 
             <div className="mt-6 w-full h-64 relative bg-zinc-800/50 rounded-xl border border-white/5 overflow-hidden group-hover:opacity-80 transition-opacity">
               <Image
                 src="/features/model-detail.webp"
-                alt="Advanced Models Showcase"
+                alt={t('models.title')}
                 fill
                 className="object-cover object-center"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -115,14 +118,14 @@ export default function CoreFeatures() {
             className="bg-zinc-900/30 border border-white/5 rounded-3xl p-8 flex flex-col justify-between group hover:bg-zinc-900/50 transition-colors"
           >
             <div>
-              <h3 className="text-xl font-bold text-white mb-2">Commercial Rights</h3>
-              <p className="text-zinc-500 text-sm">Full ownership of your creations for commercial projects.</p>
+              <h3 className="text-xl font-bold text-white mb-2">{t('commercial.title')}</h3>
+              <p className="text-zinc-500 text-sm">{t('commercial.description')}</p>
             </div>
             {/* Image Area: Commercial Badge */}
             <div className="mt-6 w-full h-32 bg-zinc-800/50 rounded-xl border border-white/5 overflow-hidden flex items-center justify-center bg-gradient-to-br from-zinc-800 to-zinc-900">
               <Image
                 src="/features/commercial-rights.webp"
-                alt="Commercial Rights Badge"
+                alt={t('commercial.title')}
                 width={200}
                 height={160}
                 className="w-auto h-[80%] object-contain drop-shadow-2xl"

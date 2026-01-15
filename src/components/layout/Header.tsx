@@ -15,18 +15,19 @@ import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 
+import { useTranslations } from 'next-intl';
+
 export default function Header() {
   const { user, isLoading, login, logout } = useAuth();
   const { theme } = useTheme();
+  const t = useTranslations('Navigation');
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // 下拉菜单状态
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // 1. 核心修复：当移动端菜单打开时，禁止页面背景滚动
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -35,7 +36,6 @@ export default function Header() {
     }
   }, [isMobileMenuOpen]);
 
-  // 滚动监听
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
@@ -44,7 +44,6 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // 点击外部关闭下拉菜单
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -59,16 +58,16 @@ export default function Header() {
   }, []);
 
   const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "Gallery", href: "/gallery" },
-    { name: "Generator", href: "/generator" },
-    { name: "Pricing", href: "/pricing" },
-    { name: "Blog", href: "/blog" },
+    { name: t('home'), href: "/" },
+    { name: t('gallery'), href: "/gallery" },
+    { name: t('generator'), href: "/generator" },
+    { name: t('pricing'), href: "/pricing" },
+    { name: t('blog'), href: "/blog" },
     {
-      name: "Prompt Library", href: "/prompt-library"
+      name: t('promptLibrary'), href: "/prompt-library"
     },
     // 优化：在菜单里显示简短名称，但链接保持长 URL 以利于 SEO
-    { name: "AI Guide", href: "/blog/how-to-make-anime-art-ai-rtx-8090-guide" }
+    { name: t('aiGuide'), href: "/blog/how-to-make-anime-art-ai-rtx-8090-guide" }
   ];
 
   return (

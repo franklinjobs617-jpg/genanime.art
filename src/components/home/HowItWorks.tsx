@@ -1,44 +1,46 @@
 "use client";
 
 import { motion } from "framer-motion";
-
 import Image from "next/image";
-
-const steps = [
-  {
-    id: "01",
-    title: "Describe Your Vision",
-    description: "Type a prompt or use our smart assistant to craft the perfect description.",
-    imagePlaceholder: "Input Interface Shot",
-  },
-  {
-    id: "02",
-    title: "Select Premium Model",
-    description: "Choose from our curated list of high-fidelity anime models and styles.",
-    imagePlaceholder: "Model Selector Shot",
-  },
-  {
-    id: "03",
-    title: "Generate & Refine",
-    description: "Get high-res results instantly. Upscale, vary, or download your masterpiece.",
-    imagePlaceholder: "Result & Upscale Shot",
-  },
-];
+import { useTranslations } from "next-intl";
 
 export default function HowItWorks() {
+  const t = useTranslations('HowItWorks');
+
+  const steps = [
+    {
+      id: "01",
+      title: t('steps.step1.title'),
+      description: t('steps.step1.description'),
+      imagePlaceholder: "Input Interface Shot",
+    },
+    {
+      id: "02",
+      title: t('steps.step2.title'),
+      description: t('steps.step2.description'),
+      imagePlaceholder: "Model Selector Shot",
+    },
+    {
+      id: "03",
+      title: t('steps.step3.title'),
+      description: t('steps.step3.description'),
+      imagePlaceholder: "Result & Upscale Shot",
+    },
+  ];
+
   return (
     <section className="py-24 bg-[#050505] relative border-t border-white/5">
       <div className="container mx-auto px-6">
         <div className="mb-16 md:text-center max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 tracking-tight">
-            Professional Anime Art
+            {t('title')}
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
-              in 3 Simple Steps
+              {t('subtitle')}
             </span>
           </h2>
           <p className="text-zinc-400 text-lg">
-            Streamlined workflow designed for both beginners and pro creators.
+            {t('description')}
           </p>
         </div>
 

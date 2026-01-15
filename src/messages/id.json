@@ -12,6 +12,20 @@
             "desain karakter anime ai"
         ]
     },
+    "Navigation": {
+        "home": "Beranda",
+        "gallery": "Galeri",
+        "generator": "Generator",
+        "pricing": "Harga",
+        "blog": "Blog",
+        "promptLibrary": "Pustaka Prompt",
+        "aiGuide": "Panduan AI",
+        "login": "Masuk",
+        "signUp": "Daftar",
+        "faq": "FAQ",
+        "privacy": "Kebijakan Privasi",
+        "terms": "Syarat Layanan"
+    },
     "Hero": {
         "titleLine1": "Pembuat",
         "titleLine2": "Gambar Anime AI",

@@ -1,0 +1,252 @@
+{
+    "Metadata": {
+        "title": "Convertir foto en anime gratis | IA Anime Generador 2026",
+        "description": "Convertir foto en anime online gratis con nuestra IA profesional. El mejor generador de dibujos anime e IA anime para crear personajes únicos al instante.",
+        "keywords": [
+            "convertir foto en anime",
+            "dibujo anime",
+            "ia anime",
+            "convertir fotos en anime",
+            "como hacer una foto en anime",
+            "foto dibujo animado",
+            "convertir foto en dibujo"
+        ]
+    },
+    "Navigation": {
+        "home": "Inicio",
+        "gallery": "Galería",
+        "generator": "Generador",
+        "pricing": "Precios",
+        "blog": "Blog",
+        "promptLibrary": "Biblioteca de Prompts",
+        "aiGuide": "Guía de IA",
+        "login": "Iniciar sesión",
+        "signUp": "Registrarse",
+        "faq": "FAQ",
+        "privacy": "Política de Privacidad",
+        "terms": "Términos de Servicio"
+    },
+    "Hero": {
+        "titleLine1": "El Mejor Generador de",
+        "titleLine2": "Dibujo Anime con IA",
+        "description": "Crea <span1>waifus, chibis y arte</span1> de alta calidad en segundos con los modelos de IA más avanzados.",
+        "searchPlaceholder": "Describe lo que imaginas... ej. chica de pelo azul, estilo ciberpunk",
+        "features": {
+            "noSignUp": "SIN REGISTRO",
+            "noWatermark": "SIN MARCA DE AGUA",
+            "quality": "CALIDAD 4K"
+        },
+        "buttons": {
+            "startCreating": "Empezar a Crear",
+            "imageToImage": "Convertir Foto a Anime"
+        }
+    },
+    "FeatureSection": {
+        "title": "Crea Increíbles <span1>Ilustraciones de Anime</span1>",
+        "subtitle": "Desde Waifus hasta Cyberpunk, transforma tus ideas en ilustraciones de anime de alta calidad en segundos - gratis, sin login.",
+        "cards": {
+            "waifu": "Generador de Waifus",
+            "pony": "Estilo Pony Diffusion",
+            "animagine": "Modelo Animagine XL",
+            "chibi": "Creador de Chibis",
+            "photo": "Convertir foto en anime",
+            "portrait": "Retratos de Anime",
+            "couple": "Parejas de Anime",
+            "action": "Escenas de Acción",
+            "emoticons": "Emoticonos Anime",
+            "cyberpunk": "Arte Cyberpunk",
+            "school": "Escena Escolar",
+            "idol": "Generador de Idols",
+            "sticker": "Pack de Stickers",
+            "mage": "Mago Fantasía",
+            "knight": "Caballero Medieval",
+            "christmas": "Escena de Navidad"
+        },
+        "buttons": {
+            "generate": "Generar con este Prompt"
+        }
+    },
+    "GalleryPage": {
+        "title": "Crea arte <span1>Waifu</span1>",
+        "subtitle": "Generar <b>Arte de Waifu</b>, <b>Fondos Cyberpunk</b> y <b>Diseños Chibi</b> en segundos.",
+        "searchPlaceholder": "Prueba 'Arte anime mujer de negocios' o 'Cyberpunk'...",
+        "generateButton": "Generar",
+        "trendingTitle": "Creaciones Tendencia",
+        "trendingSubtitle": "Explora Waifus y Fondos",
+        "loading": {
+            "title": "Cargando Motor...",
+            "subtitle": "Preparando espacio de trabajo"
+        },
+        "modes": {
+            "generation": "Generación de Imagen",
+            "video": "Video IA",
+            "upscaler": "Escalador",
+            "soon": "Pronto"
+        },
+        "galleryItems": {
+            "1": "Mujer de negocios Anime - Estilo oficina",
+            "2": "Arte Waifu Anime - Chica escolar",
+            "3": "Fondo Cyberpunk Anime - Futurista",
+            "4": "Diseño de personaje Chibi - Lindo y Kawaii",
+            "5": "Arquero Elfo Fantasía",
+            "6": "Escenario Concierto Idol",
+            "7": "Arte Ghibli - Campo nostálgico",
+            "8": "Render 3D Cinemático - Chica anime",
+            "9": "Concepto Chica Mágica",
+            "10": "Ilustración Cabaña Acogedora",
+            "11": "Arte Clínico Anime",
+            "12": "Retrato Iluminación Dramática",
+            "13": "Estética Retro 80s",
+            "14": "Vista Aérea Épica",
+            "15": "Estética Pastel de Ensueño",
+            "16": "Bruja voladora Estilo Ghibli",
+            "17": "Estilo Manga Clásico",
+            "18": "Prado Bosque Exuberante",
+            "19": "Cuerpo Completo Obra Maestra",
+            "20": "Chica Mágica Kawaii",
+            "21": "Escena Acción Cartoon 3D",
+            "22": "Figura de Anime - Colección PVC",
+            "23": "Dinamismo Acción Anime",
+            "24": "Calle Neón Cyberpunk",
+            "25": "Caballero Sagrado Plateado",
+            "26": "Mago Celestial",
+            "27": "Retrato Waifu Premium",
+            "28": "Arte Estilo Pony",
+            "29": "Calidad Animagine XL",
+            "30": "Pareja Romántica Medianoche",
+            "31": "Tardes de Secundaria",
+            "32": "Retrato Anime Clásico",
+            "33": "Set de Stickers Kawaii",
+            "34": "Pack de Emoticonos Chibi",
+            "35": "Banner Evento Cosplay",
+            "36": "Obra Maestra Torso Superior"
+        }
+    },
+    "promptLibrary": {
+        "title": "Biblioteca de <span1>Prompts</span1>",
+        "searchPlaceholder": "Buscar estilos, personajes...",
+        "popularTags": "Etiquetas Populares",
+        "copyPrompt": "Copiar Prompt",
+        "copied": "Copiado",
+        "generateButton": "Generar con este Estilo",
+        "tags": {
+            "WAIFU": "WAIFU",
+            "CHIBI": "CHIBI",
+            "ESTILO ANIME": "ESTILO ANIME",
+            "Anime": "Anime",
+            "Girl": "Chica",
+            "Cyberpunk": "Cyberpunk",
+            "Kawaii": "Kawaii",
+            "Landscape": "Paisaje",
+            "Portrait": "Retrato"
+        }
+    },
+    "Schema": {
+        "websiteName": "GenAnime - Generador IA Anime",
+        "alternateName": "Generador de dibujos anime IA",
+        "description": "Crea dibujos anime increíbles con nuestra IA. El mejor generador de arte anime e imágenes con velocidad RTX 8090.",
+        "orgDescription": "Plataforma líder de generación de anime impulsada por IA",
+        "webAppName": "Generador GenAnime",
+        "webAppDescription": "Generador de arte anime IA gratis - Crea ilustraciones, waifus y personajes chibi con tecnología IA avanzada",
+        "breadcrumbHome": "Inicio",
+        "breadcrumbGenerator": "Generador",
+        "breadcrumbGallery": "Galería",
+        "breadcrumbLibrary": "Biblioteca de Prompts"
+    },
+    "CoreFeatures": {
+        "title": "Todo lo necesario para",
+        "subtitle": "dominar la creación de anime.",
+        "engine": {
+            "title": "Motor de Generación",
+            "highlight": "Profesional",
+            "description": "Impulsado por clusters GPU de última generación. Experimenta velocidades ultrarápidas sin comprometer los detalles intrincados de tu arte.",
+            "tag1": "Generación Rápida",
+            "tag2": "Alta Resolución",
+            "tag3": "Gratis para Empezar"
+        },
+        "mobile": {
+            "title": "Estudio Móvil",
+            "description": "Tu estudio creativo en tu bolsillo. Totalmente optimizado para crear en dispositivos iOS y Android."
+        },
+        "models": {
+            "title": "Modelos Avanzados",
+            "description": "Accede a modelos premium como Animagine XL y Pony Diffusion V6."
+        },
+        "commercial": {
+            "title": "Derechos Comerciales",
+            "description": "Propiedad total de tus creaciones para proyectos comerciales."
+        }
+    },
+    "HowItWorks": {
+        "title": "Arte Anime Profesional",
+        "subtitle": "en 3 Pasos Simples",
+        "description": "Flujo de trabajo optimizado diseñado tanto para principiantes como para creadores profesionales.",
+        "steps": {
+            "step1": {
+                "title": "Describe tu Visión",
+                "description": "Escribe un prompt o usa nuestro asistente inteligente para crear la descripción perfecta."
+            },
+            "step2": {
+                "title": "Selecciona Modelo Premium",
+                "description": "Elige de nuestra lista curada de modelos y estilos anime de alta fidelidad."
+            },
+            "step3": {
+                "title": "Genera y Refina",
+                "description": "Obtén resultados en alta resolución al instante. Amplía, varía o descarga tu obra maestra."
+            }
+        }
+    },
+    "CallToAction": {
+        "title": "¿Listo para Crear tu",
+        "highlight": "Obra Maestra?",
+        "description": "Únete a miles de creadores convirtiendo su imaginación en realidad.",
+        "subdescription": "Comienza a generar arte anime profesional en segundos.",
+        "button": "Generar Ahora",
+        "note": "Sin tarjeta de crédito"
+    },
+    "FAQ": {
+        "title": "Preguntas Frecuentes",
+        "items": [
+            {
+                "q": "¿Es este el mejor generador de anime IA para principiantes?",
+                "a": "¡Sí! Nuestra interfaz está diseñada para todos. Puedes usar nuestro generador de anime IA para crear personajes o escenas sin habilidades técnicas. Solo escribe tu idea y genera."
+            },
+            {
+                "q": "¿Puedo usar el arte anime generado por IA con fines comerciales?",
+                "a": "Absolutamente. Ya sea que crees una 'mujer de negocios anime generada por IA' para una presentación o recursos para un juego, posees los derechos comerciales de tus creaciones en nuestros planes de pago."
+            },
+            {
+                "q": "¿Cómo funciona la función de sprites animados generados por IA?",
+                "a": "Nuestro modo especializado te permite generar hojas de personajes con fondos transparentes. Garantiza consistencia en diferentes poses, perfecto para desarrollo de juegos 2D."
+            },
+            {
+                "q": "¿Qué tecnología impulsa su generador de anime IA?",
+                "a": "Utilizamos un modelo de IA de alta fidelidad personalizado, optimizado específicamente para estéticas anime. Sobresale en comprender prompts complejos o detalles mecánicos intrincados, superando modelos genéricos."
+            }
+        ]
+    },
+    "SEOContent": {
+        "features": [
+            {
+                "title": "Arte Anime de Alta Fidelidad",
+                "description": "Genera ilustraciones de grado profesional con iluminación perfecta. El mejor generador de arte anime IA para creadores.",
+                "label": "Disponible Ahora"
+            },
+            {
+                "title": "Diseño de Personajes",
+                "description": "Crea personajes consistentes de pies a cabeza. Ideal para mujer de negocios anime generada por IA o héroes de fantasía.",
+                "label": "Disponible Ahora"
+            },
+            {
+                "title": "Generador de Video Anime IA",
+                "description": "Próximamente: Crea openings de anime profesionales y clips de movimiento dinámico directamente desde tus prompts de texto.",
+                "label": "Próximamente",
+                "button": "Recibir Notificación"
+            }
+        ],
+        "seoTitle": "Liderando la",
+        "seoHighlight": "Revolución del Anime IA",
+        "seoParagraph1": "Nuestra plataforma es el generador de arte anime IA más versátil. Nos especializamos en creación de imágenes de alta resolución, desde hojas de sprites animados generados por IA hasta diseños de personajes profesionales. Ya sea que necesites una mujer de negocios anime generada por IA de cuerpo completo o una mascota personalizada, te tenemos cubierto.",
+        "seoParagraph2": "El futuro es el movimiento. Estamos desarrollando activamente nuestro módulo de generador de video IA para openings de anime. Pronto, podrás transformar tus creaciones de anime generadas por IA estáticas en secuencias cinemáticas. Únete a nuestra lista de espera para ser el primero en experimentar el poder de la tecnología de generador de animación IA."
+    }
+}

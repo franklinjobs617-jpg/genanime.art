@@ -119,10 +119,12 @@ export default function LoginModal({
 // Improved Benefit Item Component
 function BenefitItem({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
   return (
-    <div className="flex items-center gap-3.5 p-3 hover:bg-white/[0.02] rounded-lg transition-colors group cursor-default">
-      {/* Icon Box */}
-      <div className="flex-shrink-0 w-8 h-8 bg-[#1A1A1C] border border-white/[0.08] rounded-lg flex items-center justify-center text-zinc-400 group-hover:text-zinc-100 group-hover:border-white/[0.15] transition-colors shadow-sm">
-
+    <div className="flex items-center gap-4 p-3 hover:bg-white/[0.04] rounded-lg transition-colors group cursor-default">
+      {/* Icon - Simplified without box background */}
+      <div className="text-zinc-500 group-hover:text-purple-400 transition-colors">
+        {React.isValidElement(icon)
+          ? React.cloneElement(icon as React.ReactElement<any>, { className: "w-5 h-5" })
+          : icon}
       </div>
 
       {/* Text Content */}

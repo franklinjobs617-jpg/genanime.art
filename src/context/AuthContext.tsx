@@ -9,7 +9,6 @@ import {
 } from "react";
 import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
 
-// 用户数据类型
 interface AppUser {
     name: string;
     picture: string;

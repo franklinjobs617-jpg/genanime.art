@@ -1,11 +1,15 @@
 import "../globals.css";
+import "../nprogress.css";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { Providers } from "@/components/Providers";
 import ScrollToTop from "@/components/ToTop";
 import FeedbackWidget from "@/components/feedweight";
+import RouteProgress from "@/components/RouteProgress";
 import Script from "next/script";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
+
+
 
 
 const inter = Inter({
@@ -40,12 +44,13 @@ export async function generateMetadata(props: {
       languages: {
         'en': '/',
         'id': '/id',
-        'de': '/de'
+        'de': '/de',
+        'es': '/es'
       },
     },
     openGraph: {
       type: 'website',
-      locale: locale === 'en' ? 'en_US' : locale === 'id' ? 'id_ID' : locale === 'de' ? 'de_DE' : 'ru_RU',
+      locale: locale === 'en' ? 'en_US' : locale === 'id' ? 'id_ID' : locale === 'de' ? 'de_DE' : locale === 'es' ? 'es_ES' : 'ru_RU',
       url: 'https://genanime.art/',
       siteName: 'AnimeAI - AI Anime Generator',
       title: t('title'),
@@ -238,6 +243,7 @@ export default async function RootLayout(props: {
           />
 
           <Providers>
+            <RouteProgress />
             {children}
             <ScrollToTop />
             <FeedbackWidget />

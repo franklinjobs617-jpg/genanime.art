@@ -1,23 +1,26 @@
 import Link from "next/link";
 import { Github, Twitter, MessageSquare, Sparkles, Send } from "lucide-react";
 
+import { useTranslations } from 'next-intl';
+
 export default function Footer() {
+  const t = useTranslations('Navigation');
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
     product: [
-      { name: "AI Generator", href: "/generator" },
-      { name: "Community Gallery", href: "/gallery" },
-      { name: "Pricing Plans", href: "/pricing" },
+      { name: t('generator'), href: "/generator" },
+      { name: t('gallery'), href: "/gallery" },
+      { name: t('pricing'), href: "/pricing" },
     ],
     resources: [
-      { name: "Blog", href: "/blog" },
-      { name: "How to make Anime Art", href: "/blog/how-to-make-anime-art-ai-rtx-8090-guide" },
-      { name: "FAQ", href: "/faq" },
+      { name: t('blog'), href: "/blog" },
+      { name: t('aiGuide'), href: "/blog/how-to-make-anime-art-ai-rtx-8090-guide" },
+      { name: t('faq'), href: "/faq" },
     ],
     legal: [
-      { name: "Privacy Policy", href: "/privacy" },
-      { name: "Terms of Service", href: "/terms" },
+      { name: t('privacy'), href: "/privacy" },
+      { name: t('terms'), href: "/terms" },
     ]
   };
 

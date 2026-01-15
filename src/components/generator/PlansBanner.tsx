@@ -4,10 +4,11 @@ import { Zap } from "lucide-react"
 import Link from "next/link"
 
 interface PlansBannerProps {
-    isGuest?: boolean
+    isGuest?: boolean;
+    onLogin?: () => void;
 }
 
-export default function PlansBanner({ isGuest }: PlansBannerProps) {
+export default function PlansBanner({ isGuest, onLogin }: PlansBannerProps) {
     return (
         <div className="w-full bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
             <div className="hidden lg:flex items-center justify-between px-5 py-4">
@@ -26,12 +27,21 @@ export default function PlansBanner({ isGuest }: PlansBannerProps) {
                         </p>
                     </div>
                 </div>
-                <Link
-                    href="/pricing"
-                    className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-sm font-medium rounded-lg transition-colors"
-                >
-                    Upgrade
-                </Link>
+                {isGuest ? (
+                    <button
+                        onClick={onLogin}
+                        className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-sm font-medium rounded-lg transition-colors"
+                    >
+                        Sign In
+                    </button>
+                ) : (
+                    <Link
+                        href="/pricing"
+                        className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-sm font-medium rounded-lg transition-colors"
+                    >
+                        Upgrade
+                    </Link>
+                )}
             </div>
 
             <div className="lg:hidden p-5">
@@ -47,12 +57,21 @@ export default function PlansBanner({ isGuest }: PlansBannerProps) {
                             {isGuest ? "New users get 100 free credits" : "Upgrade for priority generations and more"}
                         </p>
                     </div>
-                    <Link
-                        href="/pricing"
-                        className="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white text-sm font-medium rounded-lg transition-colors text-center"
-                    >
-                        Upgrade
-                    </Link>
+                    {isGuest ? (
+                        <button
+                            onClick={onLogin}
+                            className="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white text-sm font-medium rounded-lg transition-colors text-center"
+                        >
+                            Sign In
+                        </button>
+                    ) : (
+                        <Link
+                            href="/pricing"
+                            className="w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white text-sm font-medium rounded-lg transition-colors text-center"
+                        >
+                            Upgrade
+                        </Link>
+                    )}
                 </div>
             </div>
         </div>

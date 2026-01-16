@@ -24,6 +24,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { toast, Toaster } from "react-hot-toast";
 import ShowcaseGallery from "@/components/generator/ShowcaseGallery";
+import { useTranslations } from "next-intl";
 
 // 动态加载组件以优化性能
 const PlansBanner = dynamic(
@@ -50,6 +51,7 @@ const GUEST_FREE_LIMIT = 2;
 const COST_PER_IMAGE = 2;
 
 export default function GeneratorClient() {
+  const t = useTranslations('Generator');
   const searchParams = useSearchParams();
   const { user, isLoading: authLoading, login, refreshUser } = useAuth();
 
@@ -141,28 +143,28 @@ export default function GeneratorClient() {
         return;
       }
     } else if ((Number(user.credits) || 0) < currentTotalCost) {
-      toast.custom((t) => (
+      toast.custom((toastItem) => (
         <div className="bg-zinc-900 border border-amber-500/30 rounded-xl p-4 shadow-2xl max-w-md">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center flex-shrink-0">
               <Coins className="w-5 h-5 text-amber-500" />
             </div>
             <div className="flex-1">
-              <h4 className="text-sm font-semibold text-white mb-1">Insufficient Credits</h4>
+              <h4 className="text-sm font-semibold text-white mb-1">{t('imagePrompt.insufficientCredits')}</h4>
               <p className="text-xs text-zinc-400 mb-3">
-                You need {currentTotalCost} credits. You have {Number(user.credits) || 0}.
+                {t('imagePrompt.analysisCost', { count: currentTotalCost })}
               </p>
               <button
                 onClick={() => {
-                  toast.dismiss(t.id);
+                  toast.dismiss(toastItem.id);
                   window.location.href = '/pricing';
                 }}
                 className="text-xs font-medium text-amber-400 hover:text-amber-300 transition-colors"
               >
-                Get More Credits →
+                {t('imagePrompt.getMoreCredits')}
               </button>
             </div>
-            <button onClick={() => toast.dismiss(t.id)} className="text-zinc-500 hover:text-zinc-400">✕</button>
+            <button onClick={() => toast.dismiss(toastItem.id)} className="text-zinc-500 hover:text-zinc-400">✕</button>
           </div>
         </div>
       ), { duration: 6000 });
@@ -185,7 +187,7 @@ export default function GeneratorClient() {
     };
 
     setHistory((prev) => [optimisticEntry, ...prev]);
-    const toastId = toast.loading("AI is casting your vision...");
+    const toastId = toast.loading(t('history.aiCasting'));
 
     try {
       const response = await fetch("/api/generate", {
@@ -221,10 +223,10 @@ export default function GeneratorClient() {
         await refreshUser();
       }
 
-      toast.success("Art generated successfully!", { id: toastId });
+      toast.success(t('history.artGenerated'), { id: toastId });
     } catch (err) {
       console.error(err);
-      toast.error("An error occurred during generation.", { id: toastId });
+      toast.error(t('history.generationError'), { id: toastId });
       // Remove the optimistic entry on failure
       setHistory((prev) => prev.filter(item => item.id !== optimisticId));
     } finally {
@@ -232,10 +234,20 @@ export default function GeneratorClient() {
     }
   }, [activePrompt, activeStyle, activeRatio, activeQuantity, isGenerating, user, guestGenerations, currentTotalCost, refreshUser]);
 
+  const handleAnalysisSuccess = useCallback(() => {
+    if (!user) {
+      const newCount = guestGenerations + 1;
+      setGuestGenerations(newCount);
+      localStorage.setItem("guest_generations", newCount.toString());
+    } else {
+      refreshUser();
+    }
+  }, [user, guestGenerations, refreshUser]);
+
   const handleApplyPrompt = (prompt: string) => {
     setActivePrompt(prompt);
     setGenerationMode('text-to-image');
-    toast.success("Prompt applied! Ready to generate.");
+    toast.success(t('history.promptApplied'));
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
     }
@@ -275,7 +287,7 @@ export default function GeneratorClient() {
     if (selectedIds.length === 0) return;
     setHistory(prev => prev.filter(item => !selectedIds.includes(item.id)));
     setSelectedIds([]);
-    toast.success(`Removed ${selectedIds.length} items from history`);
+    toast.success(t('history.batchRemoved', { count: selectedIds.length }));
   };
 
   const groupedHistory = useMemo(() => {
@@ -356,7 +368,7 @@ export default function GeneratorClient() {
                 <img src={user.picture || "/default-avatar.png"} alt={user.name} className="w-full h-full object-cover" />
               </div>
             ) : (
-              <button onClick={login} className="px-6 py-2.5 bg-white text-black hover:bg-zinc-200 text-xs font-bold uppercase tracking-wider rounded-full transition-all shadow-lg hover:shadow-xl hover:scale-105">Login</button>
+              <button onClick={login} className="px-6 py-2.5 bg-white text-black hover:bg-zinc-200 text-xs font-bold uppercase tracking-wider rounded-full transition-all shadow-lg hover:shadow-xl hover:scale-105">{t('login')}</button>
             )}
           </div>
         </header>
@@ -392,7 +404,10 @@ export default function GeneratorClient() {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <ImagePromptConsole onApplyPrompt={handleApplyPrompt} />
+                    <ImagePromptConsole
+                      onApplyPrompt={handleApplyPrompt}
+                      onSuccess={handleAnalysisSuccess}
+                    />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -409,22 +424,22 @@ export default function GeneratorClient() {
 
 
               {[
-                { title: "Today's Creations", data: groupedHistory.today },
-                { title: "Archive", data: groupedHistory.older },
+                { key: "today", data: groupedHistory.today },
+                { key: "older", data: groupedHistory.older },
               ].map((group) => group.data.length > 0 && (
-                <div key={group.title} className="space-y-6">
+                <div key={group.key} className="space-y-6">
                   <div className="flex items-center gap-4">
                     <h3 className="text-lg font-bold text-white flex items-center gap-2 tracking-tight">
-                      <History className="w-5 h-5 text-indigo-500" /> {group.title}
+                      <History className="w-5 h-5 text-indigo-500" /> {t(`history.${group.key}`)}
                     </h3>
                     <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
                   </div>
-                  {selectedIds.length > 0 && group.title === "Today's Creations" && (
+                  {selectedIds.length > 0 && group.key === "today" && (
                     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl mb-6">
-                      <span className="text-sm font-bold text-indigo-400">{selectedIds.length} items selected</span>
+                      <span className="text-sm font-bold text-indigo-400">{t('history.itemsSelected', { count: selectedIds.length })}</span>
                       <div className="flex gap-2">
-                        <button onClick={() => setSelectedIds([])} className="px-4 py-2 bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white rounded-xl text-xs font-bold transition-all">Cancel</button>
-                        <button onClick={handleBatchDelete} className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-lg shadow-red-500/20"><Trash2 className="w-4 h-4" /> Delete</button>
+                        <button onClick={() => setSelectedIds([])} className="px-4 py-2 bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white rounded-xl text-xs font-bold transition-all">{t('cancel')}</button>
+                        <button onClick={handleBatchDelete} className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-lg shadow-red-500/20"><Trash2 className="w-4 h-4" /> {t('delete')}</button>
                       </div>
                     </motion.div>
                   )}
@@ -435,7 +450,7 @@ export default function GeneratorClient() {
                         onRegenerate={() => handleRegenerate(item.prompt, item.style, item.ratio)}
                         onDelete={(id) => {
                           setHistory(prev => prev.filter(h => h.id !== id));
-                          toast.success("Creation removed");
+                          toast.success(t('history.creationRemoved'));
                         }}
                         onViewDetail={(item) => setSelectedDetailItem(item)}
                       />
@@ -463,7 +478,7 @@ export default function GeneratorClient() {
           }}
           onDelete={(id) => {
             setHistory(prev => prev.filter(h => h.id !== id));
-            toast.success("Creation removed");
+            toast.success(t('history.creationRemoved'));
           }}
         />
       </main>

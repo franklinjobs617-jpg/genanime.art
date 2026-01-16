@@ -20,6 +20,7 @@
         "blog": "Blog",
         "promptLibrary": "Prompt Library",
         "aiGuide": "AI Guide",
+        "howToExtract": "How to Extract Prompts",
         "login": "Login",
         "signUp": "Sign Up",
         "faq": "FAQ",
@@ -42,7 +43,7 @@
         },
         "buttons": {
             "startCreating": "Start Creating",
-            "imageToImage": "Image to Image"
+            "imageToImage": "Image to Prompt"
         }
     },
     "FeatureSection": {
@@ -266,5 +267,50 @@
         "seoHighlight": "AI Anime Revolution",
         "seoParagraph1": "Our platform is the most versatile <strong>anime ai art generator</strong>. We specialize in high-resolution image creation, from <strong>ai generated animated sprite</strong> sheets to professional character designs. Whether you need a full-body <strong>anime ai generated business woman</strong> or a custom mascot via our <strong>ai animal generator</strong>, we have you covered.",
         "seoParagraph2": "The future is motion. We are actively developing our <strong>ai video generator anime opening</strong> module. Soon, you'll be able to transform your static <strong>ai generator anime</strong> creations into cinematic sequences. Join our waitlist to be the first to experience the power of <strong>AI animation generator</strong> technology."
+    },
+    "Generator": {
+        "mode": "Generation Mode",
+        "textToImage": "Text - Image",
+        "imageToPrompt": "Image - Prompt",
+        "baseModel": "Base Model",
+        "artStyle": "Art Style",
+        "aspectRatio": "Aspect Ratio",
+        "batchSize": "Batch Size",
+        "advancedSettings": "Advanced Settings",
+        "guidanceScale": "Guidance Scale",
+        "inferenceSteps": "Inference Steps",
+        "resetDefaults": "Reset Defaults",
+        "imagePrompt": {
+            "title": "Reverse Prompt Engineering",
+            "description": "Drag & drop an image or paste (Ctrl+V) to analyze its visual concepts and reconstruct its AI prompt.",
+            "analysisComplete": "Analysis complete!",
+            "insufficientCredits": "Insufficient Credits",
+            "analysisCost": "Analysis costs {count} credits.",
+            "getMoreCredits": "Get More Credits →",
+            "freeLimitReached": "Free limit reached. Please login to continue.",
+            "applyToGenerator": "Apply to Generator",
+            "analyzedPrompt": "Analyzed Prompt",
+            "copyPrompt": "Copy Prompt",
+            "copied": "Copied",
+            "editable": "Editable",
+            "refineWithTags": "Refine with Tag Chips",
+            "sourceInspiration": "Source Inspiration",
+            "sourceInspirationDesc": "Visual DNA extracted from the original pixels. Every tag represents a core aesthetic dimension.",
+            "extractingConcepts": "Extracting concepts..."
+        },
+        "history": {
+            "today": "Today's Creations",
+            "older": "Archive",
+            "itemsSelected": "{count} items selected",
+            "artGenerated": "Art generated successfully!",
+            "generationError": "An error occurred during generation.",
+            "aiCasting": "AI is casting your vision...",
+            "promptApplied": "Prompt applied! Ready to generate.",
+            "creationRemoved": "Creation removed",
+            "batchRemoved": "Removed {count} items from history"
+        },
+        "login": "Login",
+        "cancel": "Cancel",
+        "delete": "Delete"
     }
 }

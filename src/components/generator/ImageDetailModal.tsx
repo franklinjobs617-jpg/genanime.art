@@ -19,6 +19,7 @@ import {
 import { useState } from "react"
 import { toast } from "react-hot-toast"
 import SafeImage from "./SafeImage"
+import { useTranslations } from "next-intl"
 
 interface ImageDetailModalProps {
     isOpen: boolean
@@ -46,6 +47,7 @@ export default function ImageDetailModal({
     onRegenerate,
     onDelete
 }: ImageDetailModalProps) {
+    const t = useTranslations('Hero')
     const [copied, setCopied] = useState(false)
 
     if (!item) return null
@@ -206,7 +208,7 @@ export default function ImageDetailModal({
                                         <Maximize2 className="w-4 h-4" /> Original Image
                                     </button>
                                     <button className="flex items-center justify-center gap-2 py-3 bg-zinc-900 hover:bg-zinc-800 rounded-xl border border-white/10 text-xs font-bold transition-all">
-                                        <ImageIcon className="w-4 h-4" /> Image to Image
+                                        <ImageIcon className="w-4 h-4" /> {t('buttons.imageToImage')}
                                     </button>
                                 </div>
                                 <button

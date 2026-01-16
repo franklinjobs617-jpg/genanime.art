@@ -20,6 +20,7 @@
         "blog": "Blog",
         "promptLibrary": "Prompt-Bibliothek",
         "aiGuide": "KI-Anleitung",
+        "howToExtract": "How to Extract Prompts",
         "login": "Anmelden",
         "signUp": "Registrieren",
         "faq": "FAQ",
@@ -42,7 +43,7 @@
         },
         "buttons": {
             "startCreating": "Jetzt Erstellen",
-            "imageToImage": "Bild-zu-Bild"
+            "imageToImage": "Bild-zu-Prompt"
         }
     },
     "FeatureSection": {
@@ -267,5 +268,50 @@
         "seoHighlight": "KI-Anime-Revolution",
         "seoParagraph1": "Unsere Plattform ist der vielseitigste KI-Anime-Kunstgenerator. Wir spezialisieren uns auf hochauflösende Bilderstellung, von KI-generierten animierten Sprite-Bögen bis hin zu professionellen Charakterdesigns. Ob Sie eine KI-generierte Anime-Geschäftsfrau in voller Länge oder ein individuelles Maskottchen benötigen – wir haben Sie abgedeckt.",
         "seoParagraph2": "Die Zukunft ist Bewegung. Wir entwickeln aktiv unser KI-Videogenerator-Modul für Anime-Openings. Bald können Sie Ihre statischen KI-generierten Anime-Kreationen in kinoreife Sequenzen verwandeln. Treten Sie unserer Warteliste bei, um als Erster die Kraft der KI-Animationsgenerator-Technologie zu erleben."
+    },
+    "Generator": {
+        "mode": "Generierungsmodus",
+        "textToImage": "Text - Bild",
+        "imageToPrompt": "Bild - Prompt",
+        "baseModel": "Basis-Modell",
+        "artStyle": "Kunst-Stil",
+        "aspectRatio": "Seitenverhältnis",
+        "batchSize": "Batch-Größe",
+        "advancedSettings": "Erweiterte Einstellungen",
+        "guidanceScale": "Guidance-Skala",
+        "inferenceSteps": "Inferenz-Schritte",
+        "resetDefaults": "Standardwerte zurücksetzen",
+        "imagePrompt": {
+            "title": "Reverse Prompt Engineering",
+            "description": "Bild hochladen oder einfügen (Strg+V), um visuelle Konzepte zu analysieren und den KI-Prompt zu rekonstruieren.",
+            "analysisComplete": "Analyse abgeschlossen!",
+            "insufficientCredits": "Unzureichendes Guthaben",
+            "analysisCost": "Analyse kostet {count} Credits.",
+            "getMoreCredits": "Mehr Guthaben erhalten →",
+            "freeLimitReached": "Gratis-Limit erreicht. Bitte anmelden.",
+            "applyToGenerator": "Auf Generator anwenden",
+            "analyzedPrompt": "Analysierter Prompt",
+            "copyPrompt": "Prompt kopieren",
+            "copied": "Kopiert",
+            "editable": "Editierbar",
+            "refineWithTags": "Mit Tags verfeinern",
+            "sourceInspiration": "Inspirationsquelle",
+            "sourceInspirationDesc": "Visuelle DNA aus den Originalpixeln extrahiert. Jeder Tag stellt eine ästhetische Dimension dar.",
+            "extractingConcepts": "Konzepte werden extrahiert..."
+        },
+        "history": {
+            "today": "Heutige Kreationen",
+            "older": "Archiv",
+            "itemsSelected": "{count} Elemente ausgewählt",
+            "artGenerated": "Kunst erfolgreich generiert!",
+            "generationError": "Ein Fehler ist bei der Generierung aufgetreten.",
+            "aiCasting": "KI gießt Ihre Vision...",
+            "promptApplied": "Prompt angewendet! Bereit zur Generierung.",
+            "creationRemoved": "Kreation entfernt",
+            "batchRemoved": "{count} Elemente aus dem Verlauf entfernt"
+        },
+        "login": "Anmelden",
+        "cancel": "Abbrechen",
+        "delete": "Löschen"
     }
 }

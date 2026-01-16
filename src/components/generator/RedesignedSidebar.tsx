@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { ChevronDown, RotateCcw, Sparkles, Sliders, Dna, Layers, Zap, Image as ImageIcon } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { useTranslations } from "next-intl"
 
 interface SidebarProps {
     activeStyle: string
@@ -46,6 +47,7 @@ export default function RedesignedSidebar({
     generationMode,
     setGenerationMode,
 }: SidebarProps) {
+    const t = useTranslations('Generator')
     const [modelOpen, setModelOpen] = useState(false)
     const [advancedOpen, setAdvancedOpen] = useState(false)
 
@@ -113,7 +115,7 @@ export default function RedesignedSidebar({
                 <div className="space-y-4">
                     <label className="flex items-center text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
                         <Layers className="w-3 h-3 mr-2 text-indigo-400" />
-                        Generation Mode
+                        {t('mode')}
                     </label>
                     <div className="grid grid-cols-2 gap-2 p-1 bg-white/[0.02] border border-white/5 rounded-xl">
                         <button
@@ -124,7 +126,7 @@ export default function RedesignedSidebar({
                                 }`}
                         >
                             <Sparkles className="w-3 h-3" />
-                            Text - Image
+                            {t('textToImage')}
                         </button>
                         <button
                             onClick={() => setGenerationMode('image-to-prompt')}
@@ -134,7 +136,7 @@ export default function RedesignedSidebar({
                                 }`}
                         >
                             <ImageIcon className="w-3 h-3" />
-                            <span>Image - Prompt</span>
+                            <span>{t('imageToPrompt')}</span>
                         </button>
                     </div>
                 </div>
@@ -143,7 +145,7 @@ export default function RedesignedSidebar({
                 <div className="space-y-4">
                     <label className="flex items-center text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
                         <Zap className="w-3 h-3 mr-2 text-indigo-400" />
-                        Base Model
+                        {t('baseModel')}
                     </label>
                     <div className="relative">
                         <button
@@ -201,7 +203,7 @@ export default function RedesignedSidebar({
                         <div className="flex items-center justify-between">
                             <label className="flex items-center text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
                                 <Sparkles className="w-3 h-3 mr-2 text-pink-400" />
-                                Art Style
+                                {t('artStyle')}
                             </label>
                         </div>
 
@@ -250,7 +252,7 @@ export default function RedesignedSidebar({
                 <div className="grid grid-cols-1 gap-6">
                     {/* Aspect Ratio */}
                     <div className="space-y-3">
-                        <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Aspect Ratio</label>
+                        <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider">{t('aspectRatio')}</label>
                         <div className="grid grid-cols-3 gap-2">
                             {ratios.map((r) => (
                                 <button
@@ -274,7 +276,7 @@ export default function RedesignedSidebar({
 
                     {/* Image Quantity */}
                     <div className="space-y-3">
-                        <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Batch Size</label>
+                        <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider">{t('batchSize')}</label>
                         <div className="bg-zinc-800/30 p-1 rounded-lg flex border border-white/5 relative">
                             {/* Sliding background could be added here for polish */}
                             {quantities.map((num) => (
@@ -301,7 +303,7 @@ export default function RedesignedSidebar({
                     >
                         <div className="flex items-center gap-2">
                             <Sliders className="w-4 h-4" />
-                            <span className="text-xs font-bold uppercase tracking-wider">Advanced Settings</span>
+                            <span className="text-xs font-bold uppercase tracking-wider">{t('advancedSettings')}</span>
                         </div>
                         <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${advancedOpen ? "rotate-180" : ""}`} />
                     </button>
@@ -318,7 +320,7 @@ export default function RedesignedSidebar({
                                     {/* CFG Scale */}
                                     <div className="space-y-3">
                                         <div className="flex justify-between items-center text-xs">
-                                            <span className="text-zinc-400 font-medium">Guidance Scale</span>
+                                            <span className="text-zinc-400 font-medium">{t('guidanceScale')}</span>
                                             <span className="bg-white/5 px-2 py-0.5 rounded text-zinc-300 tabular-nums">{cfgScale}</span>
                                         </div>
                                         <input
@@ -334,7 +336,7 @@ export default function RedesignedSidebar({
                                     {/* Steps */}
                                     <div className="space-y-3">
                                         <div className="flex justify-between items-center text-xs">
-                                            <span className="text-zinc-400 font-medium">Inference Steps</span>
+                                            <span className="text-zinc-400 font-medium">{t('inferenceSteps')}</span>
                                             <span className="bg-white/5 px-2 py-0.5 rounded text-zinc-300 tabular-nums">{steps}</span>
                                         </div>
                                         <input
@@ -402,7 +404,7 @@ export default function RedesignedSidebar({
                     className="group w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold uppercase tracking-wider text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50 rounded-xl transition-all"
                 >
                     <RotateCcw className="w-3.5 h-3.5 transition-transform group-hover:-rotate-180" />
-                    Reset Defaults
+                    {t('resetDefaults')}
                 </button>
             </div>
         </div>

@@ -20,6 +20,7 @@
         "blog": "Blog",
         "promptLibrary": "Biblioteca de Prompts",
         "aiGuide": "Guía de IA",
+        "howToExtract": "How to Extract Prompts",
         "login": "Iniciar sesión",
         "signUp": "Registrarse",
         "faq": "FAQ",
@@ -42,7 +43,7 @@
         },
         "buttons": {
             "startCreating": "Empezar a Crear",
-            "imageToImage": "Convertir Foto a Anime"
+            "imageToImage": "Imagen a Prompt"
         }
     },
     "FeatureSection": {
@@ -252,5 +253,50 @@
         "seoHighlight": "Revolución del Anime IA",
         "seoParagraph1": "Nuestra plataforma es el generador de arte anime IA más versátil. Nos especializamos en creación de imágenes de alta resolución, desde hojas de sprites animados generados por IA hasta diseños de personajes profesionales. Ya sea que necesites una mujer de negocios anime generada por IA de cuerpo completo o una mascota personalizada, te tenemos cubierto.",
         "seoParagraph2": "El futuro es el movimiento. Estamos desarrollando activamente nuestro módulo de generador de video IA para openings de anime. Pronto, podrás transformar tus creaciones de anime generadas por IA estáticas en secuencias cinemáticas. Únete a nuestra lista de espera para ser el primero en experimentar el poder de la tecnología de generador de animación IA."
+    },
+    "Generator": {
+        "mode": "Modo de Generación",
+        "textToImage": "Texto - Imagen",
+        "imageToPrompt": "Imagen - Prompt",
+        "baseModel": "Modelo Base",
+        "artStyle": "Estilo de Arte",
+        "aspectRatio": "Relación de Aspecto",
+        "batchSize": "Tamaño del Lote",
+        "advancedSettings": "Ajustes Avanzados",
+        "guidanceScale": "Escala de Guía",
+        "inferenceSteps": "Pasos de Inferencia",
+        "resetDefaults": "Restablecer Valores",
+        "imagePrompt": {
+            "title": "Ingeniería Inversa de Prompts",
+            "description": "Arrastra una imagen o pega (Ctrl+V) para analizar conceptos visuales y reconstruir el prompt de IA.",
+            "analysisComplete": "¡Análisis completo!",
+            "insufficientCredits": "Créditos Insuficientes",
+            "analysisCost": "El análisis cuesta {count} créditos.",
+            "getMoreCredits": "Obtener más créditos →",
+            "freeLimitReached": "Límite gratuito alcanzado. Inicia sesión para continuar.",
+            "applyToGenerator": "Aplicar al Generador",
+            "analyzedPrompt": "Prompt Analizado",
+            "copyPrompt": "Copiar Prompt",
+            "copied": "Copiado",
+            "editable": "Editable",
+            "refineWithTags": "Refinar con Etiquetas",
+            "sourceInspiration": "Fuente de Inspiración",
+            "sourceInspirationDesc": "ADN visual extraído de los píxeles originales. Cada etiqueta representa una dimensión estética.",
+            "extractingConcepts": "Extrayendo conceptos..."
+        },
+        "history": {
+            "today": "Creaciones de Hoy",
+            "older": "Archivo",
+            "itemsSelected": "{count} elementos seleccionados",
+            "artGenerated": "¡Arte generado con éxito!",
+            "generationError": "Ocurrió un error durante la generación.",
+            "aiCasting": "La IA está esculpiendo tu visión...",
+            "promptApplied": "¡Prompt aplicado! Listo para generar.",
+            "creationRemoved": "Creación eliminada",
+            "batchRemoved": "Se eliminaron {count} elementos del historial"
+        },
+        "login": "Iniciar sesión",
+        "cancel": "Cancelar",
+        "delete": "Eliminar"
     }
 }

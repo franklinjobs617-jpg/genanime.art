@@ -63,11 +63,13 @@ export default function Header() {
     { name: t('generator'), href: "/generator" },
     { name: t('pricing'), href: "/pricing" },
     { name: t('blog'), href: "/blog" },
+
     {
       name: t('promptLibrary'), href: "/prompt-library"
     },
     // 优化：在菜单里显示简短名称，但链接保持长 URL 以利于 SEO
-    { name: t('aiGuide'), href: "/blog/how-to-make-anime-art-ai-rtx-8090-guide" }
+    { name: t('aiGuide'), href: "/blog/how-to-make-anime-art-ai-rtx-8090-guide" },
+    { name: t('howToExtract'), href: "/how-to-reverse-image-to-prompt-anime-guide" }
   ];
 
   return (

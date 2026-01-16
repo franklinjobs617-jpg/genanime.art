@@ -20,6 +20,7 @@
         "blog": "Blog",
         "promptLibrary": "Pustaka Prompt",
         "aiGuide": "Panduan AI",
+        "howToExtract": "How to Extract Prompts",
         "login": "Masuk",
         "signUp": "Daftar",
         "faq": "FAQ",
@@ -42,7 +43,7 @@
         },
         "buttons": {
             "startCreating": "Mulai Membuat",
-            "imageToImage": "Gambar ke Gambar"
+            "imageToImage": "Gambar ke Prompt"
         }
     },
     "FeatureSection": {
@@ -153,5 +154,50 @@
         "breadcrumbGenerator": "Generator",
         "breadcrumbGallery": "Galeri",
         "breadcrumbLibrary": "Pustaka Prompt"
+    },
+    "Generator": {
+        "mode": "Mode Pembuatan",
+        "textToImage": "Teks - Gambar",
+        "imageToPrompt": "Gambar - Prompt",
+        "baseModel": "Model Dasar",
+        "artStyle": "Gaya Seni",
+        "aspectRatio": "Rasio Aspek",
+        "batchSize": "Jumlah Gambar",
+        "advancedSettings": "Pengaturan Lanjutan",
+        "guidanceScale": "Skala Panduan",
+        "inferenceSteps": "Langkah Inferensi",
+        "resetDefaults": "Atur Ulang",
+        "imagePrompt": {
+            "title": "Rekayasa Prompt Terbalik",
+            "description": "Tarik & lepas gambar atau tempel (Ctrl+V) untuk menganalisis konsep visual dan menyusun ulang prompt AI-nya.",
+            "analysisComplete": "Analisis selesai!",
+            "insufficientCredits": "Kredit Tidak Cukup",
+            "analysisCost": "Analisis biaya {count} kredit.",
+            "getMoreCredits": "Dapatkan Lebih Banyak Kredit →",
+            "freeLimitReached": "Batas gratis tercapai. Silakan masuk untuk melanjutkan.",
+            "applyToGenerator": "Terapkan ke Generator",
+            "analyzedPrompt": "Prompt Hasil Analisis",
+            "copyPrompt": "Salin Prompt",
+            "copied": "Berhasil Disalin",
+            "editable": "Dapat Diedit",
+            "refineWithTags": "Sempurnakan dengan Chip Tag",
+            "sourceInspiration": "Inspirasi Sumber",
+            "sourceInspirationDesc": "DNA visual diekstrak dari piksel asli. Setiap tag mewakili dimensi estetika inti.",
+            "extractingConcepts": "Ekstraksi konsep..."
+        },
+        "history": {
+            "today": "Kreasi Hari Ini",
+            "older": "Arsip",
+            "itemsSelected": "{count} item terpilih",
+            "artGenerated": "Seni berhasil dibuat!",
+            "generationError": "Terjadi kesalahan saat pembuatan.",
+            "aiCasting": "AI sedang menuangkan visi Anda...",
+            "promptApplied": "Prompt diterapkan! Siap untuk membuat.",
+            "creationRemoved": "Kreasi dihapus",
+            "batchRemoved": "Menghapus {count} item dari riwayat"
+        },
+        "login": "Masuk",
+        "cancel": "Batal",
+        "delete": "Hapus"
     }
 }

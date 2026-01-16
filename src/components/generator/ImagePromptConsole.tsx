@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
 import { useAuth } from "@/context/AuthContext";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 
 const LoginModal = dynamic(() => import("@/components/LoginModel"), {
     ssr: false,
@@ -13,12 +14,14 @@ const LoginModal = dynamic(() => import("@/components/LoginModel"), {
 
 interface ImagePromptConsoleProps {
     onApplyPrompt: (prompt: string) => void;
+    onSuccess?: () => void;
 }
 
 const GUEST_FREE_LIMIT = 2;
 const COST_PER_ANALYSIS = 2;
 
-export default function ImagePromptConsole({ onApplyPrompt }: ImagePromptConsoleProps) {
+export default function ImagePromptConsole({ onApplyPrompt, onSuccess }: ImagePromptConsoleProps) {
+    const t = useTranslations('Generator.imagePrompt');
     const { user, login, refreshUser } = useAuth();
     const [image, setImage] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -36,33 +39,33 @@ export default function ImagePromptConsole({ onApplyPrompt }: ImagePromptConsole
             const guestCount = Number(localStorage.getItem("guest_generations") || "0");
             if (guestCount >= GUEST_FREE_LIMIT) {
                 setShowLoginModal(true);
-                toast.error("Free limit reached. Please login to continue.");
+                toast.error(t('freeLimitReached'));
                 return;
             }
         } else {
             if ((Number(user.credits) || 0) < COST_PER_ANALYSIS) {
-                toast.custom((t) => (
+                toast.custom((toastItem) => (
                     <div className="bg-zinc-900 border border-amber-500/30 rounded-xl p-4 shadow-2xl max-w-md">
                         <div className="flex items-start gap-3">
                             <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center flex-shrink-0">
                                 <Coins className="w-5 h-5 text-amber-500" />
                             </div>
                             <div className="flex-1">
-                                <h4 className="text-sm font-semibold text-white mb-1">Insufficient Credits</h4>
+                                <h4 className="text-sm font-semibold text-white mb-1">{t('insufficientCredits')}</h4>
                                 <p className="text-xs text-zinc-400 mb-3">
-                                    Analysis costs 2 credits. You have {Number(user.credits) || 0}.
+                                    {t('analysisCost', { count: COST_PER_ANALYSIS })}
                                 </p>
                                 <button
                                     onClick={() => {
-                                        toast.dismiss(t.id);
+                                        toast.dismiss(toastItem.id);
                                         window.location.href = '/pricing';
                                     }}
                                     className="text-xs font-medium text-amber-400 hover:text-amber-300 transition-colors"
                                 >
-                                    Get More Credits →
+                                    {t('getMoreCredits')}
                                 </button>
                             </div>
-                            <button onClick={() => toast.dismiss(t.id)} className="text-zinc-500 hover:text-zinc-400">✕</button>
+                            <button onClick={() => toast.dismiss(toastItem.id)} className="text-zinc-500 hover:text-zinc-400">✕</button>
                         </div>
                     </div>
                 ), { duration: 6000 });
@@ -97,31 +100,31 @@ export default function ImagePromptConsole({ onApplyPrompt }: ImagePromptConsole
             if (!response.ok) {
                 if (response.status === 429) {
                     setShowLoginModal(true);
-                    throw new Error("Free limit reached. Please login to continue.");
+                    throw new Error(t('freeLimitReached'));
                 }
                 if (response.status === 403) {
-                    toast.custom((t) => (
+                    toast.custom((toastItem) => (
                         <div className="bg-zinc-900 border border-amber-500/30 rounded-xl p-4 shadow-2xl max-w-md">
                             <div className="flex items-start gap-3">
                                 <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center flex-shrink-0">
                                     <Coins className="w-5 h-5 text-amber-500" />
                                 </div>
                                 <div className="flex-1">
-                                    <h4 className="text-sm font-semibold text-white mb-1">Insufficient Credits</h4>
+                                    <h4 className="text-sm font-semibold text-white mb-1">{t('insufficientCredits')}</h4>
                                     <p className="text-xs text-zinc-400 mb-3">
-                                        Analysis costs 2 credits. You have {Number(user?.credits) || 0}.
+                                        {t('analysisCost', { count: COST_PER_ANALYSIS })}
                                     </p>
                                     <button
                                         onClick={() => {
-                                            toast.dismiss(t.id);
+                                            toast.dismiss(toastItem.id);
                                             window.location.href = '/pricing';
                                         }}
                                         className="text-xs font-medium text-amber-400 hover:text-amber-300 transition-colors"
                                     >
-                                        Get More Credits →
+                                        {t('getMoreCredits')}
                                     </button>
                                 </div>
-                                <button onClick={() => toast.dismiss(t.id)} className="text-zinc-500 hover:text-zinc-400">✕</button>
+                                <button onClick={() => toast.dismiss(toastItem.id)} className="text-zinc-500 hover:text-zinc-400">✕</button>
                             </div>
                         </div>
                     ), { duration: 6000 });
@@ -132,16 +135,10 @@ export default function ImagePromptConsole({ onApplyPrompt }: ImagePromptConsole
 
             setTags(data.tags || []);
             setFullPrompt(data.prompt || "");
-            toast.success("Analysis complete!");
+            toast.success(t('analysisComplete'));
 
-            // Sync localStorage guest count if guest
-            if (!user) {
-                const guestCount = Number(localStorage.getItem("guest_generations") || "0");
-                localStorage.setItem("guest_generations", String(guestCount + 1));
-            }
-
-            // Refresh credits
-            if (user) refreshUser();
+            // Call success callback to sync UI and credits
+            if (onSuccess) onSuccess();
         } catch (error: any) {
             console.error("Analysis error:", error);
             toast.error(error.message || "Failed to analyze image. Please try again.");
@@ -256,9 +253,9 @@ export default function ImagePromptConsole({ onApplyPrompt }: ImagePromptConsole
                             <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                 <UploadCloud className="w-8 h-8 text-indigo-400" />
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-2 text-center">Reverse Prompt Engineering</h3>
+                            <h3 className="text-xl font-bold text-white mb-2 text-center">{t('title')}</h3>
                             <p className="text-zinc-500 text-center max-w-md">
-                                Drag & drop an image or paste (Ctrl+V) to analyze its visual concepts and reconstruct its AI prompt.
+                                {t('description')}
                             </p>
                         </motion.div>
                     ) : (
@@ -282,7 +279,7 @@ export default function ImagePromptConsole({ onApplyPrompt }: ImagePromptConsole
                                                 </div>
                                             </div>
                                             <div className="flex flex-col items-center">
-                                                <span className="text-indigo-400 font-bold text-sm">Extracting concepts...</span>
+                                                <span className="text-indigo-400 font-bold text-sm">{t('extractingConcepts')}</span>
                                                 <div className="w-32 h-1 bg-white/10 rounded-full mt-2 overflow-hidden">
                                                     <motion.div
                                                         className="h-full bg-gradient-to-r from-indigo-500 to-purple-500"
@@ -309,10 +306,10 @@ export default function ImagePromptConsole({ onApplyPrompt }: ImagePromptConsole
                                 </div>
                                 <div className="mt-4 flex flex-col gap-2">
                                     <h4 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">
-                                        Source Inspiration
+                                        {t('sourceInspiration')}
                                     </h4>
                                     <p className="text-[11px] text-zinc-500 leading-relaxed italic">
-                                        "Visual DNA extracted from the original pixels. Every tag represents a core aesthetic dimension."
+                                        {t('sourceInspirationDesc')}
                                     </p>
                                 </div>
                             </div>
@@ -322,7 +319,7 @@ export default function ImagePromptConsole({ onApplyPrompt }: ImagePromptConsole
                                 <div className="flex items-center justify-between mb-4">
                                     <h4 className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.15em] text-zinc-400">
                                         <Wand2 className="w-4 h-4 text-indigo-400" />
-                                        Analyzed Prompt
+                                        {t('analyzedPrompt')}
                                     </h4>
                                     <button
                                         onClick={handleCopy}
@@ -330,7 +327,7 @@ export default function ImagePromptConsole({ onApplyPrompt }: ImagePromptConsole
                                         className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white text-[11px] font-bold transition-all border border-white/5"
                                     >
                                         {isCopied ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
-                                        {isCopied ? "Copied" : "Copy Prompt"}
+                                        {isCopied ? t('copied') : t('copyPrompt')}
                                     </button>
                                 </div>
 
@@ -351,7 +348,7 @@ export default function ImagePromptConsole({ onApplyPrompt }: ImagePromptConsole
                                     {!isAnalyzing && fullPrompt && (
                                         <div className="absolute top-3 right-3 opacity-0 group-hover/text:opacity-100 transition-opacity">
                                             <div className="px-2 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded text-[10px] text-indigo-400 font-bold uppercase">
-                                                Editable
+                                                {t('editable')}
                                             </div>
                                         </div>
                                     )}
@@ -359,7 +356,7 @@ export default function ImagePromptConsole({ onApplyPrompt }: ImagePromptConsole
 
                                 <div className="space-y-4 flex-1">
                                     <h5 className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">
-                                        Refine with Tag Chips
+                                        {t('refineWithTags')}
                                     </h5>
                                     <div className="flex flex-wrap gap-2 content-start">
                                         {isAnalyzing ? (
@@ -394,7 +391,7 @@ export default function ImagePromptConsole({ onApplyPrompt }: ImagePromptConsole
                                         className="w-full group relative flex items-center justify-center gap-3 py-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black uppercase tracking-widest text-sm hover:shadow-2xl hover:shadow-indigo-500/40 hover:scale-[1.01] transition-all disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden shadow-lg shadow-indigo-500/10"
                                     >
                                         <Sparkles className="w-5 h-5 fill-white group-hover:rotate-12 transition-transform" />
-                                        <span>Apply to Generator</span>
+                                        <span>{t('applyToGenerator')}</span>
 
                                         <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                                     </button>

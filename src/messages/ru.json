@@ -11,6 +11,7 @@
         "blog": "Блог",
         "promptLibrary": "Библиотека промптов",
         "aiGuide": "Гайд по AI",
+        "howToExtract": "How to Extract Prompts",
         "contact": "Связаться с нами",
         "support": "Центр поддержки",
         "models": "AI Модели",
@@ -30,7 +31,7 @@
         },
         "buttons": {
             "startCreating": "Начать",
-            "imageToImage": "Img2Img"
+            "imageToImage": "Картинка в Промпт"
         }
     },
     "FeatureSection": {
@@ -75,5 +76,50 @@
             "upscaler": "Улучшение",
             "soon": "Скоро"
         }
+    },
+    "Generator": {
+        "mode": "Режим генерации",
+        "textToImage": "Текст - Картинка",
+        "imageToPrompt": "Картинка - Промпт",
+        "baseModel": "Базовая модель",
+        "artStyle": "Стиль арта",
+        "aspectRatio": "Соотношение сторон",
+        "batchSize": "Размер пакета",
+        "advancedSettings": "Расширенные настройки",
+        "guidanceScale": "Шкала наведения",
+        "inferenceSteps": "Шаги вывода",
+        "resetDefaults": "Сбросить настройки",
+        "imagePrompt": {
+            "title": "Обратная разработка промпта",
+            "description": "Перетащите изображение или вставьте (Ctrl+V), чтобы проанализировать визуальные концепции и восстановить AI-промпт.",
+            "analysisComplete": "Анализ завершен!",
+            "insufficientCredits": "Недостаточно кредитов",
+            "analysisCost": "Анализ стоит {count} кредитов.",
+            "getMoreCredits": "Получить больше кредитов →",
+            "freeLimitReached": "Лимит бесплатных попыток исчерпан. Пожалуйста, войдите.",
+            "applyToGenerator": "Применить к генератору",
+            "analyzedPrompt": "Проанализированный промпт",
+            "copyPrompt": "Копировать промпт",
+            "copied": "Скопировано",
+            "editable": "Редактируемый",
+            "refineWithTags": "Уточнить с помощью тегов",
+            "sourceInspiration": "Источник вдохновения",
+            "sourceInspirationDesc": "Визуальная ДНК извлечена из оригинальных пикселей. Каждый тег представляет собой основное эстеческое измерение.",
+            "extractingConcepts": "Извлечение концепций..."
+        },
+        "history": {
+            "today": "Сегодняшние творения",
+            "older": "Архив",
+            "itemsSelected": "Выбрано элементов: {count}",
+            "artGenerated": "Арт успешно создан!",
+            "generationError": "Произошла ошибка при генерации.",
+            "aiCasting": "ИИ воплощает ваше видение...",
+            "promptApplied": "Промпт применен! Готов к генерации.",
+            "creationRemoved": "Творение удалено",
+            "batchRemoved": "Удалено элементов из истории: {count}"
+        },
+        "login": "Войти",
+        "cancel": "Отмена",
+        "delete": "Удалить"
     }
 }

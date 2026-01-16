@@ -17,6 +17,7 @@ export default function Footer() {
     resources: [
       { name: t('blog'), href: "/blog" },
       { name: t('aiGuide'), href: "/blog/how-to-make-anime-art-ai-rtx-8090-guide" },
+      { name: t('howToExtract'), href: "/how-to-reverse-image-to-prompt-anime-guide" },
     ],
     support: [
       { name: t('contact'), href: "/contact" },

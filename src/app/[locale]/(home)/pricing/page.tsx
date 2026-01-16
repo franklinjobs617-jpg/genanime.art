@@ -132,13 +132,12 @@ export default function PremiumPricing() {
 
     // 3. 构建参数 (对接后端 PayTypeConvert.getProductInfo)
     // 格式: plan_initiate_monthly / plan_elite_yearly 等
-    const planKey = `plan_${planName.toLowerCase()}_${
-      isYearly ? "yearly" : "monthly"
-    }`;
+    const planKey = `plan_${planName.toLowerCase()}_${isYearly ? "yearly" : "monthly"
+      }`;
 
     try {
       const response = await fetch(
-        "https://api.genanime.art/prod-api/stripe/getPayUrl",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/stripe/getPayUrl`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -153,7 +152,6 @@ export default function PremiumPricing() {
 
       if (resData.code === 200 && resData.data) {
         toast.success("Redirecting to Stripe...", { id: toastId });
-        // 直接跳转到 Stripe 收银台
         window.location.href = resData.data;
       } else {
         throw new Error(resData.msg || "Server response error");
@@ -202,9 +200,8 @@ export default function PremiumPricing() {
           {/* Toggle Switch */}
           <div className="mt-12 flex items-center justify-center gap-6">
             <span
-              className={`text-xs font-black tracking-widest ${
-                !isYearly ? "text-white" : "text-zinc-600"
-              }`}
+              className={`text-xs font-black tracking-widest ${!isYearly ? "text-white" : "text-zinc-600"
+                }`}
             >
               MONTHLY
             </span>
@@ -218,9 +215,8 @@ export default function PremiumPricing() {
               />
             </button>
             <span
-              className={`text-xs font-black tracking-widest ${
-                isYearly ? "text-white" : "text-zinc-600"
-              }`}
+              className={`text-xs font-black tracking-widest ${isYearly ? "text-white" : "text-zinc-600"
+                }`}
             >
               YEARLY{" "}
               <span className="text-indigo-400 ml-1 text-[10px] bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">
@@ -239,9 +235,8 @@ export default function PremiumPricing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className={`group relative flex flex-col p-1 rounded-[40px] transition-all duration-500 ${
-                plan.isPopular ? "scale-105 z-20" : "z-10"
-              }`}
+              className={`group relative flex flex-col p-1 rounded-[40px] transition-all duration-500 ${plan.isPopular ? "scale-105 z-20" : "z-10"
+                }`}
             >
               <div
                 className={`relative flex flex-col h-full p-10 rounded-[39px] bg-[#0A0A0C]/90 backdrop-blur-3xl border border-white/5 transition-all duration-500 ${plan.border}`}
@@ -312,7 +307,6 @@ export default function PremiumPricing() {
           ))}
         </div>
 
-        {/* --- 信任与退款政策 --- */}
         <div className="max-w-6xl mx-auto mb-40 px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex gap-6 p-10 bg-zinc-900/30 border border-white/5 rounded-[40px] group hover:bg-zinc-900/50 transition-all">
@@ -372,16 +366,14 @@ export default function PremiumPricing() {
                     {faq.question}
                   </span>
                   <div
-                    className={`p-1.5 rounded-full border transition-all duration-300 ${
-                      activeAccordion === i
-                        ? "bg-indigo-500 border-indigo-500 rotate-180"
-                        : "border-white/10 bg-white/5"
-                    }`}
+                    className={`p-1.5 rounded-full border transition-all duration-300 ${activeAccordion === i
+                      ? "bg-indigo-500 border-indigo-500 rotate-180"
+                      : "border-white/10 bg-white/5"
+                      }`}
                   >
                     <Plus
-                      className={`w-4 h-4 transition-transform ${
-                        activeAccordion === i ? "rotate-45" : ""
-                      }`}
+                      className={`w-4 h-4 transition-transform ${activeAccordion === i ? "rotate-45" : ""
+                        }`}
                     />
                   </div>
                 </button>

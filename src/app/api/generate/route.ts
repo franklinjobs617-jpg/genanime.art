@@ -105,13 +105,13 @@ export async function POST(req: NextRequest) {
     const effectiveQuantity = isGuest ? 1 : quantity;
 
     const client = new OpenAI({
-      apiKey: "3a4b60e4-f692-4210-b26e-a03c636fc804",
-      baseURL: "https://ark.cn-beijing.volces.com/api/v3",
+      apiKey: process.env.DOUBAO_API_KEY,
+      baseURL: process.env.ARK_BASE_URL,
     });
 
     const promises = Array.from({ length: effectiveQuantity }).map(() =>
       client.images.generate({
-        model: "doubao-seedream-4-5-251128",
+        model: process.env.DOUBAO_ENDPOINT_ID || "doubao-seedream-4-5-251128",
         prompt: finalPrompt,
         size: sizeStr as any,
         response_format: "b64_json",

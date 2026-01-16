@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { prisma } from "@/lib/prisma";
 
-const apiKey = "3a4b60e4-f692-4210-b26e-a03c636fc804";
-const endpointId = "doubao-seed-1-6-vision-250815";
+const apiKey = process.env.DOUBAO_API_KEY;
+const endpointId = process.env.ARK_IMAGE_ANALYZE_MODEL || "doubao-seed-1-6-vision-250815";
 const COST_PER_ANALYSIS = 2;
 const GUEST_FREE_LIMIT = 2;
 
 const client = new OpenAI({
     apiKey: apiKey,
-    baseURL: "https://ark.cn-beijing.volces.com/api/v3",
+    baseURL: process.env.ARK_BASE_URL,
 });
 
 export async function POST(req: NextRequest) {
@@ -113,7 +113,6 @@ Avoid generic sentences. Use professional Danbooru-style tags. If the image has 
                 path: "/",
             });
         }
-
         return res;
     } catch (error: any) {
         console.error("Error analyzing image:", error);

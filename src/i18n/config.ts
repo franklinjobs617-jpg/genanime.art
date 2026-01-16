@@ -10,7 +10,7 @@ export const pathLocales: Record<string, string[]> = {
     "/pricing": ["en"],
     "/blog": ["en"],
     "/blog/how-to-make-anime-art-ai-rtx-8090-guide": ["en"],
-    "/how-to-reverse-image-to-prompt-anime-guide": ["en"],
+    "/how-to-reverse-image-to-prompt-anime-guide": ["en", "es"],
     "/contact": ["en"],
     "/support": ["en"],
     "/terms": ["en"],

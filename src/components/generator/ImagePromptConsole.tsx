@@ -15,12 +15,13 @@ const LoginModal = dynamic(() => import("@/components/LoginModel"), {
 interface ImagePromptConsoleProps {
     onApplyPrompt: (prompt: string) => void;
     onSuccess?: () => void;
+    imageFile?: File | null;
 }
 
 const GUEST_FREE_LIMIT = 2;
 const COST_PER_ANALYSIS = 2;
 
-export default function ImagePromptConsole({ onApplyPrompt, onSuccess }: ImagePromptConsoleProps) {
+export default function ImagePromptConsole({ onApplyPrompt, onSuccess, imageFile }: ImagePromptConsoleProps) {
     const t = useTranslations('Generator.imagePrompt');
     const { user, login, refreshUser } = useAuth();
     const [image, setImage] = useState<File | null>(null);
@@ -32,6 +33,13 @@ export default function ImagePromptConsole({ onApplyPrompt, onSuccess }: ImagePr
     const [isCopied, setIsCopied] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    // 当接收到外部图片文件时，自动处理和分析
+    useEffect(() => {
+        if (imageFile) {
+            handleFile(imageFile);
+        }
+    }, [imageFile]);
 
     const analyzeImage = async (file: File) => {
         // Pre-check limits
@@ -75,7 +83,6 @@ export default function ImagePromptConsole({ onApplyPrompt, onSuccess }: ImagePr
 
         setIsAnalyzing(true);
         try {
-            // Convert file to base64
             const reader = new FileReader();
             const base64Promise = new Promise<string>((resolve, reject) => {
                 reader.onload = () => resolve(reader.result as string);

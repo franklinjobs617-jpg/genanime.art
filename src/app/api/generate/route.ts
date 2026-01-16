@@ -100,6 +100,8 @@ export async function POST(req: NextRequest) {
       sizeStr = "1536x2400";
     } else if (ratio === "3:2") {
       sizeStr = "2400x1536";
+    } else if (ratio === "4:3") {
+      sizeStr = "2048x1536";
     }
 
     const effectiveQuantity = isGuest ? 1 : quantity;

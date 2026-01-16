@@ -104,6 +104,8 @@ export default function RedesignedSidebar({
         { label: "2:3", w: 3, h: 4 },
         { label: "1:1", w: 4, h: 4 },
         { label: "16:9", w: 5, h: 3 },
+        { label: "4:3", w: 4, h: 3 },
+        { label: "3:2", w: 3, h: 2 },
     ]
 
     const quantities = [1, 2, 3, 4]

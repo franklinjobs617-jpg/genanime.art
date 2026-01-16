@@ -38,6 +38,7 @@ interface ImageDetailModalProps {
     } | null
     onRegenerate: () => void
     onDelete: (id: string) => void
+    onImageToPrompt?: (imageUrl: string) => void
 }
 
 export default function ImageDetailModal({
@@ -45,7 +46,8 @@ export default function ImageDetailModal({
     onClose,
     item,
     onRegenerate,
-    onDelete
+    onDelete,
+    onImageToPrompt
 }: ImageDetailModalProps) {
     const t = useTranslations('Hero')
     const [copied, setCopied] = useState(false)
@@ -58,6 +60,22 @@ export default function ImageDetailModal({
         toast.success("Prompt copied to clipboard")
         setTimeout(() => setCopied(false), 2000)
     }
+
+    const downloadImg = async (url: string, index: number) => {
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = blobUrl;
+            link.download = `anime-${Date.now()}-${index}.png`;
+            link.click();
+            window.URL.revokeObjectURL(blobUrl);
+            toast.success("Download completed!");
+        } catch (e) {
+            toast.error("Download failed");
+        }
+    };
 
     const date = new Date(item.timestamp).toLocaleString()
     const resolution = item.ratio === "1:1" ? "1024x1024" : item.ratio === "16:9" ? "1344x768" : "768x1344"
@@ -193,7 +211,7 @@ export default function ImageDetailModal({
                             {/* Action Buttons */}
                             <div className="space-y-4 pb-4">
                                 <div className="grid grid-cols-2 gap-3">
-                                    <button className="flex items-center justify-center gap-2 py-3 bg-zinc-900 hover:bg-zinc-800 rounded-xl border border-white/10 text-xs font-bold transition-all">
+                                    <button onClick={() => downloadImg(item.urls[0], 0)} className="flex items-center justify-center gap-2 py-3 bg-zinc-900 hover:bg-zinc-800 rounded-xl border border-white/10 text-xs font-bold transition-all">
                                         <Download className="w-4 h-4" /> Download
                                     </button>
                                     <button
@@ -204,10 +222,10 @@ export default function ImageDetailModal({
                                     </button>
                                 </div>
                                 <div className="grid grid-cols-2 gap-3">
-                                    <button className="flex items-center justify-center gap-2 py-3 bg-zinc-900 hover:bg-zinc-800 rounded-xl border border-white/10 text-xs font-bold transition-all">
+                                    <button onClick={() => downloadImg(item.urls[0], 0)} className="flex items-center justify-center gap-2 py-3 bg-zinc-900 hover:bg-zinc-800 rounded-xl border border-white/10 text-xs font-bold transition-all">
                                         <Maximize2 className="w-4 h-4" /> Original Image
                                     </button>
-                                    <button className="flex items-center justify-center gap-2 py-3 bg-zinc-900 hover:bg-zinc-800 rounded-xl border border-white/10 text-xs font-bold transition-all">
+                                    <button onClick={() => onImageToPrompt && onImageToPrompt(item.urls[0])} className="flex items-center justify-center gap-2 py-3 bg-zinc-900 hover:bg-zinc-800 rounded-xl border border-white/10 text-xs font-bold transition-all">
                                         <ImageIcon className="w-4 h-4" /> {t('buttons.imageToImage')}
                                     </button>
                                 </div>

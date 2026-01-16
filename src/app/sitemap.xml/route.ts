@@ -9,7 +9,7 @@ interface Page {
 const siteMapData = {
   baseUrl: "https://genanime.art",
   lastmod: new Date().toISOString().split("T")[0],
-  locales: ["id", "de", "es"],
+  locales: ["de", "es"],
 
   translatedPages: [
     { url: "", changefreq: "daily", priority: 1.0 },

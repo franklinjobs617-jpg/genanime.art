@@ -704,9 +704,16 @@ export default function GalleryPage() {
                   src={item.image}
                   alt={t(`galleryItems.${item.id}` as any) || item.title}
                   fill
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-110 group-hover:brightness-110"
+                  className="object-cover transition-all duration-700 ease-out group-hover:scale-110 group-hover:brightness-110"
                   sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  priority={index < 4}
                 />
+
+                {/* Image Placeholder Shimmer */}
+                <div className="absolute inset-0 -z-10 bg-zinc-900 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
+                </div>
+
 
                 {/* 悬浮遮罩 */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-5">
@@ -883,6 +890,11 @@ export default function GalleryPage() {
           </motion.div>
         )}
       </AnimatePresence>
+      <style jsx global>{`
+        @keyframes shimmer {
+          100% { transform: translateX(100%); }
+        }
+      `}</style>
     </div>
   );
 }

@@ -28,6 +28,7 @@ export default function GalleryCard({ src, prompt, style, ratio, onSelect, index
                 <SafeImage
                     src={src}
                     alt={prompt}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="w-full h-auto transition-transform duration-700 ease-out group-hover:scale-110"
                 />
 

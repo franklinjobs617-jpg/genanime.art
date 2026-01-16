@@ -51,6 +51,18 @@ export default function HistoryRow({
 
     const date = formatDate(item.timestamp)
 
+    const getAspectRatioClass = (ratio: string) => {
+        switch (ratio) {
+            case "1:1": return "aspect-square";
+            case "16:9": return "aspect-[16/9]";
+            case "9:16": return "aspect-[9/16]";
+            case "4:3": return "aspect-[4/3]";
+            case "3:4": return "aspect-[3/4]";
+            case "2:3": return "aspect-[2/3]";
+            default: return "aspect-square";
+        }
+    };
+
     const getResolution = (ratio: string) => {
         switch (ratio) {
             case "1:1": return "1024x1024"
@@ -58,11 +70,13 @@ export default function HistoryRow({
             case "9:16": return "768x1344"
             case "4:3": return "1024x768"
             case "3:4": return "768x1024"
+            case "2:3": return "832x1216"
             default: return "1024x1024"
         }
     }
 
     const resolution = getResolution(item.ratio || "1:1")
+    const aspectRatioClass = getAspectRatioClass(item.ratio || "1:1")
     const modelName = item.model || "Flux v1.0"
 
     return (
@@ -118,20 +132,34 @@ export default function HistoryRow({
                 </button>
             </div>
 
-            {/* Row Content - Image */}
-            <div className="relative group/img cursor-pointer max-w-fit px-2" onClick={() => onViewDetail(item)}>
-                <div className="relative rounded-2xl overflow-hidden border border-white/10 aspect-[2/3] w-[240px] md:w-[280px]">
-                    <SafeImage
-                        src={item.urls[0]}
-                        alt={item.prompt}
-                        className="w-full h-full"
-                    />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
-                        <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
-                            <Eye className="w-5 h-5 text-white" />
+            {/* Row Content - Image Grid */}
+            <div className={`px-2 grid gap-4 w-full max-w-6xl ${item.urls.length === 1 ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" :
+                    item.urls.length === 2 ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4" :
+                        "grid-cols-2 md:grid-cols-4 lg:grid-cols-4"
+                }`}>
+                {item.urls.map((url, index) => (
+                    <motion.div
+                        key={index}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: index * 0.05 }}
+                        className={`relative group/img cursor-pointer rounded-2xl overflow-hidden border border-white/10 ${aspectRatioClass} ${item.urls.length === 1 ? "w-[240px] md:w-[280px]" : "w-full"
+                            }`}
+                        onClick={() => onViewDetail({ ...item, initialIndex: index })}
+                    >
+                        <SafeImage
+                            src={url}
+                            alt={item.prompt}
+                            fill={true}
+                            className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
+                                <Eye className="w-5 h-5 text-white" />
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </motion.div>
+                ))}
             </div>
 
             {/* Row Footer - Full Prompt */}

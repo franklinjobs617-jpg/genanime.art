@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import RedesignedSidebar from "@/components/generator/RedesignedSidebar";
 import PromptConsole from "@/components/generator/PromptConsole";
+import ImagePromptConsole from "@/components/generator/ImagePromptConsole";
 import WelcomeGuide from "@/components/generator/WelcomeGuide";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -71,6 +72,7 @@ export default function GeneratorClient() {
 
   // Prompt Console Extra State
   const [negativePrompt, setNegativePrompt] = useState("");
+  const [generationMode, setGenerationMode] = useState<'text-to-image' | 'image-to-prompt'>('text-to-image');
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [history, setHistory] = useState<any[]>([]);
@@ -169,6 +171,20 @@ export default function GeneratorClient() {
 
     setIsGenerating(true);
     setMobileSheetOpen(false);
+
+    // Create an optimistic history entry
+    const optimisticId = `temp-${Date.now()}`;
+    const optimisticEntry = {
+      id: optimisticId,
+      urls: Array(activeQuantity).fill(""), // Empty strings for skeletons
+      prompt: activePrompt,
+      timestamp: Date.now(),
+      style: activeStyle,
+      ratio: activeRatio,
+      status: 'generating'
+    };
+
+    setHistory((prev) => [optimisticEntry, ...prev]);
     const toastId = toast.loading("AI is casting your vision...");
 
     try {
@@ -190,15 +206,12 @@ export default function GeneratorClient() {
       const data = await response.json();
       const urls = data.images || (Array.isArray(data.urls) ? data.urls : [data.url]);
 
-      const newEntry = {
-        id: Date.now().toString(),
-        urls,
-        prompt: activePrompt,
-        timestamp: Date.now(),
-        style: activeStyle,
-        ratio: activeRatio,
-      };
-      setHistory((prev) => [newEntry, ...prev]);
+      // Update the optimistic entry with real data
+      setHistory((prev) => prev.map(item =>
+        item.id === optimisticId
+          ? { ...item, urls, status: 'completed' }
+          : item
+      ));
 
       if (!user) {
         const newCount = guestGenerations + 1;
@@ -212,10 +225,23 @@ export default function GeneratorClient() {
     } catch (err) {
       console.error(err);
       toast.error("An error occurred during generation.", { id: toastId });
+      // Remove the optimistic entry on failure
+      setHistory((prev) => prev.filter(item => item.id !== optimisticId));
     } finally {
       setIsGenerating(false);
     }
   }, [activePrompt, activeStyle, activeRatio, activeQuantity, isGenerating, user, guestGenerations, currentTotalCost, refreshUser]);
+
+  const handleApplyPrompt = (prompt: string) => {
+    setActivePrompt(prompt);
+    setGenerationMode('text-to-image');
+    toast.success("Prompt applied! Ready to generate.");
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    setHighlightPrompt(true);
+    setTimeout(() => setHighlightPrompt(false), 2000);
+  };
 
   const handleRegenerate = (prompt: string, style: string, ratio: string) => {
     setActivePrompt(prompt);
@@ -276,6 +302,7 @@ export default function GeneratorClient() {
           steps={steps} setSteps={setSteps}
           seed={seed} setSeed={setSeed}
           isRandomSeed={isRandomSeed} setIsRandomSeed={setIsRandomSeed}
+          generationMode={generationMode} setGenerationMode={setGenerationMode}
         />
       </aside>
 
@@ -302,6 +329,7 @@ export default function GeneratorClient() {
                   steps={steps} setSteps={setSteps}
                   seed={seed} setSeed={setSeed}
                   isRandomSeed={isRandomSeed} setIsRandomSeed={setIsRandomSeed}
+                  generationMode={generationMode} setGenerationMode={setGenerationMode}
                 />
               </SheetContent>
             </Sheet>
@@ -336,16 +364,38 @@ export default function GeneratorClient() {
         <div ref={scrollContainerRef} className="flex-1 overflow-y-auto custom-scrollbar relative px-4 md:px-8 lg:px-12 pt-6">
           <div className="w-full max-w-none pb-20 space-y-8">
             <div className="flex flex-col gap-4">
-              <PromptConsole
-                activePrompt={activePrompt} setActivePrompt={setActivePrompt}
-                negativePrompt={negativePrompt} setNegativePrompt={setNegativePrompt}
-                isGenerating={isGenerating} onGenerate={handleGenerate}
-                canGenerate={canGenerate()} isGuest={!user}
-                guestGenerations={guestGenerations} guestLimit={GUEST_FREE_LIMIT}
-                image={image} setImage={setImage}
-                imagePreview={imagePreview} setImagePreview={setImagePreview}
-                highlight={highlightPrompt}
-              />
+              <AnimatePresence mode="wait">
+                {generationMode === 'text-to-image' ? (
+                  <motion.div
+                    key="text-console"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <PromptConsole
+                      activePrompt={activePrompt} setActivePrompt={setActivePrompt}
+                      negativePrompt={negativePrompt} setNegativePrompt={setNegativePrompt}
+                      isGenerating={isGenerating} onGenerate={handleGenerate}
+                      canGenerate={canGenerate()} isGuest={!user}
+                      guestGenerations={guestGenerations} guestLimit={GUEST_FREE_LIMIT}
+                      image={image} setImage={setImage}
+                      imagePreview={imagePreview} setImagePreview={setImagePreview}
+                      highlight={highlightPrompt}
+                    />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="image-console"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ImagePromptConsole onApplyPrompt={handleApplyPrompt} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
               <AnimatePresence>
                 {((!user && guestGenerations > 0) || (user && Number(user.credits) < 50)) && (
                   <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="w-full overflow-hidden shadow-xl border border-indigo-500/10 rounded-2xl">
@@ -356,13 +406,7 @@ export default function GeneratorClient() {
             </div>
 
             <div className="space-y-12">
-              <AnimatePresence>
-                {isGenerating && (
-                  <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="mb-8">
-                    <LoadingSkeleton />
-                  </motion.div>
-                )}
-              </AnimatePresence>
+
 
               {[
                 { title: "Today's Creations", data: groupedHistory.today },

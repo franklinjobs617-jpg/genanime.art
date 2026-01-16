@@ -7,6 +7,7 @@ import {
     Wand2, Copy, X, Trash2, CheckCircle2, Loader2, AlertCircle, ImageIcon
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import SafeImage from "./SafeImage"
 
 interface Props {
     urls: string[]
@@ -72,6 +73,8 @@ export default function GenerationResultCard({
         )
     }
 
+    const isCardGenerating = urls.some(u => u === "") || isGenerating;
+
     return (
         <>
             <AnimatePresence>
@@ -86,11 +89,6 @@ export default function GenerationResultCard({
                 )}
             </AnimatePresence>
 
-            {/* 
-                New Design: Interactive Row
-                - Image thumbnails on the left
-                - Details appear on the right/bottom
-            */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -106,19 +104,35 @@ export default function GenerationResultCard({
                          ${urls.length >= 4 ? 'grid-cols-2 md:grid-cols-4' : ''}
                     `}>
                         {urls.map((u, i) => (
-                            <div key={i} className="relative aspect-square group/img cursor-zoom-in overflow-hidden" onClick={() => setSelectedImgIndex(i)}>
-                                <img src={u} alt="Result" className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-110" />
+                            <div key={i} className={`relative aspect-square group/img ${u ? 'cursor-zoom-in' : ''} overflow-hidden`} onClick={() => u && setSelectedImgIndex(i)}>
+                                {u ? (
+                                    <SafeImage
+                                        src={u}
+                                        alt={`Result ${i}`}
+                                        className="w-full h-full transition-transform duration-700 group-hover/img:scale-110"
+                                        priority={true}
+                                    />
+                                ) : (
+                                    <div className="w-full h-full bg-zinc-900 relative">
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <Loader2 className="w-5 h-5 text-indigo-500/20 animate-spin" />
+                                        </div>
+                                    </div>
+                                )}
                                 <div className="absolute inset-0 bg-black/0 group-hover/img:bg-black/20 transition-all" />
 
                                 {/* Quick Actions Overlay */}
-                                <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover/img:opacity-100 transition-all translate-y-2 group-hover/img:translate-y-0">
-                                    <button onClick={(e) => { e.stopPropagation(); downloadImg(u, i) }} className="p-2 bg-black/60 backdrop-blur-md rounded-lg text-white hover:bg-white hover:text-black transition-colors">
-                                        <Download className="w-3.5 h-3.5" />
-                                    </button>
-                                    <button onClick={(e) => { e.stopPropagation(); setSelectedImgIndex(i) }} className="p-2 bg-black/60 backdrop-blur-md rounded-lg text-white hover:bg-white hover:text-black transition-colors">
-                                        <Maximize2 className="w-3.5 h-3.5" />
-                                    </button>
-                                </div>
+                                {u && (
+                                    <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover/img:opacity-100 transition-all translate-y-2 group-hover/img:translate-y-0">
+                                        <button onClick={(e) => { e.stopPropagation(); downloadImg(u, i) }} className="p-2 bg-black/60 backdrop-blur-md rounded-lg text-white hover:bg-white hover:text-black transition-colors">
+                                            <Download className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button onClick={(e) => { e.stopPropagation(); setSelectedImgIndex(i) }} className="p-2 bg-black/60 backdrop-blur-md rounded-lg text-white hover:bg-white hover:text-black transition-colors">
+                                            <Maximize2 className="w-3.5 h-3.5" />
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>
@@ -151,12 +165,21 @@ export default function GenerationResultCard({
                                 <span className="px-2.5 py-1 bg-white/5 rounded-md text-[10px] font-bold text-zinc-400 border border-white/5">
                                     {ratio || "1:1"}
                                 </span>
+                                {isCardGenerating && (
+                                    <span className="px-2.5 py-1 bg-indigo-500/10 rounded-md text-[10px] font-bold text-indigo-400 border border-indigo-500/20 animate-pulse">
+                                        Generating...
+                                    </span>
+                                )}
                             </div>
                         </div>
 
                         {/* Bottom Actions */}
                         <div className="pt-4 mt-4 border-t border-white/5 flex items-center gap-2">
-                            <button onClick={onRegenerate} className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white text-black rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-zinc-200 transition-all shadow-lg hover:shadow-xl hover:scale-[1.02]">
+                            <button
+                                onClick={onRegenerate}
+                                disabled={isCardGenerating}
+                                className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white text-black rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-zinc-200 transition-all shadow-lg hover:shadow-xl hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
                                 <Wand2 className="w-3 h-3" /> Remix
                             </button>
                             <div className="relative" ref={menuRef}>

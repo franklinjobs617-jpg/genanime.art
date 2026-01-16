@@ -22,6 +22,8 @@ interface SidebarProps {
     setSeed: (val: number | null) => void
     isRandomSeed: boolean
     setIsRandomSeed: (val: boolean) => void
+    generationMode: 'text-to-image' | 'image-to-prompt'
+    setGenerationMode: (mode: 'text-to-image' | 'image-to-prompt') => void
 }
 
 export default function RedesignedSidebar({
@@ -41,6 +43,8 @@ export default function RedesignedSidebar({
     setSeed,
     isRandomSeed,
     setIsRandomSeed,
+    generationMode,
+    setGenerationMode,
 }: SidebarProps) {
     const [modelOpen, setModelOpen] = useState(false)
     const [advancedOpen, setAdvancedOpen] = useState(false)
@@ -113,22 +117,25 @@ export default function RedesignedSidebar({
                     </label>
                     <div className="grid grid-cols-2 gap-2 p-1 bg-white/[0.02] border border-white/5 rounded-xl">
                         <button
-                            className="flex items-center justify-center gap-2 py-2 text-[11px] font-bold rounded-lg bg-indigo-500/10 text-indigo-300 ring-1 ring-indigo-500/20 shadow-sm"
+                            onClick={() => setGenerationMode('text-to-image')}
+                            className={`flex items-center justify-center gap-2 py-2 text-[11px] font-bold rounded-lg transition-all ${generationMode === 'text-to-image'
+                                ? "bg-indigo-500/10 text-indigo-300 ring-1 ring-indigo-500/20 shadow-sm"
+                                : "text-zinc-500 hover:text-zinc-300 hover:bg-white/5"
+                                }`}
                         >
                             <Sparkles className="w-3 h-3" />
                             Text - Image
                         </button>
-                        <div
-                            className="relative flex items-center justify-center gap-2 py-2 text-[11px] font-bold rounded-lg text-zinc-600 cursor-not-allowed group/cs"
+                        <button
+                            onClick={() => setGenerationMode('image-to-prompt')}
+                            className={`flex items-center justify-center gap-2 py-2 text-[11px] font-bold rounded-lg transition-all ${generationMode === 'image-to-prompt'
+                                ? "bg-indigo-500/10 text-indigo-300 ring-1 ring-indigo-500/20 shadow-sm"
+                                : "text-zinc-500 hover:text-zinc-300 hover:bg-white/5"
+                                }`}
                         >
-                            <ImageIcon className="w-3 h-3 opacity-40" />
+                            <ImageIcon className="w-3 h-3" />
                             <span>Image - Prompt</span>
-
-                            {/* Coming Soon Tooltip/Badge */}
-                            <div className="absolute -top-1 -right-1 px-1.5 py-0.5 bg-zinc-800 text-[8px] text-zinc-400 rounded-md border border-white/5 shadow-xl font-black uppercase tracking-tighter">
-                                SOON
-                            </div>
-                        </div>
+                        </button>
                     </div>
                 </div>
 
@@ -184,53 +191,60 @@ export default function RedesignedSidebar({
                 </div>
 
                 {/* 2. Style Selector */}
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                        <label className="flex items-center text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
-                            <Sparkles className="w-3 h-3 mr-2 text-pink-400" />
-                            Art Style
-                        </label>
-                    </div>
+                {generationMode === 'text-to-image' && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="space-y-4"
+                    >
+                        <div className="flex items-center justify-between">
+                            <label className="flex items-center text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+                                <Sparkles className="w-3 h-3 mr-2 text-pink-400" />
+                                Art Style
+                            </label>
+                        </div>
 
-                    <div className="grid grid-cols-2 gap-2">
-                        {styles.map((style) => {
-                            const isActive = activeStyle === style.value
-                            return (
-                                <button
-                                    key={style.value}
-                                    onClick={() => setActiveStyle(style.value)}
-                                    className={`group relative aspect-[1.3] w-full overflow-hidden rounded-xl border transition-all duration-300 ${isActive
-                                        ? "border-purple-500/50 shadow-[0_0_15px_-5px_rgba(168,85,247,0.3)]"
-                                        : "border-white/5 hover:border-white/10"
-                                        }`}
-                                >
-                                    <div className="absolute inset-0 bg-zinc-800">
-                                        <img
-                                            src={style.img}
-                                            alt={style.label}
-                                            className={`h-full w-full object-cover transition-all duration-500 ease-out group-hover:scale-110 ${isActive ? 'opacity-100' : 'opacity-90 group-hover:opacity-100'}`}
-                                        />
-                                        {/* Subtle gradient only at bottom for text readability */}
-                                        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent opacity-80" />
+                        <div className="grid grid-cols-2 gap-2">
+                            {styles.map((style) => {
+                                const isActive = activeStyle === style.value
+                                return (
+                                    <button
+                                        key={style.value}
+                                        onClick={() => setActiveStyle(style.value)}
+                                        className={`group relative aspect-[1.3] w-full overflow-hidden rounded-xl border transition-all duration-300 ${isActive
+                                            ? "border-purple-500/50 shadow-[0_0_15px_-5px_rgba(168,85,247,0.3)]"
+                                            : "border-white/5 hover:border-white/10"
+                                            }`}
+                                    >
+                                        <div className="absolute inset-0 bg-zinc-800">
+                                            <img
+                                                src={style.img}
+                                                alt={style.label}
+                                                className={`h-full w-full object-cover transition-all duration-500 ease-out group-hover:scale-110 ${isActive ? 'opacity-100' : 'opacity-90 group-hover:opacity-100'}`}
+                                            />
+                                            {/* Subtle gradient only at bottom for text readability */}
+                                            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent opacity-80" />
 
-                                        {/* Active State Overlay (border glow internal) */}
-                                        {isActive && <div className="absolute inset-0 ring-1 ring-inset ring-white/20" />}
-                                    </div>
-                                    <div className="absolute inset-x-0 bottom-0 p-2 text-center z-10">
-                                        <span className={`text-[10px] font-bold tracking-wide shadow-black/50 drop-shadow-md ${isActive ? 'text-white' : 'text-zinc-200 group-hover:text-white'}`}>
-                                            {style.label}
-                                        </span>
-                                    </div>
+                                            {/* Active State Overlay (border glow internal) */}
+                                            {isActive && <div className="absolute inset-0 ring-1 ring-inset ring-white/20" />}
+                                        </div>
+                                        <div className="absolute inset-x-0 bottom-0 p-2 text-center z-10">
+                                            <span className={`text-[10px] font-bold tracking-wide shadow-black/50 drop-shadow-md ${isActive ? 'text-white' : 'text-zinc-200 group-hover:text-white'}`}>
+                                                {style.label}
+                                            </span>
+                                        </div>
 
-                                    {/* Active Indicator Dot */}
-                                    {isActive && (
-                                        <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-purple-500 rounded-full shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
-                                    )}
-                                </button>
-                            )
-                        })}
-                    </div>
-                </div>
+                                        {/* Active Indicator Dot */}
+                                        {isActive && (
+                                            <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-purple-500 rounded-full shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
+                                        )}
+                                    </button>
+                                )
+                            })}
+                        </div>
+                    </motion.div>
+                )}
 
                 {/* 3. Settings Grid (Ratio & Quantity) */}
                 <div className="grid grid-cols-1 gap-6">

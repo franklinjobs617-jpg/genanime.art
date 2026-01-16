@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import LoadingSkeleton from "@/components/generator/LoadingSkeleton";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import dynamic from "next/dynamic";
 import { toast, Toaster } from "react-hot-toast";
 import ShowcaseGallery from "@/components/generator/ShowcaseGallery";

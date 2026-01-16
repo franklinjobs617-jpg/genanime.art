@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { CheckCircle2, Loader2, Home, XCircle, AlertCircle } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 export default function StripeCallback() {
     const searchParams = useSearchParams();

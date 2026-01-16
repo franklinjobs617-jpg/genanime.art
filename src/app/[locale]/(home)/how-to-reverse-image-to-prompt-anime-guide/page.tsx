@@ -3,7 +3,7 @@ import {
     ArrowRight, Sparkles, Zap, Search, ShieldCheck,
     HelpCircle, Copy, Terminal, MousePointer2, Info
 } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import Image from 'next/image';
 
 const AnimePromptEngineeringGuide = () => {

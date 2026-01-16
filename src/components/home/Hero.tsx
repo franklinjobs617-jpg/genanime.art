@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { PenTool, ImagePlus, Search, Sparkles, ArrowRight } from "lucide-react";
 import AnimatedBackground from "./AnimatedBackground";
 import { useRouter } from "@/i18n/routing";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 

@@ -8,7 +8,7 @@ import {
     Lightbulb, Info, ArrowUpRight
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useState, useEffect } from "react";
 
 // --- FAQ 数据 ---

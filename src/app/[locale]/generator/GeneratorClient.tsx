@@ -125,6 +125,11 @@ export default function GeneratorClient() {
     // 处理 URL 传参
     const prompt = searchParams.get("prompt");
     if (prompt) setActivePrompt(decodeURIComponent(prompt));
+    
+    const mode = searchParams.get("mode");
+    if (mode === "upload") {
+      setGenerationMode("image-to-prompt");
+    }
 
     // 刷新用户信息确保积分最新
     if (user) refreshUser();

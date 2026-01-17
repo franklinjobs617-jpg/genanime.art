@@ -702,7 +702,7 @@ export default function GalleryPage() {
               >
                 <Image
                   src={item.image}
-                  alt={t(`galleryItems.${item.id}` as any) || item.title}
+                  alt={item.title}
                   fill
                   className="object-cover transition-all duration-700 ease-out group-hover:scale-110 group-hover:brightness-110"
                   sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
@@ -721,7 +721,7 @@ export default function GalleryPage() {
                     <div className="flex justify-between items-start mb-3">
                       <div>
                         <h3 className="text-sm font-bold text-white line-clamp-1">
-                          {t(`galleryItems.${item.id}` as any) || item.title}
+                          {item.title}
                         </h3>
                         <p className="text-[10px] text-zinc-400 font-black uppercase tracking-widest mt-0.5">
                           @{item.author}
@@ -788,7 +788,7 @@ export default function GalleryPage() {
               <div className="flex-1 bg-black/50 flex items-center justify-center p-4 relative group">
                 <img
                   src={selectedImage.image}
-                  alt={t(`galleryItems.${selectedImage.id}` as any) || selectedImage.title}
+                  alt={selectedImage.title}
                   className="max-w-full max-h-[50vh] md:max-h-[85vh] object-contain shadow-2xl"
                 />
               </div>
@@ -798,7 +798,7 @@ export default function GalleryPage() {
                   <div className="flex items-start justify-between">
                     <div>
                       <h2 className="text-2xl font-bold text-white mb-1 leading-tight">
-                        {t(`galleryItems.${selectedImage.id}` as any) || selectedImage.title}
+                        {selectedImage.title}
                       </h2>
                       <div className="flex items-center gap-2 text-zinc-400">
                         <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 flex items-center justify-center text-[10px] text-white font-bold">

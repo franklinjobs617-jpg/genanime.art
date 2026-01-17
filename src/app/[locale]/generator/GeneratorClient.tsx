@@ -130,6 +130,23 @@ export default function GeneratorClient() {
     if (mode === "upload") {
       setGenerationMode("image-to-prompt");
     }
+    
+    // 处理从首页传来的模型参数
+    const modelParam = searchParams.get("model");
+    if (modelParam) {
+      const decodedModel = decodeURIComponent(modelParam);
+      // 检查模型是否存在于可用模型列表中
+      const availableModels = [
+        "Seedream 4.0",
+        "Pony Diffusion",
+        "Animagine XL",
+        "Niji Style",
+        "SDXL Base"
+      ];
+      if (availableModels.includes(decodedModel)) {
+        setActiveModel(decodedModel);
+      }
+    }
 
     // 刷新用户信息确保积分最新
     if (user) refreshUser();
@@ -250,6 +267,9 @@ export default function GeneratorClient() {
       }
 
       toast.success(t("history.artGenerated"), { id: toastId });
+
+      // Clear the prompt after successful generation
+      setActivePrompt("");
     } catch (err) {
       console.error(err);
       toast.error(t("history.generationError"), { id: toastId });
@@ -452,9 +472,9 @@ export default function GeneratorClient() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2.5 px-4 py-2 bg-zinc-800/50 backdrop-blur-md rounded-full border border-white/5 hover:bg-zinc-800 transition-colors cursor-help">
-              <Coins className="w-4 h-4 text-amber-400" />
-              <span className="text-sm font-bold tabular-nums text-zinc-200">
+            <div className="flex items-center gap-2.5 px-4 py-2.5 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 backdrop-blur-md rounded-full border border-amber-500/30 hover:from-amber-500/30 hover:to-yellow-500/30 transition-all cursor-help">
+              <Coins className="w-5 h-5 text-amber-400" />
+              <span className="text-base font-black tabular-nums text-amber-200 tracking-wider">
                 {user ? user.credits : `${remainingGuest}/${GUEST_FREE_LIMIT}`}
               </span>
             </div>

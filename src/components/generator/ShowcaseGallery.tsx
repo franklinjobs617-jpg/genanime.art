@@ -42,7 +42,7 @@ const SHOWCASE_ITEMS = [
         ratio: "16:9"
     },
     {
-        image: "/images/prompts/cyberpunk_neon_city_32.webp",
+        image: "/images/prompts/cyberpunk_neon_city_31.webp",
         prompt: "Neon-lit cybernetic street market, crowded holographic displays, heavy rain, reflection on puddles, high contrast",
         style: "Cyberpunk",
         ratio: "16:9"

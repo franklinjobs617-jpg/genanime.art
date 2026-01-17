@@ -129,22 +129,34 @@ export default function PromptConsole({
             <button
               onClick={() => setShowSettings(!showSettings)}
               className={`
-                        flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-200
+                        flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200
                         ${showSettings || imagePreview || negativePrompt
                   ? "bg-indigo-500/10 text-indigo-400"
                   : "bg-white/5 text-zinc-500 hover:text-zinc-300 hover:bg-white/10"
                 }
                     `}
+              title="Reference Image & Negative Prompt Settings"
             >
-              <Settings2 className="w-4 h-4" />
+              <Settings2 className="w-5 h-5" />
               <span>{showSettings ? "Hide Settings" : "Ref & Negative"}</span>
             </button>
 
             {/* 右侧：生成按钮组 */}
             <div className="flex items-center gap-4">
-              <span className={`text-[10px] font-mono transition-opacity ${activePrompt.length > 0 ? 'opacity-100' : 'opacity-0'} text-zinc-600`}>
-                {activePrompt.length} chars
-              </span>
+              <div className="flex items-center gap-2">
+                <span className={`text-[10px] font-mono transition-opacity ${activePrompt.length > 0 ? 'opacity-100' : 'opacity-0'} text-zinc-600`}>
+                  {activePrompt.length} chars
+                </span>
+                {activePrompt.length > 0 && (
+                  <button 
+                    onClick={() => setActivePrompt('')} 
+                    className="text-[10px] text-zinc-500 hover:text-red-400 transition-colors px-2 py-1 rounded hover:bg-red-500/10"
+                    title="Clear prompt"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
 
               <button
                 onClick={onGenerate}
@@ -167,8 +179,8 @@ export default function PromptConsole({
                     <Sparkles className={`w-4 h-4 ${hasContent ? 'fill-white' : 'fill-transparent'}`} />
                     <div className="flex flex-col items-start leading-none">
                       <span className="text-[13px] font-bold">Generate</span>
-                      <span className="text-[8px] opacity-70 font-black uppercase tracking-tighter">
-                        {!isGuest || guestGenerations >= guestLimit ? "2 Credits" : "FREE Trial"}
+                      <span className="text-[9px] font-black uppercase tracking-tighter bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
+                        {!isGuest || guestGenerations >= guestLimit ? "2 Credits" : "FREE TRIAL"}
                       </span>
                     </div>
                   </>

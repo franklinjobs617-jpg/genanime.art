@@ -16,7 +16,18 @@ export default function Hero() {
 
   const handleTagClick = (tag: string) => {
     setInputValue(tag);
-    router.push(`/generator?prompt=${encodeURIComponent(tag)}`);
+    
+    // Map tags to appropriate models
+    let model = "Seedream 4.0";
+    if (tag.toLowerCase().includes("pony")) {
+      model = "Pony Diffusion";
+    } else if (tag.toLowerCase().includes("animagine")) {
+      model = "Animagine XL";
+    } else if (tag.toLowerCase().includes("niji")) {
+      model = "Niji Style";
+    }
+    
+    router.push(`/generator?prompt=${encodeURIComponent(tag)}&model=${encodeURIComponent(model)}`);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -82,8 +93,10 @@ export default function Hero() {
               <button
                 key={i}
                 onClick={() => handleTagClick(tag)}
-                className="px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-[10px] md:text-xs font-black text-zinc-400 uppercase tracking-[0.15em] backdrop-blur-md hover:bg-indigo-500/20 hover:text-white hover:border-indigo-500/50 transition-all active:scale-95"
+                title={`Generate with ${tag} style`}
+                className="px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-[10px] md:text-xs font-black text-zinc-400 uppercase tracking-[0.15em] backdrop-blur-md hover:bg-indigo-500/20 hover:text-white hover:border-indigo-500/50 transition-all active:scale-95 flex items-center gap-1.5"
               >
+                <Sparkles className="w-3 h-3" />
                 {tag}
               </button>
             ))}

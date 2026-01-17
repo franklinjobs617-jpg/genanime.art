@@ -61,19 +61,29 @@ export default function ImageDetailModal({
         setTimeout(() => setCopied(false), 2000)
     }
 
-    const downloadImg = async (url: string, index: number) => {
+    // 优化的下载函数：增加移动端兼容性
+    const downloadImg = async (e: React.MouseEvent, url: string, index: number) => {
+        e.stopPropagation(); // 阻止点击穿透关闭弹窗
+        toast.loading("Preparing download...", { id: "download" });
+        
         try {
-            const response = await fetch(url);
+            const response = await fetch(url, { mode: 'cors' });
+            if (!response.ok) throw new Error('Network error');
             const blob = await response.blob();
             const blobUrl = window.URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = blobUrl;
-            link.download = `anime-${Date.now()}-${index}.png`;
+            link.download = `anime-${Date.now()}.png`;
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
             window.URL.revokeObjectURL(blobUrl);
-            toast.success("Download completed!");
+            toast.success("Download completed!", { id: "download" });
         } catch (e) {
-            toast.error("Download failed");
+            // 移动端保底方案：如果跨域失败，直接新窗口打开图片
+            console.error("Download failed:", e);
+            toast.success("Long press image to save", { id: "download" });
+            window.open(url, '_blank');
         }
     };
 
@@ -99,9 +109,11 @@ export default function ImageDetailModal({
                         animate={{ opacity: 1, scale: 1, x: 0 }}
                         exit={{ opacity: 0, scale: 0.9, x: 100 }}
                         className="relative w-full h-full flex flex-col lg:flex-row shadow-2xl"
+                        onClick={(e) => e.stopPropagation()} // 阻止内容区点击关闭
                     >
                         {/* Center: Image Display */}
                         <div className="flex-1 flex items-center justify-center p-4 lg:p-12 relative">
+                            {/* 关闭按钮 */}
                             <button
                                 onClick={onClose}
                                 className="absolute top-6 left-6 z-50 p-3 bg-zinc-900/50 hover:bg-zinc-800 rounded-full border border-white/10 transition-all text-white/50 hover:text-white"
@@ -113,28 +125,34 @@ export default function ImageDetailModal({
                                 <SafeImage
                                     src={item.urls[0]}
                                     alt={item.prompt}
-                                    className="h-[500px] lg:h-[80vh] w-auto object-contain"
+                                    className="h-[450px] lg:h-[80vh] w-auto object-contain"
                                 />
                             </div>
 
-                            {/* Mobile Bottom Bar Actions (Visible on Mobile Only) */}
-                            <div className="absolute bottom-6 left-6 right-6 flex items-center justify-center gap-4 lg:hidden">
-                                <button className="p-4 bg-zinc-900/80 rounded-2xl border border-white/10 text-white">
+                            {/* Mobile Bottom Bar Actions - 已修复点击事件 */}
+                            <div className="absolute bottom-10 left-6 right-6 flex items-center justify-center gap-4 lg:hidden z-[60]">
+                                <button 
+                                    onClick={(e) => downloadImg(e, item.urls[0], 0)}
+                                    className="p-4 bg-zinc-900/80 rounded-2xl border border-white/10 text-white active:scale-90 transition-all"
+                                >
                                     <Download className="w-6 h-6" />
                                 </button>
-                                <button className="p-4 bg-zinc-900/80 rounded-2xl border border-white/10 text-white">
+                                <button 
+                                    onClick={(e) => { e.stopPropagation(); onDelete(item.id); onClose(); }}
+                                    className="p-4 bg-zinc-900/80 rounded-2xl border border-white/10 text-white active:scale-90 transition-all"
+                                >
                                     <Trash2 className="w-6 h-6 text-red-400" />
                                 </button>
                                 <button
-                                    onClick={onRegenerate}
-                                    className="flex-1 p-4 bg-indigo-600 rounded-2xl font-black text-white uppercase tracking-widest text-sm shadow-xl"
+                                    onClick={(e) => { e.stopPropagation(); onRegenerate(); onClose(); }}
+                                    className="flex-1 p-4 bg-indigo-600 rounded-2xl font-black text-white uppercase tracking-widest text-sm shadow-xl active:scale-95 transition-all"
                                 >
                                     Remix Vision
                                 </button>
                             </div>
                         </div>
 
-                        {/* Sidebar: Metadata & Actions */}
+                        {/* Sidebar: Metadata & Actions (Desktop Only) */}
                         <div className="w-full lg:w-[400px] bg-[#0c0c0e] border-l border-white/5 p-6 lg:p-8 flex flex-col gap-8 overflow-y-auto hidden lg:flex">
                             <div className="flex items-center justify-between">
                                 <span className="text-[11px] font-bold text-zinc-500 flex items-center gap-2 uppercase tracking-widest">
@@ -159,13 +177,12 @@ export default function ImageDetailModal({
                                     </button>
                                 </div>
                                 <div className="p-4 bg-zinc-900/50 rounded-2xl border border-white/5">
-                                    <p className="text-sm text-zinc-300 leading-relaxed font-medium">
+                                    <p className="text-sm text-zinc-300 leading-relaxed font-medium line-clamp-6">
                                         {item.prompt}
                                     </p>
                                 </div>
                             </div>
 
-                            {/* Model Info */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <h4 className="text-[10px] uppercase font-black text-zinc-500 tracking-widest flex items-center gap-2">
@@ -185,33 +202,12 @@ export default function ImageDetailModal({
                                 </div>
                             </div>
 
-                            {/* Technical Details Grid */}
-                            <div className="grid grid-cols-2 gap-x-8 gap-y-6 pt-4 border-t border-white/5">
-                                <div>
-                                    <h5 className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider mb-2">Image Dimension</h5>
-                                    <p className="text-xs font-black text-white">{resolution}</p>
-                                </div>
-                                <div>
-                                    <h5 className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider mb-2">Seed</h5>
-                                    <p className="text-xs font-black text-white">{item.seed || "6289880345017"}</p>
-                                </div>
-                                <div>
-                                    <h5 className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider mb-2">Prompt Enhance</h5>
-                                    <p className="text-xs font-black text-white">On</p>
-                                </div>
-                                <div>
-                                    <h5 className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider mb-2">Performance</h5>
-                                    <p className="text-xs font-black text-white">Speed</p>
-                                </div>
-                            </div>
-
-                            {/* Action Buttons Spacer */}
                             <div className="flex-1" />
 
-                            {/* Action Buttons */}
+                            {/* Desktop Buttons */}
                             <div className="space-y-4 pb-4">
                                 <div className="grid grid-cols-2 gap-3">
-                                    <button onClick={() => downloadImg(item.urls[0], 0)} className="flex items-center justify-center gap-2 py-3 bg-zinc-900 hover:bg-zinc-800 rounded-xl border border-white/10 text-xs font-bold transition-all">
+                                    <button onClick={(e) => downloadImg(e, item.urls[0], 0)} className="flex items-center justify-center gap-2 py-3 bg-zinc-900 hover:bg-zinc-800 rounded-xl border border-white/10 text-xs font-bold transition-all">
                                         <Download className="w-4 h-4" /> Download
                                     </button>
                                     <button
@@ -221,17 +217,9 @@ export default function ImageDetailModal({
                                         <Trash2 className="w-4 h-4" /> Delete
                                     </button>
                                 </div>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <button onClick={() => downloadImg(item.urls[0], 0)} className="flex items-center justify-center gap-2 py-3 bg-zinc-900 hover:bg-zinc-800 rounded-xl border border-white/10 text-xs font-bold transition-all">
-                                        <Maximize2 className="w-4 h-4" /> Original Image
-                                    </button>
-                                    <button onClick={() => onImageToPrompt && onImageToPrompt(item.urls[0])} className="flex items-center justify-center gap-2 py-3 bg-zinc-900 hover:bg-zinc-800 rounded-xl border border-white/10 text-xs font-bold transition-all">
-                                        <ImageIcon className="w-4 h-4" /> {t('buttons.imageToImage')}
-                                    </button>
-                                </div>
                                 <button
                                     onClick={onRegenerate}
-                                    className="w-full flex items-center justify-center gap-3 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-2xl text-[13px] font-black uppercase tracking-[0.2em] shadow-2xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                    className="w-full flex items-center justify-center gap-3 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-2xl text-[13px] font-black uppercase tracking-[0.2em] shadow-2xl transition-all"
                                 >
                                     <Wand2 className="w-5 h-5" /> Remix This Art
                                 </button>

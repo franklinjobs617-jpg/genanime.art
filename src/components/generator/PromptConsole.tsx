@@ -141,6 +141,22 @@ export default function PromptConsole({
               <span>{showSettings ? "Hide Settings" : "Ref & Negative"}</span>
             </button>
 
+            {/* 添加积分不足提示 */}
+            {!canGenerate && !isGuest && (
+              <div className="flex-1 text-center">
+                <p className="text-[10px] text-amber-400 font-medium">
+                  Insufficient credits. <a href="/pricing" className="underline hover:text-amber-300">Get more credits</a>
+                </p>
+              </div>
+            )}
+            {isGuest && guestGenerations >= guestLimit && (
+              <div className="flex-1 text-center">
+                <p className="text-[10px] text-amber-400 font-medium">
+                  Free trial limit reached. <a href="/pricing" className="underline hover:text-amber-300">Sign in to continue</a>
+                </p>
+              </div>
+            )}
+
             {/* 右侧：生成按钮组 */}
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
@@ -161,10 +177,13 @@ export default function PromptConsole({
               <button
                 onClick={onGenerate}
                 disabled={isGenerating || (!canGenerate && !isGuest)}
+                title={!canGenerate && !isGuest ? (guestGenerations >= guestLimit ? "Free trial limit reached" : "Insufficient credits") : ""}
                 className={`
                             group relative flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm tracking-wide transition-all duration-300 overflow-hidden
                             ${isGenerating
                     ? "bg-zinc-800 text-zinc-500 cursor-not-allowed"
+                    : !canGenerate && !isGuest
+                    ? "bg-gradient-to-r from-red-900 to-rose-900 text-white cursor-not-allowed"
                     : "bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:shadow-lg hover:shadow-indigo-500/25 hover:scale-[1.02]"
                   }
                         `}

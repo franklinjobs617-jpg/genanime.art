@@ -261,6 +261,7 @@ export default function GeneratorClient() {
           quantity: activeQuantity,
           googleUserId: user?.googleUserId,
           negativePrompt: negativePrompt,
+          model: activeModel,
         }),
       });
 

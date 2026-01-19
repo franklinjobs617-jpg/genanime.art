@@ -195,7 +195,6 @@ export async function POST(req: NextRequest) {
       watermark: false
     };
     
-    // 如果是动漫风格，添加动漫专用参数到提示词中以确保兼容性
     if (isAnimeStyle) {
       baseParams.prompt = `${finalPrompt}, vae:${ANIME_DEFAULT_PARAMS.vae}, cfg_scale:${ANIME_DEFAULT_PARAMS.cfg_scale}, steps:${ANIME_DEFAULT_PARAMS.steps}, sampler:${ANIME_DEFAULT_PARAMS.sampler_name}, clip_skip:${ANIME_DEFAULT_PARAMS.clip_skip}`;
     }

@@ -12,9 +12,19 @@ export default function Hero() {
   const t = useTranslations('Hero');
   const router = useRouter();
   const [inputValue, setInputValue] = useState("");
-  const styleTags = ["Waifu", "Chibi", "Pony Diffusion", "Animagine XL", "Niji Style"];
+  // 高质量主提示词映射
+  const stylePrompts: Record<string, string> = {
+    "Waifu": "masterpiece, best quality, 1girl, solo, anime style, detailed eyes, flowing hair, cinematic lighting, soft shadows, elegant dress, fantasy background, magical aura, perfect face, smooth skin, vibrant colors, sharp focus, studio quality, professional digital artwork",
+    "Chibi": "masterpiece, best quality, chibi character, kawaii, adorable, super cute, small body, big head, large expressive eyes, tiny limbs, round cheeks, playful pose, colorful background, soft pastel colors, detailed facial features, charming smile, innocent look, anime style, studio quality",
+    "Pony Diffusion": "masterpiece, best quality, official art, unity 8k wallpaper, highly detailed, vibrant colors, aesthetic masterpiece, dynamic pose, fantasy setting, magical lighting, detailed armor, ornate clothing, ethereal atmosphere, professional digital painting, sharp focus, smooth skin, perfect composition",
+    "Animagine XL": "masterpiece, best quality, official art, unity 8k wallpaper, highly detailed, vibrant colors, aesthetic masterpiece, realistic lighting, detailed textures, cinematic composition, sharp focus, professional digital artwork, perfect anatomy, smooth skin, elaborate costume design",
+    "Niji Style": "masterpiece, best quality, niji style, anime style, soft pastel colors, dreamy atmosphere, fantasy setting, detailed background, ethereal lighting, cute character, magical girl style, watercolor texture, hand-drawn feeling, soft brush strokes, delicate details"
+  };
+
+  const styleTags = Object.keys(stylePrompts);
 
   const handleTagClick = (tag: string) => {
+    const prompt = stylePrompts[tag] || tag;
     setInputValue(tag);
     
     // Map tags to appropriate models
@@ -27,7 +37,7 @@ export default function Hero() {
       model = "Niji Style";
     }
     
-    router.push(`/generator?prompt=${encodeURIComponent(tag)}&model=${encodeURIComponent(model)}`);
+    router.push(`/generator?prompt=${encodeURIComponent(prompt)}&model=${encodeURIComponent(model)}`);
   };
 
   const handleSubmit = (e: React.FormEvent) => {

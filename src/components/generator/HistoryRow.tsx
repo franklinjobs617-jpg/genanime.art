@@ -138,30 +138,62 @@ export default function HistoryRow({
                         "grid-cols-2 md:grid-cols-4 lg:grid-cols-4"
                 }`}>
                 {item.urls.map((url, index) => (
-                    <motion.div
-                        key={index}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.05 }}
-                        className={`relative group/img cursor-pointer rounded-2xl overflow-hidden border border-white/10 ${aspectRatioClass} ${item.urls.length === 1 ? "w-[240px] md:w-[280px]" : "w-full"
-                            }`}
-                        onClick={() => onViewDetail({ ...item, initialIndex: index })}
-                    >
-                        <SafeImage
-                            src={url}
-                            alt={item.prompt}
-                            fill={true}
-                            sizes="(max-width: 768px) 45vw, (max-width: 1024px) 22vw, 15vw"
-                            placeholder="blur"
-                            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAADAAQDAREAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
-                            className="w-full h-full object-cover transition-opacity duration-300"
-                        />
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
-                            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
-                                <Eye className="w-5 h-5 text-white" />
+                    <div key={index} className="relative">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: index * 0.05 }}
+                            className={`relative group/img cursor-pointer rounded-2xl overflow-hidden border border-white/10 ${aspectRatioClass} ${item.urls.length === 1 ? "w-[240px] md:w-[280px]" : "w-full"
+                                }`}
+                            onClick={() => onViewDetail({ ...item, initialIndex: index })}
+                            onTouchStart={(e) => {
+                                // 为移动端添加长按保存提示
+                                const touchStartTime = Date.now();
+                                let touchTimer: NodeJS.Timeout;
+                                
+                                touchTimer = setTimeout(() => {
+                                    // 检查触摸持续时间是否超过阈值（例如500毫秒）
+                                    if (Date.now() - touchStartTime > 500) {
+                                        // 显示长按保存提示
+                                        const tooltip = document.createElement('div');
+                                        tooltip.className = 'fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-3 py-2 rounded-lg z-50 transition-opacity duration-300';
+                                        tooltip.textContent = 'Long press to save to your gallery';
+                                        document.body.appendChild(tooltip);
+                                        
+                                        // 3秒后自动移除提示
+                                        setTimeout(() => {
+                                            tooltip.remove();
+                                        }, 3000);
+                                    }
+                                }, 500); // 500ms 作为长按阈值
+                                
+                                // 清除定时器，如果触摸结束
+                                const clearTouchTimer = () => {
+                                    clearTimeout(touchTimer);
+                                    window.removeEventListener('touchend', clearTouchTimer);
+                                    window.removeEventListener('touchmove', clearTouchTimer);
+                                };
+                                
+                                window.addEventListener('touchend', clearTouchTimer);
+                                window.addEventListener('touchmove', clearTouchTimer);
+                            }}
+                        >
+                            <SafeImage
+                                src={url}
+                                alt={item.prompt}
+                                fill={true}
+                                sizes="(max-width: 768px) 45vw, (max-width: 1024px) 22vw, 15vw"
+                                placeholder="blur"
+                                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAADAAQDAREAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+                                className="w-full h-full object-cover transition-opacity duration-300"
+                            />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
+                                    <Eye className="w-5 h-5 text-white" />
+                                </div>
                             </div>
-                        </div>
-                    </motion.div>
+                        </motion.div>
+                    </div>
                 ))}
             </div>
 

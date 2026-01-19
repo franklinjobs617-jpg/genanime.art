@@ -165,14 +165,32 @@ export default function GeneratorClient() {
       return;
     }
 
+    // 检查选择的图片数量是否有效
+    if (activeQuantity <= 0 || activeQuantity > 4) {
+      toast.error("Invalid number of images selected. Please select 1-4 images.");
+      return;
+    }
+
     if (isGenerating) return;
 
     if (!user) {
       if (guestGenerations >= GUEST_FREE_LIMIT) {
-        setShowLoginModal(true);
+        // 检查登录模态框是否已经在显示
+        if (!showLoginModal) {
+          setShowLoginModal(true);
+        }
         return;
       }
     } else if ((Number(user.credits) || 0) < currentTotalCost) {
+      // 使用一个变量来跟踪是否已经显示了提示
+      if (typeof window !== 'undefined') {
+        const toastId = 'insufficient-credits-toast';
+        // 如果已经有一个相同的提示在显示，则不创建新的
+        if (document.querySelector(`[data-sonner-toast-id="${toastId}"]`)) {
+          return;
+        }
+      }
+      
       toast.custom(
         (toastItem) => (
           <div className="bg-zinc-900 border border-amber-500/30 rounded-xl p-4 shadow-2xl max-w-md">
@@ -206,7 +224,10 @@ export default function GeneratorClient() {
             </div>
           </div>
         ),
-        { duration: 6000 }
+        { 
+          id: 'insufficient-credits-toast',
+          duration: 6000 
+        }
       );
       return;
     }
@@ -417,6 +438,42 @@ export default function GeneratorClient() {
           setGenerationMode={setGenerationMode}
         />
       </aside>
+
+      {/* 移动端浮动设置按钮 */}
+      <div className="lg:hidden fixed bottom-24 right-4 z-50">
+        <Sheet open={mobileSheetOpen} onOpenChange={setMobileSheetOpen}>
+          <SheetTrigger asChild>
+            <button className="p-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 rounded-full shadow-lg shadow-indigo-500/30 transition-all border border-white/10">
+              <Settings className="w-5 h-5 text-white" />
+            </button>
+          </SheetTrigger>
+          <SheetContent
+            side="left"
+            className="w-[300px] p-0 bg-[#09090b] border-r border-white/10"
+          >
+            <RedesignedSidebar
+              activeStyle={activeStyle}
+              setActiveStyle={setActiveStyle}
+              activeRatio={activeRatio}
+              setActiveRatio={setActiveRatio}
+              activeQuantity={activeQuantity}
+              setActiveQuantity={setActiveQuantity}
+              activeModel={activeModel}
+              setActiveModel={setActiveModel}
+              cfgScale={cfgScale}
+              setCfgScale={setCfgScale}
+              steps={steps}
+              setSteps={setSteps}
+              seed={seed}
+              setSeed={setSeed}
+              isRandomSeed={isRandomSeed}
+              setIsRandomSeed={setIsRandomSeed}
+              generationMode={generationMode}
+              setGenerationMode={setGenerationMode}
+            />
+          </SheetContent>
+        </Sheet>
+      </div>
 
       <main className="flex-1 flex flex-col relative overflow-hidden bg-[#09090b]">
         {/* Ambient Effects */}

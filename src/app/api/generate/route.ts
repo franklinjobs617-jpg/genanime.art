@@ -22,6 +22,35 @@ const STYLE_PROMPTS: Record<string, string> = {
   "Pastel Luxe Art": "pastel colors, soft lighting, painterly, dreamlike",
 };
 
+// 定义动漫相关的风格
+const ANIME_STYLES = [
+  "Vibrant Anime",
+  "Retro 90s",
+  "Elite Game Splash",
+  "Makoto Ethereal",
+  "Cyberpunk Trigger",
+];
+
+// 动漫专用参数配置
+const ANIME_DEFAULT_PARAMS = {
+  cfg_scale: 9.5,
+  steps: 30,
+  sampler_name: "DPM++ 2M Karras",
+  clip_skip: 2,
+  vae: "animevae.pt"
+};
+
+// 分辨率预设
+const ASPECT_RATIO_DIMENSIONS: Record<string, { width: number; height: number }> = {
+  "1:1": { width: 1024, height: 1024 },
+  "9:16": { width: 832, height: 1216 }, // 优化竖屏模式
+  "16:9": { width: 1216, height: 832 }, // 优化横屏模式
+  "2:3": { width: 832, height: 1216 },
+  "3:2": { width: 1216, height: 832 },
+  "4:3": { width: 1216, height: 912 },
+  "3:4": { width: 912, height: 1216 },
+};
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -32,6 +61,23 @@ export async function POST(req: NextRequest) {
         { success: false, error: "Prompt is required" },
         { status: 400 }
       );
+
+    // 限制单次生成的最大数量，防止API滥用和过载
+    const MAX_QUANTITY = 4;
+    if (quantity > MAX_QUANTITY) {
+      return NextResponse.json(
+        { success: false, error: `Maximum quantity allowed is ${MAX_QUANTITY}` },
+        { status: 400 }
+      );
+    }
+
+    // 确保数量至少为1
+    if (quantity < 1) {
+      return NextResponse.json(
+        { success: false, error: "Quantity must be at least 1" },
+        { status: 400 }
+      );
+    }
 
     const isGuest = !googleUserId;
     const cookies = req.cookies;
@@ -91,18 +137,9 @@ export async function POST(req: NextRequest) {
     // 6. Concatenate Negative Prompt to finalPrompt
     finalPrompt += `, negative prompt: ${finalNegative}`;
 
-    let sizeStr = "1920x1920"; // 默认 1:1
-    if (ratio === "9:16") {
-      sizeStr = "1440x2560";
-    } else if (ratio === "16:9") {
-      sizeStr = "2560x1440";
-    } else if (ratio === "2:3") {
-      sizeStr = "1536x2400";
-    } else if (ratio === "3:2") {
-      sizeStr = "2400x1536";
-    } else if (ratio === "4:3") {
-      sizeStr = "2048x1536";
-    }
+    // 获取优化后的分辨率
+    const dimension = ASPECT_RATIO_DIMENSIONS[ratio] || ASPECT_RATIO_DIMENSIONS["1:1"];
+    const sizeStr = `${dimension.width}x${dimension.height}`;
 
     const effectiveQuantity = isGuest ? 1 : quantity;
 
@@ -111,14 +148,25 @@ export async function POST(req: NextRequest) {
       baseURL: process.env.ARK_BASE_URL,
     });
 
+    // 检查是否为动漫风格
+    const isAnimeStyle = ANIME_STYLES.includes(style);
+    
+    // 构建基础参数
+    const baseParams: any = {
+      model: process.env.DOUBAO_ENDPOINT_ID || "doubao-seedream-4-5-251128",
+      prompt: finalPrompt,
+      size: sizeStr as any,
+      response_format: "b64_json",
+      watermark: false
+    };
+    
+    // 如果是动漫风格，添加动漫专用参数到提示词中以确保兼容性
+    if (isAnimeStyle) {
+      baseParams.prompt = `${finalPrompt}, vae:${ANIME_DEFAULT_PARAMS.vae}, cfg_scale:${ANIME_DEFAULT_PARAMS.cfg_scale}, steps:${ANIME_DEFAULT_PARAMS.steps}, sampler:${ANIME_DEFAULT_PARAMS.sampler_name}, clip_skip:${ANIME_DEFAULT_PARAMS.clip_skip}`;
+    }
+    
     const promises = Array.from({ length: effectiveQuantity }).map(() =>
-      client.images.generate({
-        model: process.env.DOUBAO_ENDPOINT_ID || "doubao-seedream-4-5-251128",
-        prompt: finalPrompt,
-        size: sizeStr as any,
-        response_format: "b64_json",
-        watermark: false
-      } as any)
+      client.images.generate(baseParams)
     );
 
     const responses = await Promise.all(promises);

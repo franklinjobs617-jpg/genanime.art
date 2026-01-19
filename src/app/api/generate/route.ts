@@ -42,13 +42,13 @@ const ANIME_DEFAULT_PARAMS = {
 
 // 分辨率预设
 const ASPECT_RATIO_DIMENSIONS: Record<string, { width: number; height: number }> = {
-  "1:1": { width: 1024, height: 1024 },
-  "9:16": { width: 832, height: 1216 }, // 优化竖屏模式
-  "16:9": { width: 1216, height: 832 }, // 优化横屏模式
-  "2:3": { width: 832, height: 1216 },
-  "3:2": { width: 1216, height: 832 },
-  "4:3": { width: 1216, height: 912 },
-  "3:4": { width: 912, height: 1216 },
+  "1:1": { width: 2048, height: 2048 },
+  "9:16": { width: 1536, height: 2048 }, // 优化竖屏模式
+  "16:9": { width: 2048, height: 1536 }, // 优化横屏模式
+  "2:3": { width: 1536, height: 2048 },
+  "3:2": { width: 2048, height: 1536 },
+  "4:3": { width: 2048, height: 1536 },
+  "3:4": { width: 1536, height: 2048 },
 };
 
 export async function POST(req: NextRequest) {
@@ -132,7 +132,48 @@ export async function POST(req: NextRequest) {
     finalPrompt += `, negative prompt: ${finalNegative}`;
 
     // 获取优化后的分辨率
-    const dimension = ASPECT_RATIO_DIMENSIONS[ratio] || ASPECT_RATIO_DIMENSIONS["1:1"];
+    let dimension = ASPECT_RATIO_DIMENSIONS[ratio] || ASPECT_RATIO_DIMENSIONS["1:1"];
+    
+    // 对于某些模型，可能需要特定的分辨率优化
+    if (model) {
+      // 如果是Pony模型，可以使用其推荐的分辨率
+      if (model.includes("Pony") || model.toLowerCase().includes("pony")) {
+        // Pony模型通常推荐使用特定的分辨率
+        if (ratio === "1:1") {
+          dimension = { width: 1024, height: 1024 };
+        } else if (ratio === "16:9") {
+          dimension = { width: 1344, height: 768 };
+        } else if (ratio === "9:16") {
+          dimension = { width: 768, height: 1344 };
+        } else {
+          // 其他比例按比例调整
+          const ratioValue = dimension.width / dimension.height;
+          if (ratioValue > 1) {
+            // 横向图片
+            dimension = { width: 1344, height: Math.round(1344 / ratioValue) };
+          } else {
+            // 纵向图片
+            dimension = { width: Math.round(1344 * ratioValue), height: 1344 };
+          }
+        }
+      }
+    }
+    
+    // 确保最小尺寸满足API要求
+    if (dimension.width * dimension.height < 3686400 && !(model && (model.includes("Pony") || model.toLowerCase().includes("pony")))) {
+      // 如果小于最小要求且不是Pony模型，则使用更高分辨率
+      if (ratio === "1:1") {
+        dimension = { width: 2048, height: 2048 };
+      } else {
+        const ratioValue = dimension.width / dimension.height;
+        if (ratioValue > 1) {
+          dimension = { width: 2048, height: Math.round(2048 / ratioValue) };
+        } else {
+          dimension = { width: Math.round(2048 * ratioValue), height: 2048 };
+        }
+      }
+    }
+    
     const sizeStr = `${dimension.width}x${dimension.height}`;
 
     const effectiveQuantity = isGuest ? 1 : quantity;

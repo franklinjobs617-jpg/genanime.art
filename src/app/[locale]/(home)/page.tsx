@@ -1,31 +1,24 @@
 import dynamic from 'next/dynamic';
 import Hero from "@/components/home/Hero";
 
-/**
- * 优化策略：
- * 1. 移除所有 skeleton loaders - 避免 CLS (Cumulative Layout Shift)
- * 2. 保持 SSR - 所有内容对 Google 爬虫可见
- * 3. 使用 dynamic import - 代码分割，减小初始 bundle
- * 4. SEO 关键组件（FAQ, SEOContent）完全可被爬取
- */
-
-// 所有组件使用 dynamic import 进行代码分割，但不禁用 SSR
 const FeatureSection = dynamic(() => import("@/components/home/FeatureSection"));
 const HowItWorks = dynamic(() => import("@/components/home/HowItWorks"));
 const PromptLibraryPreview = dynamic(() => import("@/components/home/PromptLibraryPreview"));
 const CoreFeatures = dynamic(() => import("@/components/home/CoreFeatures"));
 
-// SEO 关键组件 - 必须保证完整 SSR
 const SEOContentSection = dynamic(() => import("@/components/home/SEOContentSection"));
 const FAQSection = dynamic(() => import("@/components/home/FAQSection"));
 
 const CallToAction = dynamic(() => import("@/components/home/CallToAction"));
 
-export default function HomePage() {
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const resolvedParams = await params;
+  const { locale } = resolvedParams;
+  
   return (
     <main className="relative min-h-screen bg-[#050505] overflow-x-hidden">
       <Hero />
-
+      
       <FeatureSection />
       <HowItWorks />
       <PromptLibraryPreview />
@@ -36,6 +29,25 @@ export default function HomePage() {
       <FAQSection />
 
       <CallToAction />
+
+      {locale === 'en' && (
+        <div className="w-full flex justify-center items-center py-6 bg-[#050505]">
+          <a 
+            href="https://theresanaiforthat.com/ai/animeai/?ref=featured&v=7340698" 
+            target="_blank" 
+            rel="nofollow"
+            className="hover:opacity-80 transition-opacity" // 加一点悬停效果
+          >
+            <img 
+              width="300" 
+              src="https://media.theresanaiforthat.com/featured-on-taaft.png?width=600" 
+              alt="Verified on There's An AI For That" 
+              loading='lazy'
+            />
+          </a>
+        </div>
+      )}
+
     </main>
   );
 }

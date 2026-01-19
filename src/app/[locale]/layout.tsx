@@ -63,7 +63,7 @@ export async function generateMetadata(props: {
       description: t('description'),
       images: [
         {
-          url: 'https://genanime.art/prompts/images/anime_waifu_16.webp',
+          url: 'https://genanime.art/images/prompts/anime_waifu_16.webp',
           width: 1200,
           height: 630,
           alt: 'AnimeAI - AI Anime Art Generator',
@@ -74,7 +74,7 @@ export async function generateMetadata(props: {
       card: 'summary_large_image',
       title: t('title'),
       description: t('description'),
-      images: ['https://genanime.art/prompts/images/anime_waifu_16.webp'],
+      images: ['https://genanime.art/images/prompts/anime_waifu_16.webp'],
       creator: '@AnimeAI',
     },
     robots: {

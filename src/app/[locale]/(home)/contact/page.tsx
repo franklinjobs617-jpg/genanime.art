@@ -26,8 +26,17 @@ export default function ContactPage() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // In a real app, handle form submission
-        alert("Message sent! We'll get back to you soon.");
+        
+        // Show success message
+        alert("Thank you for contacting us! We'll get back to you soon.");
+        
+        // Reset form
+        setFormState({
+            name: "",
+            email: "",
+            subject: "",
+            message: ""
+        });
     };
 
     return (
@@ -71,7 +80,7 @@ export default function ContactPage() {
                             <h2 className="text-3xl font-bold tracking-tight">Contact Information</h2>
                             <div className="space-y-6">
                                 {[
-                                    { icon: <Mail className="w-6 h-6 text-purple-500" />, label: "Email", value: "support@animeai.com" },
+                                    { icon: <Mail className="w-6 h-6 text-purple-500" />, label: "Email", value: "admin@genanime.art" },
                                     { icon: <div className="w-6 h-6 flex items-center justify-center">D</div>, label: "Discord", value: "Join our Community" },
                                     { icon: <Twitter className="w-6 h-6 text-[#1DA1F2]" />, label: "Twitter", value: "@AnimeAI_Gen" },
                                 ].map((item, i) => (
@@ -94,7 +103,7 @@ export default function ContactPage() {
                                 <h3 className="text-xl font-bold">Business Inquiries</h3>
                             </div>
                             <p className="text-zinc-400 text-sm leading-relaxed">
-                                Interested in API access or enterprise solutions? Reach out to our business team at <span className="text-white font-bold">biz@animeai.com</span>
+                                Interested in API access or enterprise solutions? Reach out to our business team at <span className="text-white font-bold">admin@genanime.art</span>
                             </p>
                         </div>
                     </motion.div>

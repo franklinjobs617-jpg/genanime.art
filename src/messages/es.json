@@ -65,7 +65,11 @@
             "sticker": "Pack de Stickers",
             "mage": "Mago Fantasía",
             "knight": "Caballero Medieval",
-            "christmas": "Escena de Navidad"
+            "christmas": "Escena de Navidad",
+            "cyberpunk_waifu": "Cyberpunk Waifu Anime",
+            "kimono_waifu": "Estilo Kimono Waifu",
+            "beach_waifu": "Vacaciones de Waifu en la Playa",
+            "bedroom_waifu": "Confort de Waifu en el Dormitorio"
         },
         "buttons": {
             "generate": "Generar con este Prompt"

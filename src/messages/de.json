@@ -65,7 +65,11 @@
             "sticker": "Anime Sticker-Paket",
             "mage": "Fantasy Magier Generator",
             "knight": "Mittelalterlicher Ritter Anime",
-            "christmas": "Weihnachts-Anime Szene"
+            "christmas": "Weihnachts-Anime Szene",
+            "cyberpunk_waifu": "Cyberpunk Waifu Anime",
+            "kimono_waifu": "Kimono Waifu Stil",
+            "beach_waifu": "Strand-Waifu Urlaub",
+            "bedroom_waifu": "Schlafzimmer-Waifu Komfort"
         },
         "buttons": {
             "generate": "Mit diesem Prompt generieren"

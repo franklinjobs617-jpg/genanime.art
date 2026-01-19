@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import { Metadata } from "next";
 
 interface PageProps {
   params: {
@@ -6,48 +6,56 @@ interface PageProps {
   };
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { locale } = params;
 
-  if (locale === 'es') {
+  if (locale === "es") {
     return {
-      title: 'Cómo Convertir Foto a Anime con IA - Guía Completa | GenAnime',
-      description: 'Aprende cómo convertir foto a anime usando IA. Descubre la mejor app para convertir foto a anime y convertir imagen a dibujo animado.',
-      keywords: 'convertir foto a anime, app para convertir foto a anime, convertir imagen a dibujo animado, generador de anime con IA',
+      title: "Cómo Convertir Foto a Anime con IA - Guía Completa | GenAnime",
+      description:
+        "Aprende cómo convertir foto a anime usando IA. Descubre la mejor app para convertir foto a anime y convertir imagen a dibujo animado.",
+      keywords:
+        "convertir foto a anime, app para convertir foto a anime, convertir imagen a dibujo animado, generador de anime con IA",
       alternates: {
-        canonical: 'https://genanime.art/how-to-reverse-image-to-prompt-anime-guide',
+        canonical:
+          "https://genanime.art/how-to-reverse-image-to-prompt-anime-guide",
         languages: {
-          'en': 'https://genanime.art/how-to-reverse-image-to-prompt-anime-guide',
-          'es': 'https://genanime.art/es/how-to-reverse-image-to-prompt-anime-guide',
-        }
+          en: "https://genanime.art/how-to-reverse-image-to-prompt-anime-guide",
+          es: "https://genanime.art/es/how-to-reverse-image-to-prompt-anime-guide",
+        },
       },
       openGraph: {
-        title: 'Cómo Convertir Foto a Anime con IA - Guía Completa',
-        description: 'Aprende cómo convertir foto a anime usando IA. Descubre la mejor app para convertir foto a anime.',
-        type: 'article',
-        locale: 'es_ES',
-        url: 'https://genanime.art/es/how-to-reverse-image-to-prompt-anime-guide',
+        title: "Cómo Convertir Foto a Anime con IA - Guía Completa",
+        description:
+          "Aprende cómo convertir foto a anime usando IA. Descubre la mejor app para convertir foto a anime.",
+        type: "article",
+        locale: "es_ES",
+        url: "https://genanime.art/es/how-to-reverse-image-to-prompt-anime-guide",
       },
     };
   }
 
   return {
-    title: 'Master Reverse Engineering: Flux AI Image to Prompt - GenAnime',
-    description: 'Learn how to deconstruct any anime masterpiece into a high-octane "magic spell" for your next generation.',
+    title: "Master Reverse Engineering: Flux AI Image to Prompt - GenAnime",
+    description:
+      'Learn how to deconstruct any anime masterpiece into a high-octane "magic spell" for your next generation.',
     alternates: {
-      canonical: 'https://genanime.art/how-to-reverse-image-to-prompt-anime-guide',
+      canonical:
+        "https://genanime.art/how-to-reverse-image-to-prompt-anime-guide",
       languages: {
-        'en': 'https://genanime.art/how-to-reverse-image-to-prompt-anime-guide',
-        'es': 'https://genanime.art/es/how-to-reverse-image-to-prompt-anime-guide',
-     
-      }
+        en: "https://genanime.art/how-to-reverse-image-to-prompt-anime-guide",
+        es: "https://genanime.art/es/how-to-reverse-image-to-prompt-anime-guide",
+      },
     },
     openGraph: {
-      title: 'Master Reverse Engineering: Flux AI Image to Prompt',
-      description: 'Learn how to deconstruct any anime masterpiece into a high-octane "magic spell" for your next generation.',
-      type: 'article',
-      locale: 'en_US',
-      url: 'https://genanime.art/how-to-reverse-image-to-prompt-anime-guide',
+      title: "Master Reverse Engineering: Flux AI Image to Prompt",
+      description:
+        'Learn how to deconstruct any anime masterpiece into a high-octane "magic spell" for your next generation.',
+      type: "article",
+      locale: "en_US",
+      url: "https://genanime.art/how-to-reverse-image-to-prompt-anime-guide",
     },
   };
 }

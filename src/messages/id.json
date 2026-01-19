@@ -65,7 +65,11 @@
             "sticker": "Paket Stiker Anime",
             "mage": "Generator Penyihir Fantasi",
             "knight": "Anime Ksatria Abad Pertengahan",
-            "christmas": "Adegan Natal Anime"
+            "christmas": "Adegan Natal Anime",
+            "cyberpunk_waifu": "Anime Waifu Cyberpunk",
+            "kimono_waifu": "Gaya Waifu Kimono",
+            "beach_waifu": "Liburan Waifu Pantai",
+            "bedroom_waifu": "Kenikmatan Waifu Kamar Tidur"
         },
         "buttons": {
             "generate": "Buat dengan Prompt Ini"

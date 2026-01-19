@@ -65,7 +65,11 @@
             "sticker": "Anime Sticker Pack",
             "mage": "Fantasy Mage Generator",
             "knight": "Medieval Knight Anime",
-            "christmas": "Christmas Anime Scene"
+            "christmas": "Christmas Anime Scene",
+            "cyberpunk_waifu": "Cyberpunk Waifu Anime",
+            "kimono_waifu": "Kimono Waifu Style",
+            "beach_waifu": "Beach Waifu Vacation",
+            "bedroom_waifu": "Bedroom Waifu Comfort"
         },
         "buttons": {
             "generate": "Generate with this Prompt"

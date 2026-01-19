@@ -27,7 +27,8 @@
         "models": "AI Models",
         "ponyDiffusion": "Pony Diffusion",
         "privacy": "Privacy Policy",
-        "terms": "Terms of Service"
+        "terms": "Terms of Service",
+        "imageToPrompt": "Image to Prompt"
     },
     "Hero": {
         "titleLine1": "Best Anime",

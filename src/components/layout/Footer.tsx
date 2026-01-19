@@ -12,6 +12,7 @@ export default function Footer() {
       { name: t('generator'), href: "/generator" },
       { name: t('gallery'), href: "/gallery" },
       { name: t('promptLibrary'), href: "/prompt-library" },
+      { name: t('imageToPrompt'), href: "/image-to-prompt" },
       { name: t('pricing'), href: "/pricing" },
     ],
     resources: [

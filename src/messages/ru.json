@@ -17,7 +17,8 @@
         "models": "AI Модели",
         "ponyDiffusion": "Pony Diffusion",
         "privacy": "Политика конфиденциальности",
-        "terms": "Условия использования"
+        "terms": "Условия использования",
+        "imageToPrompt": "Картинка в Промпт"
     },
     "Hero": {
         "titleLine1": "Лучший",

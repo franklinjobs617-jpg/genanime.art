@@ -29,7 +29,8 @@
         "models": "Modelos IA",
         "ponyDiffusion": "Pony Diffusion",
         "privacy": "Política de Privacidad",
-        "terms": "Términos de Servicio"
+        "terms": "Términos de Servicio",
+        "imageToPrompt": "Imagen a Prompt"
     },
     "Hero": {
         "titleLine1": "El Mejor Generador de",

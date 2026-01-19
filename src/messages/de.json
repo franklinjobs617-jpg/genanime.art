@@ -29,7 +29,8 @@
         "models": "KI-Modelle",
         "ponyDiffusion": "Pony-Diffusion",
         "privacy": "Datenschutz",
-        "terms": "Nutzungsbedingungen"
+        "terms": "Nutzungsbedingungen",
+        "imageToPrompt": "Bild-zu-Prompt"
     },
     "Hero": {
         "titleLine1": "Bester Anime",

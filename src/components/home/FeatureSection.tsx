@@ -80,14 +80,7 @@ const originalCards = [
       "Relaxing beach anime scene, beautiful waifu in summer outfit, sunny weather, ocean waves, palm trees, vacation atmosphere, bright colors, cheerful mood.",
     tags: ["Beach", "Summer"],
   },
-  {
-    id: "bedroom_waifu",
-    title: "Bedroom Waifu Comfort",
-    image: "/bedroom-waifu-anime.webp",
-    prompt:
-      "Cozy bedroom anime scene, comfortable interior, soft lighting, intimate setting, peaceful atmosphere, homey environment, warm tones.",
-    tags: ["Bedroom", "Interior"],
-  },
+ 
   {
     id: "couple",
     title: "Anime Couple Art",
@@ -95,6 +88,14 @@ const originalCards = [
     prompt:
       "anime couple illustration, romantic atmosphere, two anime characters standing close together, soft lighting, gentle expressions, clean background, detailed anime lineart, harmonious color palette, pure 2D anime style",
     tags: ["Couple", "Romance"],
+  },
+   {
+    id: "bedroom_waifu",
+    title: "Bedroom Waifu Comfort",
+    image: "/bedroom-waifu-anime.webp",
+    prompt:
+      "Cozy bedroom anime scene, comfortable interior, soft lighting, intimate setting, peaceful atmosphere, homey environment, warm tones.",
+    tags: ["Bedroom", "Interior"],
   },
   {
     id: "action",

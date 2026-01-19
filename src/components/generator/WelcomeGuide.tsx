@@ -44,7 +44,7 @@ export default function WelcomeGuide() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -50 }}
           transition={{ duration: 0.3 }}
-          className="fixed top-4 left-1/2 transform -translate-x-1/2 w-[calc(100%-32px)] max-w-md z-[9999] pointer-events-auto"
+          className="fixed top-4 left-1/2 transform -translate-x-1/2 w-full max-w-[calc(100vw-16px)] sm:max-w-md z-[9999] pointer-events-auto"
         >
           <div className="bg-zinc-900/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-4 flex items-start gap-3">
             <div className="mt-0.5 flex-shrink-0">

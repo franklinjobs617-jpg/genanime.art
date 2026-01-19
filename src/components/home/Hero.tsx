@@ -9,25 +9,29 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 
 export default function Hero() {
-  const t = useTranslations('Hero');
+  const t = useTranslations("Hero");
   const router = useRouter();
   const [inputValue, setInputValue] = useState("");
   // 高质量主提示词映射
   const stylePrompts: Record<string, string> = {
-    "Waifu": "masterpiece, best quality, 1girl, solo, anime style, detailed eyes, flowing hair, cinematic lighting, soft shadows, elegant dress, fantasy background, magical aura, perfect face, smooth skin, vibrant colors, sharp focus, studio quality, professional digital artwork",
-    "Chibi": "masterpiece, best quality, chibi character, kawaii, adorable, super cute, small body, big head, large expressive eyes, tiny limbs, round cheeks, playful pose, colorful background, soft pastel colors, detailed facial features, charming smile, innocent look, anime style, studio quality",
-    "Pony Diffusion": "masterpiece, best quality, official art, unity 8k wallpaper, highly detailed, vibrant colors, aesthetic masterpiece, dynamic pose, fantasy setting, magical lighting, detailed armor, ornate clothing, ethereal atmosphere, professional digital painting, sharp focus, smooth skin, perfect composition",
-    "Animagine XL": "masterpiece, best quality, official art, unity 8k wallpaper, highly detailed, vibrant colors, aesthetic masterpiece, realistic lighting, detailed textures, cinematic composition, sharp focus, professional digital artwork, perfect anatomy, smooth skin, elaborate costume design",
-    "Niji Style": "masterpiece, best quality, niji style, anime style, soft pastel colors, dreamy atmosphere, fantasy setting, detailed background, ethereal lighting, cute character, magical girl style, watercolor texture, hand-drawn feeling, soft brush strokes, delicate details"
+    Waifu:
+      "masterpiece, best quality, absurdres, 8k, ultra detailed, high resolution, perfect lighting, 1girl, solo, beautiful detailed eyes, beautiful detailed face, elegant beautiful detailed hair, intricate elegant clothes, detailed background, soft smooth skin, perfect detailed hands, aesthetic beauty, studio quality, professional digital art, soft bloom light, cinematic lighting, bokeh, film grain, atmospheric, dynamic pose, vivid colors, ultra sharp focus, ornate, exquisite, refined, glowing eyes, perfect eyelashes, beautiful detailed lips, jewelry, accessories, elegant dress, fantasy setting, magic aura",
+    Chibi:
+      "masterpiece, best quality, absurdres, 8k, ultra detailed, high resolution, perfect lighting, chibi kawaii cute, adorable, super cute, small body, big head, large expressive beautiful eyes, tiny limbs, round cheeks, big cute eyes, cute face, happy cheerful expression, playful pose, colorful background, soft pastel colors, detailed facial features, charming smile, innocent look, anime style, studio quality, soft bloom light, magical atmosphere, fluffy hair, cute outfit, detailed accessories, professional digital art, round shiny eyes, big cute pupils, soft shadows, smooth gradients",
+    "Pony Diffusion":
+      "masterpiece, best quality, absurdres, 8k, ultra detailed, high resolution, perfect lighting, official art, unity 8k wallpaper, photorealistic, highly detailed, vibrant colors, aesthetic masterpiece, dynamic pose, fantasy setting, magical lighting, detailed armor, ornate clothing, intricate patterns, ethereal atmosphere, professional digital painting, sharp focus, smooth skin, perfect anatomy, detailed textures, epic composition, dramatic angle, ornate accessories, fantasy elements, magical particles, detailed environment, cinematic shot, character full body, detailed face, ornate weapons, fantasy creatures in background",
+    "Animagine XL":
+      "masterpiece, best quality, absurdres, 8k, ultra detailed, high resolution, perfect lighting, official art, unity 8k wallpaper, highly detailed, vibrant colors, aesthetic masterpiece, realistic lighting, detailed textures, cinematic composition, sharp focus, smooth skin, perfect anatomy, beautiful detailed eyes, intricate costume design, elaborate clothing, detailed background, fantasy setting, ethereal atmosphere, professional digital artwork, ornate details, exquisite beauty, stunning visuals, detailed hair strands, perfect shading, realistic skin texture, intricate fabric details",
+    "Niji Style":
+      "masterpiece, best quality, absurdres, 8k, ultra detailed, high resolution, perfect lighting, niji style, anime style, soft pastel colors, dreamy atmosphere, fantasy setting, detailed background, ethereal lighting, magical girl style, watercolor texture, hand-drawn feeling, soft brush strokes, delicate details, gentle bloom effect, soft shadows, dreamlike quality, fantasy elements, floral motifs, soft clouds, aesthetic beauty, professional digital art, magical particles, soft hair strands, glowing effects, fairy tale atmosphere, detailed accessories, cute character design",
   };
 
   const styleTags = Object.keys(stylePrompts);
 
   const handleTagClick = (tag: string) => {
     const prompt = stylePrompts[tag] || tag;
-    setInputValue(tag);
-    
-    // Map tags to appropriate models
+    setInputValue(prompt);
+
     let model = "Seedream 4.0";
     if (tag.toLowerCase().includes("pony")) {
       model = "Pony Diffusion";
@@ -36,8 +40,12 @@ export default function Hero() {
     } else if (tag.toLowerCase().includes("niji")) {
       model = "Niji Style";
     }
-    
-    router.push(`/generator?prompt=${encodeURIComponent(prompt)}&model=${encodeURIComponent(model)}`);
+
+    router.push(
+      `/generator?prompt=${encodeURIComponent(
+        prompt
+      )}&model=${encodeURIComponent(model)}`
+    );
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -49,12 +57,11 @@ export default function Hero() {
   };
 
   return (
-    // 修改 1: 
+    // 修改 1:
     // - 移除 overflow-hidden / overflow-x-hidden
     // - 保持 min-h-screen 确保至少占满一屏
     // - 使用 relative 确保内容层级正确
     <section className="relative w-full min-h-screen bg-[#030305] font-sans selection:bg-indigo-500/30 flex flex-col overflow-hidden">
-
       {/* 
          修改 2: 背景层改为 absolute (绝对定位)
          让背景跟随容器滚动。
@@ -73,7 +80,6 @@ export default function Hero() {
       */}
       <div className="relative z-10 container mx-auto px-6 md:px-12 flex-grow flex flex-col justify-center py-24 md:py-32">
         <div className="max-w-4xl">
-
           <motion.form
             onSubmit={handleSubmit}
             initial={{ opacity: 0, y: 20 }}
@@ -85,10 +91,13 @@ export default function Hero() {
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder={t('searchPlaceholder')}
+              placeholder={t("searchPlaceholder")}
               className="flex-1 bg-transparent border-none outline-none text-white placeholder-zinc-600 text-sm font-medium h-10"
             />
-            <button type="submit" className="p-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-white transition-all shadow-lg shadow-indigo-600/20">
+            <button
+              type="submit"
+              className="p-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-white transition-all shadow-lg shadow-indigo-600/20"
+            >
               <ArrowRight className="w-4 h-4" />
             </button>
           </motion.form>
@@ -117,9 +126,9 @@ export default function Hero() {
             animate={{ opacity: 1, x: 0 }}
             className="text-5xl sm:text-6xl md:text-[100px] font-black text-white leading-[0.95] md:leading-[0.9] mb-6 md:mb-8 tracking-tighter"
           >
-            {t('titleLine1')} <br />
+            {t("titleLine1")} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 drop-shadow-[0_10px_10px_rgba(99,102,241,0.2)]">
-              {t('titleLine2')}
+              {t("titleLine2")}
             </span>
           </motion.h1>
 
@@ -130,15 +139,28 @@ export default function Hero() {
             className="space-y-6 md:space-y-8"
           >
             <p className="text-zinc-400 text-base md:text-2xl max-w-2xl font-medium leading-relaxed">
-              {t.rich('description', {
-                span1: (chunks) => <span className="text-white border-b-2 border-indigo-500/50 pb-1">{chunks}</span>
+              {t.rich("description", {
+                span1: (chunks) => (
+                  <span className="text-white border-b-2 border-indigo-500/50 pb-1">
+                    {chunks}
+                  </span>
+                ),
               })}
             </p>
 
             <div className="flex flex-wrap gap-4 md:gap-6 text-xs md:text-sm font-bold text-zinc-500 uppercase tracking-widest">
-              <span className="flex items-center gap-2"><Sparkles className="w-4 h-4 text-indigo-500" /> {t('features.noSignUp')}</span>
-              <span className="flex items-center gap-2"><Sparkles className="w-4 h-4 text-purple-500" /> {t('features.noWatermark')}</span>
-              <span className="flex items-center gap-2"><Sparkles className="w-4 h-4 text-pink-500" /> {t('features.quality')}</span>
+              <span className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-indigo-500" />{" "}
+                {t("features.noSignUp")}
+              </span>
+              <span className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-purple-500" />{" "}
+                {t("features.noWatermark")}
+              </span>
+              <span className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-pink-500" />{" "}
+                {t("features.quality")}
+              </span>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 pt-2">
@@ -148,22 +170,20 @@ export default function Hero() {
               >
                 <div className="flex items-center justify-center gap-3 px-8 md:px-10 py-4 md:py-5 bg-white text-black rounded-2xl font-black text-base md:text-lg transition-all duration-300 hover:bg-indigo-500 hover:text-white transform hover:scale-105 shadow-2xl">
                   <PenTool className="w-5 h-5" />
-                  <span>{t('buttons.startCreating')}</span>
+                  <span>{t("buttons.startCreating")}</span>
                 </div>
               </button>
 
               <Link href="/generator?mode=upload" className="group">
                 <div className="flex items-center justify-center gap-3 px-8 md:px-10 py-4 md:py-5 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 text-white rounded-2xl font-black text-base md:text-lg transition-all duration-300 transform hover:scale-105">
                   <ImagePlus className="w-5 h-5" />
-                  <span>{t('buttons.imageToImage')}</span>
+                  <span>{t("buttons.imageToImage")}</span>
                 </div>
               </Link>
             </div>
           </motion.div>
-
         </div>
       </div>
-
     </section>
   );
 }

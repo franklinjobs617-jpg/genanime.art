@@ -54,30 +54,13 @@ const ASPECT_RATIO_DIMENSIONS: Record<string, { width: number; height: number }>
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { prompt, style, ratio, quantity = 1, googleUserId, negativePrompt } = body;
+    const { prompt, style, ratio, quantity = 1, googleUserId, negativePrompt, model = "" } = body;
 
     if (!prompt?.trim())
       return NextResponse.json(
         { success: false, error: "Prompt is required" },
         { status: 400 }
       );
-
-    // 限制单次生成的最大数量，防止API滥用和过载
-    const MAX_QUANTITY = 4;
-    if (quantity > MAX_QUANTITY) {
-      return NextResponse.json(
-        { success: false, error: `Maximum quantity allowed is ${MAX_QUANTITY}` },
-        { status: 400 }
-      );
-    }
-
-    // 确保数量至少为1
-    if (quantity < 1) {
-      return NextResponse.json(
-        { success: false, error: "Quantity must be at least 1" },
-        { status: 400 }
-      );
-    }
 
     const isGuest = !googleUserId;
     const cookies = req.cookies;
@@ -113,6 +96,17 @@ export async function POST(req: NextRequest) {
 
     // 1. Base Prompt
     let finalPrompt = prompt;
+
+    // 根据模型类型添加预设前缀
+    if (model) {
+      if (model.includes("Pony") || model.toLowerCase().includes("pony")) {
+        finalPrompt = "score_9, score_8_up, score_7_up, anime source, " + finalPrompt;
+      } else if (model.includes("Niji") || model.toLowerCase().includes("niji")) {
+        finalPrompt = "studio ghibli style, vibrant colors, cinematic lighting, artistic composition, " + finalPrompt;
+      } else if (model.includes("Flux") || model.toLowerCase().includes("flux")) {
+        finalPrompt = "photorealistic details, depth of field, 8k resolution, natural lighting, " + finalPrompt;
+      }
+    }
 
     // 2. Add Style Suffix (if not Default)
     const styleSuffix = STYLE_PROMPTS[style];

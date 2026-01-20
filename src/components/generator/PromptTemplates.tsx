@@ -17,58 +17,105 @@ interface PromptTemplatesProps {
 
 const TEMPLATES: Template[] = [
   {
-    id: "tpl-1",
-    title: "Ethereal Portrait",
-    prompt:
-      "an ethereal anime girl portrait, soft glowing skin, dreamy bokeh, ultra-detailed eyes, cinematic lighting",
-    style: "Vibrant Anime",
+    id: "tpl-10",
+    title: "Abstract Digital Art",
+    prompt: `(Subject:1.5): A breathtakingly beautiful and elegant 1/7 scale anime girl figure. (Outfit:1.4): Wearing a sophisticated summer-themed fantasy dress, featuring semi-transparent light blue silk layers, delicate lace ruffles, and elegant silver embroidery, sleeveless design with a stylish choker, perfectly balanced elegance and freshness. (Face:1.4): Exquisite facial features, large sparkling sapphire eyes, soft natural makeup, a gentle and captivating smile. (Hair:1.3): Long flowing silver hair with a slight translucent effect at the tips, decorated with small pearl hairpins.
+(Environment): Placed on a realistic modern computer desk, circular transparent acrylic base with no text.
+(Background): A large 4K monitor displaying the professional ZBrush modeling interface with the 3D sculpt of this figure, showing intricate mesh details. Next to the monitor, a premium TAMIYA-style packaging box with the beautiful character illustration.
+(Quality): Masterpiece, 8k resolution, photorealistic, cinematic lighting, soft studio shadows, subsurface scattering for skin, depth of field, sharp focus on the figure, high-end collector's item aesthetic.`,
+    style: "",
     ratio: "1:1",
-    image: "/gallery/masterpiece-anime-girl-upper-body-waist-up-portrait.webp",
+    image: "/gallery/genanime-art-elegant-summer-oc-figure-pro-setup.webp",
   },
   {
-    id: "tpl-2",
-    title: "Retro 90s Cel",
+    id: "tpl-11",
+    title: "Thick Oil Impasto",
     prompt:
-      "classic 1990s anime cel style, nostalgic vibe, screentone texture, bold lines, coffee shop ambience",
-    style: "Retro 90s",
-    ratio: "16:9",
-    image: "/gallery/retro-1980s-anime-style-boy-girl-coffee-shop-nostalgic.webp",
-  },
-  {
-    id: "tpl-3",
-    title: "Ghibli Scenery",
-    prompt:
-      "ghibli-inspired countryside bus stop, warm sunlight, lush greenery, whimsical mood, painterly textures",
-    style: "Makoto Ethereal",
-    ratio: "16:9",
-    image: "/gallery/ghibli-inspired-nostalgic-countryside-bus-stop-scenery.webp",
-  },
-  {
-    id: "tpl-4",
-    title: "Cyberpunk Streets",
-    prompt:
-      "neon-lit cyberpunk street at night, rain reflections, dynamic perspective, vivid colors, futuristic signage",
-    style: "Cyberpunk Trigger",
+      "Avant-garde anime character portrait in heavy impasto oil painting style. A mysterious girl with messy white hair and piercing red eyes. Thick, visible brushstrokes, rich textures, dark moody lighting with a single spotlight. High artistic value, unique character design, expressive and emotional.",
+    style: "Oil Painting",
     ratio: "9:16",
-    image: "/gallery/cyberpunk-street.webp",
+    image: "/gallery/avant-garde-anime-girl-thick-oil-painting.webp",
   },
   {
-    id: "tpl-5",
-    title: "Game Splash Art",
+    id: "tpl-12",
+    title: "Vibrant Pop Art",
     prompt:
-      "elite game splash art, powerful pose, flowing cape, energy particles, iconic character silhouette",
-    style: "Elite Game Splash",
-    ratio: "2:3",
-    image: "/gallery/epic-birds-eye-view-anime-character-aerial-cityscape.webp",
+      "Stylized anime character in a vibrant Pop Art aesthetic. A cool boy with sunglasses, bold black outlines, halftone dot patterns, and a limited palette of neon pink, yellow, and cyan. Flat colors, high contrast, 1960s comic book vibe mixed with modern anime. Eye-catching and iconic.",
+    style: "Pop Art",
+    ratio: "9:16",
+    image: "/gallery/stylized-anime-boy-pop-art-neon.webp",
   },
   {
-    id: "tpl-6",
-    title: "Pastel Kawaii Sticker",
+    id: "tpl-13",
+    title: "Minimalist Sumi-e",
     prompt:
-      "kawaii sticker sheet, pastel palette, cute chibi expressions, high contrast outlines, playful charm",
-    style: "Pastel Luxe Art",
-    ratio: "1:1",
-    image: "/gallery/kawaii-sticker.webp",
+      "Minimalist anime character design using traditional Japanese ink wash (Sumi-e) techniques. A graceful female warrior, only essential lines and shadows, elegant flow, negative space. Splashes of black ink, high-quality paper texture, Zen-like atmosphere. Sophisticated and modern.",
+    style: "Ink Wash",
+    ratio: "9:16",
+    image: "/gallery/minimalist-anime-warrior-ink-wash-sumie.webp",
+  },
+  {
+    id: "tpl-14",
+    title: "Glitch-core Cyber",
+    prompt:
+      "Edgy anime character in a Glitch-core and Cyber-goth style. A character with digital distortion effects, chromatic aberration, scan lines, and neon green accents. Dark aesthetic, tech-wear fashion, fragmented visuals, high energy. Unique and experimental.",
+    style: "Glitch Art",
+    ratio: "9:16",
+    image: "/gallery/edgy-anime-girl-glitch-core-cyber-goth.webp",
+  },
+  {
+    id: "tpl-15",
+    title: "3D Paper-cut Art",
+    prompt:
+      "Unique anime character created in a 3D paper-cut art style. Layers of colored paper creating depth and shadows. A whimsical character with intricate patterns, soft studio lighting, macro photography feel. Creative, tactile, and highly distinctive.",
+    style: "Paper Cut",
+    ratio: "9:16",
+    image: "/gallery/unique-anime-character-3d-paper-cut-art.webp",
+  },
+  {
+    id: "tpl-16",
+    title: "Stained Glass Celestial",
+    prompt:
+      "Anime character portrait designed as a vibrant stained glass window. A celestial goddess with flowing hair, intricate lead lines, glowing translucent colors, sunlight filtering through. Ethereal, sacred, and visually stunning. Unique mosaic-like composition.",
+    style: "Stained Glass",
+    ratio: "9:16",
+    image: "/gallery/celestial-goddess-anime-stained-glass-art.webp",
+  },
+  {
+    id: "tpl-17",
+    title: "Vaporwave Retro",
+    prompt:
+      "Retro-futuristic anime character in a Vaporwave and Synthwave aesthetic. A character with a 1980s anime style, pastel purple and pink sunset background, palm tree silhouettes, and VHS glitch effects. Nostalgic, dreamy, and highly stylized.",
+    style: "Vaporwave",
+    ratio: "9:16",
+    image: "/gallery/retro-vaporwave-anime-character-synthwave.webp",
+  },
+  {
+    id: "tpl-18",
+    title: "Dark Fantasy Knight",
+    prompt:
+      "Dark fantasy anime character design. A knight in ornate, cursed black armor with glowing blue soul-fire leaking from the joints. Gothic architecture in the background, dramatic chiaroscuro lighting, high detail, epic and intimidating.",
+    style: "Dark Fantasy",
+    ratio: "9:16",
+    image: "/gallery/dark-fantasy-anime-knight-cursed-armor.webp",
+  },
+  {
+    id: "tpl-19",
+    title: "Watercolor Sketch",
+    prompt:
+      "Artistic anime character in a loose watercolor and pencil sketch style. A girl with a soft smile, delicate washes of color, intentional pencil marks, and paper texture. Ethereal, light, and full of personality. High-end editorial illustration feel.",
+    style: "Watercolor",
+    ratio: "9:16",
+    image: "/gallery/artistic-anime-girl-watercolor-pencil-sketch.webp",
+  },
+  {
+    id: "tpl-20",
+    title: "Neon Noir Detective",
+    prompt:
+      "Neon-noir anime character portrait. A detective-like character in a dark city, illuminated by harsh pink and blue neon lights. High contrast, deep shadows, cinematic composition, rain effects. Moody and stylish.",
+    style: "Neon Noir",
+    ratio: "9:16",
+    image: "/gallery/neon-noir-anime-detective-portrait.webp",
   },
 ];
 

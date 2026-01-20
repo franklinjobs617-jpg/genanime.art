@@ -15,12 +15,12 @@ import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 
 export default function Header() {
   const { user, isLoading, login, logout } = useAuth();
   const { theme } = useTheme();
-  const t = useTranslations('Navigation');
+  const t = useTranslations("Navigation");
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -58,26 +58,34 @@ export default function Header() {
   }, []);
 
   const navLinks = [
-    { name: t('home'), href: "/" },
-    { name: t('gallery'), href: "/gallery" },
-    { name: t('generator'), href: "/generator" },
-    { name: t('pricing'), href: "/pricing" },
-    { name: t('blog'), href: "/blog" },
+    { name: t("home"), href: "/" },
+    { name: t("gallery"), href: "/gallery" },
+    { name: t("generator"), href: "/generator" },
+    { name: t("pricing"), href: "/pricing" },
+    { name: t("blog"), href: "/blog" },
 
     {
-      name: t('promptLibrary'), href: "/prompt-library"
+      name: t("promptLibrary"),
+      href: "/prompt-library",
     },
     // 优化：在菜单里显示简短名称，但链接保持长 URL 以利于 SEO
-    { name: t('aiGuide'), href: "/blog/how-to-make-anime-art-ai-rtx-8090-guide" },
-    { name: t('howToExtract'), href: "/how-to-reverse-image-to-prompt-anime-guide" }
+    {
+      name: t("aiGuide"),
+      href: "/blog/how-to-make-anime-art-ai-rtx-8090-guide",
+    },
+    {
+      name: t("howToExtract"),
+      href: "/how-to-reverse-image-to-prompt-anime-guide",
+    },
   ];
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-300 ease-in-out ${isScrolled || isMobileMenuOpen
-        ? "bg-[#050505]/90 backdrop-blur-xl py-3 shadow-lg shadow-black/50"
-        : "bg-transparent py-5"
-        }`}
+      className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-300 ease-in-out ${
+        isScrolled || isMobileMenuOpen
+          ? "bg-[#050505]/90 backdrop-blur-xl py-3 shadow-lg shadow-black/50"
+          : "bg-transparent py-5"
+      }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
@@ -91,32 +99,33 @@ export default function Header() {
           </span>
         </Link>
 
-        {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
-              className={`text-sm font-semibold transition-colors ${isScrolled
-                ? "text-zinc-400 hover:text-white"
-                : "text-white/80 hover:text-white"
-                }`}
+              className={`text-sm font-semibold transition-colors ${
+                isScrolled
+                  ? "text-zinc-400 hover:text-white"
+                  : "text-white/80 hover:text-white"
+              }`}
             >
               {link.name}
             </Link>
           ))}
         </nav>
 
-        {/* Right Section */}
         <div className="flex items-center gap-3 lg:gap-6 relative z-[70]">
-          {/* Desktop Actions */}
           <div className="hidden lg:flex items-center gap-4">
             <LanguageSwitcher />
             {isLoading ? (
               <div className="w-8 h-8 rounded-full bg-zinc-800 animate-pulse border border-white/10"></div>
             ) : user ? (
               <div className="flex items-center gap-4">
-                <Link href="/pricing" className="px-3 py-1.5 bg-zinc-900 rounded-full text-xs font-bold text-zinc-300 border border-white/10 select-none hover:bg-zinc-800 transition-colors">
+                <Link
+                  href="/pricing"
+                  className="px-3 py-1.5 bg-zinc-900 rounded-full text-xs font-bold text-zinc-300 border border-white/10 select-none hover:bg-zinc-800 transition-colors"
+                >
                   {user.credits} Credits
                 </Link>
 
@@ -127,7 +136,11 @@ export default function Header() {
                     className="flex items-center gap-2 focus:outline-none group p-1 rounded-full transition-colors hover:bg-white/5"
                   >
                     <UserAvatar user={user} />
-                    <ChevronDown className={`w-4 h-4 text-zinc-400 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`} />
+                    <ChevronDown
+                      className={`w-4 h-4 text-zinc-400 transition-transform ${
+                        isDropdownOpen ? "rotate-180" : ""
+                      }`}
+                    />
                   </button>
 
                   <AnimatePresence>
@@ -139,19 +152,35 @@ export default function Header() {
                         className="absolute right-0 top-full mt-2 w-64 bg-[#111] border border-zinc-800 rounded-xl shadow-2xl overflow-hidden"
                       >
                         <div className="p-4 border-b border-zinc-800 bg-zinc-900/50">
-                          <p className="text-sm font-semibold text-white truncate">{user.name}</p>
-                          <p className="text-xs text-zinc-500 truncate mt-0.5">{user.email}</p>
+                          <p className="text-sm font-semibold text-white truncate">
+                            {user.name}
+                          </p>
+                          <p className="text-xs text-zinc-500 truncate mt-0.5">
+                            {user.email}
+                          </p>
                         </div>
                         <div className="p-2 space-y-1">
-                          <Link href="/profile" className="flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg">
+                          <Link
+                            href="/profile"
+                            className="flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg"
+                          >
                             <UserIcon className="w-4 h-4" /> My Profile
                           </Link>
-                          <Link href="/settings" className="flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg">
+                          <Link
+                            href="/settings"
+                            className="flex items-center gap-3 px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg"
+                          >
                             <Settings className="w-4 h-4" /> Settings
                           </Link>
                         </div>
                         <div className="p-2 border-t border-zinc-800">
-                          <button onClick={() => { logout(); setIsDropdownOpen(false); }} className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg">
+                          <button
+                            onClick={() => {
+                              logout();
+                              setIsDropdownOpen(false);
+                            }}
+                            className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg"
+                          >
                             <LogOut className="w-4 h-4" /> Log out
                           </button>
                         </div>
@@ -161,7 +190,10 @@ export default function Header() {
                 </div>
               </div>
             ) : (
-              <button onClick={login} className="text-sm font-bold bg-white text-black px-6 py-2.5 rounded-full hover:bg-zinc-200 transition-all">
+              <button
+                onClick={login}
+                className="text-sm font-bold bg-white text-black px-6 py-2.5 rounded-full hover:bg-zinc-200 transition-all"
+              >
                 Login
               </button>
             )}
@@ -174,7 +206,11 @@ export default function Header() {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle Menu"
             >
-              {isMobileMenuOpen ? <X className="w-7 h-7 text-indigo-400" /> : <Menu className="w-7 h-7" />}
+              {isMobileMenuOpen ? (
+                <X className="w-7 h-7 text-indigo-400" />
+              ) : (
+                <Menu className="w-7 h-7" />
+              )}
             </button>
           </div>
         </div>
@@ -213,18 +249,32 @@ export default function Header() {
                     <div className="flex items-center gap-4">
                       <UserAvatar user={user} size="large" />
                       <div className="overflow-hidden">
-                        <div className="text-white font-bold text-lg truncate">{user.name}</div>
-                        <div className="text-sm text-zinc-500 truncate">{user.email}</div>
+                        <div className="text-white font-bold text-lg truncate">
+                          {user.name}
+                        </div>
+                        <div className="text-sm text-zinc-500 truncate">
+                          {user.email}
+                        </div>
                       </div>
                     </div>
 
-                    <Link href="/pricing" className="flex items-center justify-between bg-black/40 p-4 rounded-2xl border border-white/5 hover:bg-black/60 transition-colors">
-                      <span className="text-zinc-400 font-bold uppercase text-[10px] tracking-widest">Balance</span>
-                      <span className="text-indigo-400 font-black">{user.credits} Credits</span>
+                    <Link
+                      href="/pricing"
+                      className="flex items-center justify-between bg-black/40 p-4 rounded-2xl border border-white/5 hover:bg-black/60 transition-colors"
+                    >
+                      <span className="text-zinc-400 font-bold uppercase text-[10px] tracking-widest">
+                        Balance
+                      </span>
+                      <span className="text-indigo-400 font-black">
+                        {user.credits} Credits
+                      </span>
                     </Link>
 
                     <button
-                      onClick={() => { logout(); setIsMobileMenuOpen(false); }}
+                      onClick={() => {
+                        logout();
+                        setIsMobileMenuOpen(false);
+                      }}
                       className="w-full py-4 bg-zinc-800 hover:bg-red-500/10 hover:text-red-400 text-white rounded-2xl text-sm font-bold transition-all flex items-center justify-center gap-2 border border-white/5"
                     >
                       <LogOut className="w-4 h-4" />
@@ -233,7 +283,10 @@ export default function Header() {
                   </div>
                 ) : (
                   <button
-                    onClick={() => { login(); setIsMobileMenuOpen(false); }}
+                    onClick={() => {
+                      login();
+                      setIsMobileMenuOpen(false);
+                    }}
                     className="w-full py-5 bg-white text-black rounded-2xl font-black text-xl text-center shadow-xl active:scale-95 transition-transform"
                   >
                     Login with Google
@@ -257,15 +310,25 @@ export default function Header() {
 }
 
 // 头像组件
-function UserAvatar({ user, size = "small" }: { user: any; size?: "small" | "large" }) {
+function UserAvatar({
+  user,
+  size = "small",
+}: {
+  user: any;
+  size?: "small" | "large";
+}) {
   const [imgError, setImgError] = useState(false);
-  useEffect(() => { setImgError(false); }, [user.picture]);
+  useEffect(() => {
+    setImgError(false);
+  }, [user.picture]);
 
   const sizeClasses = size === "small" ? "w-9 h-9" : "w-16 h-16";
   const initial = user.name ? user.name.charAt(0).toUpperCase() : "U";
 
   return (
-    <div className={`${sizeClasses} rounded-full overflow-hidden border border-white/20 relative flex-shrink-0 bg-zinc-800 shadow-lg shadow-black/20`}>
+    <div
+      className={`${sizeClasses} rounded-full overflow-hidden border border-white/20 relative flex-shrink-0 bg-zinc-800 shadow-lg shadow-black/20`}
+    >
       {user.picture && !imgError ? (
         <img
           src={user.picture}

@@ -219,21 +219,21 @@ const DICTIONARIES: any = {
           num: "01",
           title: "Subir Imagen de Referencia",
           desc: "Selecciona cualquier ilustración o captura de anime. Las imágenes de alta resolución dan mejores detalles.",
-          img: "/ScreenShot_2026-01-19_185738_548.webp",
+          img: "/ScreenShot_2026-01-19_185738_548.png",
           alt: "Interfaz de herramienta de extracción de prompt mostrando área de arrastrar y soltar",
         },
         {
           num: "02",
           title: "Análisis Estético IA",
           desc: "Nuestro motor escanea composición, iluminación, paleta de colores y rasgos del personaje.",
-          img: "/ScreenShot_2026-01-19_185750_124.webp",
+          img: "/ScreenShot_2026-01-19_185750_124.png",
           alt: "Pantalla de análisis IA mostrando etiquetas técnicas y elementos visuales detectados",
         },
         {
           num: "03",
           title: "Copiar y Remixar",
           desc: "Obtén el prompt crudo. Cópialo directamente o usa nuestro modificador integrado para ajustar detalles.",
-          img: "/ScreenShot_2026-01-19_185803_171.webp",
+          img: "/ScreenShot_2026-01-19_185803_171.png",
           alt: "Resultados de prompt generados mostrados en editor de texto con funcionalidad de copiar y editar",
         },
       ],
@@ -491,7 +491,7 @@ export default async function ImageToPromptPage({
               {t.cta.desc}
             </p>
             <Link
-              href="/generator?mode=upload"
+              href="/generator#image-prompt"
               className="inline-flex items-center gap-3 bg-white text-indigo-950 font-black py-5 px-12 rounded-full text-xl hover:bg-indigo-50 transition-colors"
             >
               {t.cta.btn} <ChevronRight className="w-6 h-6" />

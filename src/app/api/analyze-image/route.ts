@@ -116,8 +116,33 @@ Avoid generic sentences. Use professional Danbooru-style tags. If the image has 
         return res;
     } catch (error: any) {
         console.error("Error analyzing image:", error);
+        
+        // 检查错误类型并返回更具体的错误信息
+        let errorMessage = error.message || "Failed to analyze image";
+        let errorType = "general";
+        
+        if (error.message && typeof error.message === 'string') {
+          const lowerMessage = error.message.toLowerCase();
+          
+          if (lowerMessage.includes('sensitive') || lowerMessage.includes('inappropriate') || 
+              lowerMessage.includes('nsfw') || lowerMessage.includes('adult') || 
+              lowerMessage.includes('sex') || lowerMessage.includes('nudity')) {
+            errorType = "content_filter";
+            errorMessage = "Content not allowed: Please ensure your image doesn't contain adult or inappropriate content";
+          } else if (lowerMessage.includes('credit') || lowerMessage.includes('insufficient')) {
+            errorType = "insufficient_credits";
+            errorMessage = "Insufficient credits";
+          } else if (lowerMessage.includes('limit') || lowerMessage.includes('rate')) {
+            errorType = "rate_limit";
+            errorMessage = "Rate limit exceeded";
+          } else if (lowerMessage.includes('user') && lowerMessage.includes('not found')) {
+            errorType = "user_not_found";
+            errorMessage = "User not found";
+          }
+        }
+        
         return NextResponse.json(
-            { success: false, error: error.message || "Failed to analyze image" },
+            { success: false, error: errorMessage, errorType },
             { status: 500 }
         );
     }

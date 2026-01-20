@@ -292,9 +292,41 @@ export default function GeneratorClient() {
 
       // Clear the prompt after successful generation
       setActivePrompt("");
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      toast.error(t("history.generationError"), { id: toastId });
+      
+      // 检查错误类型并显示相应提示
+      let errorMessage = t("history.generationError");
+      if (err instanceof Error) {
+        try {
+          // 尝试解析错误响应
+          const errorData = JSON.parse(err.message);
+          if (errorData.errorType) {
+            switch (errorData.errorType) {
+              case "content_filter":
+                errorMessage = "Content not allowed: Please ensure your prompt doesn't contain adult or inappropriate content";
+                break;
+              case "insufficient_credits":
+                errorMessage = t("history.insufficientCredits");
+                break;
+              case "rate_limit":
+                errorMessage = "Rate limit exceeded. Please try again later.";
+                break;
+              case "user_not_found":
+                errorMessage = "User not found. Please log in again.";
+                break;
+              default:
+                errorMessage = errorData.error || t("history.generationError");
+            }
+          } else {
+            errorMessage = errorData.error || t("history.generationError");
+          }
+        } catch (parseErr) {
+          errorMessage = err.message || t("history.generationError");
+        }
+      }
+      
+      toast.error(errorMessage, { id: toastId });
       // Remove the optimistic entry on failure
       setHistory((prev) => prev.filter((item) => item.id !== optimisticId));
     } finally {

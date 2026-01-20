@@ -9,12 +9,16 @@ interface Page {
 const siteMapData = {
   baseUrl: "https://genanime.art",
   lastmod: new Date().toISOString().split("T")[0],
-  locales: [ "es"],
+  locales: ["es"],
 
   translatedPages: [
     { url: "", changefreq: "daily", priority: 1.0 },
     { url: "/generator", changefreq: "daily", priority: 0.9 },
-    { url: "/how-to-reverse-image-to-prompt-anime-guide", changefreq: "monthly", priority: 0.7 },
+    {
+      url: "/how-to-reverse-image-to-prompt-anime-guide",
+      changefreq: "monthly",
+      priority: 0.7,
+    },
   ] as Page[],
 
   englishOnlyPages: [
@@ -23,7 +27,9 @@ const siteMapData = {
     { url: "/pricing", changefreq: "weekly", priority: 0.7 },
     { url: "/blog", changefreq: "daily", priority: 0.8 },
     {
-      url:"/image-to-prompt",changefreq:"weekly",priority:0.7
+      url: "/image-to-prompt",
+      changefreq: "weekly",
+      priority: 0.7,
     },
     {
       url: "/blog/how-to-make-anime-art-ai-rtx-8090-guide",
@@ -62,7 +68,7 @@ export async function GET(request: NextRequest) {
         loc: `${siteMapData.baseUrl}/${locale}${page.url}`,
         changefreq: page.changefreq,
         priority: page.priority,
-        alternates: alternates, 
+        alternates: alternates,
       });
     });
   });
@@ -72,7 +78,7 @@ export async function GET(request: NextRequest) {
       loc: `${siteMapData.baseUrl}${page.url}`,
       changefreq: page.changefreq,
       priority: page.priority,
-      alternates: [], 
+      alternates: [],
     });
   });
 
@@ -82,22 +88,22 @@ export async function GET(request: NextRequest) {
   xmlns:xhtml="http://www.w3.org/1999/xhtml"
 >
   ${allUrls
-      .map(
-        (page) => `
+    .map(
+      (page) => `
   <url>
     <loc>${page.loc}</loc>
     ${page.alternates
-            .map(
-              (alt: any) =>
-                `<xhtml:link rel="alternate" hreflang="${alt.hreflang}" href="${alt.href}"/>`
-            )
-            .join("")}
+      .map(
+        (alt: any) =>
+          `<xhtml:link rel="alternate" hreflang="${alt.hreflang}" href="${alt.href}"/>`
+      )
+      .join("")}
     <lastmod>${siteMapData.lastmod}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
   </url>`
-      )
-      .join("")}
+    )
+    .join("")}
 </urlset>`;
 
   return new NextResponse(sitemapXml.trim(), {

@@ -137,7 +137,7 @@ export default function ImagePromptConsole({ onApplyPrompt, onSuccess, imageFile
                     ), { duration: 6000 });
                     throw new Error("Insufficient credits");
                 }
-                throw new Error(data.error || "Failed to analyze image");
+                throw new Error(JSON.stringify({ error: data.error || "Failed to analyze image", errorType: data.errorType || "general" }));
             }
 
             setTags(data.tags || []);
@@ -148,8 +148,35 @@ export default function ImagePromptConsole({ onApplyPrompt, onSuccess, imageFile
             if (onSuccess) onSuccess();
         } catch (error: any) {
             console.error("Analysis error:", error);
-            toast.error(error.message || "Failed to analyze image. Please try again.");
-            // Don't reset previewUrl so user can try again after login/refill
+            
+            let errorMessage = error.message || "Failed to analyze image. Please try again.";
+            try {
+              const errorData = JSON.parse(error.message);
+              if (errorData.errorType) {
+                switch (errorData.errorType) {
+                  case "content_filter":
+                    errorMessage = "Content not allowed: Please ensure your image doesn't contain adult or inappropriate content";
+                    break;
+                  case "insufficient_credits":
+                    errorMessage = t("insufficientCredits");
+                    break;
+                  case "rate_limit":
+                    errorMessage = "Rate limit exceeded. Please try again later.";
+                    break;
+                  case "user_not_found":
+                    errorMessage = "User not found. Please log in again.";
+                    break;
+                  default:
+                    errorMessage = errorData.error || "Failed to analyze image. Please try again.";
+                }
+              } else {
+                errorMessage = errorData.error || "Failed to analyze image. Please try again.";
+              }
+            } catch (parseErr) {
+              errorMessage = error.message || "Failed to analyze image. Please try again.";
+            }
+            
+            toast.error(errorMessage);
         } finally {
             setIsAnalyzing(false);
         }

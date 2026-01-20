@@ -1,20 +1,15 @@
 import dynamic from 'next/dynamic';
 import Hero from "@/components/home/Hero";
-
 const FeatureSection = dynamic(() => import("@/components/home/FeatureSection"));
 const HowItWorks = dynamic(() => import("@/components/home/HowItWorks"));
 const PromptLibraryPreview = dynamic(() => import("@/components/home/PromptLibraryPreview"));
 const CoreFeatures = dynamic(() => import("@/components/home/CoreFeatures"));
-
 const SEOContentSection = dynamic(() => import("@/components/home/SEOContentSection"));
 const FAQSection = dynamic(() => import("@/components/home/FAQSection"));
-
 const CallToAction = dynamic(() => import("@/components/home/CallToAction"));
-
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
   const { locale } = resolvedParams;
-  
   return (
     <main className="relative min-h-screen bg-[#050505] overflow-x-hidden">
       <Hero />
@@ -36,7 +31,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             href="https://theresanaiforthat.com/ai/animeai/?ref=featured&v=7340698" 
             target="_blank" 
             rel="nofollow"
-            className="hover:opacity-80 transition-opacity" // 加一点悬停效果
+            className="hover:opacity-80 transition-opacity" 
           >
             <img 
               width="300" 

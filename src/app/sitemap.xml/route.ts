@@ -23,6 +23,11 @@ const siteMapData = {
     { url: "/pricing", changefreq: "weekly", priority: 0.7 },
     { url: "/blog", changefreq: "daily", priority: 0.8 },
     {
+      url:"/image-to-prompt",changefreq:"weekly",priority:0.7
+    },
+    {
+    }
+    {
       url: "/blog/how-to-make-anime-art-ai-rtx-8090-guide",
       changefreq: "monthly",
       priority: 0.7,

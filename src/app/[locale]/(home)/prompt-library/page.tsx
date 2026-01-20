@@ -20,19 +20,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { PROMPTS_DATA } from "./data";
-import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
-
-// --- 辅助函数 ---
-const getAspectRatioClass = (ratio: string) => {
-  switch (ratio) {
-    case "16:9": return "aspect-video";
-    case "1:1": return "aspect-square";
-    case "3:2": return "aspect-[3/2]";
-    case "9:16": return "aspect-[9/16]";
-    case "2:3": default: return "aspect-[2/3]";
-  }
-};
 
 // --- 图片组件 ---
 const PromptCardImage = ({ item, onClick }: { item: any; onClick: () => void }) => {
@@ -45,15 +33,13 @@ const PromptCardImage = ({ item, onClick }: { item: any; onClick: () => void }) 
     : item.alt || `${item.imageName} - AI Anime Art Prompt`;
 
   return (
-    <div className="relative w-full h-full cursor-zoom-in bg-gray-900" onClick={onClick}>
-      <Image
+    <div className="relative w-full cursor-zoom-in bg-gray-900" onClick={onClick}>
+      <img
         src={src}
         alt={localizedAlt}
-        fill
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        className="object-cover group-hover:scale-110 transition-transform duration-700"
+        className="w-full h-auto object-cover group-hover:scale-110 transition-transform duration-700"
         onError={() => setSrc(`https://placehold.co/600x400/111/fff?text=${encodeURIComponent(item.imageName)}`)}
-        unoptimized={src.startsWith("http")}
+        loading="lazy"
       />
       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
         <div className="bg-black/50 backdrop-blur-sm p-3 rounded-full text-white/80 border border-white/10">
@@ -100,6 +86,31 @@ export default function PromptLibrary() {
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-purple-500 selection:text-white">
 
+      {/* 自定义样式 */}
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #18181b;
+          border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #3f3f46;
+          border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #52525b;
+        }
+        
+        .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+      `}</style>
+
       {/* --- 灯箱 Modal (保持原有逻辑) --- */}
       {selectedItem && (
         <div
@@ -117,17 +128,14 @@ export default function PromptLibrary() {
             {/* Modal Image */}
             <div className="relative w-full lg:flex-1 h-[45vh] lg:h-full bg-[#020202] flex items-center justify-center overflow-hidden group/image">
               <div className="absolute inset-0 opacity-30 blur-3xl scale-110 pointer-events-none">
-                <Image src={`/images/prompts/${selectedItem.imageName}.webp`} alt="bg" fill className="object-cover" unoptimized />
+                <img src={`/images/prompts/${selectedItem.imageName}.webp`} alt="bg" className="w-full h-full object-cover" />
               </div>
-              <div className="relative w-full h-full p-2 md:p-8">
-                <Image
+              <div className="relative w-full h-full p-2 md:p-8 flex items-center justify-center">
+                <img
                   src={`/images/prompts/${selectedItem.imageName}.webp`}
                   alt={selectedItem.alt}
-                  fill
-                  className="object-contain drop-shadow-2xl z-10"
-                  quality={100}
-                  priority
-                  unoptimized
+                  className="max-w-full max-h-full object-contain drop-shadow-2xl z-10"
+                  loading="eager"
                 />
               </div>
             </div>
@@ -224,15 +232,15 @@ export default function PromptLibrary() {
           </div>
         </header>
 
-        {/* --- Masonry Grid --- */}
+        {/* --- Enhanced Masonry Grid --- */}
         <main className="mb-24">
           <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 space-y-4 mx-auto">
             {filteredPrompts.map((item) => (
               <div
                 key={item.id}
-                className="break-inside-avoid mb-4 group relative bg-[#0f0f0f] border border-white/5 rounded-2xl overflow-hidden hover:border-purple-500/40 transition-all duration-300 flex flex-col shadow-lg shadow-black/40"
+                className="break-inside-avoid mb-4 group relative bg-[#0f0f0f] border border-white/5 rounded-2xl overflow-hidden hover:border-purple-500/40 transition-all duration-300 flex flex-col shadow-lg shadow-black/40 hover:shadow-purple-500/10"
               >
-                <div className={`relative w-full ${getAspectRatioClass(item.ratio)} overflow-hidden bg-[#151515]`}>
+                <div className="relative w-full overflow-hidden bg-[#151515]">
                   <PromptCardImage item={item} onClick={() => setSelectedItem(item)} />
                   <div className="absolute top-2 right-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden md:block">
                     <button onClick={(e) => handleTryStyle(item.prompt, e)} className="bg-purple-600 text-white p-2 rounded-full shadow-lg hover:bg-purple-500 transition active:scale-95">

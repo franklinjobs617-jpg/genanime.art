@@ -61,6 +61,7 @@ export default function Header() {
     { name: t("home"), href: "/" },
     { name: t("gallery"), href: "/gallery" },
     { name: t("generator"), href: "/generator" },
+    { name: t("voiceChanger"), href: "/tools/anime-voice-changer" },
     { name: t("pricing"), href: "/pricing" },
     { name: t("blog"), href: "/blog" },
 
@@ -233,11 +234,11 @@ export default function Header() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-2xl font-black italic text-zinc-300 py-4 border-b border-white/5 hover:text-white transition-all flex justify-between items-center group"
+                  className="text-xl md:text-2xl font-black italic text-zinc-300 py-4 border-b border-white/5 hover:text-white transition-all flex justify-between items-center group"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {link.name}
-                  <ChevronDown className="w-5 h-5 -rotate-90 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <span className="truncate pr-4">{link.name}</span>
+                  <ChevronDown className="w-5 h-5 -rotate-90 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
                 </Link>
               ))}
 

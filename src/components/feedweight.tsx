@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { MessageSquarePlus, X, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { usePathname } from "next/navigation";
 
 export default function FeedbackWidget() {
     const [isOpen, setIsOpen] = useState(false);
@@ -10,6 +11,9 @@ export default function FeedbackWidget() {
     const [contact, setContact] = useState("");
     const [loading, setLoading] = useState(false);
 
+    const pathname = usePathname();
+    const isGeneratorPage = pathname?.includes("/generator");
+    if (isGeneratorPage) return null;
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!message.trim()) return;

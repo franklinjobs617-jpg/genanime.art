@@ -1,8 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
-
-import { Link } from "@/i18n/routing";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Search,
@@ -18,10 +16,12 @@ import {
   Loader2,
   Flame,
   TrendingUp,
+  Download,
 } from "lucide-react";
 import Masonry from "react-masonry-css";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 
 // --- 类型定义 ---
@@ -44,35 +44,16 @@ export default function GalleryPage() {
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
   const [copied, setCopied] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
-
   const [likedItems, setLikedItems] = useState<Set<string>>(new Set());
+  const [mounted, setMounted] = useState(false);
 
-  const modes = [
-    {
-      label: t("modes.generation"),
-      icon: <ImageIcon className="w-5 h-5" />,
-      active: true,
-      href: "/generator",
-      disabled: false,
-    },
-    {
-      label: t("modes.video"),
-      icon: <Video className="w-5 h-5" />,
-      active: false,
-      href: "#",
-      badge: t("modes.soon"),
-      disabled: true,
-    },
-    {
-      label: t("modes.upscaler"),
-      icon: <Maximize2 className="w-5 h-5" />,
-      active: false,
-      href: "#",
-      disabled: true,
-    },
-  ];
+  // 防止水合不匹配
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  const baseImages: GalleryItem[] = [
+  // --- 完整数据 ---
+const baseImages: GalleryItem[] = [
     {
       id: "u1",
       title: "Ethereal Starlight Soul",
@@ -690,13 +671,14 @@ export default function GalleryPage() {
 
   const galleryImages = [...baseImages];
 
+  // 瀑布流列数配置 - 移动端改为2列
   const breakpointColumnsObj = {
-    default: 4,
+    default: 5,
     1536: 4,
     1280: 3,
     1024: 3,
     768: 2,
-    640: 1,
+    640: 2, // 确保移动端是2列
   };
 
   const handleRemix = (promptText: string) => {
@@ -724,83 +706,124 @@ export default function GalleryPage() {
     setLikedItems(newLikes);
   };
 
+  const modes = [
+    {
+      label: t("modes.generation"),
+      icon: <ImageIcon className="w-5 h-5" />,
+      active: true,
+      href: "/generator",
+      disabled: false,
+    },
+    {
+      label: t("modes.video"),
+      icon: <Video className="w-5 h-5" />,
+      active: false,
+      href: "#",
+      badge: t("modes.soon"),
+      disabled: true,
+    },
+    {
+      label: t("modes.upscaler"),
+      icon: <Maximize2 className="w-5 h-5" />,
+      active: false,
+      href: "#",
+      disabled: true,
+    },
+  ];
+
+  if (!mounted) return null;
+
   return (
-    <div className="min-h-screen bg-[#050507] text-white font-sans selection:bg-pink-500/30 relative">
+    <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-indigo-500/30 relative overflow-x-hidden">
+      
       {/* 全局加载遮罩 */}
       <AnimatePresence>
         {isNavigating && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center flex-col gap-6"
+            className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-xl flex items-center justify-center flex-col gap-6"
           >
             <div className="relative">
-              <div className="absolute inset-0 bg-pink-500 blur-xl opacity-20 animate-pulse" />
-              <Loader2 className="w-12 h-12 text-pink-500 animate-spin relative z-10" />
+              <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-20 animate-pulse" />
+              <Loader2 className="w-12 h-12 text-indigo-500 animate-spin relative z-10" />
             </div>
             <div className="text-center space-y-2">
-              <h3 className="text-xl font-bold text-white tracking-tight">
-                {t("loading.title")}
-              </h3>
+              <h3 className="text-xl font-bold text-white tracking-tight">{t("loading.title")}</h3>
               <p className="text-zinc-500 text-sm">{t("loading.subtitle")}</p>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* 背景氛围 */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.04]" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60vw] h-[500px] bg-indigo-900/20 blur-[120px] rounded-full" />
+      {/* 顶部环境光背景 */}
+      <div className="fixed top-0 left-0 w-full h-[600px] pointer-events-none z-0">
+         <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-indigo-600/10 blur-[120px] rounded-full mix-blend-screen" />
+         <div className="absolute top-[-100px] right-0 w-[600px] h-[600px] bg-purple-600/5 blur-[100px] rounded-full mix-blend-screen" />
       </div>
+      
+      {/* 噪点纹理背景 */}
+      <div className="fixed inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none z-0 mix-blend-overlay"></div>
 
       {/* Hero Section */}
-      <section className="relative w-full pt-36 pb-20 flex flex-col items-center justify-center px-6 z-10">
-        <div className="relative z-10 w-full max-w-4xl text-center space-y-12">
-          <div className="space-y-6">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white uppercase italic leading-[0.9]">
-              {t.rich("title", {
-                span1: (chunks) => (
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
-                    {chunks}
-                  </span>
-                ),
-              })}
+      {/* 关键修复：pt-36 md:pt-48 增加顶部内边距，确保内容不会被 Header 遮挡 */}
+      <section className="relative w-full pt-36 md:pt-48 pb-16 flex flex-col items-center justify-center px-4 z-10">
+        <div className="relative z-10 w-full max-w-5xl text-center space-y-8 md:space-y-10">
+          
+          {/* Badge - 放到搜索框下面或者保持在顶部但需要确保不遮挡 */}
+          <motion.div 
+             initial={{ opacity: 0, y: 20 }}
+             animate={{ opacity: 1, y: 0 }}
+             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-indigo-300 backdrop-blur-sm"
+          >
+             <Sparkles className="w-3 h-3" /> Community Showcase
+          </motion.div>
+
+          <div className="space-y-4">
+            {/* 字体大小调整，避免在移动端换行过多 */}
+            <h1 className="text-3xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white uppercase italic leading-[0.95]">
+               Discover <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">Infinite</span> <br />
+               Anime Inspiration
             </h1>
-            <p className="text-zinc-400 text-lg md:text-xl font-medium max-w-2xl mx-auto tracking-tight">
-              {t.rich("subtitle", {
-                b: (chunks) => <b>{chunks}</b>,
-              })}
+            <p className="text-zinc-400 text-sm md:text-lg font-medium max-w-2xl mx-auto tracking-tight leading-relaxed px-4">
+              Explore thousands of AI-generated anime masterpieces. Remix prompts, find your style, and create something unique.
             </p>
           </div>
 
           {/* Search Bar */}
-          <div className="relative max-w-2xl mx-auto w-full group">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[28px] opacity-30 group-hover:opacity-60 blur transition duration-500" />
-            <div className="relative flex items-center bg-[#0a0a0c] border border-white/10 rounded-[26px] p-2 shadow-2xl">
+          <div className="relative max-w-2xl mx-auto w-full group px-2">
+            <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[32px] opacity-20 group-hover:opacity-40 blur-lg transition duration-500" />
+            <div className="relative flex items-center bg-[#0e0e11] border border-white/10 rounded-[28px] p-2 shadow-2xl transition-colors group-focus-within:border-indigo-500/50">
               <div className="pl-4 pr-3">
                 <Search className="w-5 h-5 text-zinc-500 group-focus-within:text-white transition-colors" />
               </div>
               <input
                 type="text"
                 placeholder={t("searchPlaceholder")}
-                className="flex-1 bg-transparent border-none outline-none text-base text-white placeholder:text-zinc-600 py-3"
+                className="flex-1 bg-transparent border-none outline-none text-sm md:text-base text-white placeholder:text-zinc-600 py-2 md:py-3 w-full min-w-0"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleRemix(search)}
               />
               <button
                 onClick={() => handleRemix(search)}
-                className="bg-white text-black hover:bg-zinc-200 px-6 py-3 rounded-[20px] text-sm font-black transition-all flex items-center gap-2 shrink-0 hover:scale-[1.02] active:scale-95"
+                className="hidden sm:flex bg-white text-black hover:bg-zinc-200 px-6 py-3 rounded-[22px] text-sm font-black transition-all items-center gap-2 shrink-0 hover:scale-[1.02] active:scale-95"
               >
                 <Sparkles className="w-4 h-4 fill-black" />
                 {t("generateButton")}
               </button>
+              {/* Mobile Search Button (Icon only) */}
+              <button
+                 onClick={() => handleRemix(search)} 
+                 className="sm:hidden w-10 h-10 bg-white rounded-full flex items-center justify-center text-black active:scale-90 transition-transform shrink-0"
+              >
+                 <Sparkles className="w-4 h-4 fill-black" />
+              </button>
             </div>
           </div>
-
-          {/* Nav Pills */}
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          
+           {/* Nav Pills (Optional, keeping it simple for mobile) */}
+           <div className="hidden md:flex flex-wrap items-center justify-center gap-3">
             {modes.map((mode) => (
               <Link
                 key={mode.label}
@@ -824,126 +847,134 @@ export default function GalleryPage() {
               </Link>
             ))}
           </div>
+
         </div>
       </section>
 
       {/* Gallery Section */}
-      <section className="px-4 md:px-8 pb-32 max-w-[1920px] mx-auto z-10 relative">
-        <div className="flex items-end justify-between mb-8 px-2">
+      <section className="px-3 md:px-8 pb-32 max-w-[2400px] mx-auto z-10 relative">
+        
+        {/* Filter / Header Bar */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-8 gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-pink-500/10 rounded-lg border border-pink-500/20">
-              <Flame className="w-5 h-5 text-pink-500 fill-pink-500/20" />
+            <div className="p-2.5 bg-indigo-500/10 rounded-xl border border-indigo-500/20">
+              <Flame className="w-5 h-5 text-indigo-500 fill-indigo-500/20" />
             </div>
             <div>
-              <h2 className="text-xl font-black tracking-tight uppercase text-white">
+              <h2 className="text-lg md:text-xl font-black tracking-tight uppercase text-white">
                 {t("trendingTitle")}
               </h2>
               <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest mt-0.5">
-                {t("trendingSubtitle")}
+                Daily Curated Selection
               </p>
             </div>
           </div>
-          {/* 显示当前点赞总数 (模拟) */}
-          <div className="hidden md:flex items-center gap-2 text-zinc-500 text-sm font-bold">
-            <TrendingUp className="w-4 h-4" />
-            <span>{likedItems.size} Liked this session</span>
+          
+          {/* Simple Sort */}
+          <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+              {['Trending'].map((filter, i) => (
+                  <button key={filter} className={`px-4 py-1.5 rounded-full text-xs font-bold border transition-colors whitespace-nowrap ${i === 0 ? 'bg-white text-black border-white' : 'bg-transparent text-zinc-500 border-zinc-800 hover:border-zinc-600'}`}>
+                      {filter}
+                  </button>
+              ))}
           </div>
         </div>
 
         <Masonry
           breakpointCols={breakpointColumnsObj}
-          className="flex w-auto -ml-4 md:-ml-6"
-          columnClassName="pl-4 md:pl-6 bg-clip-padding"
+          className="flex w-auto -ml-3 md:-ml-6"
+          columnClassName="pl-3 md:pl-6 bg-clip-padding"
         >
           {galleryImages.map((item, index) => (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "100px" }}
-              transition={{ duration: 0.5, delay: (index % 4) * 0.1 }}
+              transition={{ duration: 0.5, delay: (index % 4) * 0.05 }}
               key={`${item.id}-${index}`}
-              className="mb-6 group relative cursor-pointer"
+              className="mb-4 md:mb-8 group relative cursor-pointer"
               onClick={() => setSelectedImage(item)}
             >
-              <div
-                className={`relative w-full ${item.aspect} rounded-[20px] overflow-hidden bg-[#121217] border border-white/5 group-hover:border-pink-500/30 transition-all duration-500 shadow-lg`}
-              >
+              {/* Image Container */}
+              <div className={`relative w-full ${item.aspect} rounded-xl md:rounded-2xl overflow-hidden bg-[#121217] border border-white/5 group-hover:border-indigo-500/30 transition-all duration-300 shadow-lg`}>
                 <Image
                   src={item.image}
                   alt={item.title}
                   fill
-                  className="object-cover transition-all duration-700 ease-out group-hover:scale-110 group-hover:brightness-110"
-                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  priority={index < 4}
+                  className="object-cover transition-all duration-700 ease-out md:group-hover:scale-105"
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                  loading={index < 8 ? "eager" : "lazy"}
                 />
 
-                {/* Image Placeholder Shimmer */}
-                <div className="absolute inset-0 -z-10 bg-zinc-900 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
-                </div>
+                {/* Mobile: Gradient Overlay (Always visible for readability) */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-                {/* 悬浮遮罩 */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-5">
-                  <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                    <div className="flex justify-between items-start mb-3">
-                      <div>
-                        <h3 className="text-sm font-bold text-white line-clamp-1">
-                          {item.title}
-                        </h3>
-                        <p className="text-[10px] text-zinc-400 font-black uppercase tracking-widest mt-0.5">
-                          @{item.author}
-                        </p>
-                      </div>
+                {/* Desktop Hover Actions */}
+                <div className="absolute inset-0 opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 hidden md:flex flex-col justify-end p-4 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+                    <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        <p className="text-white font-bold text-sm line-clamp-1 mb-2">{item.title}</p>
+                        <div className="flex gap-2">
+                            <button 
+                                onClick={(e) => { e.stopPropagation(); handleRemix(item.prompt); }}
+                                className="flex-1 bg-white/10 hover:bg-white text-white hover:text-black backdrop-blur-md py-2 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
+                            >
+                                <Zap className="w-3 h-3" /> Remix
+                            </button>
+                            <button 
+                                onClick={(e) => toggleLike(e, item.id)}
+                                className={`p-2 rounded-lg backdrop-blur-md border transition-colors ${likedItems.has(item.id) ? 'bg-pink-500/20 border-pink-500/50 text-pink-500' : 'bg-black/20 border-white/10 text-white hover:bg-white/20'}`}
+                            >
+                                <Heart className={`w-4 h-4 ${likedItems.has(item.id) ? "fill-current" : ""}`} />
+                            </button>
+                        </div>
                     </div>
-
-                    <div className="grid grid-cols-5 gap-2">
-                      {/* Remix 按钮 */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRemix(item.prompt);
-                        }}
-                        className="col-span-4 py-2.5 bg-white text-black rounded-xl text-[11px] font-black uppercase tracking-tight hover:bg-pink-500 hover:text-white transition-colors flex items-center justify-center gap-2 active:scale-95 shadow-lg"
-                      >
-                        <Zap className="w-3.5 h-3.5 fill-current" />
-                        Remix
-                      </button>
-
-                      {/* 点赞按钮 */}
-                      <button
-                        onClick={(e) => toggleLike(e, item.id)}
-                        className={`col-span-1 flex items-center justify-center rounded-xl backdrop-blur-md border transition-all active:scale-90 ${
-                          likedItems.has(item.id)
-                            ? "bg-pink-500/20 border-pink-500/50 text-pink-500"
-                            : "bg-white/10 border-white/10 text-white hover:bg-white/20"
-                        }`}
-                      >
-                        <Heart
-                          className={`w-4 h-4 ${
-                            likedItems.has(item.id) ? "fill-current" : ""
-                          }`}
-                        />
-                      </button>
-                    </div>
-                  </div>
                 </div>
               </div>
+              
+              {/* Mobile Info Bar */}
+              <div className="md:hidden mt-2 flex justify-between items-start px-1">
+                 <div className="flex-1 pr-2">
+                     <h3 className="text-[10px] font-bold text-zinc-300 line-clamp-1 leading-tight">{item.title}</h3>
+                     <p className="text-[9px] text-zinc-600 font-medium mt-0.5 truncate">@{item.author}</p>
+                 </div>
+                 <button 
+                    onClick={(e) => toggleLike(e, item.id)}
+                    className="text-zinc-500 active:scale-90 transition-transform"
+                 >
+                     <Heart className={`w-3.5 h-3.5 ${likedItems.has(item.id) ? "fill-pink-500 text-pink-500" : ""}`} />
+                 </button>
+              </div>
+
             </motion.div>
           ))}
         </Masonry>
+        
+        {/* Load More Button */}
+        <div className="mt-8 md:mt-16 flex justify-center">
+            <button className="px-8 py-4 bg-zinc-900 border border-zinc-800 hover:border-zinc-600 hover:bg-zinc-800 rounded-full text-xs font-bold uppercase tracking-widest transition-all">
+                Load More Inspiration
+            </button>
+        </div>
+
       </section>
 
-      {/* 图片详情模态框 (Lightbox) */}
+      {/* Image Detail Modal (Lightbox) */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-[#050507]/95 backdrop-blur-xl p-4 md:p-8"
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-[#050505]/95 backdrop-blur-2xl p-0 md:p-8"
             onClick={() => setSelectedImage(null)}
           >
-            <button className="absolute top-6 right-6 p-2 bg-white/10 rounded-full hover:bg-white/20 text-white z-50 transition-colors">
+            {/* Mobile Close Button */}
+            <button className="absolute top-4 right-4 p-2 bg-black/50 rounded-full text-white z-50 md:hidden">
+              <X className="w-6 h-6" />
+            </button>
+
+            {/* Desktop Close Button */}
+            <button className="hidden md:block absolute top-6 right-6 p-2 bg-white/10 rounded-full hover:bg-white/20 text-white z-50 transition-colors">
               <X className="w-6 h-6" />
             </button>
 
@@ -951,123 +982,97 @@ export default function GalleryPage() {
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="bg-[#0a0a0c] border border-white/10 rounded-3xl overflow-hidden max-w-6xl w-full max-h-[90vh] flex flex-col md:flex-row shadow-2xl relative"
+              className="bg-[#0a0a0c] md:border border-zinc-800 md:rounded-3xl overflow-hidden w-full h-full md:h-auto md:max-h-[90vh] md:max-w-6xl flex flex-col md:flex-row shadow-2xl relative"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex-1 bg-black/50 flex items-center justify-center p-4 relative group">
+              
+              {/* Left: Image Area */}
+              <div className="flex-1 bg-black flex items-center justify-center relative group h-[50vh] md:h-auto">
+                <div className="absolute inset-0 overflow-hidden opacity-30 blur-3xl pointer-events-none">
+                     <Image src={selectedImage.image} alt="" fill className="object-cover" />
+                </div>
+                
                 <img
                   src={selectedImage.image}
                   alt={selectedImage.title}
-                  className="max-w-full max-h-[50vh] md:max-h-[85vh] object-contain shadow-2xl"
+                  className="relative max-w-full max-h-full object-contain z-10"
                 />
               </div>
 
-              <div className="w-full md:w-[420px] bg-[#0f0f12] flex flex-col border-l border-white/5 h-auto md:h-full">
-                <div className="p-6 border-b border-white/5">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h2 className="text-2xl font-bold text-white mb-1 leading-tight">
-                        {selectedImage.title}
-                      </h2>
-                      <div className="flex items-center gap-2 text-zinc-400">
-                        <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 flex items-center justify-center text-[10px] text-white font-bold">
-                          {selectedImage.author.charAt(0)}
+              {/* Right: Info Area */}
+              <div className="w-full md:w-[400px] bg-[#09090b] flex flex-col h-[50vh] md:h-auto border-l border-zinc-800">
+                {/* Header */}
+                <div className="p-5 border-b border-zinc-800 flex justify-between items-start bg-[#09090b]">
+                   <div>
+                       <h2 className="text-xl font-bold text-white leading-tight line-clamp-2">{selectedImage.title}</h2>
+                       <div className="flex items-center gap-2 mt-2">
+                           <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-[10px] font-bold">
+                               {selectedImage.author[0]}
+                           </div>
+                           <span className="text-xs text-zinc-400 font-medium">@{selectedImage.author}</span>
+                       </div>
+                   </div>
+                   <div className="flex gap-2">
+                       <button className="p-2 bg-zinc-800 rounded-lg text-zinc-400 hover:text-white transition-colors">
+                           <Download className="w-4 h-4" />
+                       </button>
+                       <button 
+                           onClick={(e) => toggleLike(e, selectedImage.id)}
+                           className={`p-2 rounded-lg bg-zinc-800 transition-colors ${likedItems.has(selectedImage.id) ? 'text-pink-500' : 'text-zinc-400 hover:text-white'}`}
+                       >
+                           <Heart className={`w-4 h-4 ${likedItems.has(selectedImage.id) ? "fill-current" : ""}`} />
+                       </button>
+                   </div>
+                </div>
+
+                {/* Scrollable Content */}
+                <div className="flex-1 overflow-y-auto p-5 custom-scrollbar bg-[#09090b]">
+                    {/* Prompt Box */}
+                    <div className="space-y-2 mb-6">
+                        <div className="flex justify-between items-center">
+                            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Prompt</span>
+                            <button 
+                                onClick={() => handleCopy(selectedImage.prompt)}
+                                className="text-[10px] flex items-center gap-1 text-zinc-400 hover:text-white bg-zinc-800 px-2 py-1 rounded"
+                            >
+                                {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                                {copied ? "Copied" : "Copy"}
+                            </button>
                         </div>
-                        <span className="text-sm font-medium">
-                          @{selectedImage.author}
-                        </span>
-                      </div>
+                        <div className="p-3 bg-zinc-900/50 rounded-xl border border-zinc-800 text-sm text-zinc-300 font-mono leading-relaxed break-words">
+                            {selectedImage.prompt}
+                        </div>
                     </div>
 
-                    <button
-                      onClick={(e) => toggleLike(e, selectedImage.id)}
-                      className={`flex flex-col items-center gap-1 min-w-[50px] transition-colors ${
-                        likedItems.has(selectedImage.id)
-                          ? "text-pink-500"
-                          : "text-zinc-500 hover:text-white"
-                      }`}
+                    {/* Params Grid */}
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="p-3 bg-zinc-900 rounded-lg border border-zinc-800">
+                            <span className="block text-[10px] text-zinc-500 font-bold uppercase mb-1">Ratio</span>
+                            <span className="text-xs text-white font-medium">{selectedImage.aspect.replace('aspect-', '').replace('[', '').replace(']', '').replace('/', ':')}</span>
+                        </div>
+                        <div className="p-3 bg-zinc-900 rounded-lg border border-zinc-800">
+                            <span className="block text-[10px] text-zinc-500 font-bold uppercase mb-1">Model</span>
+                            <span className="text-xs text-white font-medium">Anime V5</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Fixed Footer Action */}
+                <div className="p-5 border-t border-zinc-800 bg-[#09090b] pb-safe">
+                    <button 
+                        onClick={() => handleRemix(selectedImage.prompt)}
+                        className="w-full py-3.5 bg-white text-black hover:bg-zinc-200 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
                     >
-                      <Heart
-                        className={`w-6 h-6 ${
-                          likedItems.has(selectedImage.id) ? "fill-current" : ""
-                        }`}
-                      />
-                      <span className="text-xs font-bold">
-                        {selectedImage.likes +
-                          (likedItems.has(selectedImage.id) ? 1 : 0)}
-                      </span>
+                        <Zap className="w-4 h-4 fill-black" />
+                        Remix this Image
                     </button>
-                  </div>
-                </div>
-
-                {/* Prompt 区域 */}
-                <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
-                  <div className="bg-zinc-900/50 rounded-xl p-4 border border-white/5 hover:border-white/10 transition-colors group">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="w-3.5 h-3.5 text-pink-500" />
-                        <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">
-                          Generation Prompt
-                        </span>
-                      </div>
-                      <button
-                        onClick={() => handleCopy(selectedImage.prompt)}
-                        className="text-zinc-500 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-medium bg-white/5 px-2 py-1 rounded-md"
-                      >
-                        {copied ? (
-                          <Check className="w-3.5 h-3.5" />
-                        ) : (
-                          <Copy className="w-3.5 h-3.5" />
-                        )}
-                        {copied ? "Copied" : "Copy"}
-                      </button>
-                    </div>
-                    <p className="text-sm text-zinc-300 leading-relaxed font-mono whitespace-pre-wrap break-words">
-                      {selectedImage.prompt}
-                    </p>
-                  </div>
-
-                  <div className="mt-6 grid grid-cols-2 gap-4">
-                    <div className="bg-zinc-900/30 p-3 rounded-lg border border-white/5">
-                      <span className="text-[10px] text-zinc-500 uppercase font-bold block mb-1">
-                        Model
-                      </span>
-                      <span className="text-xs text-white font-medium">
-                        Anime V4.5
-                      </span>
-                    </div>
-                    <div className="bg-zinc-900/30 p-3 rounded-lg border border-white/5">
-                      <span className="text-[10px] text-zinc-500 uppercase font-bold block mb-1">
-                        Scale
-                      </span>
-                      <span className="text-xs text-white font-medium">
-                        1024 x 1536
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-6 border-t border-white/5 bg-[#0a0a0c]">
-                  <button
-                    onClick={() => handleRemix(selectedImage.prompt)}
-                    className="w-full py-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 hover:scale-[1.02] active:scale-95"
-                  >
-                    <Zap className="w-4 h-4 fill-white" />
-                    Remix this Style
-                  </button>
                 </div>
               </div>
+
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-      <style jsx global>{`
-        @keyframes shimmer {
-          100% {
-            transform: translateX(100%);
-          }
-        }
-      `}</style>
     </div>
   );
 }

@@ -26,8 +26,6 @@ const siteMapData = {
       url:"/image-to-prompt",changefreq:"weekly",priority:0.7
     },
     {
-    }
-    {
       url: "/blog/how-to-make-anime-art-ai-rtx-8090-guide",
       changefreq: "monthly",
       priority: 0.7,
@@ -64,22 +62,20 @@ export async function GET(request: NextRequest) {
         loc: `${siteMapData.baseUrl}/${locale}${page.url}`,
         changefreq: page.changefreq,
         priority: page.priority,
-        alternates: alternates, // 每个语种版本都要包含完整的 alternate 关系
+        alternates: alternates, 
       });
     });
   });
 
-  // 2. 处理仅英文的页面逻辑
   siteMapData.englishOnlyPages.forEach((page) => {
     allUrls.push({
       loc: `${siteMapData.baseUrl}${page.url}`,
       changefreq: page.changefreq,
       priority: page.priority,
-      alternates: [], // 仅英文页面无需 alternate 标签
+      alternates: [], 
     });
   });
 
-  // 3. 构建 XML 字符串
   const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset 
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"

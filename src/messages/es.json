@@ -303,5 +303,25 @@
         "login": "Iniciar sesión",
         "cancel": "Cancelar",
         "delete": "Eliminar"
-    }
+    },
+    "Pricing": {
+  "title": "DESATA TU VISIÓN ZENITH",
+  "subtitle": "Transforma tu imaginación en píxeles con IA profesional. Selecciona un plan para elevar tu maestría creativa.",
+  "monthly": "Mensual",
+  "yearly": "Anual",
+  "save": "AHORRA 25%",
+  "cta": "Actualizar a",
+  "popular": "MÁS POPULAR",
+  "redirecting": "Preparando pago seguro...",
+  "credits": "CRÉDITOS DE ALTA VELOCIDAD",
+  "guaranteeTitle": "GARANTÍA ABSOLUTA",
+  "guaranteeDesc": "¿No estás satisfecho? Ofrecemos una política de reembolso de 7 días si has usado menos de 20 créditos.",
+  "secureTitle": "INFRAESTRUCTURA SEGURA",
+  "secureDesc": "Los pagos se procesan vía Stripe con cifrado SSL de 256 bits. Nunca guardamos tus datos.",
+  "plans": {
+    "initiate": { "name": "Iniciado", "desc": "Comienza tu viaje en el universo del anime." },
+    "elite": { "name": "Elite", "desc": "La potencia para creadores de contenido y artistas profesionales." },
+    "zenith": { "name": "Zenith", "desc": "Rendimiento definitivo para estudios profesionales." }
+  }
+}
 }

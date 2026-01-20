@@ -1,318 +1,347 @@
 {
-    "Metadata": {
-        "title": "AI Anime Generator: Free Anime AI Art & Image Generator (2026)",
-        "description": "Create stunning anime art with our free AI Anime Generator. The best Anime AI Image Generator for waifus, character sheets, and wallpapers. No login required.",
-        "keywords": [
-            "ai anime generator",
-            "anime ai art generator",
-            "ai image generator anime",
-            "free anime ai",
-            "text to anime"
-        ]
+  "Metadata": {
+    "title": "AI Anime Generator: Free Anime AI Art & Image Generator (2026)",
+    "description": "Create stunning anime art with our free AI Anime Generator. The best Anime AI Image Generator for waifus, character sheets, and wallpapers. No login required.",
+    "keywords": [
+      "ai anime generator",
+      "anime ai art generator",
+      "ai image generator anime",
+      "free anime ai",
+      "text to anime"
+    ]
+  },
+  "Navigation": {
+    "home": "Home",
+    "gallery": "Gallery",
+    "generator": "Generator",
+    "pricing": "Pricing",
+    "blog": "Blog",
+    "promptLibrary": "Prompt Library",
+    "aiGuide": "AI Guide",
+    "howToExtract": "How to Extract Prompts",
+    "login": "Login",
+    "signUp": "Sign Up",
+    "faq": "FAQ",
+    "contact": "Contact Us",
+    "support": "Help Center",
+    "models": "AI Models",
+    "ponyDiffusion": "Pony Diffusion",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "Hero": {
+    "titleLine1": "Best Anime",
+    "titleLine2": "AI Generator",
+    "description": "Create <span1>waifu, chibi, & pony art</span1> in seconds with the world's most advanced models.",
+    "searchPlaceholder": "Describe your dream... e.g. silver hair, cyberpunk",
+    "features": {
+      "noSignUp": "No sign-up",
+      "noWatermark": "No watermark",
+      "quality": "4K Quality"
     },
-    "Navigation": {
-        "home": "Home",
-        "gallery": "Gallery",
-        "generator": "Generator",
-        "pricing": "Pricing",
-        "blog": "Blog",
-        "promptLibrary": "Prompt Library",
-        "aiGuide": "AI Guide",
-        "howToExtract": "How to Extract Prompts",
-        "login": "Login",
-        "signUp": "Sign Up",
-        "faq": "FAQ",
-        "contact": "Contact Us",
-        "support": "Help Center",
-        "models": "AI Models",
-        "ponyDiffusion": "Pony Diffusion",
-        "privacy": "Privacy Policy",
-        "terms": "Terms of Service"
-    },
-    "Hero": {
-        "titleLine1": "Best Anime",
-        "titleLine2": "AI Generator",
-        "description": "Create <span1>waifu, chibi, & pony art</span1> in seconds with the world's most advanced models.",
-        "searchPlaceholder": "Describe your dream... e.g. silver hair, cyberpunk",
-        "features": {
-            "noSignUp": "No sign-up",
-            "noWatermark": "No watermark",
-            "quality": "4K Quality"
-        },
-        "buttons": {
-            "startCreating": "Start Creating",
-            "imageToImage": "Image to Prompt"
-        }
-    },
-    "FeatureSection": {
-        "title": "Create Stunning <span1>Anime Illustrations</span1>",
-        "subtitle": "From Waifu to Cyberpunk, transform your ideas into high-quality anime illustrations in seconds – free, no login required.",
-        "cards": {
-            "waifu": "Anime Waifu Generator",
-            "pony": "Pony Diffusion Style",
-            "animagine": "Animagine XL Model",
-            "chibi": "Cute Chibi Maker",
-            "photo": "Photo to Anime",
-            "portrait": "Anime Portrait Generator",
-            "couple": "Anime Couple Art",
-            "action": "Anime Action Scene",
-            "emoticons": "Anime Emoticons",
-            "cyberpunk": "Cyberpunk Anime Art",
-            "school": "Anime School Scene",
-            "idol": "Anime Idol Generator",
-            "sticker": "Anime Sticker Pack",
-            "mage": "Fantasy Mage Generator",
-            "knight": "Medieval Knight Anime",
-            "christmas": "Christmas Anime Scene",
-            "cyberpunk_waifu": "Cyberpunk Waifu Anime",
-            "kimono_waifu": "Kimono Waifu Style",
-            "beach_waifu": "Beach Waifu Vacation",
-            "bedroom_waifu": "Bedroom Waifu Comfort"
-        },
-        "buttons": {
-            "generate": "Generate with this Prompt"
-        }
-    },
-    "GalleryPage": {
-        "title": "Create <span1>Waifu</span1> Art",
-        "subtitle": "Generate high-quality <b>Anime Waifu Art</b>, <b>Cyberpunk Wallpapers</b>, and <b>Chibi Character Designs</b> in seconds.",
-        "searchPlaceholder": "Try 'Business Woman Anime Art' or 'Cyberpunk'...",
-        "generateButton": "Generate",
-        "trendingTitle": "Trending Creations",
-        "trendingSubtitle": "Explore Waifus & Wallpapers",
-        "loading": {
-            "title": "Loading Engine...",
-            "subtitle": "Preparing workspace"
-        },
-        "modes": {
-            "generation": "Image Generation",
-            "video": "AI Video",
-            "upscaler": "Upscaler",
-            "soon": "Soon"
-        },
-        "galleryItems": {
-            "1": "Business Woman Anime Art - Office Style",
-            "2": "Anime Waifu Art - School Girl",
-            "3": "Cyberpunk Anime Wallpaper - Futuristic",
-            "4": "Chibi Character Design - Cute & Kawaii",
-            "5": "Fantasy Elf Archer - Character Art",
-            "6": "Idol Concert Stage - Music Performance",
-            "7": "Ghibli Scenery Art - Nostalgic Countryside",
-            "8": "3D Cinematic Render - Cute Anime Girl",
-            "9": "Magical Girl Concept - Character Sheet",
-            "10": "Cozy Storybook Illustration - Cottage Style",
-            "11": "Clinical Anime Art - Hospital Uniform",
-            "12": "Dramatic Lighting Portrait - Anime Girl",
-            "13": "Retro 80s Aesthetic - City Pop Vibe",
-            "14": "Epic Aerial View - Anime Character",
-            "15": "Dreamy Pastel Aesthetics - Soft & Elegant",
-            "16": "Flying Witch Scenery - Ghibli Style",
-            "17": "Classic Manga Style - Black and White",
-            "18": "Lush Forest Meadow - Studio Ghibli Style",
-            "19": "Full Body Masterpiece - Character Design",
-            "20": "Kawaii Magical Girl - Pink Hair",
-            "21": "3D Cartoon Action Scene - Corridor",
-            "22": "Anime Figure Setup - PVC Collection",
-            "23": "Dynamic Action Rush - Anime Battle",
-            "24": "Neon Street Cyberpunk - Rain & Lights",
-            "25": "Silver Holy Knight - Fantasy Armor",
-            "26": "Celestial Mage - Star Magic",
-            "27": "Premium Waifu Portrait - Flowing White Hair",
-            "28": "Pony Style Art - Vibrant Colors",
-            "29": "Animagine XL Quality - Future Library",
-            "30": "Midnight Romantic Couple - Fireworks",
-            "31": "High School Afternoons - Sunset Vibe",
-            "32": "Classic Anime Portrait - Soft Expression",
-            "33": "Kawaii Sticker Set - Cute Mascot",
-            "34": "Chibi Emote Pack - Cute Expressions",
-            "35": "Cosplay Event Banner - Pro Photography",
-            "36": "Upper Body Masterpiece - Intricate Design"
-        }
-    },
-    "promptLibrary": {
-        "guideSection": {
-            "title": "Master the Art of Anime Prompts",
-            "subtitle": "Stop guessing. Use this proven formula to generate breathtaking anime art every single time.",
-            "formulaTitle": "The Golden Prompt Formula",
-            "qualityBoosters": "Quality Boosters",
-            "qualityDesc": "Always start or end your prompt with these tags to force the AI to use its best rendering capabilities.",
-            "negativePrompts": "Negative Prompts (What to Avoid)",
-            "negativeDesc": "Tell the AI what NOT to generate. Crucial for fixing hands and preventing blurry images.",
-            "lighting": "Lighting & Atmosphere",
-            "lightingDesc": "Lighting makes the difference between a flat drawing and a cinematic masterpiece."
-        },
-        "title": "Discover <span1>Infinite</span1> Prompts",
-        "searchPlaceholder": "Search tags, styles, or keywords...",
-        "seoDescription": "Explore a vast collection of high-quality AI anime art prompts. From cyberpunk aesthetics to kawaii portraits, find the perfect text-to-image prompts for Stable Diffusion, Midjourney, and our own AI Generator.",
-        "generateButton": "Try this Style",
-        "copyPrompt": "Copy Prompt",
-        "copied": "Copied!",
-        "featuresTitle": "Why Use Our Anime Prompts?",
-        "featuresDesc": "We curate the best prompts to ensure high consistency and beautiful aesthetics for your AI generations.",
-        "guideTitle": "How to Write the Perfect Anime Prompt",
-        "guideDesc": "Creating stunning AI art isn't magic—it's a formula. To get the best results from our generator, structure your prompts using this simple framework:",
-        "tags": {
-            "Anime": "Anime",
-            "Girl": "Girl",
-            "Cyberpunk": "Cyberpunk",
-            "Kawaii": "Kawaii",
-            "Landscape": "Landscape",
-            "Portrait": "Portrait",
-            "Mecha": "Mecha",
-            "Watercolor": "Watercolor"
-        }
-    },
-    "Schema": {
-        "websiteName": "AnimeAI - AI Anime Generator",
-        "alternateName": "Anime AI Art Generator",
-        "description": "Create stunning anime art with our AI anime generator. Best anime AI art generator & image generator with RTX 8090 speed.",
-        "orgDescription": "Leading AI-powered anime art generator platform",
-        "webAppName": "AnimeAI Generator",
-        "webAppDescription": "Free AI anime art generator - Create stunning anime illustrations, waifu, chibi characters with advanced AI technology",
-        "breadcrumbHome": "Home",
-        "breadcrumbGenerator": "Generator",
-        "breadcrumbGallery": "Gallery",
-        "breadcrumbLibrary": "Prompt Library"
-    },
-    "CoreFeatures": {
-        "title": "Everything needed to",
-        "subtitle": "master anime creation.",
-        "engine": {
-            "title": "Professional Grade",
-            "highlight": "Generation Engine",
-            "description": "Powered by state-of-the-art GPU clusters. Experience lightning-fast generation speeds without compromising on the intricate details of your artwork.",
-            "tag1": "Fast Generation",
-            "tag2": "High Resolution",
-            "tag3": "Start for Free"
-        },
-        "mobile": {
-            "title": "Mobile Studio",
-            "description": "Your creative studio in your pocket. Fully optimized for creating on iOS and Android devices."
-        },
-        "models": {
-            "title": "Advanced Models",
-            "description": "Access premium models like Animagine XL & Pony Diffusion V6."
-        },
-        "commercial": {
-            "title": "Commercial Rights",
-            "description": "Full ownership of your creations for commercial projects."
-        }
-    },
-    "HowItWorks": {
-        "title": "Professional Anime Art",
-        "subtitle": "in 3 Simple Steps",
-        "description": "Streamlined workflow designed for both beginners and pro creators.",
-        "steps": {
-            "step1": {
-                "title": "Describe Your Vision",
-                "description": "Type a prompt or use our smart assistant to craft the perfect description."
-            },
-            "step2": {
-                "title": "Select Premium Model",
-                "description": "Choose from our curated list of high-fidelity anime models and styles."
-            },
-            "step3": {
-                "title": "Generate & Refine",
-                "description": "Get high-res results instantly. Upscale, vary, or download your masterpiece."
-            }
-        }
-    },
-    "CallToAction": {
-        "title": "Ready to Create Your",
-        "highlight": "Masterpiece?",
-        "description": "Join thousands of creators turning their imagination into reality.",
-        "subdescription": "Start generating professional anime art in seconds.",
-        "button": "Generate Now",
-        "note": "No credit card required"
-    },
-    "FAQ": {
-        "title": "Frequently Asked Questions",
-        "items": [
-            {
-                "q": "Is this the best AI anime generator for beginners?",
-                "a": "Yes! Our interface is designed for everyone. You can use our AI anime generator to create characters or scenes without any technical skills. Just type your idea and generate."
-            },
-            {
-                "q": "Can I use the AI generated anime art for commercial purposes?",
-                "a": "Absolutely. Whether you create an 'anime ai generated business woman' for a presentation or assets for a game, you own the commercial rights to your creations on our paid plans."
-            },
-            {
-                "q": "How does the AI generated animated sprite feature work?",
-                "a": "Our specialized mode allows you to generate character sheets with transparent backgrounds. It ensures consistency across different poses, perfect for 2D game development."
-            },
-            {
-                "q": "What technology powers your anime AI generator?",
-                "a": "We use a custom-tuned, high-fidelity AI model optimized specifically for anime aesthetics. It excels at understanding complex prompts or intricate mechanical details, surpassing generic off-the-shelf models."
-            }
-        ]
-    },
-    "SEOContent": {
-        "features": [
-            {
-                "title": "High-Fidelity Anime Art",
-                "description": "Generate professional-grade illustrations with perfect lighting. The ultimate anime ai art generator for creators.",
-                "label": "Available Now"
-            },
-            {
-                "title": "Character Design",
-                "description": "Create consistent characters from head to toe. Ideal for anime ai generated business woman or fantasy heroes.",
-                "label": "Available Now"
-            },
-            {
-                "title": "AI Anime Video Generator",
-                "description": "Coming Soon: Create professional anime openings and dynamic motion clips directly from your text prompts.",
-                "label": "Coming Soon",
-                "button": "Get Notified on Launch"
-            }
-        ],
-        "seoTitle": "Leading the",
-        "seoHighlight": "AI Anime Revolution",
-        "seoParagraph1": "Our platform is the most versatile <strong>anime ai art generator</strong>. We specialize in high-resolution image creation, from <strong>ai generated animated sprite</strong> sheets to professional character designs. Whether you need a full-body <strong>anime ai generated business woman</strong> or a custom mascot via our <strong>ai animal generator</strong>, we have you covered.",
-        "seoParagraph2": "The future is motion. We are actively developing our <strong>ai video generator anime opening</strong> module. Soon, you'll be able to transform your static <strong>ai generator anime</strong> creations into cinematic sequences. Join our waitlist to be the first to experience the power of <strong>AI animation generator</strong> technology."
-    },
-    "Generator": {
-        "mode": "Generation Mode",
-        "textToImage": "Text - Image",
-        "imageToPrompt": "Image - Prompt",
-        "baseModel": "Base Model",
-        "artStyle": "Art Style",
-        "aspectRatio": "Aspect Ratio",
-        "batchSize": "Batch Size",
-        "advancedSettings": "Advanced Settings",
-        "guidanceScale": "Guidance Scale",
-        "inferenceSteps": "Inference Steps",
-        "resetDefaults": "Reset Defaults",
-        "imagePrompt": {
-            "title": "Reverse Prompt Engineering",
-            "description": "Drag & drop an image or paste (Ctrl+V) to analyze its visual concepts and reconstruct its AI prompt.",
-            "analysisComplete": "Analysis complete!",
-            "insufficientCredits": "Insufficient Credits",
-            "analysisCost": "Analysis costs {count} credits.",
-            "getMoreCredits": "Get More Credits →",
-            "freeLimitReached": "Free limit reached. Please login to continue.",
-            "applyToGenerator": "Apply to Generator",
-            "analyzedPrompt": "Analyzed Prompt",
-            "copyPrompt": "Copy Prompt",
-            "copied": "Copied",
-            "editable": "Editable",
-            "refineWithTags": "Refine with Tag Chips",
-            "sourceInspiration": "Source Inspiration",
-            "sourceInspirationDesc": "Visual DNA extracted from the original pixels. Every tag represents a core aesthetic dimension.",
-            "extractingConcepts": "Extracting concepts..."
-        },
-        "history": {
-            "today": "Today's Creations",
-            "older": "Archive",
-            "itemsSelected": "{count} items selected",
-            "artGenerated": "Art generated successfully!",
-            "generationError": "An error occurred during generation.",
-            "aiCasting": "AI is casting your vision...",
-            "promptApplied": "Prompt applied! Ready to generate.",
-            "creationRemoved": "Creation removed",
-            "batchRemoved": "Removed {count} items from history"
-        },
-        "login": "Login",
-        "cancel": "Cancel",
-        "delete": "Delete"
+    "buttons": {
+      "startCreating": "Start Creating",
+      "imageToImage": "Image to Prompt"
     }
+  },
+  "FeatureSection": {
+    "title": "Create Stunning <span1>Anime Illustrations</span1>",
+    "subtitle": "From Waifu to Cyberpunk, transform your ideas into high-quality anime illustrations in seconds – free, no login required.",
+    "cards": {
+      "waifu": "Anime Waifu Generator",
+      "pony": "Pony Diffusion Style",
+      "animagine": "Animagine XL Model",
+      "chibi": "Cute Chibi Maker",
+      "photo": "Photo to Anime",
+      "portrait": "Anime Portrait Generator",
+      "couple": "Anime Couple Art",
+      "action": "Anime Action Scene",
+      "emoticons": "Anime Emoticons",
+      "cyberpunk": "Cyberpunk Anime Art",
+      "school": "Anime School Scene",
+      "idol": "Anime Idol Generator",
+      "sticker": "Anime Sticker Pack",
+      "mage": "Fantasy Mage Generator",
+      "knight": "Medieval Knight Anime",
+      "christmas": "Christmas Anime Scene",
+      "cyberpunk_waifu": "Cyberpunk Waifu Anime",
+      "kimono_waifu": "Kimono Waifu Style",
+      "beach_waifu": "Beach Waifu Vacation",
+      "bedroom_waifu": "Bedroom Waifu Comfort"
+    },
+    "buttons": {
+      "generate": "Generate with this Prompt"
+    }
+  },
+  "GalleryPage": {
+    "title": "Create <span1>Waifu</span1> Art",
+    "subtitle": "Generate high-quality <b>Anime Waifu Art</b>, <b>Cyberpunk Wallpapers</b>, and <b>Chibi Character Designs</b> in seconds.",
+    "searchPlaceholder": "Try 'Business Woman Anime Art' or 'Cyberpunk'...",
+    "generateButton": "Generate",
+    "trendingTitle": "Trending Creations",
+    "trendingSubtitle": "Explore Waifus & Wallpapers",
+    "loading": {
+      "title": "Loading Engine...",
+      "subtitle": "Preparing workspace"
+    },
+    "modes": {
+      "generation": "Image Generation",
+      "video": "AI Video",
+      "upscaler": "Upscaler",
+      "soon": "Soon"
+    },
+    "galleryItems": {
+      "1": "Business Woman Anime Art - Office Style",
+      "2": "Anime Waifu Art - School Girl",
+      "3": "Cyberpunk Anime Wallpaper - Futuristic",
+      "4": "Chibi Character Design - Cute & Kawaii",
+      "5": "Fantasy Elf Archer - Character Art",
+      "6": "Idol Concert Stage - Music Performance",
+      "7": "Ghibli Scenery Art - Nostalgic Countryside",
+      "8": "3D Cinematic Render - Cute Anime Girl",
+      "9": "Magical Girl Concept - Character Sheet",
+      "10": "Cozy Storybook Illustration - Cottage Style",
+      "11": "Clinical Anime Art - Hospital Uniform",
+      "12": "Dramatic Lighting Portrait - Anime Girl",
+      "13": "Retro 80s Aesthetic - City Pop Vibe",
+      "14": "Epic Aerial View - Anime Character",
+      "15": "Dreamy Pastel Aesthetics - Soft & Elegant",
+      "16": "Flying Witch Scenery - Ghibli Style",
+      "17": "Classic Manga Style - Black and White",
+      "18": "Lush Forest Meadow - Studio Ghibli Style",
+      "19": "Full Body Masterpiece - Character Design",
+      "20": "Kawaii Magical Girl - Pink Hair",
+      "21": "3D Cartoon Action Scene - Corridor",
+      "22": "Anime Figure Setup - PVC Collection",
+      "23": "Dynamic Action Rush - Anime Battle",
+      "24": "Neon Street Cyberpunk - Rain & Lights",
+      "25": "Silver Holy Knight - Fantasy Armor",
+      "26": "Celestial Mage - Star Magic",
+      "27": "Premium Waifu Portrait - Flowing White Hair",
+      "28": "Pony Style Art - Vibrant Colors",
+      "29": "Animagine XL Quality - Future Library",
+      "30": "Midnight Romantic Couple - Fireworks",
+      "31": "High School Afternoons - Sunset Vibe",
+      "32": "Classic Anime Portrait - Soft Expression",
+      "33": "Kawaii Sticker Set - Cute Mascot",
+      "34": "Chibi Emote Pack - Cute Expressions",
+      "35": "Cosplay Event Banner - Pro Photography",
+      "36": "Upper Body Masterpiece - Intricate Design"
+    }
+  },
+  "promptLibrary": {
+    "guideSection": {
+      "title": "Master the Art of Anime Prompts",
+      "subtitle": "Stop guessing. Use this proven formula to generate breathtaking anime art every single time.",
+      "formulaTitle": "The Golden Prompt Formula",
+      "qualityBoosters": "Quality Boosters",
+      "qualityDesc": "Always start or end your prompt with these tags to force the AI to use its best rendering capabilities.",
+      "negativePrompts": "Negative Prompts (What to Avoid)",
+      "negativeDesc": "Tell the AI what NOT to generate. Crucial for fixing hands and preventing blurry images.",
+      "lighting": "Lighting & Atmosphere",
+      "lightingDesc": "Lighting makes the difference between a flat drawing and a cinematic masterpiece."
+    },
+    "title": "Discover <span1>Infinite</span1> Prompts",
+    "searchPlaceholder": "Search tags, styles, or keywords...",
+    "seoDescription": "Explore a vast collection of high-quality AI anime art prompts. From cyberpunk aesthetics to kawaii portraits, find the perfect text-to-image prompts for Stable Diffusion, Midjourney, and our own AI Generator.",
+    "generateButton": "Try this Style",
+    "copyPrompt": "Copy Prompt",
+    "copied": "Copied!",
+    "featuresTitle": "Why Use Our Anime Prompts?",
+    "featuresDesc": "We curate the best prompts to ensure high consistency and beautiful aesthetics for your AI generations.",
+    "guideTitle": "How to Write the Perfect Anime Prompt",
+    "guideDesc": "Creating stunning AI art isn't magic—it's a formula. To get the best results from our generator, structure your prompts using this simple framework:",
+    "tags": {
+      "Anime": "Anime",
+      "Girl": "Girl",
+      "Cyberpunk": "Cyberpunk",
+      "Kawaii": "Kawaii",
+      "Landscape": "Landscape",
+      "Portrait": "Portrait",
+      "Mecha": "Mecha",
+      "Watercolor": "Watercolor"
+    }
+  },
+  "Schema": {
+    "websiteName": "AnimeAI - AI Anime Generator",
+    "alternateName": "Anime AI Art Generator",
+    "description": "Create stunning anime art with our AI anime generator. Best anime AI art generator & image generator with RTX 8090 speed.",
+    "orgDescription": "Leading AI-powered anime art generator platform",
+    "webAppName": "AnimeAI Generator",
+    "webAppDescription": "Free AI anime art generator - Create stunning anime illustrations, waifu, chibi characters with advanced AI technology",
+    "breadcrumbHome": "Home",
+    "breadcrumbGenerator": "Generator",
+    "breadcrumbGallery": "Gallery",
+    "breadcrumbLibrary": "Prompt Library"
+  },
+  "CoreFeatures": {
+    "title": "Everything needed to",
+    "subtitle": "master anime creation.",
+    "engine": {
+      "title": "Professional Grade",
+      "highlight": "Generation Engine",
+      "description": "Powered by state-of-the-art GPU clusters. Experience lightning-fast generation speeds without compromising on the intricate details of your artwork.",
+      "tag1": "Fast Generation",
+      "tag2": "High Resolution",
+      "tag3": "Start for Free"
+    },
+    "mobile": {
+      "title": "Mobile Studio",
+      "description": "Your creative studio in your pocket. Fully optimized for creating on iOS and Android devices."
+    },
+    "models": {
+      "title": "Advanced Models",
+      "description": "Access premium models like Animagine XL & Pony Diffusion V6."
+    },
+    "commercial": {
+      "title": "Commercial Rights",
+      "description": "Full ownership of your creations for commercial projects."
+    }
+  },
+  "HowItWorks": {
+    "title": "Professional Anime Art",
+    "subtitle": "in 3 Simple Steps",
+    "description": "Streamlined workflow designed for both beginners and pro creators.",
+    "steps": {
+      "step1": {
+        "title": "Describe Your Vision",
+        "description": "Type a prompt or use our smart assistant to craft the perfect description."
+      },
+      "step2": {
+        "title": "Select Premium Model",
+        "description": "Choose from our curated list of high-fidelity anime models and styles."
+      },
+      "step3": {
+        "title": "Generate & Refine",
+        "description": "Get high-res results instantly. Upscale, vary, or download your masterpiece."
+      }
+    }
+  },
+  "CallToAction": {
+    "title": "Ready to Create Your",
+    "highlight": "Masterpiece?",
+    "description": "Join thousands of creators turning their imagination into reality.",
+    "subdescription": "Start generating professional anime art in seconds.",
+    "button": "Generate Now",
+    "note": "No credit card required"
+  },
+  "FAQ": {
+    "title": "Frequently Asked Questions",
+    "items": [
+      {
+        "q": "Is this the best AI anime generator for beginners?",
+        "a": "Yes! Our interface is designed for everyone. You can use our AI anime generator to create characters or scenes without any technical skills. Just type your idea and generate."
+      },
+      {
+        "q": "Can I use the AI generated anime art for commercial purposes?",
+        "a": "Absolutely. Whether you create an 'anime ai generated business woman' for a presentation or assets for a game, you own the commercial rights to your creations on our paid plans."
+      },
+      {
+        "q": "How does the AI generated animated sprite feature work?",
+        "a": "Our specialized mode allows you to generate character sheets with transparent backgrounds. It ensures consistency across different poses, perfect for 2D game development."
+      },
+      {
+        "q": "What technology powers your anime AI generator?",
+        "a": "We use a custom-tuned, high-fidelity AI model optimized specifically for anime aesthetics. It excels at understanding complex prompts or intricate mechanical details, surpassing generic off-the-shelf models."
+      }
+    ]
+  },
+  "SEOContent": {
+    "features": [
+      {
+        "title": "High-Fidelity Anime Art",
+        "description": "Generate professional-grade illustrations with perfect lighting. The ultimate anime ai art generator for creators.",
+        "label": "Available Now"
+      },
+      {
+        "title": "Character Design",
+        "description": "Create consistent characters from head to toe. Ideal for anime ai generated business woman or fantasy heroes.",
+        "label": "Available Now"
+      },
+      {
+        "title": "AI Anime Video Generator",
+        "description": "Coming Soon: Create professional anime openings and dynamic motion clips directly from your text prompts.",
+        "label": "Coming Soon",
+        "button": "Get Notified on Launch"
+      }
+    ],
+    "seoTitle": "Leading the",
+    "seoHighlight": "AI Anime Revolution",
+    "seoParagraph1": "Our platform is the most versatile <strong>anime ai art generator</strong>. We specialize in high-resolution image creation, from <strong>ai generated animated sprite</strong> sheets to professional character designs. Whether you need a full-body <strong>anime ai generated business woman</strong> or a custom mascot via our <strong>ai animal generator</strong>, we have you covered.",
+    "seoParagraph2": "The future is motion. We are actively developing our <strong>ai video generator anime opening</strong> module. Soon, you'll be able to transform your static <strong>ai generator anime</strong> creations into cinematic sequences. Join our waitlist to be the first to experience the power of <strong>AI animation generator</strong> technology."
+  },
+  "Generator": {
+    "mode": "Generation Mode",
+    "textToImage": "Text - Image",
+    "imageToPrompt": "Image - Prompt",
+    "baseModel": "Base Model",
+    "artStyle": "Art Style",
+    "aspectRatio": "Aspect Ratio",
+    "batchSize": "Batch Size",
+    "advancedSettings": "Advanced Settings",
+    "guidanceScale": "Guidance Scale",
+    "inferenceSteps": "Inference Steps",
+    "resetDefaults": "Reset Defaults",
+    "imagePrompt": {
+      "title": "Reverse Prompt Engineering",
+      "description": "Drag & drop an image or paste (Ctrl+V) to analyze its visual concepts and reconstruct its AI prompt.",
+      "analysisComplete": "Analysis complete!",
+      "insufficientCredits": "Insufficient Credits",
+      "analysisCost": "Analysis costs {count} credits.",
+      "getMoreCredits": "Get More Credits →",
+      "freeLimitReached": "Free limit reached. Please login to continue.",
+      "applyToGenerator": "Apply to Generator",
+      "analyzedPrompt": "Analyzed Prompt",
+      "copyPrompt": "Copy Prompt",
+      "copied": "Copied",
+      "editable": "Editable",
+      "refineWithTags": "Refine with Tag Chips",
+      "sourceInspiration": "Source Inspiration",
+      "sourceInspirationDesc": "Visual DNA extracted from the original pixels. Every tag represents a core aesthetic dimension.",
+      "extractingConcepts": "Extracting concepts..."
+    },
+    "history": {
+      "today": "Today's Creations",
+      "older": "Archive",
+      "itemsSelected": "{count} items selected",
+      "artGenerated": "Art generated successfully!",
+      "generationError": "An error occurred during generation.",
+      "aiCasting": "AI is casting your vision...",
+      "promptApplied": "Prompt applied! Ready to generate.",
+      "creationRemoved": "Creation removed",
+      "batchRemoved": "Removed {count} items from history"
+    },
+    "login": "Login",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "Pricing": {
+    "title": "UNLEASH YOUR ZENITH VISION",
+    "subtitle": "Transform imagination into pixels with professional AI. Select a plan to elevate your creative mastery.",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "save": "SAVE 25%",
+    "cta": "Upgrade to",
+    "popular": "MOST POPULAR",
+    "redirecting": "Preparing secure checkout...",
+    "credits": "HIGH-SPEED CREDITS",
+    "guaranteeTitle": "IRONCLAD GUARANTEE",
+    "guaranteeDesc": "Not satisfied? We offer a 7-day refund policy for all plans if you've used less than 20 credits.",
+    "secureTitle": "SECURE INFRASTRUCTURE",
+    "secureDesc": "Payments are processed via Stripe with 256-bit SSL encryption. We never store your card info.",
+    "plans": {
+      "initiate": {
+        "name": "Initiate",
+        "desc": "Start your journey into the anime universe."
+      },
+      "elite": {
+        "name": "Elite",
+        "desc": "The powerhouse for content creators & professional artists."
+      },
+      "zenith": {
+        "name": "Zenith",
+        "desc": "Ultimate performance for professional studios."
+      }
+    }
+  }
 }

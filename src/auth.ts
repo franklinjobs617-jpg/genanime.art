@@ -50,12 +50,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               accessToken: account.access_token,
               picture: user.image,
               name: user.name,
-              // 注意：这里更新的是 googleUserId。如果数据库此列已有值且不想改变，可移除此行
             },
             create: {
               email: email,
               type: CURRENT_SITE_TYPE,
-              googleUserId: crypto.randomUUID(), // 如果是新用户，生成一个 UUID 作为 googleUserId
+              googleUserId: crypto.randomUUID(), 
               name: user.name,
               givenName: (profile as any)?.given_name,
               familyName: (profile as any)?.family_name,

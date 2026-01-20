@@ -530,12 +530,12 @@ export default function GeneratorClient() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2.5 px-4 py-2.5 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 backdrop-blur-md rounded-full border border-amber-500/30 hover:from-amber-500/30 hover:to-yellow-500/30 transition-all cursor-help">
+            <Link href="/pricing" className="flex items-center gap-2.5 px-4 py-2.5 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 backdrop-blur-md rounded-full border border-amber-500/30 hover:from-amber-500/30 hover:to-yellow-500/30 transition-all cursor-pointer">
               <Coins className="w-5 h-5 text-amber-400" />
               <span className="text-base font-black tabular-nums text-amber-200 tracking-wider">
                 {user ? user.credits : `${remainingGuest}/${GUEST_FREE_LIMIT}`}
               </span>
-            </div>
+            </Link>
             {authLoading ? (
               <div className="w-10 h-10 rounded-full bg-zinc-800 animate-pulse" />
             ) : user ? (

@@ -67,7 +67,6 @@ export default function Header() {
     {
       name: t('promptLibrary'), href: "/prompt-library"
     },
-    { name: t('imageToPrompt'), href: "/image-to-prompt" },
     // 优化：在菜单里显示简短名称，但链接保持长 URL 以利于 SEO
     { name: t('aiGuide'), href: "/blog/how-to-make-anime-art-ai-rtx-8090-guide" },
     { name: t('howToExtract'), href: "/how-to-reverse-image-to-prompt-anime-guide" }
@@ -117,9 +116,9 @@ export default function Header() {
               <div className="w-8 h-8 rounded-full bg-zinc-800 animate-pulse border border-white/10"></div>
             ) : user ? (
               <div className="flex items-center gap-4">
-                <div className="px-3 py-1.5 bg-zinc-900 rounded-full text-xs font-bold text-zinc-300 border border-white/10 select-none">
+                <Link href="/pricing" className="px-3 py-1.5 bg-zinc-900 rounded-full text-xs font-bold text-zinc-300 border border-white/10 select-none hover:bg-zinc-800 transition-colors">
                   {user.credits} Credits
-                </div>
+                </Link>
 
                 <div className="relative" ref={dropdownRef}>
                   <button
@@ -219,10 +218,10 @@ export default function Header() {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between bg-black/40 p-4 rounded-2xl border border-white/5">
+                    <Link href="/pricing" className="flex items-center justify-between bg-black/40 p-4 rounded-2xl border border-white/5 hover:bg-black/60 transition-colors">
                       <span className="text-zinc-400 font-bold uppercase text-[10px] tracking-widest">Balance</span>
                       <span className="text-indigo-400 font-black">{user.credits} Credits</span>
-                    </div>
+                    </Link>
 
                     <button
                       onClick={() => { logout(); setIsMobileMenuOpen(false); }}

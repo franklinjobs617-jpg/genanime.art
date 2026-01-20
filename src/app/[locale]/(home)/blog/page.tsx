@@ -21,15 +21,6 @@ const blogPosts = [
     category: "Tutorial",
     slug: "/how-to-reverse-image-to-prompt-anime-guide"
   },
-  {
-    id: 3,
-    title: "Image to Prompt Generator for Anime Art",
-    excerpt: "Turn any anime image into a high-quality AI prompt in seconds. Learn how to reverse engineer anime artwork and extract professional prompts.",
-    date: "Jan 19, 2026",
-    readTime: "5 min read",
-    category: "Tutorial",
-    slug: "/image-to-prompt"
-  },
 ];
 
 export default function BlogPage() {

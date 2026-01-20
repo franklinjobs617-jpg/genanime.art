@@ -94,21 +94,21 @@ const DICTIONARIES: any = {
           title: "Upload Reference Image",
           desc: "Select any anime illustration, screenshot, or AI-generated image. High-resolution images yield better detail detection.",
           img: "/ScreenShot_2026-01-19_185738_548.png",
-          alt: "Upload anime image to prompt extraction tool interface showing drag and drop area"
+          alt: "Upload anime image to prompt extraction tool interface showing drag and drop area",
         },
         {
           num: "02",
           title: "AI Aesthetic Analysis",
           desc: "Our engine scans for composition, lighting, color palette, and character traits (hair color, eye shape, clothing).",
           img: "/ScreenShot_2026-01-19_185750_124.png",
-          alt: "AI analysis screen showing technical tags and visual elements detected from anime image"
+          alt: "AI analysis screen showing technical tags and visual elements detected from anime image",
         },
         {
           num: "03",
           title: "Copy & Remix",
           desc: "Get the raw prompt. Copy it directly or use our built-in modifier to tweak the hair color or setting before generating.",
           img: "/ScreenShot_2026-01-19_185803_171.png",
-          alt: "Generated prompt results displayed in text editor with copy and edit functionality"
+          alt: "Generated prompt results displayed in text editor with copy and edit functionality",
         },
       ],
     },
@@ -220,21 +220,21 @@ const DICTIONARIES: any = {
           title: "Subir Imagen de Referencia",
           desc: "Selecciona cualquier ilustración o captura de anime. Las imágenes de alta resolución dan mejores detalles.",
           img: "/ScreenShot_2026-01-19_185738_548.webp",
-          alt: "Interfaz de herramienta de extracción de prompt mostrando área de arrastrar y soltar"
+          alt: "Interfaz de herramienta de extracción de prompt mostrando área de arrastrar y soltar",
         },
         {
           num: "02",
           title: "Análisis Estético IA",
           desc: "Nuestro motor escanea composición, iluminación, paleta de colores y rasgos del personaje.",
           img: "/ScreenShot_2026-01-19_185750_124.webp",
-          alt: "Pantalla de análisis IA mostrando etiquetas técnicas y elementos visuales detectados"
+          alt: "Pantalla de análisis IA mostrando etiquetas técnicas y elementos visuales detectados",
         },
         {
           num: "03",
           title: "Copiar y Remixar",
           desc: "Obtén el prompt crudo. Cópialo directamente o usa nuestro modificador integrado para ajustar detalles.",
           img: "/ScreenShot_2026-01-19_185803_171.webp",
-          alt: "Resultados de prompt generados mostrados en editor de texto con funcionalidad de copiar y editar"
+          alt: "Resultados de prompt generados mostrados en editor de texto con funcionalidad de copiar y editar",
         },
       ],
     },
@@ -298,7 +298,6 @@ export default async function ImageToPromptPage({
 
   return (
     <article className="min-h-screen bg-[#020203] text-zinc-300 selection:bg-indigo-500/40 pb-20 font-sans">
-      {/* --- HERO SECTION (保留了您喜欢的原版高级黑背景) --- */}
       <header className="relative w-full pt-32 pb-24 px-6 overflow-hidden">
         {/* 背景光效 */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-indigo-600/10 blur-[120px] rounded-full pointer-events-none" />
@@ -335,7 +334,6 @@ export default async function ImageToPromptPage({
       </header>
 
       <main className="max-w-5xl mx-auto px-6">
-        {/* --- SEO DEEP DIVE (新增：长文本介绍，针对SEO优化) --- */}
         <section className="prose prose-invert prose-lg max-w-3xl mx-auto mb-24 text-center">
           <h2 className="text-3xl font-bold text-white mb-6">
             {t.seo_intro.title}
@@ -392,7 +390,7 @@ export default async function ImageToPromptPage({
         </section>
 
         {/* --- HOW TO STEPS --- */}
-     {/* --- HOW TO STEPS (修复版：全图显示，清晰可见) --- */}
+        {/* --- HOW TO STEPS (修复版：全图显示，清晰可见) --- */}
         <section className="mb-32">
           <h2 className="text-4xl font-bold text-white mb-20 text-center">
             {t.steps.title}
@@ -419,17 +417,17 @@ export default async function ImageToPromptPage({
                 </div>
 
                 {/* 图片部分 (修复：完整显示不裁剪) */}
-                <div className="flex-1 w-full max-w-[650px] relative">
+                <div className="flex-1 w-full max-w-[700px] relative">
                   {/* 背景光晕 */}
                   <div className="absolute -inset-4 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-[30px] blur-2xl opacity-0 group-hover:opacity-100 transition duration-700" />
-                  
+
                   {/* 浏览器窗口容器 */}
                   <div className="relative rounded-xl overflow-hidden bg-[#131316] border border-white/10 shadow-2xl">
                     {/* 模拟浏览器头部 */}
                     <div className="h-8 bg-[#1A1A1E] border-b border-white/5 flex items-center px-4 gap-2">
-                      <div className="w-3 h-3 rounded-full bg-[#FF5F57]" /> 
-                      <div className="w-3 h-3 rounded-full bg-[#FEBC2E]" /> 
-                      <div className="w-3 h-3 rounded-full bg-[#28C840]" /> 
+                      <div className="w-3 h-3 rounded-full bg-[#FF5F57]" />
+                      <div className="w-3 h-3 rounded-full bg-[#FEBC2E]" />
+                      <div className="w-3 h-3 rounded-full bg-[#28C840]" />
                       <div className="ml-4 flex-1 h-4 bg-white/5 rounded-full max-w-[200px]" />
                     </div>
 
@@ -444,8 +442,8 @@ export default async function ImageToPromptPage({
                         // 🌟 核心修改：
                         // object-contain: 保证图片完整显示，不裁剪
                         // object-center: 图片居中
-                        className="object-contain object-center transition-transform duration-500 group-hover:scale-[1.01]"
-                        sizes="(max-width: 768px) 100vw, 650px"
+                        className="object-contain object-center transition-transform duration-500 group-hover:scale-[1.02]"
+                        sizes="(max-width: 768px) 100vw, 700px"
                       />
                     </div>
                   </div>

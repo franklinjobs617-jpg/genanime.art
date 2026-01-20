@@ -14,7 +14,6 @@ const siteMapData = {
   translatedPages: [
     { url: "", changefreq: "daily", priority: 1.0 },
     { url: "/generator", changefreq: "daily", priority: 0.9 },
-    { url: "/image-to-prompt", changefreq: "daily", priority: 0.8 },
     { url: "/how-to-reverse-image-to-prompt-anime-guide", changefreq: "monthly", priority: 0.7 },
   ] as Page[],
 

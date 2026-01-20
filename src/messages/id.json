@@ -29,8 +29,7 @@
         "models": "Model AI",
         "ponyDiffusion": "Pony Diffusion",
         "privacy": "Kebijakan Privasi",
-        "terms": "Syarat Layanan",
-        "imageToPrompt": "Gambar ke Prompt"
+        "terms": "Syarat Layanan"
     },
     "Hero": {
         "titleLine1": "Pembuat",

@@ -171,7 +171,7 @@ export default function GhibliPage({ params }: PageProps) {
               {/* Image AFTER (Ghibli) */}
               <div className="absolute inset-0 bg-zinc-800">
                 <img
-                  src="/br/ghibli_landscape_sample.webp"
+                  src="/ghibli-style-portrait-after.webp"
                   alt="Ghibli Version"
                   className="absolute inset-0 w-full h-full object-cover"
                   draggable={false}
@@ -187,7 +187,7 @@ export default function GhibliPage({ params }: PageProps) {
                 style={{ width: `${sliderPosition}%` }}
               >
                 <img
-                  src="/br/real_landscape_sample.webp"
+                  src="/ghibli-style-portrait-before.webp"
                   alt="Original Photo"
                   className="absolute inset-0 w-[100vw] max-w-5xl h-full object-cover"
                   style={{ width: 'calc(100vw - 2rem)', maxWidth: '64rem' }}

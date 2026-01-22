@@ -13,7 +13,7 @@ import {
   Home,
   History,
   Trash2,
-  SlidersHorizontal 
+  SlidersHorizontal
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@/i18n/routing";
@@ -116,7 +116,7 @@ export default function GeneratorClient() {
 
     const prompt = searchParams.get("prompt");
     if (prompt) setActivePrompt(decodeURIComponent(prompt));
-    
+
     const style = searchParams.get("style");
     if (style) setActiveStyle(decodeURIComponent(style));
 
@@ -124,7 +124,7 @@ export default function GeneratorClient() {
     if (mode === "upload") {
       setGenerationMode("image-to-prompt");
     }
-    
+
     const modelParam = searchParams.get("model");
     if (modelParam) {
       const decodedModel = decodeURIComponent(modelParam);
@@ -150,16 +150,16 @@ export default function GeneratorClient() {
   }, [history]);
 
   const handleGenerate = useCallback(async () => {
-     if (!activePrompt.trim() && generationMode !== "image-to-image") {
+    if (!activePrompt.trim() && generationMode !== "image-to-image") {
       toast.error("Please enter a prompt before generating.");
       return;
     }
-    
+
     if (generationMode === "image-to-image" && !image) {
       toast.error("Please upload a reference image for Image-to-Image generation.");
       return;
     }
-    
+
     if (activeQuantity <= 0 || activeQuantity > 4) {
       toast.error("Invalid number of images selected.");
       return;
@@ -172,9 +172,9 @@ export default function GeneratorClient() {
         return;
       }
     } else if ((Number(user.credits) || 0) < currentTotalCost) {
-        // ... (原有的积分不足提示逻辑)
-        toast.error(t("imagePrompt.insufficientCredits"));
-        return;
+      // ... (原有的积分不足提示逻辑)
+      toast.error(t("imagePrompt.insufficientCredits"));
+      return;
     }
 
     setIsGenerating(true);
@@ -204,6 +204,14 @@ export default function GeneratorClient() {
         QUALITY_PROMPT
       ].filter(Boolean).join(", ");
 
+      // 调试日志：确保风格正确应用
+      console.log('Style Application Debug:', {
+        activeStyle,
+        stylePrompt,
+        originalPrompt: activePrompt,
+        enhancedPrompt
+      });
+
       let requestBody: any = {
         prompt: enhancedPrompt,
         originalPrompt: activePrompt,
@@ -224,14 +232,14 @@ export default function GeneratorClient() {
           reader.onerror = reject;
           reader.readAsDataURL(image);
         });
-        
+
         requestBody.image = imageBase64;
         requestBody.strength = imageStrength;
       }
 
       // 根据生成模式选择正确的 API 端点
-      const apiEndpoint = generationMode === "image-to-image" 
-        ? "/api/generate-img2img" 
+      const apiEndpoint = generationMode === "image-to-image"
+        ? "/api/generate-img2img"
         : "/api/generate";
 
       const response = await fetch(apiEndpoint, {
@@ -273,7 +281,7 @@ export default function GeneratorClient() {
   }, [activePrompt, activeStyle, activeRatio, activeQuantity, isGenerating, user, guestGenerations, currentTotalCost, refreshUser, generationMode, image, imageStrength, negativePrompt, activeModel]);
 
   const handleAnalysisSuccess = useCallback(() => {
-     if (!user) {
+    if (!user) {
       const newCount = guestGenerations + 1;
       setGuestGenerations(newCount);
       localStorage.setItem("guest_generations", newCount.toString());
@@ -324,7 +332,7 @@ export default function GeneratorClient() {
   };
 
   const handleImageToPrompt = async (imageUrl: string) => {
-     try {
+    try {
       const response = await fetch(imageUrl);
       const blob = await response.blob();
       const fileName = `image_${Date.now()}.png`;
@@ -385,12 +393,12 @@ export default function GeneratorClient() {
       </aside>
 
       <main className="flex-1 flex flex-col relative overflow-hidden bg-[#09090b]">
-        
+
         <header className="flex items-center justify-between px-6 h-16 border-b border-zinc-800/50 bg-[#09090b] z-40">
           {/* Mobile Left: Home + Menu */}
           <div className="flex items-center gap-3">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="lg:hidden p-2 text-zinc-400 hover:text-white hover:bg-zinc-800/50 rounded-md transition-all"
             >
               <Home className="w-5 h-5" />
@@ -457,7 +465,7 @@ export default function GeneratorClient() {
                 Credits
               </span>
             </Link>
-            
+
             {authLoading ? (
               <div className="w-9 h-9 rounded-full bg-zinc-800 animate-pulse" />
             ) : user ? (
@@ -485,7 +493,7 @@ export default function GeneratorClient() {
         >
           <div className="w-full max-w-9xl mx-auto pb-20 space-y-10">
             <div className="flex flex-col gap-6">
-              
+
               <div className="lg:hidden flex p-1 bg-zinc-900/50 border border-zinc-800 rounded-lg mb-2">
                 {[
                   { id: "text-to-image", label: "Text" },
@@ -495,11 +503,10 @@ export default function GeneratorClient() {
                   <button
                     key={item.id}
                     onClick={() => setGenerationMode(item.id as any)}
-                    className={`flex-1 py-1.5 text-[10px] font-semibold uppercase tracking-wider rounded-md transition-all ${
-                      generationMode === item.id
-                        ? "bg-zinc-800 text-zinc-100 shadow-sm"
-                        : "text-zinc-500 hover:text-zinc-300"
-                    }`}
+                    className={`flex-1 py-1.5 text-[10px] font-semibold uppercase tracking-wider rounded-md transition-all ${generationMode === item.id
+                      ? "bg-zinc-800 text-zinc-100 shadow-sm"
+                      : "text-zinc-500 hover:text-zinc-300"
+                      }`}
                   >
                     {item.label}
                   </button>
@@ -515,26 +522,26 @@ export default function GeneratorClient() {
                     exit={{ opacity: 0, y: -10 }}
                     className="w-full"
                   >
-                       <PromptConsole
-                          activePrompt={activePrompt}
-                          setActivePrompt={setActivePrompt}
-                          negativePrompt={negativePrompt}
-                          setNegativePrompt={setNegativePrompt}
-                          isGenerating={isGenerating}
-                          onGenerate={handleGenerate}
-                          canGenerate={canGenerate()}
-                          isGuest={!user}
-                          guestGenerations={guestGenerations}
-                          guestLimit={GUEST_FREE_LIMIT}
-                          image={image}
-                          setImage={setImage}
-                          imagePreview={imagePreview}
-                          setImagePreview={setImagePreview}
-                          mode={generationMode}
-                          preset={activePreset}
-                          imageStrength={imageStrength}
-                          setImageStrength={setImageStrength}
-                       />
+                    <PromptConsole
+                      activePrompt={activePrompt}
+                      setActivePrompt={setActivePrompt}
+                      negativePrompt={negativePrompt}
+                      setNegativePrompt={setNegativePrompt}
+                      isGenerating={isGenerating}
+                      onGenerate={handleGenerate}
+                      canGenerate={canGenerate()}
+                      isGuest={!user}
+                      guestGenerations={guestGenerations}
+                      guestLimit={GUEST_FREE_LIMIT}
+                      image={image}
+                      setImage={setImage}
+                      imagePreview={imagePreview}
+                      setImagePreview={setImagePreview}
+                      mode={generationMode}
+                      preset={activePreset}
+                      imageStrength={imageStrength}
+                      setImageStrength={setImageStrength}
+                    />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -552,22 +559,22 @@ export default function GeneratorClient() {
                   </motion.div>
                 )}
               </AnimatePresence>
-              
+
               {/* PlansBanner 等其他组件保持不变... */}
               <AnimatePresence>
                 {((!user && guestGenerations > 0) ||
                   (user && Number(user.credits) < 50)) && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="w-full overflow-hidden shadow-xl border border-indigo-500/10 rounded-2xl"
-                  >
-                    <PlansBanner
-                      isGuest={!user}
-                      onLogin={() => setShowLoginModal(true)}
-                    />
-                  </motion.div>
-                )}
+                    <motion.div
+                      initial={{ opacity: 0, y: -20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="w-full overflow-hidden shadow-xl border border-indigo-500/10 rounded-2xl"
+                    >
+                      <PlansBanner
+                        isGuest={!user}
+                        onLogin={() => setShowLoginModal(true)}
+                      />
+                    </motion.div>
+                  )}
               </AnimatePresence>
             </div>
             {/* History List ... */}

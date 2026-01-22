@@ -10,22 +10,7 @@ const GLOBAL_QUALITY_BOOSTER =
 const GLOBAL_NEGATIVE_PROMPT =
   "low quality, worst quality, ugly, blurry, pixelated, jpeg artifacts, text, watermark, signature, bad anatomy, bad hands, deformed, amateur";
 
-const STYLE_PROMPTS: Record<string, string> = {
-  Default: "",
-  Realism:
-    "photorealistic, raw photo, dslr, soft lighting, highly detailed skin texture, hyper-realistic",
-  "Vibrant Anime":
-    "official art, unity 8k wallpaper, ultra detailed, vibrant colors, aesthetic masterpiece",
-  "Studio Ghibli": 
-    "studio ghibli style, miyazaki hayao style, hand-drawn animation, cel shading, soft natural lighting, muted colors, peaceful atmosphere, nostalgic, magical realism, watercolor style, dreamy, whimsical",
-  "Retro 90s": "1990s anime style, cel shaded, vintage aesthetic, vhs noise",
-  "Elite Game Splash":
-    "game splash art, genshin impact style, honkai star rail style, dynamic pose",
-  "Makoto Ethereal":
-    "makoto shinkai style, kimi no na wa style, breathtaking scenery, highly detailed",
-  "Cyberpunk Trigger": "studio trigger style, neon lights, bold lines, vivid colors",
-  "Pastel Luxe Art": "pastel colors, soft lighting, painterly, dreamlike",
-};
+// 注意：风格处理现在完全由前端负责，后端不再重复处理风格提示词
 
 const ANIME_STYLES = [
   "Vibrant Anime",
@@ -132,7 +117,8 @@ export async function POST(req: NextRequest) {
       finalPrompt = "maintain the original style and aesthetic, preserve the visual characteristics";
     }
 
-    if (model) {
+    // 根据模型类型添加预设前缀（仅在前端未处理时）
+    if (model && !finalPrompt.includes("score_9") && !finalPrompt.includes("studio ghibli") && !finalPrompt.includes("photorealistic details")) {
       if (model.includes("Pony") || model.toLowerCase().includes("pony")) {
         finalPrompt = "score_9, score_8_up, score_7_up, anime source, " + finalPrompt;
       } else if (model.includes("Niji") || model.toLowerCase().includes("niji")) {
@@ -146,10 +132,11 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const styleSuffix = STYLE_PROMPTS[style];
-    if (styleSuffix && style !== "Default") {
-      finalPrompt = finalPrompt ? `${finalPrompt}, ${styleSuffix}` : styleSuffix;
-    }
+    // 移除后端的重复风格处理，因为前端已经处理了
+    // const styleSuffix = STYLE_PROMPTS[style];
+    // if (styleSuffix && style !== "Default") {
+    //   finalPrompt = finalPrompt ? `${finalPrompt}, ${styleSuffix}` : styleSuffix;
+    // }
 
     // 添加 img2img 特定的指导
     const hint = strengthToHint(Number(strength));
@@ -159,7 +146,10 @@ export async function POST(req: NextRequest) {
       finalPrompt = hint;
     }
     
-    finalPrompt += `, ${GLOBAL_QUALITY_BOOSTER}`;
+    // 确保包含全局质量提升词（避免重复添加）
+    if (!finalPrompt.includes("masterpiece") && !finalPrompt.includes("best quality")) {
+      finalPrompt += `, ${GLOBAL_QUALITY_BOOSTER}`;
+    }
 
     let finalNegative = GLOBAL_NEGATIVE_PROMPT;
     if (negativePrompt?.trim()) {

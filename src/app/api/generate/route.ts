@@ -7,22 +7,7 @@ const COST_PER_IMAGE = 2;
 const GLOBAL_QUALITY_BOOSTER = "masterpiece, best quality, aesthetic, breathtaking, 8k uhd, highly detailed, sharp focus, perfect composition, high fidelity, rich textures";
 const GLOBAL_NEGATIVE_PROMPT = "low quality, worst quality, ugly, blurry, pixelated, jpeg artifacts, text, watermark, signature, bad anatomy, bad hands, deformed, amateur";
 
-const STYLE_PROMPTS: Record<string, string> = {
-  "Default": "",
-  "Realism": "photorealistic, raw photo, dslr, soft lighting, highly detailed skin texture, hyper-realistic",
-  "Vibrant Anime":
-    "official art, unity 8k wallpaper, ultra detailed, vibrant colors, aesthetic masterpiece",
-  "Studio Ghibli": 
-    "studio ghibli style, miyazaki hayao style, hand-drawn animation, cel shading, soft natural lighting, muted colors, peaceful atmosphere, nostalgic, magical realism, watercolor style, dreamy, whimsical",
-  "Retro 90s": "1990s anime style, cel shaded, vintage aesthetic, vhs noise",
-  "Elite Game Splash":
-    "game splash art, genshin impact style, honkai star rail style, dynamic pose",
-  "Makoto Ethereal":
-    "makoto shinkai style, kimi no na wa style, breathtaking scenery, highly detailed",
-  "Cyberpunk Trigger":
-    "studio trigger style, neon lights, bold lines, vivid colors",
-  "Pastel Luxe Art": "pastel colors, soft lighting, painterly, dreamlike",
-};
+// 注意：风格处理现在完全由前端负责，后端不再重复处理风格提示词
 
 // 定义动漫相关的风格
 const ANIME_STYLES = [
@@ -97,10 +82,18 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // 1. Base Prompt
+    // 1. 使用前端已经处理好的增强提示词（包含风格）
     let finalPrompt = prompt;
-    // 根据模型类型添加预设前缀
-    if (model) {
+    
+    // 调试日志：检查接收到的提示词
+    console.log('Backend Prompt Processing:', {
+      receivedPrompt: prompt,
+      style: style,
+      model: model
+    });
+    
+    // 2. 根据模型类型添加预设前缀（仅在前端未处理时）
+    if (model && !prompt.includes("score_9") && !prompt.includes("studio ghibli") && !prompt.includes("photorealistic details")) {
       if (model.includes("Pony") || model.toLowerCase().includes("pony")) {
         finalPrompt = "score_9, score_8_up, score_7_up, anime source, " + finalPrompt;
       } else if (model.includes("Niji") || model.toLowerCase().includes("niji")) {
@@ -110,14 +103,12 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // 2. Add Style Suffix (if not Default)
-    const styleSuffix = STYLE_PROMPTS[style];
-    if (styleSuffix && style !== "Default") {
-      finalPrompt += `, ${styleSuffix}`;
+    // 3. 确保包含全局质量提升词（避免重复添加）
+    if (!finalPrompt.includes("masterpiece") && !finalPrompt.includes("best quality")) {
+      finalPrompt += `, ${GLOBAL_QUALITY_BOOSTER}`;
     }
-
-    // 3. Force Global Quality Boosters
-    finalPrompt += `, ${GLOBAL_QUALITY_BOOSTER}`;
+    
+    console.log('Final processed prompt:', finalPrompt);
 
     // 4. Build Negative Prompt
     let finalNegative = GLOBAL_NEGATIVE_PROMPT;

@@ -9,13 +9,11 @@ import ImagePromptConsole from "@/components/generator/ImagePromptConsole";
 import WelcomeGuide from "@/components/generator/WelcomeGuide";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
-  Settings,
   Coins,
-  Home, // 确保引入 Home 图标
+  Home,
   History,
   Trash2,
-  ChevronLeft, // 新增返回箭头图标
-  SlidersHorizontal // 建议用这个图标代表参数设置，比 Settings 更直观
+  SlidersHorizontal 
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@/i18n/routing";
@@ -103,8 +101,6 @@ export default function GeneratorClient() {
     return guestGenerations < GUEST_FREE_LIMIT;
   }, [user, guestGenerations, currentTotalCost]);
 
-  // ... (Effect 和 Handler 逻辑保持不变)
-  // 为了节省篇幅，省略未修改的逻辑代码...
   useEffect(() => {
     const savedGuestCount = localStorage.getItem("guest_generations");
     if (savedGuestCount) setGuestGenerations(Number(savedGuestCount));
@@ -154,11 +150,16 @@ export default function GeneratorClient() {
   }, [history]);
 
   const handleGenerate = useCallback(async () => {
-     // ... (保持原有的 handleGenerate 逻辑)
-     if (!activePrompt.trim()) {
+     if (!activePrompt.trim() && generationMode !== "image-to-image") {
       toast.error("Please enter a prompt before generating.");
       return;
     }
+    
+    if (generationMode === "image-to-image" && !image) {
+      toast.error("Please upload a reference image for Image-to-Image generation.");
+      return;
+    }
+    
     if (activeQuantity <= 0 || activeQuantity > 4) {
       toast.error("Invalid number of images selected.");
       return;
@@ -203,19 +204,40 @@ export default function GeneratorClient() {
         QUALITY_PROMPT
       ].filter(Boolean).join(", ");
 
-      const response = await fetch("/api/generate", {
+      let requestBody: any = {
+        prompt: enhancedPrompt,
+        originalPrompt: activePrompt,
+        style: activeStyle,
+        ratio: activeRatio,
+        quantity: activeQuantity,
+        googleUserId: user?.googleUserId,
+        negativePrompt: negativePrompt,
+        model: activeModel,
+      };
+
+      // 为 img2img 模式添加图片数据
+      if (generationMode === "image-to-image" && image) {
+        // 将 File 转换为 base64
+        const imageBase64 = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(image);
+        });
+        
+        requestBody.image = imageBase64;
+        requestBody.strength = imageStrength;
+      }
+
+      // 根据生成模式选择正确的 API 端点
+      const apiEndpoint = generationMode === "image-to-image" 
+        ? "/api/generate-img2img" 
+        : "/api/generate";
+
+      const response = await fetch(apiEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt: enhancedPrompt, // Send enhanced prompt to backend
-          originalPrompt: activePrompt, // Optional: send original for reference if needed
-          style: activeStyle,
-          ratio: activeRatio,
-          quantity: activeQuantity,
-          googleUserId: user?.googleUserId,
-          negativePrompt: negativePrompt,
-          model: activeModel,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) throw new Error("Generation failed");
@@ -248,7 +270,7 @@ export default function GeneratorClient() {
     } finally {
       setIsGenerating(false);
     }
-  }, [activePrompt, activeStyle, activeRatio, activeQuantity, isGenerating, user, guestGenerations, currentTotalCost, refreshUser]);
+  }, [activePrompt, activeStyle, activeRatio, activeQuantity, isGenerating, user, guestGenerations, currentTotalCost, refreshUser, generationMode, image, imageStrength, negativePrompt, activeModel]);
 
   const handleAnalysisSuccess = useCallback(() => {
      if (!user) {

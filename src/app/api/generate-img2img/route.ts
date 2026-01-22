@@ -56,10 +56,10 @@ const ASPECT_RATIO_DIMENSIONS: Record<string, { width: number; height: number }>
 
 function strengthToHint(strength: number) {
   const s = Math.max(0, Math.min(1, strength));
-  if (s <= 0.25) return "Very low remix. Preserve the original image closely.";
-  if (s <= 0.55) return "Moderate remix. Keep key identity and composition.";
-  if (s <= 0.8) return "Strong remix. Allow creative changes while respecting the reference.";
-  return "Very strong remix. Use the reference loosely and be highly creative.";
+  if (s <= 0.3) return "Preserve the original image composition, colors, and details closely. Make minimal changes.";
+  if (s <= 0.5) return "Keep the main subject and composition. Allow moderate style changes while maintaining identity.";
+  if (s <= 0.7) return "Allow significant style transformation while preserving the core subject and pose.";
+  return "Strong creative transformation. Use the reference image as loose inspiration.";
 }
 
 export async function POST(req: NextRequest) {
@@ -74,12 +74,20 @@ export async function POST(req: NextRequest) {
       negativePrompt,
       model = "",
       image,
-      strength = 0.6,
+      strength = 0.4, // 降低默认 strength，更好地保持原图特征
     } = body as any;
 
     if (!image) {
       return NextResponse.json(
         { success: false, error: "Reference image is required for Img2Img" },
+        { status: 400 }
+      );
+    }
+
+    // 验证图片格式
+    if (!image.startsWith('data:image/')) {
+      return NextResponse.json(
+        { success: false, error: "Invalid image format. Please provide a valid base64 image." },
         { status: 400 }
       );
     }
@@ -119,6 +127,11 @@ export async function POST(req: NextRequest) {
 
     let finalPrompt = (prompt || "").trim();
 
+    // 如果没有提供 prompt 且没有选择特定风格，添加保持原图风格的指导
+    if (!finalPrompt && style === "Default") {
+      finalPrompt = "maintain the original style and aesthetic, preserve the visual characteristics";
+    }
+
     if (model) {
       if (model.includes("Pony") || model.toLowerCase().includes("pony")) {
         finalPrompt = "score_9, score_8_up, score_7_up, anime source, " + finalPrompt;
@@ -138,8 +151,14 @@ export async function POST(req: NextRequest) {
       finalPrompt = finalPrompt ? `${finalPrompt}, ${styleSuffix}` : styleSuffix;
     }
 
+    // 添加 img2img 特定的指导
     const hint = strengthToHint(Number(strength));
-    finalPrompt = finalPrompt ? `${finalPrompt}. ${hint}` : hint;
+    if (finalPrompt) {
+      finalPrompt = `${finalPrompt}. ${hint}`;
+    } else {
+      finalPrompt = hint;
+    }
+    
     finalPrompt += `, ${GLOBAL_QUALITY_BOOSTER}`;
 
     let finalNegative = GLOBAL_NEGATIVE_PROMPT;
@@ -167,18 +186,34 @@ export async function POST(req: NextRequest) {
     const isAnimeStyle = ANIME_STYLES.includes(style);
 
     const baseParams: any = {
-      model:
-        process.env.DOUBAO_T2I_ENDPOINT_ID,
+      model: process.env.DOUBAO_T2I_ENDPOINT_ID,
       prompt: finalPrompt,
-      image,
+      image: image, // 确保原始图片被传递
+      strength: Number(strength), // 添加 strength 参数控制变化程度
       size: sizeStr as any,
       response_format: "b64_json",
       watermark: false,
+      // 添加 img2img 特定参数
+      image_guidance_scale: 1.5, // 图片引导强度
+      num_inference_steps: isAnimeStyle ? ANIME_DEFAULT_PARAMS.steps : 25,
     };
 
+    // 为动漫风格添加特殊参数
     if (isAnimeStyle) {
-      baseParams.prompt = `${finalPrompt}, vae:${ANIME_DEFAULT_PARAMS.vae}, cfg_scale:${ANIME_DEFAULT_PARAMS.cfg_scale}, steps:${ANIME_DEFAULT_PARAMS.steps}, sampler:${ANIME_DEFAULT_PARAMS.sampler_name}, clip_skip:${ANIME_DEFAULT_PARAMS.clip_skip}`;
+      baseParams.cfg_scale = ANIME_DEFAULT_PARAMS.cfg_scale;
+      baseParams.sampler_name = ANIME_DEFAULT_PARAMS.sampler_name;
+      baseParams.clip_skip = ANIME_DEFAULT_PARAMS.clip_skip;
+      // 不要在 prompt 中重复添加这些参数，而是作为独立参数传递
     }
+
+    console.log('Img2Img Debug Info:', {
+      hasImage: !!image,
+      imagePrefix: image?.substring(0, 50) + '...',
+      prompt: finalPrompt,
+      style,
+      strength,
+      model: process.env.DOUBAO_T2I_ENDPOINT_ID
+    });
 
     const promises = Array.from({ length: effectiveQuantity }).map(() =>
       client.images.generate(baseParams)
@@ -229,8 +264,19 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, images: imageUrls });
   } catch (error: any) {
+    console.error('Img2Img Generation Error:', {
+      message: error?.message,
+      status: error?.status,
+      code: error?.code,
+      stack: error?.stack
+    });
+    
     return NextResponse.json(
-      { success: false, error: error?.message || "Generation failed" },
+      { 
+        success: false, 
+        error: error?.message || "Generation failed",
+        details: process.env.NODE_ENV === 'development' ? error?.stack : undefined
+      },
       { status: 500 }
     );
   }

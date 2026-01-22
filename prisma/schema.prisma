@@ -21,6 +21,8 @@ model user {
   accessToken   String?  @db.Text @map("access_token")
   ip            String?  @default("0.0.0.0")
   type          String   @default("1") // 对应网站类型：1.removermarca 2.genanime 等
+  lastDailyReward DateTime? @map("last_daily_reward") // 最后一次领取每日奖励的时间
+  currentStreak   Int?     @default(0) @map("current_streak") // 当前连续签到天数
   createTime    DateTime @default(now()) @map("create_time")
   updateTime    DateTime @updatedAt @map("update_time")
 

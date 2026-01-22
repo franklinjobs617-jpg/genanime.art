@@ -21,6 +21,7 @@ import dynamic from "next/dynamic";
 import { toast, Toaster } from "react-hot-toast";
 import ShowcaseGallery from "@/components/generator/ShowcaseGallery";
 import { useTranslations } from "next-intl";
+import { trackConversionFunnel, trackDailyReward, AnalyticsEvents, trackEvent } from "@/lib/analytics";
 
 // ... (导入部分保持不变)
 const PlansBanner = dynamic(
@@ -39,6 +40,12 @@ const ImageDetailModal = dynamic(
   { ssr: false }
 );
 const LoginModal = dynamic(() => import("@/components/LoginModel"), {
+  ssr: false,
+});
+const DailyRewardModal = dynamic(() => import("@/components/generator/DailyRewardModal"), {
+  ssr: false,
+});
+const ConversionModal = dynamic(() => import("@/components/generator/ConversionModal"), {
   ssr: false,
 });
 
@@ -82,6 +89,9 @@ export default function GeneratorClient() {
     null
   );
   const [highlightPrompt, setHighlightPrompt] = useState(false);
+  const [showDailyReward, setShowDailyReward] = useState(false);
+  const [showConversionModal, setShowConversionModal] = useState(false);
+  const [conversionTrigger, setConversionTrigger] = useState<"credits_low" | "guest_limit" | "daily_visit" | "generation_complete">("daily_visit");
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const currentTotalCost = useMemo(
@@ -140,8 +150,49 @@ export default function GeneratorClient() {
       }
     }
 
-    if (user) refreshUser();
-  }, []);
+    if (user) {
+      refreshUser();
+      // 用户登录后检查每日奖励
+      checkDailyReward();
+    }
+  }, [user]); // 依赖 user 变化
+
+  // 检查每日奖励的函数
+  const checkDailyReward = useCallback(() => {
+    if (!user) return;
+
+    console.log('检查每日奖励 - 用户:', user.googleUserId);
+
+    const today = new Date().toDateString();
+    const lastRewardClaim = localStorage.getItem(`lastRewardClaim_${user.googleUserId}`);
+
+    console.log('今天:', today);
+    console.log('上次领取:', lastRewardClaim);
+
+    // 如果今天还没有领取过奖励
+    if (lastRewardClaim !== today) {
+      console.log('显示每日奖励弹窗');
+      // 延迟显示每日奖励弹窗
+      setTimeout(() => {
+        setShowDailyReward(true);
+        trackDailyReward.show(1, user.googleUserId);
+      }, 2000);
+    } else {
+      console.log('今天已经领取过奖励了');
+    }
+    
+    // 更新最后访问时间
+    localStorage.setItem(`lastVisit_${user.googleUserId}`, today);
+  }, [user]);
+
+  // 检查是否需要显示转化弹窗
+  const checkConversionModal = useCallback((trigger: typeof conversionTrigger) => {
+    setConversionTrigger(trigger);
+    setShowConversionModal(true);
+    
+    // 记录转化弹窗显示事件
+    trackConversionFunnel.showConversionModal(trigger, user?.googleUserId);
+  }, [user]);
 
   useEffect(() => {
     if (history.length > 0) {
@@ -168,12 +219,11 @@ export default function GeneratorClient() {
 
     if (!user) {
       if (guestGenerations >= GUEST_FREE_LIMIT) {
-        if (!showLoginModal) setShowLoginModal(true);
+        checkConversionModal("guest_limit");
         return;
       }
     } else if ((Number(user.credits) || 0) < currentTotalCost) {
-      // ... (原有的积分不足提示逻辑)
-      toast.error(t("imagePrompt.insufficientCredits"));
+      checkConversionModal("credits_low");
       return;
     }
 
@@ -204,7 +254,6 @@ export default function GeneratorClient() {
         QUALITY_PROMPT
       ].filter(Boolean).join(", ");
 
-      // 调试日志：确保风格正确应用
       console.log('Style Application Debug:', {
         activeStyle,
         stylePrompt,
@@ -271,6 +320,13 @@ export default function GeneratorClient() {
 
       toast.success(t("history.artGenerated"), { id: toastId });
       setActivePrompt("");
+      
+      // 生成完成后，如果积分较低，显示转化弹窗
+      if (user && Number(user.credits) < 10) {
+        setTimeout(() => {
+          checkConversionModal("generation_complete");
+        }, 3000);
+      }
     } catch (err: any) {
       console.error(err);
       toast.error(t("history.generationError"), { id: toastId });
@@ -364,6 +420,16 @@ export default function GeneratorClient() {
         open={showLoginModal}
         onClose={() => setShowLoginModal(false)}
         onLogin={login}
+      />
+      <DailyRewardModal
+        isOpen={showDailyReward}
+        onClose={() => setShowDailyReward(false)}
+      />
+      <ConversionModal
+        isOpen={showConversionModal}
+        onClose={() => setShowConversionModal(false)}
+        trigger={conversionTrigger}
+        userCredits={user ? Number(user.credits) : 0}
       />
 
       {/* Desktop Sidebar */}

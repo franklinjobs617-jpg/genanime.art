@@ -10,6 +10,7 @@ const languages = [
     { code: "en", label: "English" },
     { code: "de", label: "Deutsch" },
     { code: "es", label: "Español" },
+    { code: "pt", label: "Português (BR)" },
 ];
 
 export default function LanguageSwitcher({ isMobile = false }: { isMobile?: boolean }) {

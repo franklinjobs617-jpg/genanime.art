@@ -33,7 +33,7 @@ export default function PlansBanner({ isGuest, onLogin }: PlansBannerProps) {
         {isGuest ? (
           <button
             onClick={onLogin}
-            className="flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-zinc-200 text-black text-sm font-bold rounded-lg transition-all shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:shadow-[0_0_20px_rgba(255,255,255,0.5)]"
+            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-400 hover:to-violet-500 text-white text-sm font-bold rounded-lg transition-all shadow-[0_0_15px_rgba(99,102,241,0.3)] hover:shadow-[0_0_20px_rgba(99,102,241,0.5)]"
           >
             <LogIn className="w-4 h-4" />
             <span>Sign In</span>
@@ -76,7 +76,7 @@ export default function PlansBanner({ isGuest, onLogin }: PlansBannerProps) {
                             */
               <button
                 onClick={onLogin}
-                className="w-full flex justify-center items-center gap-2 py-3.5 bg-white hover:bg-zinc-200 text-black text-sm font-black rounded-xl transition-all shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] active:scale-[0.98]"
+                className="w-full flex justify-center items-center gap-2 py-3.5 bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-400 hover:to-violet-500 text-white text-sm font-black rounded-xl transition-all shadow-[0_0_20px_rgba(99,102,241,0.25)] hover:shadow-[0_0_25px_rgba(99,102,241,0.4)] active:scale-[0.98]"
               >
                 <LogIn className="w-4 h-4 stroke-[3px]" />
                 Sign In Now

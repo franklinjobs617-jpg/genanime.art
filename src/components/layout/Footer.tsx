@@ -1,10 +1,11 @@
 import { Link } from "@/i18n/routing";
 import { Github, Twitter, MessageSquare, Sparkles, Send } from "lucide-react";
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 export default function Footer() {
   const t = useTranslations('Navigation');
+  const locale = useLocale();
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
@@ -29,6 +30,16 @@ export default function Footer() {
       { name: t('terms'), href: "/terms" },
     ]
   };
+
+  // Custom links for Portuguese (BR)
+  if (locale === 'pt') {
+    footerLinks.resources = [
+        { name: "Guia IA Anime", href: "/como-fazer-anime-ia" },
+        { name: "Avatar Anime", href: "/foto-de-perfil-anime" },
+        { name: "Filtro Ghibli", href: "/filtro-ia-ghibli" },
+        { name: "Filtro Desenho", href: "/transformar-foto-em-desenho" },
+    ];
+  }
 
   return (
     <footer className="bg-[#050505] border-t border-white/5 pt-16 pb-8 text-zinc-400 font-sans">

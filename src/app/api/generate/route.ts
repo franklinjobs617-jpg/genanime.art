@@ -96,7 +96,6 @@ export async function POST(req: NextRequest) {
 
     // 1. Base Prompt
     let finalPrompt = prompt;
-
     // 根据模型类型添加预设前缀
     if (model) {
       if (model.includes("Pony") || model.toLowerCase().includes("pony")) {
@@ -188,7 +187,8 @@ export async function POST(req: NextRequest) {
     
     // 构建基础参数
     const baseParams: any = {
-      model: process.env.DOUBAO_ENDPOINT_ID || "doubao-seedream-4-5-251128",
+      model:
+        process.env.DOUBAO_ENDPOINT_ID,
       prompt: finalPrompt,
       size: sizeStr as any,
       response_format: "b64_json",

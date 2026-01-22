@@ -174,7 +174,7 @@ export default function Hero() {
                 </div>
               </button>
 
-              <Link href="/generator?mode=upload" className="group">
+              <Link href="/generator?mode=img2img" className="group">
                 <div className="flex items-center justify-center gap-3 px-8 md:px-10 py-4 md:py-5 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 text-white rounded-2xl font-black text-base md:text-lg transition-all duration-300 transform hover:scale-105">
                   <ImagePlus className="w-5 h-5" />
                   <span>{t("buttons.imageToImage")}</span>

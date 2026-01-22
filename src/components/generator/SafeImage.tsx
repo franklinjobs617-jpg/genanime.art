@@ -13,6 +13,7 @@ interface SafeImageProps {
     sizes?: string
     placeholder?: 'blur' | 'empty'
     blurDataURL?: string
+    objectFit?: 'cover' | 'contain'
 }
 
 export default function SafeImage({
@@ -23,7 +24,8 @@ export default function SafeImage({
     fill = false,
     sizes,
     placeholder = 'empty',
-    blurDataURL
+    blurDataURL,
+    objectFit = 'cover'
 }: SafeImageProps) {
     // 关键修复 1: 当 src 改变时，我们需要重置状态
     const [status, setStatus] = useState<'loading' | 'error' | 'loaded'>('loading')
@@ -84,7 +86,7 @@ export default function SafeImage({
                         }}
                         onError={() => setStatus('error')}
                         className={`
-                            object-cover transition-all duration-700 ease-out
+                            object-${objectFit} transition-all duration-700 ease-out
                             ${status === 'loaded' ? 'opacity-100 scale-100 blur-0' : 'opacity-0 scale-105 blur-lg'}
                         `}
                     />

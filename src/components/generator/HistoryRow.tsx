@@ -2,17 +2,15 @@
 
 import { motion } from "framer-motion"
 import {
-    Plus,
-    Share2,
     Clock,
     Maximize2,
-    Layers,
     Wand2,
-    Eye,
-    Globe,
-    Cpu
+    Cpu,
+    Download,
+    Trash2,
 } from "lucide-react"
 import SafeImage from "./SafeImage"
+import { toast } from "react-hot-toast"
 
 interface HistoryRowProps {
     item: {
@@ -26,6 +24,7 @@ interface HistoryRowProps {
         seed?: number
         steps?: number
         cfgScale?: number
+        status?: string
     }
     onRegenerate: () => void
     onDelete: (id: string) => void
@@ -38,6 +37,8 @@ export default function HistoryRow({
     onDelete,
     onViewDetail
 }: HistoryRowProps) {
+    const isGenerating = item.status === 'generating';
+
     const formatDate = (timestamp: number) => {
         const d = new Date(timestamp)
         const year = d.getFullYear()
@@ -45,9 +46,30 @@ export default function HistoryRow({
         const day = String(d.getDate()).padStart(2, '0')
         const hours = String(d.getHours()).padStart(2, '0')
         const minutes = String(d.getMinutes()).padStart(2, '0')
-        const seconds = String(d.getSeconds()).padStart(2, '0')
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+        return `${year}-${month}-${day} ${hours}:${minutes}`
     }
+
+    const handleDownload = async (e: React.MouseEvent, url: string) => {
+        e.stopPropagation();
+        const toastId = toast.loading("Starting download...");
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = blobUrl;
+            link.download = `genanime-${Date.now()}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(blobUrl);
+            toast.success("Saved!", { id: toastId });
+        } catch (err) {
+            console.error(err);
+            toast.error("Download failed", { id: toastId });
+            window.open(url, "_blank");
+        }
+    };
 
     const date = formatDate(item.timestamp)
 
@@ -80,128 +102,123 @@ export default function HistoryRow({
     const modelName = item.model || "Flux v1.0"
 
     return (
-        <div className="group flex flex-col gap-3 py-6 border-b border-white/5 transition-colors hover:bg-white/[0.02]">
-            {/* Row Header - Metadata - Scrollable on mobile */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-2">
-                <div className="flex items-center gap-4 text-[10px] md:text-[11px] font-medium text-zinc-500 overflow-x-auto pb-2 md:pb-0 no-scrollbar whitespace-nowrap">
-                    <div className="flex items-center gap-1.5 text-zinc-300 shrink-0">
-                        <Plus className="w-3.5 h-3.5" />
-                        <span className="font-bold">Prompt</span>
-                    </div>
-
-                    <div className="h-3 w-px bg-zinc-800" />
-
-                    <div className="flex items-center gap-1.5">
-                        <Layers className="w-3.5 h-3.5" />
-                        <span>Text to Image</span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5">
-                        <Globe className="w-3.5 h-3.5" />
-                        <span>Public</span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5">
-                        <Cpu className="w-3.5 h-3.5 text-indigo-400" />
-                        <span className="text-zinc-300">{modelName}</span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5" />
-                        <span>{date}</span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5">
-                        <Maximize2 className="w-3.5 h-3.5" />
-                        <span>{resolution}</span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5">
-                        <span className="font-bold text-zinc-400">{item.urls.length}</span>
-                    </div>
+        <div className="group flex flex-col gap-4 p-5 bg-[#09090b] border border-zinc-800 rounded-2xl transition-all hover:border-zinc-700 hover:shadow-lg">
+            {/* Top: Prompt & Main Actions */}
+            <div className="flex items-start justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                    <p className="text-sm text-zinc-300 font-medium leading-relaxed line-clamp-2 font-mono">
+                        {item.prompt}
+                    </p>
                 </div>
-
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        onRegenerate()
-                    }}
-                    className="flex items-center justify-center gap-2 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-md text-[11px] font-bold transition-all border border-white/5 self-start md:self-auto shrink-0"
-                >
-                    <Wand2 className="w-3.5 h-3.5" /> Remix
-                </button>
             </div>
 
-            {/* Row Content - Image Grid */}
-            <div className={`px-2 grid gap-4 w-full max-w-6xl ${item.urls.length === 1 ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" :
+            {/* Middle: Image Grid */}
+            <div className={`grid gap-3 w-full ${item.urls.length === 1 ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" :
                     item.urls.length === 2 ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4" :
-                        "grid-cols-2 md:grid-cols-4 lg:grid-cols-4"
+                        "grid-cols-2 md:grid-cols-4"
                 }`}>
-                {item.urls.map((url, index) => (
-                    <div key={index} className="relative">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: index * 0.05 }}
-                            className={`relative group/img cursor-pointer rounded-2xl overflow-hidden border border-white/10 ${aspectRatioClass} ${item.urls.length === 1 ? "w-[240px] md:w-[280px]" : "w-full"
-                                }`}
-                            onClick={() => onViewDetail({ ...item, initialIndex: index })}
-                            onTouchStart={(e) => {
-                                // 为移动端添加长按保存提示
-                                const touchStartTime = Date.now();
-                                let touchTimer: NodeJS.Timeout;
-                                
-                                touchTimer = setTimeout(() => {
-                                    // 检查触摸持续时间是否超过阈值（例如500毫秒）
-                                    if (Date.now() - touchStartTime > 500) {
-                                        // 显示长按保存提示
-                                        const tooltip = document.createElement('div');
-                                        tooltip.className = 'fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-3 py-2 rounded-lg z-50 transition-opacity duration-300';
-                                        tooltip.textContent = 'Long press to save to your gallery';
-                                        document.body.appendChild(tooltip);
-                                        
-                                        // 3秒后自动移除提示
-                                        setTimeout(() => {
-                                            tooltip.remove();
-                                        }, 3000);
-                                    }
-                                }, 500); // 500ms 作为长按阈值
-                                
-                                // 清除定时器，如果触摸结束
-                                const clearTouchTimer = () => {
-                                    clearTimeout(touchTimer);
-                                    window.removeEventListener('touchend', clearTouchTimer);
-                                    window.removeEventListener('touchmove', clearTouchTimer);
-                                };
-                                
-                                window.addEventListener('touchend', clearTouchTimer);
-                                window.addEventListener('touchmove', clearTouchTimer);
-                            }}
-                        >
-                            <SafeImage
-                                src={url}
-                                alt={item.prompt}
-                                fill={true}
-                                sizes="(max-width: 768px) 45vw, (max-width: 1024px) 22vw, 15vw"
-                                placeholder="blur"
-                                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAADAAQDAREAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
-                                className="w-full h-full object-cover transition-opacity duration-300"
-                            />
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
-                                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
-                                    <Eye className="w-5 h-5 text-white" />
+                {item.urls.map((url, index) => {
+                    const isLoading = isGenerating || !url;
+                    
+                    if (isLoading) {
+                         return (
+                            <div key={index} className={`relative overflow-hidden rounded-xl bg-zinc-900 border border-zinc-800 ${aspectRatioClass} ${item.urls.length === 1 ? "w-[240px]" : "w-full"}`}>
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-800/50 to-transparent -translate-x-full animate-[shimmer_1.5s_infinite]" />
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className="w-8 h-8 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin" />
                                 </div>
                             </div>
-                        </motion.div>
-                    </div>
-                ))}
+                         );
+                    }
+
+                    return (
+                        <div key={index} className="relative">
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.98 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: index * 0.05 }}
+                                className={`relative group/img cursor-pointer rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900 ${aspectRatioClass} ${item.urls.length === 1 ? "w-[240px]" : "w-full"
+                                    }`}
+                                onClick={() => onViewDetail({ ...item, initialIndex: index })}
+                            >
+                                <SafeImage
+                                    src={url}
+                                    alt={item.prompt}
+                                    fill={true}
+                                    sizes="(max-width: 768px) 45vw, (max-width: 1024px) 22vw, 15vw"
+                                    placeholder="blur"
+                                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAADAAQDAREAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-110"
+                                />
+                                
+                                {/* Hover Overlay & Actions */}
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300">
+                                    <div className="absolute top-2 right-2 flex flex-col gap-1.5 translate-x-4 group-hover/img:translate-x-0 transition-transform duration-300">
+                                        <button
+                                            onClick={(e) => handleDownload(e, url)}
+                                            className="p-2 bg-black/60 hover:bg-white text-white hover:text-black rounded-lg backdrop-blur-md border border-white/10 transition-colors"
+                                            title="Download"
+                                        >
+                                            <Download className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onViewDetail({ ...item, initialIndex: index });
+                                            }}
+                                            className="p-2 bg-black/60 hover:bg-white text-white hover:text-black rounded-lg backdrop-blur-md border border-white/10 transition-colors"
+                                            title="Maximize"
+                                        >
+                                            <Maximize2 className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onRegenerate();
+                                            }}
+                                            className="p-2 bg-black/60 hover:bg-indigo-500 text-white hover:text-white rounded-lg backdrop-blur-md border border-white/10 transition-colors"
+                                            title="Remix"
+                                        >
+                                            <Wand2 className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onDelete(item.id);
+                                            }}
+                                            className="p-2 bg-black/60 hover:bg-red-500 text-white hover:text-white rounded-lg backdrop-blur-md border border-white/10 transition-colors"
+                                            title="Delete Batch"
+                                        >
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </div>
+                    )
+                })}
             </div>
 
-            {/* Row Footer - Full Prompt */}
-            <div className="px-2">
-                <p className="text-[13px] text-zinc-400 leading-relaxed max-w-4xl line-clamp-2 italic font-medium">
-                    {item.prompt}
-                </p>
+            {/* Bottom: Icons Metadata */}
+            <div className="flex items-center gap-4 text-[10px] font-bold text-zinc-500 border-t border-zinc-800/50 pt-3 mt-1">
+                <div className="flex items-center gap-1.5 px-2 py-1 bg-zinc-900 rounded-md border border-zinc-800">
+                    <Cpu className="w-3 h-3 text-indigo-400" />
+                    <span>{modelName}</span>
+                </div>
+                <div className="flex items-center gap-1.5 px-2 py-1 bg-zinc-900 rounded-md border border-zinc-800">
+                    <Maximize2 className="w-3 h-3 text-emerald-400" />
+                    <span>{resolution}</span>
+                </div>
+                <div className="flex items-center gap-1.5 px-2 py-1 bg-zinc-900 rounded-md border border-zinc-800">
+                    <Clock className="w-3 h-3 text-orange-400" />
+                    <span>{date}</span>
+                </div>
+                {item.style && item.style !== "Default" && (
+                    <div className="flex items-center gap-1.5 px-2 py-1 bg-zinc-900 rounded-md border border-zinc-800">
+                        <Wand2 className="w-3 h-3 text-pink-400" />
+                        <span>{item.style}</span>
+                    </div>
+                )}
             </div>
         </div>
     )

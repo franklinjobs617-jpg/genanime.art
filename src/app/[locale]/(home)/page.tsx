@@ -7,9 +7,16 @@ const CoreFeatures = dynamic(() => import("@/components/home/CoreFeatures"));
 const SEOContentSection = dynamic(() => import("@/components/home/SEOContentSection"));
 const FAQSection = dynamic(() => import("@/components/home/FAQSection"));
 const CallToAction = dynamic(() => import("@/components/home/CallToAction"));
+const BrHomePage = dynamic(() => import("@/components/home/br/BrHomePage"));
+
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
   const { locale } = resolvedParams;
+
+  if (locale === 'pt') {
+    return <BrHomePage />;
+  }
+
   return (
     <main className="relative min-h-screen bg-[#050505] overflow-x-hidden">
       <Hero />

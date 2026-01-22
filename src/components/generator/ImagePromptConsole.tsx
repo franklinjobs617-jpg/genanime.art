@@ -272,9 +272,9 @@ export default function ImagePromptConsole({ onApplyPrompt, onSuccess, imageFile
                             onDrop={handleDrop}
                             onClick={() => inputRef.current?.click()}
                             className={`
-                                flex-1 flex flex-col items-center justify-center p-12 cursor-pointer transition-all duration-300
-                                ${isDragOver ? "bg-indigo-500/10 border-indigo-500/50" : "hover:bg-white/[0.02]"}
-                                border-2 border-dashed border-white/10 m-4 rounded-[20px]
+                                flex-1 flex flex-col items-center justify-center p-10 cursor-pointer transition-all duration-300
+                                ${isDragOver ? "bg-violet-500/10 border-violet-500/50" : "bg-black/20 hover:bg-black/30"}
+                                border-2 border-dashed border-violet-500/30 m-4 rounded-2xl backdrop-blur-xl
                             `}
                         >
                             <input
@@ -284,13 +284,16 @@ export default function ImagePromptConsole({ onApplyPrompt, onSuccess, imageFile
                                 onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
                                 className="hidden"
                             />
-                            <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <UploadCloud className="w-8 h-8 text-indigo-400" />
+                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-r from-violet-500/15 to-blue-500/15 flex items-center justify-center mb-5 ring-1 ring-white/10">
+                                <UploadCloud className="w-7 h-7 text-violet-300" />
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-2 text-center">{t('title')}</h3>
-                            <p className="text-zinc-500 text-center max-w-md">
+                            <h3 className="text-lg font-black text-white mb-2 text-center">{t('title')}</h3>
+                            <p className="text-zinc-400 text-center max-w-md text-sm">
                                 {t('description')}
                             </p>
+                            <div className="mt-4 text-[11px] font-medium text-zinc-500">
+                                Click to upload, drag & drop, or paste (Ctrl+V)
+                            </div>
                         </motion.div>
                     ) : (
                         <motion.div

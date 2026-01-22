@@ -1,0 +1,348 @@
+{
+  "Metadata": {
+    "title": "Transformar Foto em Anime Online Grátis - IA 2026 - GenAnime",
+    "description": "Transforme foto em anime instantaneamente com nossa IA avançada. Use o gerador estilo Studio Ghibli e Shonen. Grátis, sem registro e 100% online em 2026.",
+    "keywords": [
+      "transformar foto em anime",
+      "anime ai generator",
+      "foto em anime",
+      "ia anime",
+      "filtro anime"
+    ]
+  },
+  "Navigation": {
+    "home": "Início",
+    "gallery": "Galeria",
+    "generator": "Gerador",
+    "pricing": "Preços",
+    "blog": "Blog",
+    "promptLibrary": "Biblioteca de Prompts",
+    "aiGuide": "Guia IA",
+    "howToExtract": "Como Extrair Prompts",
+    "voiceChanger": "Modificador de Voz",
+    "login": "Entrar",
+    "signUp": "Cadastrar",
+    "faq": "FAQ",
+    "contact": "Contato",
+    "support": "Ajuda",
+    "models": "Modelos IA",
+    "ponyDiffusion": "Pony Diffusion",
+    "privacy": "Política de Privacidade",
+    "terms": "Termos de Uso"
+  },
+  "Hero": {
+    "titleLine1": "Melhor Gerador",
+    "titleLine2": "de Anime IA",
+    "description": "Crie <span1>waifus, chibis e arte pony</span1> em segundos com os modelos mais avançados do mundo.",
+    "searchPlaceholder": "Descreva seu sonho... ex: cabelo prateado, cyberpunk",
+    "features": {
+      "noSignUp": "Sem cadastro",
+      "noWatermark": "Sem marca d'água",
+      "quality": "Qualidade 4K"
+    },
+    "buttons": {
+      "startCreating": "Começar a Criar",
+      "imageToImage": "Imagem para Prompt"
+    }
+  },
+  "FeatureSection": {
+    "title": "Crie <span1>Ilustrações de Anime</span1> Incríveis",
+    "subtitle": "De Waifus a Cyberpunk, transforme suas ideias em ilustrações de anime de alta qualidade em segundos – grátis, sem necessidade de login.",
+    "cards": {
+      "waifu": "Gerador de Anime Waifu",
+      "pony": "Estilo Pony Diffusion",
+      "animagine": "Modelo Animagine XL",
+      "chibi": "Criador de Chibi Fofo",
+      "photo": "Foto para Anime",
+      "portrait": "Gerador de Retrato Anime",
+      "couple": "Arte de Casal Anime",
+      "action": "Cena de Ação Anime",
+      "emoticons": "Emoticons de Anime",
+      "cyberpunk": "Arte Anime Cyberpunk",
+      "school": "Cena Escolar Anime",
+      "idol": "Gerador de Ídolo Anime",
+      "sticker": "Pacote de Adesivos Anime",
+      "mage": "Gerador de Mago de Fantasia",
+      "knight": "Cavaleiro Medieval Anime",
+      "christmas": "Cena de Natal Anime",
+      "cyberpunk_waifu": "Waifu Anime Cyberpunk",
+      "kimono_waifu": "Estilo Waifu Quimono",
+      "beach_waifu": "Férias Waifu na Praia",
+      "bedroom_waifu": "Conforto Waifu no Quarto"
+    },
+    "buttons": {
+      "generate": "Gerar com este Prompt"
+    }
+  },
+  "GalleryPage": {
+    "title": "Crie Arte <span1>Waifu</span1>",
+    "subtitle": "Gere <b>Arte Anime Waifu</b> de alta qualidade, <b>Wallpapers Cyberpunk</b> e <b>Designs de Personagens Chibi</b> em segundos.",
+    "searchPlaceholder": "Tente 'Arte Anime Mulher de Negócios' ou 'Cyberpunk'...",
+    "generateButton": "Gerar",
+    "trendingTitle": "Criações em Alta",
+    "trendingSubtitle": "Explore Waifus e Wallpapers",
+    "loading": {
+      "title": "Carregando Motor...",
+      "subtitle": "Preparando espaço de trabalho"
+    },
+    "modes": {
+      "generation": "Geração de Imagem",
+      "video": "Vídeo IA",
+      "upscaler": "Upscaler",
+      "soon": "Em Breve"
+    },
+    "galleryItems": {
+      "1": "Arte Anime Mulher de Negócios - Estilo Escritório",
+      "2": "Arte Anime Waifu - Garota Escolar",
+      "3": "Wallpaper Anime Cyberpunk - Futurista",
+      "4": "Design de Personagem Chibi - Fofo e Kawaii",
+      "5": "Arqueira Elfa de Fantasia - Arte de Personagem",
+      "6": "Palco de Concerto Ídolo - Performance Musical",
+      "7": "Arte de Cenário Ghibli - Campo Nostálgico",
+      "8": "Renderização Cinemática 3D - Garota Anime Fofa",
+      "9": "Conceito de Garota Mágica - Ficha de Personagem",
+      "10": "Ilustração de Livro de Histórias Aconchegante - Estilo Chalé",
+      "11": "Arte Anime Clínica - Uniforme Hospitalar",
+      "12": "Retrato com Iluminação Dramática - Garota Anime",
+      "13": "Estética Retro Anos 80 - Vibe City Pop",
+      "14": "Vista Aérea Épica - Personagem Anime",
+      "15": "Estética Pastel Sonhadora - Suave e Elegante",
+      "16": "Cenário Bruxa Voadora - Estilo Ghibli",
+      "17": "Estilo Mangá Clássico - Preto e Branco",
+      "18": "Prado de Floresta Exuberante - Estilo Studio Ghibli",
+      "19": "Obra-prima de Corpo Inteiro - Design de Personagem",
+      "20": "Garota Mágica Kawaii - Cabelo Rosa",
+      "21": "Cena de Ação Cartoon 3D - Corredor",
+      "22": "Configuração de Figura Anime - Coleção PVC",
+      "23": "Corrida de Ação Dinâmica - Batalha Anime",
+      "24": "Cyberpunk Rua Neon - Chuva e Luzes",
+      "25": "Cavaleiro Sagrado Prateado - Armadura de Fantasia",
+      "26": "Mago Celestial - Magia Estelar",
+      "27": "Retrato Waifu Premium - Cabelo Branco Fluido",
+      "28": "Arte Estilo Pony - Cores Vibrantes",
+      "29": "Qualidade Animagine XL - Biblioteca Futura",
+      "30": "Casal Romântico da Meia-Noite - Fogos de Artifício",
+      "31": "Tardes de Escola Secundária - Vibe Pôr do Sol",
+      "32": "Retrato Anime Clássico - Expressão Suave",
+      "33": "Conjunto de Adesivos Kawaii - Mascote Fofo",
+      "34": "Pacote de Emotes Chibi - Expressões Fofas",
+      "35": "Banner de Evento Cosplay - Fotografia Profissional",
+      "36": "Obra-prima de Corpo Superior - Design Intrincado"
+    }
+  },
+  "promptLibrary": {
+    "guideSection": {
+      "title": "Domine a Arte dos Prompts de Anime",
+      "subtitle": "Pare de adivinhar. Use esta fórmula comprovada para gerar arte de anime de tirar o fôlego todas as vezes.",
+      "formulaTitle": "A Fórmula do Prompt Dourado",
+      "qualityBoosters": "Impulsionadores de Qualidade",
+      "qualityDesc": "Sempre comece ou termine seu prompt com essas tags para forçar a IA a usar suas melhores capacidades de renderização.",
+      "negativePrompts": "Prompts Negativos (O que evitar)",
+      "negativeDesc": "Diga à IA o que NÃO gerar. Crucial para corrigir mãos e evitar imagens borradas.",
+      "lighting": "Iluminação e Atmosfera",
+      "lightingDesc": "A iluminação faz a diferença entre um desenho plano e uma obra-prima cinematográfica."
+    },
+    "title": "Descubra Prompts <span1>Infinitos</span1>",
+    "searchPlaceholder": "Pesquisar tags, estilos ou palavras-chave...",
+    "seoDescription": "Explore uma vasta coleção de prompts de arte anime IA de alta qualidade. De estética cyberpunk a retratos kawaii, encontre os prompts de texto para imagem perfeitos para Stable Diffusion, Midjourney e nosso próprio Gerador de IA.",
+    "generateButton": "Experimente este Estilo",
+    "copyPrompt": "Copiar Prompt",
+    "copied": "Copiado!",
+    "featuresTitle": "Por que usar nossos Prompts de Anime?",
+    "featuresDesc": "Nós curamos os melhores prompts para garantir alta consistência e bela estética para suas gerações de IA.",
+    "guideTitle": "Como Escrever o Prompt de Anime Perfeito",
+    "guideDesc": "Criar arte IA impressionante não é mágica — é uma fórmula. Para obter os melhores resultados do nosso gerador, estruture seus prompts usando esta estrutura simples:",
+    "tags": {
+      "Anime": "Anime",
+      "Girl": "Garota",
+      "Cyberpunk": "Cyberpunk",
+      "Kawaii": "Kawaii",
+      "Landscape": "Paisagem",
+      "Portrait": "Retrato",
+      "Mecha": "Mecha",
+      "Watercolor": "Aquarela"
+    }
+  },
+  "Schema": {
+    "websiteName": "GenAnime ART - Conversor de IA",
+    "alternateName": "Anime AI Art Generator",
+    "description": "Transformar foto em anime com Inteligência Artificial avançada.",
+    "orgDescription": "Plataforma líder em geração de arte anime com IA",
+    "webAppName": "GenAnime Generator",
+    "webAppDescription": "Gerador de arte anime gratuito - Crie ilustrações anime deslumbrantes",
+    "breadcrumbHome": "Início",
+    "breadcrumbGenerator": "Gerador",
+    "breadcrumbGallery": "Galeria",
+    "breadcrumbLibrary": "Biblioteca de Prompts"
+  },
+  "CoreFeatures": {
+    "title": "Tudo o que é necessário para",
+    "subtitle": "dominar a criação de anime.",
+    "engine": {
+      "title": "Grau Profissional",
+      "highlight": "Motor de Geração",
+      "description": "Alimentado por clusters de GPU de última geração. Experimente velocidades de geração ultrarrápidas sem comprometer os detalhes intrincados de sua arte.",
+      "tag1": "Geração Rápida",
+      "tag2": "Alta Resolução",
+      "tag3": "Comece Grátis"
+    },
+    "mobile": {
+      "title": "Estúdio Móvel",
+      "description": "Seu estúdio criativo no seu bolso. Totalmente otimizado para criar em dispositivos iOS e Android."
+    },
+    "models": {
+      "title": "Modelos Avançados",
+      "description": "Acesse modelos premium como Animagine XL e Pony Diffusion V6."
+    },
+    "commercial": {
+      "title": "Direitos Comerciais",
+      "description": "Propriedade total de suas criações para projetos comerciais."
+    }
+  },
+  "HowItWorks": {
+    "title": "Arte Anime Profissional",
+    "subtitle": "em 3 Passos Simples",
+    "description": "Fluxo de trabalho simplificado projetado para iniciantes e criadores profissionais.",
+    "steps": {
+      "step1": {
+        "title": "Descreva Sua Visão",
+        "description": "Digite um prompt ou use nosso assistente inteligente para criar a descrição perfeita."
+      },
+      "step2": {
+        "title": "Selecione o Modelo Premium",
+        "description": "Escolha entre nossa lista curada de modelos e estilos de anime de alta fidelidade."
+      },
+      "step3": {
+        "title": "Gerar e Refinar",
+        "description": "Obtenha resultados de alta resolução instantaneamente. Melhore, varie ou baixe sua obra-prima."
+      }
+    }
+  },
+  "CallToAction": {
+    "title": "Pronto para Criar Sua",
+    "highlight": "Obra-prima?",
+    "description": "Junte-se a milhares de criadores transformando sua imaginação em realidade.",
+    "subdescription": "Comece a gerar arte anime profissional em segundos.",
+    "button": "Gerar Agora",
+    "note": "Não é necessário cartão de crédito"
+  },
+  "FAQ": {
+    "title": "Perguntas Frequentes",
+    "items": [
+      {
+        "q": "Este é o melhor gerador de anime IA para iniciantes?",
+        "a": "Sim! Nossa interface é projetada para todos. Você pode usar nosso gerador de anime IA para criar personagens ou cenas sem nenhuma habilidade técnica. Basta digitar sua ideia e gerar."
+      },
+      {
+        "q": "Posso usar a arte anime gerada por IA para fins comerciais?",
+        "a": "Absolutamente. Se você criar uma 'mulher de negócios anime gerada por ia' para uma apresentação ou ativos para um jogo, você possui os direitos comerciais de suas criações em nossos planos pagos."
+      },
+      {
+        "q": "Como funciona o recurso de sprite animado gerado por IA?",
+        "a": "Nosso modo especializado permite gerar fichas de personagens com fundos transparentes. Garante consistência em diferentes poses, perfeito para desenvolvimento de jogos 2D."
+      },
+      {
+        "q": "Que tecnologia alimenta seu gerador de anime IA?",
+        "a": "Usamos um modelo de IA de alta fidelidade ajustado sob medida, otimizado especificamente para estética de anime. Ele se destaca na compreensão de prompts complexos ou detalhes mecânicos intrincados, superando modelos genéricos de prateleira."
+      }
+    ]
+  },
+  "SEOContent": {
+    "features": [
+      {
+        "title": "Arte Anime de Alta Fidelidade",
+        "description": "Gere ilustrações de nível profissional com iluminação perfeita. O gerador de arte anime ia definitivo para criadores.",
+        "label": "Disponível Agora"
+      },
+      {
+        "title": "Design de Personagem",
+        "description": "Crie personagens consistentes da cabeça aos pés. Ideal para mulher de negócios anime gerada por ia ou heróis de fantasia.",
+        "label": "Disponível Agora"
+      },
+      {
+        "title": "Gerador de Vídeo Anime IA",
+        "description": "Em Breve: Crie aberturas de anime profissionais e clipes de movimento dinâmicos diretamente de seus prompts de texto.",
+        "label": "Em Breve",
+        "button": "Seja Notificado no Lançamento"
+      }
+    ],
+    "seoTitle": "Liderando a",
+    "seoHighlight": "Revolução Anime IA",
+    "seoParagraph1": "Nossa plataforma é o <strong>gerador de arte anime ia</strong> mais versátil. Especializamo-nos na criação de imagens de alta resolução, desde folhas de <strong>sprite animado gerado por ia</strong> até designs de personagens profissionais. Se você precisa de uma <strong>mulher de negócios anime gerada por ia</strong> de corpo inteiro ou um mascote personalizado através do nosso <strong>gerador de animais ia</strong>, nós temos o que você precisa.",
+    "seoParagraph2": "O futuro é o movimento. Estamos desenvolvendo ativamente nosso módulo <strong>gerador de vídeo ia abertura anime</strong>. Em breve, você poderá transformar suas criações estáticas de <strong>gerador anime ia</strong> em sequências cinematográficas. Junte-se à nossa lista de espera para ser o primeiro a experimentar o poder da tecnologia <strong>gerador de animação ia</strong>."
+  },
+  "Generator": {
+    "mode": "Modo de Geração",
+    "textToImage": "Texto - Imagem",
+    "imageToPrompt": "Imagem - Prompt",
+    "baseModel": "Modelo Base",
+    "artStyle": "Estilo de Arte",
+    "aspectRatio": "Proporção",
+    "batchSize": "Tamanho do Lote",
+    "advancedSettings": "Configurações Avançadas",
+    "guidanceScale": "Escala de Orientação",
+    "inferenceSteps": "Passos de Inferência",
+    "resetDefaults": "Restaurar Padrões",
+    "imagePrompt": {
+      "title": "Engenharia de Prompt Reversa",
+      "description": "Arraste e solte uma imagem ou cole (Ctrl+V) para analisar seus conceitos visuais e reconstruir seu prompt de IA.",
+      "analysisComplete": "Análise completa!",
+      "insufficientCredits": "Créditos Insuficientes",
+      "analysisCost": "A análise custa {count} créditos.",
+      "getMoreCredits": "Obter Mais Créditos →",
+      "freeLimitReached": "Limite gratuito atingido. Faça login para continuar.",
+      "applyToGenerator": "Aplicar ao Gerador",
+      "analyzedPrompt": "Prompt Analisado",
+      "copyPrompt": "Copiar Prompt",
+      "copied": "Copiado",
+      "editable": "Editável",
+      "refineWithTags": "Refinar com Tags",
+      "sourceInspiration": "Inspiração da Fonte",
+      "sourceInspirationDesc": "DNA visual extraído dos pixels originais. Cada tag representa uma dimensão estética central.",
+      "extractingConcepts": "Extraindo conceitos..."
+    },
+    "history": {
+      "today": "Criações de Hoje",
+      "older": "Arquivo",
+      "itemsSelected": "{count} itens selecionados",
+      "artGenerated": "Arte gerada com sucesso!",
+      "generationError": "Ocorreu um erro durante a geração.",
+      "aiCasting": "A IA está projetando sua visão...",
+      "promptApplied": "Prompt aplicado! Pronto para gerar.",
+      "creationRemoved": "Criação removida",
+      "batchRemoved": "Removidos {count} itens do histórico"
+    },
+    "login": "Entrar",
+    "cancel": "Cancelar",
+    "delete": "Excluir"
+  },
+  "Pricing": {
+    "title": "LIBERE SUA VISÃO ZENITH",
+    "subtitle": "Transforme imaginação em pixels com IA profissional. Selecione um plano para elevar sua maestria criativa.",
+    "monthly": "Mensal",
+    "yearly": "Anual",
+    "save": "ECONOMIZE 25%",
+    "cta": "Atualize para",
+    "popular": "MAIS POPULAR",
+    "redirecting": "Preparando checkout seguro...",
+    "credits": "CRÉDITOS DE ALTA VELOCIDADE",
+    "guaranteeTitle": "GARANTIA DE FERRO",
+    "guaranteeDesc": "Não satisfeito? Oferecemos uma política de reembolso de 7 dias para todos os planos se você usou menos de 20 créditos.",
+    "secureTitle": "INFRAESTRUTURA SEGURA",
+    "secureDesc": "Pagamentos processados via Stripe com criptografia SSL de 256 bits. Nunca armazenamos as informações do seu cartão.",
+    "plans": {
+      "initiate": {
+        "name": "Iniciado",
+        "desc": "Comece sua jornada no universo anime."
+      },
+      "elite": {
+        "name": "Elite",
+        "desc": "A potência para criadores de conteúdo e artistas profissionais."
+      },
+      "zenith": {
+        "name": "Zenith",
+        "desc": "Desempenho máximo para estúdios profissionais."
+      }
+    }
+  }
+}

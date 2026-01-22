@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import RedesignedSidebar from "@/components/generator/RedesignedSidebar";
+import RedesignedSidebar, { STYLES, QUALITY_PROMPT } from "@/components/generator/RedesignedSidebar";
 import PromptConsole from "@/components/generator/PromptConsole";
 import ImagePromptConsole from "@/components/generator/ImagePromptConsole";
 import WelcomeGuide from "@/components/generator/WelcomeGuide";
@@ -55,6 +55,7 @@ export default function GeneratorClient() {
 
   const [activePrompt, setActivePrompt] = useState("");
   const [activeStyle, setActiveStyle] = useState("Default");
+  const [activePreset, setActivePreset] = useState<"free" | "ghibli" | "avatar">("free");
   const [activeRatio, setActiveRatio] = useState("1:1");
   const [activeQuantity, setActiveQuantity] = useState(1);
   const [activeModel, setActiveModel] = useState("Seedream 4.0");
@@ -66,10 +67,11 @@ export default function GeneratorClient() {
 
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageStrength, setImageStrength] = useState(0.7);
 
   const [negativePrompt, setNegativePrompt] = useState("");
   const [generationMode, setGenerationMode] = useState<
-    "text-to-image" | "image-to-prompt"
+    "text-to-image" | "image-to-prompt" | "image-to-image"
   >("text-to-image");
 
   const [isGenerating, setIsGenerating] = useState(false);
@@ -119,6 +121,9 @@ export default function GeneratorClient() {
     const prompt = searchParams.get("prompt");
     if (prompt) setActivePrompt(decodeURIComponent(prompt));
     
+    const style = searchParams.get("style");
+    if (style) setActiveStyle(decodeURIComponent(style));
+
     const mode = searchParams.get("mode");
     if (mode === "upload") {
       setGenerationMode("image-to-prompt");
@@ -189,11 +194,21 @@ export default function GeneratorClient() {
     const toastId = toast.loading(t("history.aiCasting"));
 
     try {
+      // Construct enhanced prompt with style modifiers and quality boosters
+      const selectedStyleObj = STYLES.find(s => s.value === activeStyle);
+      const stylePrompt = selectedStyleObj?.prompt || "";
+      const enhancedPrompt = [
+        activePrompt,
+        stylePrompt,
+        QUALITY_PROMPT
+      ].filter(Boolean).join(", ");
+
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          prompt: activePrompt,
+          prompt: enhancedPrompt, // Send enhanced prompt to backend
+          originalPrompt: activePrompt, // Optional: send original for reference if needed
           style: activeStyle,
           ratio: activeRatio,
           quantity: activeQuantity,
@@ -321,8 +336,8 @@ export default function GeneratorClient() {
         onLogin={login}
       />
 
-      {/* Desktop Sidebar (保持不变) */}
-      <aside className="hidden lg:flex flex-col w-[320px] border-r border-white/5 bg-[#09090b] shadow-2xl relative z-20">
+      {/* Desktop Sidebar */}
+      <aside className="hidden lg:flex flex-col w-[320px] border-r border-zinc-800 bg-[#09090b] relative z-20">
         <RedesignedSidebar
           activeStyle={activeStyle}
           setActiveStyle={setActiveStyle}
@@ -342,43 +357,32 @@ export default function GeneratorClient() {
           setIsRandomSeed={setIsRandomSeed}
           generationMode={generationMode}
           setGenerationMode={setGenerationMode}
+          activePreset={activePreset}
+          setActivePreset={setActivePreset}
         />
       </aside>
 
-      {/* 
-          1. 删除了原本在底部的 Sheet (fixed bottom-24 right-4) 
-          现在移动端设置入口统一放在顶部 Header
-      */}
-
       <main className="flex-1 flex flex-col relative overflow-hidden bg-[#09090b]">
-        {/* Ambient Effects */}
-        <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-indigo-900/10 via-[#09090b]/50 to-[#09090b] pointer-events-none" />
-        <div className="absolute top-[-200px] right-[-200px] w-[600px] h-[600px] bg-indigo-600/5 blur-[120px] rounded-full pointer-events-none" />
-
-        <header className="flex items-center justify-between px-4 md:px-8 h-20 bg-transparent z-40">
-          {/* 左侧区域：移动端显示 [首页] + [设置] */}
+        
+        <header className="flex items-center justify-between px-6 h-16 border-b border-zinc-800/50 bg-[#09090b] z-40">
+          {/* Mobile Left: Home + Menu */}
           <div className="flex items-center gap-3">
-            
-            {/* 2. 新增移动端返回首页按钮 */}
             <Link 
               href="/" 
-              className="lg:hidden p-2.5 bg-zinc-800/50 hover:bg-zinc-800 rounded-xl transition-all border border-white/5 text-zinc-400 hover:text-white group"
+              className="lg:hidden p-2 text-zinc-400 hover:text-white hover:bg-zinc-800/50 rounded-md transition-all"
             >
-              <Home className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <Home className="w-5 h-5" />
             </Link>
 
-            {/* 3. 移动端侧边栏设置触发器 (保留这一个，删除了右下角的) */}
             <Sheet open={mobileSheetOpen} onOpenChange={setMobileSheetOpen}>
               <SheetTrigger asChild>
-                {/* 样式微调，使用 indigo 色调突出这不仅仅是菜单，而是参数控制 */}
-                <button className="lg:hidden p-2.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 rounded-xl transition-all border border-indigo-500/20">
-                  {/* 使用 SlidersHorizontal 图标表示调节参数 */}
+                <button className="lg:hidden p-2 text-zinc-400 hover:text-white hover:bg-zinc-800/50 rounded-md transition-all">
                   <SlidersHorizontal className="w-5 h-5" />
                 </button>
               </SheetTrigger>
               <SheetContent
                 side="left"
-                className="w-[300px] p-0 bg-[#09090b] border-r border-white/10"
+                className="w-[320px] p-0 bg-[#09090b] border-r border-zinc-800"
               >
                 <RedesignedSidebar
                   activeStyle={activeStyle}
@@ -399,36 +403,43 @@ export default function GeneratorClient() {
                   setIsRandomSeed={setIsRandomSeed}
                   generationMode={generationMode}
                   setGenerationMode={setGenerationMode}
+                  activePreset={activePreset}
+                  setActivePreset={setActivePreset}
                 />
               </SheetContent>
             </Sheet>
 
-            {/* Desktop 面包屑导航 (保持不变) */}
+            {/* Desktop Breadcrumb */}
             <nav className="hidden lg:flex items-center gap-2 text-sm font-medium text-zinc-500">
               <Link
                 href="/"
-                className="hover:text-white transition-colors flex items-center gap-2"
+                className="hover:text-zinc-300 transition-colors"
               >
-                <Home className="w-4 h-4" /> Home
+                Home
               </Link>
               <span className="text-zinc-700">/</span>
-              <span className="text-indigo-400 font-bold tracking-tight">
+              <span className="text-zinc-200">
                 Generator
               </span>
             </nav>
           </div>
 
-          <div className="flex items-center gap-3">
-            <Link href="/pricing" className="flex items-center gap-2.5 px-4 py-2.5 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 backdrop-blur-md rounded-full border border-amber-500/30 hover:from-amber-500/30 hover:to-yellow-500/30 transition-all cursor-pointer">
-              <Coins className="w-5 h-5 text-amber-400" />
-              <span className="text-base font-black tabular-nums text-amber-200 tracking-wider">
+          <div className="flex items-center gap-4">
+            <Link href="/pricing" className="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900 border border-zinc-800 hover:border-indigo-500/50 hover:bg-zinc-800/50 transition-all duration-300 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <Coins className="w-4 h-4 text-indigo-400 group-hover:text-indigo-300 transition-colors" />
+              <span className="text-sm font-bold text-zinc-300 group-hover:text-white tabular-nums relative z-10">
                 {user ? user.credits : `${remainingGuest}/${GUEST_FREE_LIMIT}`}
               </span>
+              <span className="hidden sm:inline-block text-xs font-semibold text-indigo-400 uppercase tracking-wider ml-1 relative z-10 group-hover:text-indigo-300">
+                Credits
+              </span>
             </Link>
+            
             {authLoading ? (
-              <div className="w-10 h-10 rounded-full bg-zinc-800 animate-pulse" />
+              <div className="w-9 h-9 rounded-full bg-zinc-800 animate-pulse" />
             ) : user ? (
-              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/10 hover:border-indigo-500 transition-all cursor-pointer shadow-lg">
+              <div className="w-9 h-9 rounded-full overflow-hidden border border-zinc-700 hover:border-indigo-500 hover:shadow-[0_0_10px_rgba(99,102,241,0.3)] transition-all cursor-pointer">
                 <img
                   src={user.picture || "/default-avatar.png"}
                   alt={user.name}
@@ -438,7 +449,7 @@ export default function GeneratorClient() {
             ) : (
               <button
                 onClick={login}
-                className="px-6 py-2.5 bg-white text-black hover:bg-zinc-200 text-xs font-bold uppercase tracking-wider rounded-full transition-all shadow-lg hover:shadow-xl hover:scale-105"
+                className="px-6 py-2 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-bold shadow-[0_0_20px_-5px_rgba(99,102,241,0.4)] hover:shadow-[0_0_25px_-5px_rgba(99,102,241,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
               >
                 {t("login")}
               </button>
@@ -446,40 +457,62 @@ export default function GeneratorClient() {
           </div>
         </header>
 
-        {/* 内容区域保持不变 */}
         <div
           ref={scrollContainerRef}
-          className="flex-1 overflow-y-auto custom-scrollbar relative px-4 md:px-8 lg:px-12 pt-6"
+          className="flex-1 overflow-y-auto custom-scrollbar relative px-4 md:px-8 lg:px-16 pt-8"
         >
-          {/* ... */}
-          <div className="w-full max-w-none pb-20 space-y-8">
-            <div className="flex flex-col gap-4">
+          <div className="w-full max-w-9xl mx-auto pb-20 space-y-10">
+            <div className="flex flex-col gap-6">
+              
+              <div className="lg:hidden flex p-1 bg-zinc-900/50 border border-zinc-800 rounded-lg mb-2">
+                {[
+                  { id: "text-to-image", label: "Text" },
+                  { id: "image-to-image", label: "Image" },
+                  { id: "image-to-prompt", label: "Analyze" },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => setGenerationMode(item.id as any)}
+                    className={`flex-1 py-1.5 text-[10px] font-semibold uppercase tracking-wider rounded-md transition-all ${
+                      generationMode === item.id
+                        ? "bg-zinc-800 text-zinc-100 shadow-sm"
+                        : "text-zinc-500 hover:text-zinc-300"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+
               <AnimatePresence mode="wait">
-                {generationMode === "text-to-image" ? (
+                {generationMode !== "image-to-prompt" ? (
                   <motion.div
                     key="text-console"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{ duration: 0.3 }}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="w-full"
                   >
-                    <PromptConsole
-                      activePrompt={activePrompt}
-                      setActivePrompt={setActivePrompt}
-                      negativePrompt={negativePrompt}
-                      setNegativePrompt={setNegativePrompt}
-                      isGenerating={isGenerating}
-                      onGenerate={handleGenerate}
-                      canGenerate={canGenerate()}
-                      isGuest={!user}
-                      guestGenerations={guestGenerations}
-                      guestLimit={GUEST_FREE_LIMIT}
-                      image={image}
-                      setImage={setImage}
-                      imagePreview={imagePreview}
-                      setImagePreview={setImagePreview}
-                      highlight={highlightPrompt}
-                    />
+                       <PromptConsole
+                          activePrompt={activePrompt}
+                          setActivePrompt={setActivePrompt}
+                          negativePrompt={negativePrompt}
+                          setNegativePrompt={setNegativePrompt}
+                          isGenerating={isGenerating}
+                          onGenerate={handleGenerate}
+                          canGenerate={canGenerate()}
+                          isGuest={!user}
+                          guestGenerations={guestGenerations}
+                          guestLimit={GUEST_FREE_LIMIT}
+                          image={image}
+                          setImage={setImage}
+                          imagePreview={imagePreview}
+                          setImagePreview={setImagePreview}
+                          mode={generationMode}
+                          preset={activePreset}
+                          imageStrength={imageStrength}
+                          setImageStrength={setImageStrength}
+                       />
                   </motion.div>
                 ) : (
                   <motion.div

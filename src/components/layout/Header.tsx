@@ -15,12 +15,13 @@ import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function Header() {
   const { user, isLoading, login, logout } = useAuth();
   const { theme } = useTheme();
   const t = useTranslations("Navigation");
+  const locale = useLocale();
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -61,23 +62,23 @@ export default function Header() {
     { name: t("home"), href: "/" },
     { name: t("gallery"), href: "/gallery" },
     { name: t("generator"), href: "/generator" },
-    { name: t("voiceChanger"), href: "/tools/anime-voice-changer" },
-    { name: t("pricing"), href: "/pricing" },
-    { name: t("blog"), href: "/blog" },
-
-    {
-      name: t("promptLibrary"),
-      href: "/prompt-library",
-    },
-    {
-      name: t("aiGuide"),
-      href: "/blog/how-to-make-anime-art-ai-rtx-8090-guide",
-    },
-    {
-      name: t("howToExtract"),
-      href: "/how-to-reverse-image-to-prompt-anime-guide",
-    },
   ];
+
+  if (locale === 'pt') {
+    navLinks.push(
+      { name: "Avatar", href: "/foto-de-perfil-anime" },
+      { name: "Ghibli", href: "/filtro-ia-ghibli" },
+      { name: "Desenho", href: "/transformar-foto-em-desenho" },
+      { name: "Guia", href: "/como-fazer-anime-ia" }
+    );
+  } else {
+    navLinks.push(
+      { name: t("voiceChanger"), href: "/tools/anime-voice-changer" },
+      { name: t("pricing"), href: "/pricing" },
+      { name: t("blog"), href: "/blog" },
+      { name: t("promptLibrary"), href: "/prompt-library" },
+    );
+  }
 
   return (
     <header

@@ -130,11 +130,11 @@ export default function ImageDetailModal({
                 <X className="w-5 h-5" />
               </button>
 
-              <div className="relative max-h-full max-w-full aspect-[2/3] lg:aspect-auto shadow-[0_0_100px_-20px_rgba(79,70,229,0.3)] rounded-2xl overflow-hidden border border-white/10">
+              <div className="relative max-h-full max-w-full shadow-[0_0_100px_-20px_rgba(79,70,229,0.3)] rounded-2xl overflow-hidden border border-white/10 flex items-center justify-center">
                 <SafeImage
                   src={item.urls[0]}
                   alt={item.prompt}
-                  className="h-[450px] lg:h-[80vh] w-auto object-cover"
+                  className="max-h-[80vh] w-auto h-auto max-w-full object-contain"
                 />
               </div>
 

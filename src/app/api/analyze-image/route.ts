@@ -56,23 +56,36 @@ export async function POST(req: NextRequest) {
             messages: [
                 {
                     role: "system",
-                    content: `You are a professional AI Art Prompt Engineer and Anime Stylist. Your task is to analyze the user's uploaded image and reverse-engineer a high-quality prompt for Stable Diffusion / Flux.
+                    content: `You are a professional AI Art Prompt Engineer specializing in Studio Ghibli and anime aesthetics. Your task is to analyze the user's uploaded image and reverse-engineer a high-quality prompt for Stable Diffusion / Flux that captures the essence of Studio Ghibli's visual style.
 
 ### Output Rules:
 1.  **Format:** Output ONLY a comma-separated list of English tags.
 2.  **Order of Importance:** 
-    - [Quality/Style Tags] -> [Main Subject] -> [Clothing/Accessories] -> [Pose/Action] -> [Environment/Background] -> [Lighting/Atmosphere].
+    - [Quality/Style Tags] -> [Ghibli-specific Elements] -> [Main Subject] -> [Clothing/Accessories] -> [Pose/Action] -> [Environment/Background] -> [Lighting/Atmosphere].
 3.  **No Chinese:** Strictly no Chinese characters in the output.
 
+### Studio Ghibli Style Elements (PRIORITY):
+- **Visual Style:** \`studio ghibli style, miyazaki hayao style, ghibli movie style, hand-drawn animation, cel shading, soft colors, watercolor style\`
+- **Lighting:** \`soft natural lighting, golden hour, warm sunlight, dappled light, atmospheric lighting, dreamy lighting\`
+- **Colors:** \`muted colors, pastel palette, earthy tones, soft greens, sky blues, warm yellows\`
+- **Atmosphere:** \`nostalgic, peaceful, whimsical, magical realism, serene atmosphere\`
+
 ### Extraction Layers:
-1.  **Quality Boosters:** Always include standard high-quality tokens like: \`masterpiece, best quality, ultra-detailed, 8k wallpaper, highly detailed\`.
-2.  **Core Subject:** Identify gender, hair style/color, eye color, and unique features (e.g., \`1girl, solo, long pink hair, purple eyes, cat ears\`).
-3.  **Clothing & Medium:** Be specific about textures and styles (e.g., \`frills, lace, school uniform, oversized hoodie, techwear\`).
-4.  **Art Style & Technique:** This is crucial for GenAnime. Identify styles like: \`flat color, cel shading, retro anime style, cinematic lighting, depth of field, sketch, oil painting, watercolor\`.
-5.  **Environment & Lighting:** Describe the vibe (e.g., \`cherry blossoms, cyberpunk city, sunset, soft rim lighting, volumetric light, lens flare\`).
+1.  **Quality Boosters:** Always include: \`masterpiece, best quality, ultra-detailed, highly detailed, beautiful, aesthetic\`.
+2.  **Ghibli Style Tags:** ALWAYS include relevant Ghibli-specific visual elements from above.
+3.  **Core Subject:** Identify gender, age, hair style/color, eye color, and unique features (e.g., \`1girl, solo, brown hair, gentle eyes, child\`).
+4.  **Clothing & Accessories:** Focus on simple, natural clothing styles typical of Ghibli films (e.g., \`simple dress, casual clothes, natural fabrics, flowing clothes\`).
+5.  **Environment & Nature:** Ghibli films emphasize nature - identify landscapes, plants, weather (e.g., \`lush forest, rolling hills, cloudy sky, grass field, ancient trees\`).
+6.  **Mood & Composition:** Capture the emotional tone (e.g., \`peaceful expression, contemplative mood, wide shot, cinematic composition\`).
+
+### Special Focus Areas:
+- **Nature Elements:** Trees, grass, clouds, water, flowers, wind effects
+- **Architecture:** Traditional buildings, rural settings, cozy interiors
+- **Character Expression:** Gentle, thoughtful, innocent expressions
+- **Composition:** Wide establishing shots, medium shots with environmental context
 
 ### Tone Setting:
-Avoid generic sentences. Use professional Danbooru-style tags. If the image has a specific artist's style or era (like 90s anime), mention it.`
+Prioritize tags that evoke the gentle, nostalgic, and magical atmosphere of Studio Ghibli films. Focus on natural beauty, emotional depth, and the harmony between characters and their environment.`
                 },
                 {
                     role: "user",
@@ -86,12 +99,34 @@ Avoid generic sentences. Use professional Danbooru-style tags. If the image has 
                     ],
                 },
             ],
-            max_tokens: 500,
+            max_tokens: 600,
         });
 
         let result = response.choices[0]?.message?.content || "";
         result = result.replace(/^Tags:\s*/i, "").trim();
-        const finalPrompt = `${result}, (genanime_style:1.2), colorful`;
+
+        // Enhanced post-processing for Ghibli style
+        const ghibliEnhancements = [
+            "studio ghibli style",
+            "miyazaki hayao style",
+            "soft natural lighting",
+            "muted colors",
+            "peaceful atmosphere",
+            "hand-drawn animation",
+            "cel shading"
+        ];
+
+        // Check if Ghibli elements are already present
+        const hasGhibliElements = ghibliEnhancements.some(enhancement =>
+            result.toLowerCase().includes(enhancement.toLowerCase())
+        );
+
+        // Add Ghibli enhancements if not present
+        if (!hasGhibliElements) {
+            result = `studio ghibli style, miyazaki hayao style, ${result}`;
+        }
+
+        const finalPrompt = `${result}, (ghibli_style:1.3), (soft_colors:1.2), nostalgic, magical realism`;
 
         // Update credits or guest count
         if (!isGuest) {
@@ -116,31 +151,31 @@ Avoid generic sentences. Use professional Danbooru-style tags. If the image has 
         return res;
     } catch (error: any) {
         console.error("Error analyzing image:", error);
-        
+
         // 检查错误类型并返回更具体的错误信息
         let errorMessage = error.message || "Failed to analyze image";
         let errorType = "general";
-        
+
         if (error.message && typeof error.message === 'string') {
-          const lowerMessage = error.message.toLowerCase();
-          
-          if (lowerMessage.includes('sensitive') || lowerMessage.includes('inappropriate') || 
-              lowerMessage.includes('nsfw') || lowerMessage.includes('adult') || 
-              lowerMessage.includes('sex') || lowerMessage.includes('nudity')) {
-            errorType = "content_filter";
-            errorMessage = "Content not allowed: Please ensure your image doesn't contain adult or inappropriate content";
-          } else if (lowerMessage.includes('credit') || lowerMessage.includes('insufficient')) {
-            errorType = "insufficient_credits";
-            errorMessage = "Insufficient credits";
-          } else if (lowerMessage.includes('limit') || lowerMessage.includes('rate')) {
-            errorType = "rate_limit";
-            errorMessage = "Rate limit exceeded";
-          } else if (lowerMessage.includes('user') && lowerMessage.includes('not found')) {
-            errorType = "user_not_found";
-            errorMessage = "User not found";
-          }
+            const lowerMessage = error.message.toLowerCase();
+
+            if (lowerMessage.includes('sensitive') || lowerMessage.includes('inappropriate') ||
+                lowerMessage.includes('nsfw') || lowerMessage.includes('adult') ||
+                lowerMessage.includes('sex') || lowerMessage.includes('nudity')) {
+                errorType = "content_filter";
+                errorMessage = "Content not allowed: Please ensure your image doesn't contain adult or inappropriate content";
+            } else if (lowerMessage.includes('credit') || lowerMessage.includes('insufficient')) {
+                errorType = "insufficient_credits";
+                errorMessage = "Insufficient credits";
+            } else if (lowerMessage.includes('limit') || lowerMessage.includes('rate')) {
+                errorType = "rate_limit";
+                errorMessage = "Rate limit exceeded";
+            } else if (lowerMessage.includes('user') && lowerMessage.includes('not found')) {
+                errorType = "user_not_found";
+                errorMessage = "User not found";
+            }
         }
-        
+
         return NextResponse.json(
             { success: false, error: errorMessage, errorType },
             { status: 500 }

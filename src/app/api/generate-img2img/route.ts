@@ -16,6 +16,8 @@ const STYLE_PROMPTS: Record<string, string> = {
     "photorealistic, raw photo, dslr, soft lighting, highly detailed skin texture, hyper-realistic",
   "Vibrant Anime":
     "official art, unity 8k wallpaper, ultra detailed, vibrant colors, aesthetic masterpiece",
+  "Studio Ghibli": 
+    "studio ghibli style, miyazaki hayao style, hand-drawn animation, cel shading, soft natural lighting, muted colors, peaceful atmosphere, nostalgic, magical realism, watercolor style, dreamy, whimsical",
   "Retro 90s": "1990s anime style, cel shaded, vintage aesthetic, vhs noise",
   "Elite Game Splash":
     "game splash art, genshin impact style, honkai star rail style, dynamic pose",
@@ -27,6 +29,7 @@ const STYLE_PROMPTS: Record<string, string> = {
 
 const ANIME_STYLES = [
   "Vibrant Anime",
+  "Studio Ghibli",
   "Retro 90s",
   "Elite Game Splash",
   "Makoto Ethereal",
@@ -145,6 +148,9 @@ export async function POST(req: NextRequest) {
     }
     if (style === "Realism") {
       finalNegative += ", anime, cartoon, illustration, 2d, sketch";
+    } else if (style === "Studio Ghibli") {
+      // Ghibli-specific negative prompts to avoid overly modern or harsh elements
+      finalNegative += ", overly saturated, neon colors, cyberpunk, modern technology, harsh lighting, aggressive, violent, dark atmosphere, gothic";
     }
     finalPrompt += `, negative prompt: ${finalNegative}`;
 
@@ -208,7 +214,7 @@ export async function POST(req: NextRequest) {
       const totalCost = effectiveQuantity * COST_PER_IMAGE;
       await prisma.user.update({
         where: { googleUserId },
-        data: { credits: { decrement: totalCost } },
+        data: { credits: (Number(user.credits) - totalCost).toString() },
       });
     } else {
       const newCount = guestCount + 1;

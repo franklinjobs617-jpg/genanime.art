@@ -7,7 +7,8 @@
     "build": "prisma generate && next build",
     "postbuild": "next-sitemap",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "optimize-images": "node scripts/optimize-images.js"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",

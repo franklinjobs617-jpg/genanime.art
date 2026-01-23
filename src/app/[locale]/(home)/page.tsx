@@ -1,13 +1,38 @@
 import dynamic from 'next/dynamic';
 import Hero from "@/components/home/Hero";
-const FeatureSection = dynamic(() => import("@/components/home/FeatureSection"));
-const HowItWorks = dynamic(() => import("@/components/home/HowItWorks"));
-const PromptLibraryPreview = dynamic(() => import("@/components/home/PromptLibraryPreview"));
-const CoreFeatures = dynamic(() => import("@/components/home/CoreFeatures"));
-const SEOContentSection = dynamic(() => import("@/components/home/SEOContentSection"));
-const FAQSection = dynamic(() => import("@/components/home/FAQSection"));
-const CallToAction = dynamic(() => import("@/components/home/CallToAction"));
-const BrHomePage = dynamic(() => import("@/components/home/br/BrHomePage"));
+
+// 优化动态导入 - 保持SSR但延迟加载非关键组件
+const FeatureSection = dynamic(() => import("@/components/home/FeatureSection"), {
+  loading: () => <div className="h-96 bg-[#050505] animate-pulse" />
+});
+
+const HowItWorks = dynamic(() => import("@/components/home/HowItWorks"), {
+  loading: () => <div className="h-96 bg-[#050505] animate-pulse" />
+});
+
+const PromptLibraryPreview = dynamic(() => import("@/components/home/PromptLibraryPreview"), {
+  loading: () => <div className="h-96 bg-[#050505] animate-pulse" />
+});
+
+const CoreFeatures = dynamic(() => import("@/components/home/CoreFeatures"), {
+  loading: () => <div className="h-96 bg-[#050505] animate-pulse" />
+});
+
+const SEOContentSection = dynamic(() => import("@/components/home/SEOContentSection"), {
+  loading: () => <div className="h-64 bg-[#050505] animate-pulse" />
+});
+
+const FAQSection = dynamic(() => import("@/components/home/FAQSection"), {
+  loading: () => <div className="h-96 bg-[#050505] animate-pulse" />
+});
+
+const CallToAction = dynamic(() => import("@/components/home/CallToAction"), {
+  loading: () => <div className="h-64 bg-[#050505] animate-pulse" />
+});
+
+const BrHomePage = dynamic(() => import("@/components/home/br/BrHomePage"), {
+  loading: () => <div className="min-h-screen bg-[#050505] animate-pulse" />
+});
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
@@ -18,18 +43,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   }
 
   return (
-    <main className="relative min-h-screen bg-[#050505] overflow-x-hidden">
+    <main className="relative min-h-screen bg-[#050505]">
       <Hero />
       
       <FeatureSection />
       <HowItWorks />
       <PromptLibraryPreview />
       <CoreFeatures />
-
       <SEOContentSection />
-
       <FAQSection />
-
       <CallToAction />
 
       {locale === 'en' && (
@@ -49,7 +71,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           </a>
         </div>
       )}
-
     </main>
   );
 }

@@ -12,6 +12,7 @@ export default function Hero() {
   const t = useTranslations("Hero");
   const router = useRouter();
   const [inputValue, setInputValue] = useState("");
+  const [showGuestGuide, setShowGuestGuide] = useState(false);
   // 高质量主提示词映射
   const stylePrompts: Record<string, string> = {
     Waifu:
@@ -48,43 +49,42 @@ export default function Hero() {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const targetPath = inputValue.trim()
-      ? `/generator?prompt=${encodeURIComponent(inputValue)}`
-      : "/generator";
-    router.push(targetPath);
+  const handleStartCreating = () => {
+    // 首次访问显示引导
+    const hasVisited = localStorage.getItem('hasVisitedGenerator');
+    if (!hasVisited) {
+      setShowGuestGuide(true);
+    } else {
+      router.push("/generator");
+    }
+  };
+
+  const handleGuestGuideClose = () => {
+    setShowGuestGuide(false);
+    localStorage.setItem('hasVisitedGenerator', 'true');
+    router.push("/generator");
   };
 
   return (
-    // 修改 1:
-    // - 移除 overflow-hidden / overflow-x-hidden
-    // - 保持 min-h-screen 确保至少占满一屏
-    // - 使用 relative 确保内容层级正确
-    <section className="relative w-full min-h-screen bg-[#030305] font-sans selection:bg-indigo-500/30 flex flex-col overflow-hidden">
-      {/* 
-         修改 2: 背景层改为 absolute (绝对定位)
-         让背景跟随容器滚动。
-      */}
+    <section className="relative w-full min-h-screen bg-[#030305] font-sans selection:bg-indigo-500/30 flex flex-col">
+      {/* 背景层 - 使用更高效的定位 */}
       <div className="absolute inset-0 z-0">
-        <div className="w-full h-full scale-105">
+        <div className="w-full h-full">
           <AnimatedBackground />
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-[#030305] via-[#030305]/60 to-transparent z-[1]" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#030305] via-transparent to-transparent z-[1]" />
       </div>
 
-      {/* 
-         内容层: 
-         py-24 确保上下有足够呼吸空间，不会被切断
-      */}
-      <div className="relative z-10 container mx-auto px-6 md:px-12 flex-grow flex flex-col justify-center py-24 md:py-32">
+      {/* 内容层 - 优化移动端间距 */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 md:px-12 flex-grow flex flex-col justify-center py-16 sm:py-24 md:py-32">
         <div className="max-w-4xl">
+          {/* 桌面端搜索框 */}
           <motion.form
             onSubmit={handleSubmit}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-8 hidden md:flex items-center gap-3 bg-white/5 backdrop-blur-2xl px-6 py-3 rounded-2xl w-full max-w-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group focus-within:border-indigo-500/50 transition-all"
+            className="mb-6 md:mb-8 hidden md:flex items-center gap-3 bg-white/5 backdrop-blur-2xl px-6 py-3 rounded-2xl w-full max-w-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group focus-within:border-indigo-500/50 transition-all"
           >
             <Search className="w-5 h-5 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" />
             <input
@@ -102,6 +102,7 @@ export default function Hero() {
             </button>
           </motion.form>
 
+          {/* 样式标签 - 优化移动端显示 */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -113,18 +114,19 @@ export default function Hero() {
                 key={i}
                 onClick={() => handleTagClick(tag)}
                 title={`Generate with ${tag} style`}
-                className="px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-[10px] md:text-xs font-black text-zinc-400 uppercase tracking-[0.15em] backdrop-blur-md hover:bg-indigo-500/20 hover:text-white hover:border-indigo-500/50 transition-all active:scale-95 flex items-center gap-1.5"
+                className="px-3 py-1.5 md:px-4 md:py-2 rounded-xl bg-white/5 border border-white/5 text-[9px] sm:text-[10px] md:text-xs font-black text-zinc-400 uppercase tracking-[0.15em] backdrop-blur-md hover:bg-indigo-500/20 hover:text-white hover:border-indigo-500/50 transition-all active:scale-95 flex items-center gap-1.5"
               >
-                <Sparkles className="w-3 h-3" />
+                <Sparkles className="w-2.5 h-2.5 md:w-3 md:h-3" />
                 {tag}
               </button>
             ))}
           </motion.div>
 
+          {/* 主标题 - 优化移动端字体大小 */}
           <motion.h1
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-5xl sm:text-6xl md:text-[100px] font-black text-white leading-[0.95] md:leading-[0.9] mb-6 md:mb-8 tracking-tighter"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-[100px] font-black text-white leading-[0.95] md:leading-[0.9] mb-6 md:mb-8 tracking-tighter"
           >
             {t("titleLine1")} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 drop-shadow-[0_10px_10px_rgba(99,102,241,0.2)]">
@@ -138,7 +140,8 @@ export default function Hero() {
             transition={{ delay: 0.4 }}
             className="space-y-6 md:space-y-8"
           >
-            <p className="text-zinc-400 text-base md:text-2xl max-w-2xl font-medium leading-relaxed">
+            {/* 描述文字 - 优化移动端字体大小 */}
+            <p className="text-zinc-400 text-sm sm:text-base md:text-2xl max-w-2xl font-medium leading-relaxed">
               {t.rich("description", {
                 span1: (chunks) => (
                   <span className="text-white border-b-2 border-indigo-500/50 pb-1">
@@ -148,35 +151,37 @@ export default function Hero() {
               })}
             </p>
 
-            <div className="flex flex-wrap gap-4 md:gap-6 text-xs md:text-sm font-bold text-zinc-500 uppercase tracking-widest">
-              <span className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-indigo-500" />{" "}
+            {/* 特性标签 - 优化移动端布局 */}
+            <div className="flex flex-wrap gap-3 md:gap-6 text-[10px] sm:text-xs md:text-sm font-bold text-zinc-500 uppercase tracking-widest">
+              <span className="flex items-center gap-1.5 md:gap-2">
+                <Sparkles className="w-3 h-3 md:w-4 md:h-4 text-indigo-500" />
                 {t("features.noSignUp")}
               </span>
-              <span className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-purple-500" />{" "}
+              <span className="flex items-center gap-1.5 md:gap-2">
+                <Sparkles className="w-3 h-3 md:w-4 md:h-4 text-purple-500" />
                 {t("features.noWatermark")}
               </span>
-              <span className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-pink-500" />{" "}
+              <span className="flex items-center gap-1.5 md:gap-2">
+                <Sparkles className="w-3 h-3 md:w-4 md:h-4 text-pink-500" />
                 {t("features.quality")}
               </span>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 pt-2">
+            {/* 行动按钮 - 优化移动端布局 */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-5 pt-2">
               <button
                 onClick={() => router.push("/generator")}
-                className="group"
+                className="group w-full sm:w-auto"
               >
-                <div className="flex items-center justify-center gap-3 px-8 md:px-10 py-4 md:py-5 bg-white text-black rounded-2xl font-black text-base md:text-lg transition-all duration-300 hover:bg-indigo-500 hover:text-white transform hover:scale-105 shadow-2xl">
-                  <PenTool className="w-5 h-5" />
+                <div className="flex items-center justify-center gap-2 md:gap-3 px-6 sm:px-8 md:px-10 py-3 md:py-4 lg:py-5 bg-white text-black rounded-2xl font-black text-sm sm:text-base md:text-lg transition-all duration-300 hover:bg-indigo-500 hover:text-white transform hover:scale-105 shadow-2xl">
+                  <PenTool className="w-4 h-4 md:w-5 md:h-5" />
                   <span>{t("buttons.startCreating")}</span>
                 </div>
               </button>
 
-              <Link href="/generator?mode=upload" className="group">
-                <div className="flex items-center justify-center gap-3 px-8 md:px-10 py-4 md:py-5 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 text-white rounded-2xl font-black text-base md:text-lg transition-all duration-300 transform hover:scale-105">
-                  <ImagePlus className="w-5 h-5" />
+              <Link href="/generator?mode=upload" className="group w-full sm:w-auto">
+                <div className="flex items-center justify-center gap-2 md:gap-3 px-6 sm:px-8 md:px-10 py-3 md:py-4 lg:py-5 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 text-white rounded-2xl font-black text-sm sm:text-base md:text-lg transition-all duration-300 transform hover:scale-105">
+                  <ImagePlus className="w-4 h-4 md:w-5 md:h-5" />
                   <span>{t("buttons.imageToImage")}</span>
                 </div>
               </Link>

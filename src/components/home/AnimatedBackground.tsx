@@ -1,61 +1,58 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 
 export default function AnimatedBackground() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isClient, setIsClient] = useState(false);
-
-  const images = ["/image.png"];
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
+    // 检测是否为移动设备
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  useEffect(() => {
-    if (!isClient) return;
-
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, 8000);
-
-    return () => clearInterval(interval);
-  }, [isClient, images.length]);
-
-  if (!isClient) {
-    return (
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-600/40 via-indigo-600/30 to-pink-600/40" />
-    );
-  }
+  // 渐变背景作为后备和基础
+  const gradientFallback = (
+    <div className="absolute inset-0 bg-gradient-to-br from-purple-600/40 via-indigo-600/30 to-pink-600/40" />
+  );
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={currentIndex}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 1.5, ease: "easeInOut" }}
-        className="absolute inset-0"
-      >
-        <Image
-          src={images[currentIndex]}
-          alt="Anime AI Background"
-          fill
-          priority
-          quality={95}
-          sizes="100vw"
-          className="object-cover opacity-75 brightness-125 contrast-110 saturate-125"
-          placeholder="blur"
-          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCwAB//2Q=="
-        />
+    <div className="absolute inset-0">
+      {/* 始终显示渐变背景作为基础 */}
+      {gradientFallback}
+      
+      {/* 图片层 - 使用优化后的WebP图片 */}
+      <Image
+        src={isMobile ? "/image-mobile.webp" : "/image-optimized.webp"}
+        alt="Anime AI Background"
+        fill
+        priority={false}
+        quality={75}
+        sizes="(max-width: 768px) 640px, 1920px"
+        className={`object-cover transition-opacity duration-1000 ${
+          imageLoaded ? 'opacity-50' : 'opacity-0'
+        } brightness-125 contrast-110 saturate-125`}
+        placeholder="blur"
+        blurDataURL="data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAfQ//73v/+BiOh/AAA="
+        onLoad={() => setImageLoaded(true)}
+        loading="lazy"
+        onError={() => {
+          // 如果WebP加载失败，回退到原图
+          console.log('WebP failed, falling back to PNG');
+        }}
+      />
 
-        {/* 轻微渐变遮罩 - 仅用于文字可读性 */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#030305]/40 via-transparent to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#030305]/60" />
-      </motion.div>
-    </AnimatePresence>
+      {/* 渐变遮罩 - 确保文字可读性 */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#030305]/50 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#030305]/70" />
+    </div>
   );
 }

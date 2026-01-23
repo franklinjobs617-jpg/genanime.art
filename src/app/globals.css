@@ -163,5 +163,30 @@
     button {
       touch-action: manipulation;
     }
+    
+    /* 优化移动端滚动性能 */
+    body {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: none;
+    }
+    
+    /* 减少移动端重绘 */
+    .motion-reduce {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  
+  /* 优化图片加载 */
+  img {
+    content-visibility: auto;
+  }
+  
+  /* 优化大屏幕布局 */
+  @media (min-width: 1920px) {
+    .container {
+      max-width: 1400px;
+    }
   }
 }

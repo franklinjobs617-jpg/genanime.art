@@ -6,6 +6,8 @@ import { Link } from "@/i18n/routing";
 interface PlansBannerProps {
   isGuest?: boolean;
   onLogin?: () => void;
+  userCredits?: number;
+  onUpgrade?: () => void;
 }
 
 export default function PlansBanner({ isGuest, onLogin }: PlansBannerProps) {

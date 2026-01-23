@@ -15,38 +15,38 @@ interface ConversionModalProps {
 
 const CONVERSION_CONTENT = {
   credits_low: {
-    title: "Running Low on Credits!",
-    subtitle: "Keep your creativity flowing",
-    description: "Don't let inspiration wait",
-    urgency: "Limited Time Offer",
-    cta: "Get More Credits",
+    title: "Almost Out of Credits!",
+    subtitle: "Don't let your creativity stop here",
+    description: "Remove watermarks & unlock unlimited potential",
+    urgency: "⚡ 25% OFF Today Only",
+    cta: "Upgrade Now",
     icon: Zap,
     gradient: "from-red-500 to-pink-500"
   },
   guest_limit: {
     title: "Free Limit Reached",
-    subtitle: "Unlock unlimited possibilities",
-    description: "Join thousands of creators",
-    urgency: "New User Benefits",
+    subtitle: "Ready to create without limits?",
+    description: "Join thousands of creators worldwide",
+    urgency: "🎁 New User Special",
     cta: "Sign Up Free",
     icon: Crown,
     gradient: "from-purple-500 to-indigo-500"
   },
   daily_visit: {
-    title: "Welcome Back!",
-    subtitle: "Ready to create something amazing?",
-    description: "Your next masterpiece awaits",
-    urgency: "Daily Special",
+    title: "Welcome Back Creator!",
+    subtitle: "Ready for your next masterpiece?",
+    description: "Your artistic journey continues",
+    urgency: "🌟 Daily Inspiration",
     cta: "Start Creating",
     icon: Sparkles,
     gradient: "from-blue-500 to-cyan-500"
   },
   generation_complete: {
-    title: "Amazing Work!",
-    subtitle: "Keep the momentum going",
-    description: "Strike while inspiration is hot",
-    urgency: "Special Offer",
-    cta: "Continue Creating",
+    title: "Great Work! 🎨",
+    subtitle: "Love your art? Remove the watermark!",
+    description: "Get clean, professional images + unlimited generations",
+    urgency: "💎 Pro Features Unlocked",
+    cta: "Go Watermark-Free",
     icon: Star,
     gradient: "from-green-500 to-emerald-500"
   }
@@ -282,8 +282,8 @@ export default function ConversionModal({ isOpen, onClose, trigger, userCredits 
                     <div
                       key={index}
                       className={`relative p-6 rounded-3xl border-2 cursor-pointer transition-all duration-150 ${selectedPlan === index
-                          ? "border-purple-500 bg-purple-50 shadow-lg scale-105"
-                          : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-md"
+                        ? "border-purple-500 bg-purple-50 shadow-lg scale-105"
+                        : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-md"
                         }`}
                       onClick={() => setSelectedPlan(index)}
                     >

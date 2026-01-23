@@ -222,8 +222,12 @@ export async function POST(req: NextRequest) {
 
       let buffer: any = Buffer.from(base64, "base64");
 
-      if (!isGuest && isPremium) {
-        buffer = await addWatermark(buffer, "genanime.art");
+      if (!isPremium) {
+        try {
+          buffer = await addWatermark(buffer, "GenAnime.art");
+        } catch (e) {
+          console.error("Watermark error:", e);
+        }
       }
 
       const finalBase64 = buffer.toString("base64");

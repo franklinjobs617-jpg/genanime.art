@@ -31,7 +31,7 @@ CREATE TABLE "User" (
     "email" TEXT,
     "emailVerified" DATETIME,
     "image" TEXT,
-    "credits" INTEGER NOT NULL DEFAULT 10
+    "credits" INTEGER NOT NULL DEFAULT 6
 );
 
 -- CreateTable

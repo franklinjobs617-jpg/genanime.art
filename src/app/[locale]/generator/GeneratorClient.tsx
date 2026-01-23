@@ -32,6 +32,10 @@ const PlansBanner = dynamic(
     ),
   }
 );
+const WatermarkNotice = dynamic(() => import("@/components/generator/WatermarkNotice"), {
+  loading: () => null,
+  ssr: false,
+});
 const HistoryRow = dynamic(() => import("@/components/generator/HistoryRow"), {
   ssr: false,
 });
@@ -91,6 +95,7 @@ export default function GeneratorClient() {
   const [highlightPrompt, setHighlightPrompt] = useState(false);
   const [showDailyReward, setShowDailyReward] = useState(false);
   const [showConversionModal, setShowConversionModal] = useState(false);
+  const [showWatermarkNotice, setShowWatermarkNotice] = useState(false);
   const [conversionTrigger, setConversionTrigger] = useState<"credits_low" | "guest_limit" | "daily_visit" | "generation_complete">("daily_visit");
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -133,6 +138,8 @@ export default function GeneratorClient() {
     const mode = searchParams.get("mode");
     if (mode === "upload") {
       setGenerationMode("image-to-prompt");
+    } else if (mode === "img2img") {
+      setGenerationMode("image-to-image");
     }
 
     const modelParam = searchParams.get("model");
@@ -321,11 +328,29 @@ export default function GeneratorClient() {
       toast.success(t("history.artGenerated"), { id: toastId });
       setActivePrompt("");
       
-      // 生成完成后，如果积分较低，显示转化弹窗
-      if (user && Number(user.credits) < 10) {
-        setTimeout(() => {
-          checkConversionModal("generation_complete");
-        }, 3000);
+      // 更精准的转化策略
+      if (user) {
+        const remainingCredits = Number(user.credits);
+        const isPremium = remainingCredits > 100;
+        
+        // 如果是免费用户，显示水印提示
+        if (!isPremium) {
+          setShowWatermarkNotice(true);
+          setTimeout(() => setShowWatermarkNotice(false), 8000); // 8秒后自动隐藏
+        }
+        
+        // 第一次生成后就提示升级优势
+        if (remainingCredits === 4) { // 刚用了第一张图
+          setTimeout(() => {
+            checkConversionModal("generation_complete");
+          }, 1500);
+        }
+        // 积分快用完时再次提示
+        else if (remainingCredits <= 2) { // 只剩1张图时
+          setTimeout(() => {
+            checkConversionModal("credits_low");
+          }, 1000);
+        }
       }
     } catch (err: any) {
       console.error(err);
@@ -641,6 +666,18 @@ export default function GeneratorClient() {
                       />
                     </motion.div>
                   )}
+              </AnimatePresence>
+              
+              {/* Watermark Notice */}
+              <AnimatePresence>
+                {showWatermarkNotice && user && Number(user.credits) <= 100 && (
+                  <WatermarkNotice 
+                    onUpgrade={() => {
+                      setShowWatermarkNotice(false);
+                      checkConversionModal("credits_low");
+                    }}
+                  />
+                )}
               </AnimatePresence>
             </div>
             {/* History List ... */}

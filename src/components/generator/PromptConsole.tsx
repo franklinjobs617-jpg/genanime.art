@@ -113,7 +113,7 @@ export default function PromptConsole({
     ? preset === "avatar"
       ? "Describe the avatar look (optional)…"
       : "Describe how you want to remix (optional)…"
-    : "Describe your imagination… (e.g. A cyberpunk samurai in neon rain)";
+    : "Describe your imagination in detail… (e.g. A cyberpunk samurai in neon rain, detailed armor, glowing katana)";
   const promptMax = 4000;
 
   return (
@@ -134,7 +134,8 @@ export default function PromptConsole({
           <div className="relative px-4 pt-4 pb-2">
             <div className="mb-2 flex items-center justify-between">
               <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 flex items-center gap-2">
-                <Sparkles className="w-3 h-3 text-indigo-400" /> Prompt
+                <Sparkles className="w-3 h-3 text-indigo-400" /> 
+                {mode === "image-to-image" ? "Remix Description" : "Creative Prompt"}
               </div>
               <div className="text-[10px] font-mono text-zinc-600 tabular-nums">
                 {Math.min(activePrompt.length, promptMax)}/{promptMax}
@@ -315,6 +316,18 @@ export default function PromptConsole({
           </p>
         </div>
       )}
+
+      {/* Content Policy - Moved outside for better UX */}
+      <div className="flex items-center justify-center">
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-500/5 border border-amber-500/10 rounded-full">
+          <div className="w-3 h-3 rounded-full bg-amber-500/20 flex items-center justify-center">
+            <span className="text-amber-500 text-[8px] font-bold">!</span>
+          </div>
+          <span className="text-[10px] text-amber-300/80 font-medium">
+            Keep content family-friendly • No nudity or explicit material
+          </span>
+        </div>
+      </div>
     </div>
   );
 }

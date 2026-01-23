@@ -288,9 +288,21 @@ export default function ImagePromptConsole({ onApplyPrompt, onSuccess, imageFile
                                 <UploadCloud className="w-7 h-7 text-violet-300" />
                             </div>
                             <h3 className="text-lg font-black text-white mb-2 text-center">{t('title')}</h3>
-                            <p className="text-zinc-400 text-center max-w-md text-sm">
+                            <p className="text-zinc-400 text-center max-w-md text-sm mb-4">
                                 {t('description')}
                             </p>
+                            
+                            {/* Content Guidelines for Image Upload */}
+                            <div className="flex items-start gap-2 p-3 bg-red-500/5 border border-red-500/20 rounded-lg max-w-md">
+                              <div className="w-4 h-4 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <span className="text-red-400 text-[10px] font-bold">!</span>
+                              </div>
+                              <div className="text-[11px] text-red-200/80 leading-relaxed">
+                                <span className="font-semibold text-red-300">Image Policy:</span> No nudity, explicit, or inappropriate content. 
+                                Only upload family-friendly images.
+                              </div>
+                            </div>
+                            
                             <div className="mt-4 text-[11px] font-medium text-zinc-500">
                                 Click to upload, drag & drop, or paste (Ctrl+V)
                             </div>

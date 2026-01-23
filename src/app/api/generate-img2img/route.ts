@@ -202,7 +202,9 @@ export async function POST(req: NextRequest) {
       prompt: finalPrompt,
       style,
       strength,
-      model: process.env.DOUBAO_T2I_ENDPOINT_ID
+      model: process.env.DOUBAO_T2I_ENDPOINT_ID,
+      apiKey: process.env.DOUBAO_API_KEY ? 'Set' : 'Not Set',
+      baseURL: process.env.ARK_BASE_URL
     });
 
     const promises = Array.from({ length: effectiveQuantity }).map(() =>

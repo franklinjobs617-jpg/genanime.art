@@ -145,7 +145,7 @@ export async function POST(req: NextRequest) {
     } else {
       finalPrompt = hint;
     }
-    
+
     // 确保包含全局质量提升词（避免重复添加）
     if (!finalPrompt.includes("masterpiece") && !finalPrompt.includes("best quality")) {
       finalPrompt += `, ${GLOBAL_QUALITY_BOOSTER}`;
@@ -176,7 +176,7 @@ export async function POST(req: NextRequest) {
     const isAnimeStyle = ANIME_STYLES.includes(style);
 
     const baseParams: any = {
-      model: process.env.DOUBAO_T2I_ENDPOINT_ID,
+      model: process.env.DOUBAO_ENDPOINT_ID, // 使用和文生图相同的端点 doubao-seedream-4-0-250828
       prompt: finalPrompt,
       image: image, // 确保原始图片被传递
       strength: Number(strength), // 添加 strength 参数控制变化程度
@@ -202,7 +202,7 @@ export async function POST(req: NextRequest) {
       prompt: finalPrompt,
       style,
       strength,
-      model: process.env.DOUBAO_T2I_ENDPOINT_ID,
+      model: process.env.DOUBAO_ENDPOINT_ID, // 使用和文生图相同的端点 doubao-seedream-4-0-250828
       apiKey: process.env.DOUBAO_API_KEY ? 'Set' : 'Not Set',
       baseURL: process.env.ARK_BASE_URL
     });
@@ -266,10 +266,10 @@ export async function POST(req: NextRequest) {
       code: error?.code,
       stack: error?.stack
     });
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: error?.message || "Generation failed",
         details: process.env.NODE_ENV === 'development' ? error?.stack : undefined
       },

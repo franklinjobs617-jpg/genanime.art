@@ -4,17 +4,16 @@ import type React from "react";
 import { useState, useRef, useEffect } from "react";
 import {
   Download,
-  Maximize2,
   MoreHorizontal,
-  ThumbsUp,
   Wand2,
   Copy,
   X,
   Trash2,
-  CheckCircle2,
   Loader2,
-  AlertCircle,
-  ImageIcon,
+  Crown,
+  Sparkles,
+  ArrowRight,
+  Zap,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import SafeImage from "./SafeImage";
@@ -27,6 +26,8 @@ interface Props {
   isGenerating?: boolean;
   onRegenerate?: () => void;
   onDelete?: () => void;
+  isPro?: boolean;
+  onUpgrade?: () => void;
 }
 
 export default function GenerationResultCard({
@@ -37,9 +38,10 @@ export default function GenerationResultCard({
   isGenerating,
   onRegenerate,
   onDelete,
+  isPro = false,
+  onUpgrade,
 }: Props) {
   const [selectedImgIndex, setSelectedImgIndex] = useState<number | null>(null);
-  const [liked, setLiked] = useState<boolean | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const [notification, setNotification] = useState<{
@@ -212,6 +214,56 @@ export default function GenerationResultCard({
                 </AnimatePresence>
               </div>
             </div>
+
+            {/* 付费功能引导 */}
+            {!isPro && (
+              <div className="pt-4 mt-4 border-t border-white/5 space-y-3">
+                <div className="flex items-center gap-2 text-zinc-400 text-[10px] font-bold uppercase tracking-wider">
+                  <Sparkles className="w-3 h-3 text-amber-400" />
+                  <span>Pro Features</span>
+                </div>
+                
+                <div className="space-y-2">
+                  <button
+                    onClick={onUpgrade}
+                    className="w-full group/pro flex items-center justify-between p-3 bg-gradient-to-r from-violet-600/10 to-indigo-600/10 border border-violet-500/20 rounded-xl hover:from-violet-600/20 hover:to-indigo-600/20 hover:border-violet-500/40 transition-all duration-300"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 bg-gradient-to-br from-violet-500 to-indigo-500 rounded-lg flex items-center justify-center">
+                        <Zap className="w-3 h-3 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <p className="text-[10px] font-bold text-white">Upscale to 4K</p>
+                        <p className="text-[9px] text-zinc-500">Ultra HD quality</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 text-violet-400">
+                      <Crown className="w-3 h-3" />
+                      <ArrowRight className="w-3 h-3 group-hover/pro:translate-x-0.5 transition-transform" />
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={onUpgrade}
+                    className="w-full group/pro flex items-center justify-between p-3 bg-gradient-to-r from-amber-600/10 to-orange-600/10 border border-amber-500/20 rounded-xl hover:from-amber-600/20 hover:to-orange-600/20 hover:border-amber-500/40 transition-all duration-300"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg flex items-center justify-center">
+                        <Download className="w-3 h-3 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <p className="text-[10px] font-bold text-white">No Watermark</p>
+                        <p className="text-[9px] text-zinc-500">Clean downloads</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 text-amber-400">
+                      <Crown className="w-3 h-3" />
+                      <ArrowRight className="w-3 h-3 group-hover/pro:translate-x-0.5 transition-transform" />
+                    </div>
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </motion.div>
@@ -260,39 +312,73 @@ export default function GenerationResultCard({
 
             {/* 底部：操作栏容器 (通过 z-index 确保在最上层) */}
             <div className="relative z-[180] w-full px-6 pt-10 pb-12 bg-gradient-to-t from-black via-black/90 to-transparent">
-              <div className="max-w-md mx-auto flex items-center gap-3">
-                {/* 下载按钮 - 专门加大高度以适配移动端 */}
-                <button
-                  onClick={(e) => handleDownload(e, urls[selectedImgIndex!])}
-                  className="h-16 flex-1 bg-white text-black rounded-2xl flex items-center justify-center gap-3 font-black text-[11px] uppercase tracking-widest active:scale-95 transition-transform shadow-xl"
-                >
-                  <Download className="w-5 h-5" />
-                  Save Image
-                </button>
+              <div className="max-w-md mx-auto space-y-4">
+                {/* 主要操作按钮 */}
+                <div className="flex items-center gap-3">
+                  {/* 下载按钮 - 专门加大高度以适配移动端 */}
+                  <button
+                    onClick={(e) => handleDownload(e, urls[selectedImgIndex!])}
+                    className="h-16 flex-1 bg-white text-black rounded-2xl flex items-center justify-center gap-3 font-black text-[11px] uppercase tracking-widest active:scale-95 transition-transform shadow-xl"
+                  >
+                    <Download className="w-5 h-5" />
+                    Save Image
+                  </button>
 
-                {/* 删除按钮 */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onDelete?.();
-                    setSelectedImgIndex(null);
-                  }}
-                  className="h-16 w-16 bg-red-500/10 text-red-500 rounded-2xl flex items-center justify-center border border-red-500/20 active:scale-95"
-                >
-                  <Trash2 className="w-5 h-5" />
-                </button>
+                  {/* 删除按钮 */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete?.();
+                      setSelectedImgIndex(null);
+                    }}
+                    className="h-16 w-16 bg-red-500/10 text-red-500 rounded-2xl flex items-center justify-center border border-red-500/20 active:scale-95"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
 
-                {/* Remix 按钮 */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onRegenerate?.();
-                    setSelectedImgIndex(null);
-                  }}
-                  className="h-16 px-6 bg-indigo-600 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest active:scale-95 shadow-lg shadow-indigo-500/20"
-                >
-                  <Wand2 className="w-5 h-5" />
-                </button>
+                  {/* Remix 按钮 */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onRegenerate?.();
+                      setSelectedImgIndex(null);
+                    }}
+                    className="h-16 px-6 bg-indigo-600 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest active:scale-95 shadow-lg shadow-indigo-500/20"
+                  >
+                    <Wand2 className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* 付费功能引导 - 全屏预览版本 */}
+                {!isPro && (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onUpgrade?.();
+                        setSelectedImgIndex(null);
+                      }}
+                      className="flex-1 group/pro flex items-center justify-center gap-2 h-12 bg-gradient-to-r from-violet-600/20 to-indigo-600/20 border border-violet-500/30 rounded-xl text-white hover:from-violet-600/30 hover:to-indigo-600/30 hover:border-violet-500/50 transition-all active:scale-95"
+                    >
+                      <Zap className="w-4 h-4 text-violet-400" />
+                      <span className="text-[10px] font-bold">4K Upscale</span>
+                      <Crown className="w-3 h-3 text-amber-400" />
+                    </button>
+                    
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onUpgrade?.();
+                        setSelectedImgIndex(null);
+                      }}
+                      className="flex-1 group/pro flex items-center justify-center gap-2 h-12 bg-gradient-to-r from-amber-600/20 to-orange-600/20 border border-amber-500/30 rounded-xl text-white hover:from-amber-600/30 hover:to-orange-600/30 hover:border-amber-500/50 transition-all active:scale-95"
+                    >
+                      <Download className="w-4 h-4 text-amber-400" />
+                      <span className="text-[10px] font-bold">No Watermark</span>
+                      <Crown className="w-3 h-3 text-amber-400" />
+                    </button>
+                  </div>
+                )}
               </div>
               <p className="text-center text-zinc-500 text-[9px] mt-6 font-bold uppercase tracking-[0.3em] opacity-50">
                 Tap Background to Close

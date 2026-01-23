@@ -12,7 +12,14 @@ export default function Hero() {
   const t = useTranslations("Hero");
   const router = useRouter();
   const [inputValue, setInputValue] = useState("");
-  const [showGuestGuide, setShowGuestGuide] = useState(false);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (inputValue.trim()) {
+      router.push(`/generator?prompt=${encodeURIComponent(inputValue.trim())}`);
+    } else {
+      router.push("/generator");
+    }
+  };
   // 高质量主提示词映射
   const stylePrompts: Record<string, string> = {
     Waifu:

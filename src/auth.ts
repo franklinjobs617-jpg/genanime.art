@@ -33,17 +33,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
   callbacks: {
     async signIn({ user, account, profile }) {
-      console.log("SignIn attempt:", { user: user?.email, provider: account?.provider });
+      console.log("=== SignIn Callback Start ===");
+      console.log("User:", user?.email);
+      console.log("Provider:", account?.provider);
+      console.log("Profile:", profile);
 
       if (account?.provider === "google") {
         try {
           const email = user.email;
           if (!email) {
-            console.error("No email provided");
+            console.error("❌ No email provided");
             return false;
           }
 
-          console.log("Attempting database upsert for:", email);
+          console.log("✅ Email found:", email);
+          console.log("🔄 Attempting database connection...");
+
+          // 测试数据库连接
+          await prisma.$connect();
+          console.log("✅ Database connected successfully");
+
+          console.log("🔄 Attempting database upsert...");
 
           // 使用 upsert 原子操作
           const result = await prisma.user.upsert({
@@ -72,13 +82,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             },
           });
 
-          console.log("Database upsert successful:", result.id);
+          console.log("✅ Database upsert successful:", result.id);
+          console.log("=== SignIn Callback Success ===");
           return true;
         } catch (error) {
-          console.error("Auth_SignIn_Database_Error:", error);
+          console.error("❌ Auth_SignIn_Database_Error:", error);
+          console.error("Error details:", {
+            message: error instanceof Error ? error.message : 'Unknown error',
+            stack: error instanceof Error ? error.stack : 'No stack trace'
+          });
+          console.log("=== SignIn Callback Failed ===");
           return false;
         }
       }
+
+      console.log("✅ Non-Google provider, allowing sign in");
       return true;
     },
 

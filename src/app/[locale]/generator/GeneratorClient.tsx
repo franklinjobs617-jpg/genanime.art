@@ -448,7 +448,10 @@ export default function GeneratorClient() {
       />
       <DailyRewardModal
         isOpen={showDailyReward}
-        onClose={() => setShowDailyReward(false)}
+        onClose={() => {
+          setShowDailyReward(false);
+          console.log('每日奖励弹框已关闭');
+        }}
       />
       <ConversionModal
         isOpen={showConversionModal}

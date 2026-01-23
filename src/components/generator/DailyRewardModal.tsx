@@ -28,6 +28,26 @@ export default function DailyRewardModal({ isOpen, onClose }: DailyRewardModalPr
   const [isClaimingReward, setIsClaimingReward] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
 
+  // 添加键盘ESC关闭功能
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      // 防止背景滚动
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen, onClose]);
+
   useEffect(() => {
     if (isOpen && user) {
       // Calculate consecutive check-in days
@@ -101,187 +121,181 @@ export default function DailyRewardModal({ isOpen, onClose }: DailyRewardModalPr
   const RewardIcon = currentReward.icon;
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
+          {/* 优化的背景遮罩 */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/60 backdrop-blur-md"
+            transition={{ duration: 0.2 }}
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={onClose}
           />
 
-          {/* Modal */}
+          {/* 优化的弹框动画 */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 50 }}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 50 }}
-            transition={{ type: "spring", duration: 0.5 }}
-            className="relative w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden"
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ 
+              type: "spring", 
+              duration: 0.3,
+              stiffness: 300,
+              damping: 30
+            }}
+            className="relative w-full max-w-sm bg-white rounded-2xl shadow-xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
           >
-            {/* Confetti Effect */}
+            {/* 简化的彩纸效果 */}
             {showConfetti && (
               <div className="absolute inset-0 pointer-events-none z-10">
-                {Array.from({ length: 15 }).map((_, i) => (
+                {Array.from({ length: 8 }).map((_, i) => (
                   <motion.div
                     key={i}
                     initial={{
                       opacity: 1,
-                      y: -20,
-                      x: Math.random() * 300,
+                      y: -10,
+                      x: 150 + Math.random() * 100 - 50,
                       rotate: 0,
                       scale: 1
                     }}
                     animate={{
                       opacity: 0,
-                      y: 400,
-                      rotate: 360,
+                      y: 300,
+                      rotate: 180,
                       scale: 0
                     }}
                     transition={{
-                      duration: 2.5,
-                      delay: Math.random() * 0.5,
+                      duration: 1.5,
+                      delay: Math.random() * 0.3,
                       ease: "easeOut"
                     }}
-                    className="absolute w-2 h-2 rounded-full"
-                    style={{
-                      background: `hsl(${Math.random() * 360}, 70%, 60%)`
-                    }}
+                    className="absolute w-2 h-2 rounded-full bg-yellow-400"
                   />
                 ))}
               </div>
             )}
 
-            {/* Close Button */}
+            {/* 优化的关闭按钮 */}
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 z-10 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all"
+              className="absolute top-3 right-3 z-20 p-2 text-white/80 hover:text-white hover:bg-white/20 rounded-full transition-all duration-200 backdrop-blur-sm"
+              aria-label="关闭弹框"
             >
               <X className="w-5 h-5" />
             </button>
 
-            {/* Header with Gradient */}
-            <div className="relative bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 p-8 text-center text-white">
-              {/* Animated Background Shapes */}
-              <div className="absolute inset-0 overflow-hidden">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="absolute -top-10 -right-10 w-20 h-20 bg-white/10 rounded-full"
-                />
-                <motion.div
-                  animate={{ rotate: -360 }}
-                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                  className="absolute -bottom-5 -left-5 w-16 h-16 bg-white/10 rounded-full"
-                />
+            {/* 简化的头部渐变 */}
+            <div className="relative bg-gradient-to-br from-purple-500 to-pink-500 p-6 text-center text-white">
+              {/* 简化的背景装饰 */}
+              <div className="absolute inset-0 overflow-hidden opacity-20">
+                <div className="absolute -top-8 -right-8 w-16 h-16 bg-white rounded-full" />
+                <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-white rounded-full" />
               </div>
 
               <div className="relative z-10">
-                {/* Icon */}
+                {/* 图标 */}
                 <motion.div
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ type: "spring", duration: 0.8, delay: 0.2 }}
-                  className="flex justify-center mb-4"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", duration: 0.5, delay: 0.1 }}
+                  className="flex justify-center mb-3"
                 >
-                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30">
-                    <RewardIcon className="w-8 h-8 text-white" />
+                  <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                    <RewardIcon className="w-7 h-7 text-white" />
                   </div>
                 </motion.div>
 
-                {/* Title */}
+                {/* 标题 */}
                 <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="text-2xl font-bold mb-2"
+                  transition={{ delay: 0.2 }}
+                  className="text-xl font-bold mb-2"
                 >
                   {currentReward.title}
                 </motion.h2>
 
                 <motion.p
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="text-white/90 text-sm"
+                  transition={{ delay: 0.3 }}
+                  className="text-white/90 text-sm mb-3"
                 >
                   {currentReward.desc}
                 </motion.p>
 
-                {/* Streak Display */}
+                {/* 连续签到显示 */}
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5 }}
-                  className="flex justify-center items-center gap-2 mt-4 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full border border-white/30"
+                  transition={{ delay: 0.4 }}
+                  className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full text-sm"
                 >
                   <Calendar className="w-4 h-4" />
-                  <span className="text-sm font-medium">
-                    Day {currentStreak} Streak
-                  </span>
+                  <span>第 {currentStreak} 天</span>
                 </motion.div>
               </div>
             </div>
 
-            {/* Content */}
-            <div className="p-6 bg-white">
-              {/* Reward Display */}
+            {/* 内容区域 */}
+            <div className="p-5 bg-white">
+              {/* 奖励显示 */}
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className="text-center mb-6"
+                transition={{ delay: 0.5 }}
+                className="text-center mb-5"
               >
-                <div className="inline-flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-200 rounded-2xl">
-                  <Coins className="w-8 h-8 text-yellow-500" />
+                <div className="inline-flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-xl">
+                  <Coins className="w-6 h-6 text-yellow-500" />
                   <div>
-                    <div className="text-3xl font-bold text-gray-800">
+                    <div className="text-2xl font-bold text-gray-800">
                       +{currentReward.credits}
                     </div>
-                    <div className="text-sm text-gray-600">Credits</div>
+                    <div className="text-xs text-gray-600">积分</div>
                   </div>
                 </div>
                 <p className="text-xs text-gray-500 mt-2">
-                  Generate {Math.floor(currentReward.credits / 2)} images
+                  可生成 {Math.floor(currentReward.credits / 2)} 张图片
                 </p>
               </motion.div>
 
-              {/* Weekly Progress */}
+              {/* 简化的进度条 */}
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 }}
-                className="mb-6"
+                transition={{ delay: 0.6 }}
+                className="mb-5"
               >
-                <div className="flex justify-between items-center mb-3">
-                  <span className="text-sm font-medium text-gray-700">Weekly Progress</span>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-medium text-gray-700">本周进度</span>
                   <span className="text-sm text-gray-500">{currentStreak}/7</span>
                 </div>
 
-                {/* Progress Bar */}
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-3">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${(currentStreak / 7) * 100}%` }}
-                    transition={{ duration: 1, delay: 0.8 }}
+                    transition={{ duration: 0.8, delay: 0.7 }}
                     className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full"
                   />
                 </div>
 
-                {/* Reward Dots */}
+                {/* 奖励点 */}
                 <div className="flex justify-between">
                   {DAILY_REWARDS.map((reward, index) => (
                     <motion.div
                       key={index}
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      transition={{ delay: 0.9 + index * 0.1 }}
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${index < currentStreak
-                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg"
+                      transition={{ delay: 0.8 + index * 0.05 }}
+                      className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${index < currentStreak
+                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
                         : index === currentStreak - 1
-                          ? "bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-lg animate-pulse"
+                          ? "bg-gradient-to-r from-yellow-400 to-orange-500 text-white animate-pulse"
                           : "bg-gray-200 text-gray-500"
                         }`}
                     >
@@ -291,37 +305,37 @@ export default function DailyRewardModal({ isOpen, onClose }: DailyRewardModalPr
                 </div>
               </motion.div>
 
-              {/* Claim Button */}
+              {/* 领取按钮 */}
               <motion.button
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1 }}
+                transition={{ delay: 0.9 }}
                 onClick={handleClaimReward}
                 disabled={isClaimingReward}
-                className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-2xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
+                className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
               >
                 {isClaimingReward ? (
                   <>
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Claiming...
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    领取中...
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-5 h-5" />
-                    Claim Reward
+                    <Sparkles className="w-4 h-4" />
+                    领取奖励
                   </>
                 )}
               </motion.button>
 
-              {/* Next Day Hint */}
+              {/* 明日提示 */}
               {currentStreak < 7 && (
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 1.2 }}
+                  transition={{ delay: 1 }}
                   className="text-center text-xs text-gray-500 mt-3"
                 >
-                  Come back tomorrow for {DAILY_REWARDS[currentStreak]?.credits} credits! 🎁
+                  明天回来可获得 {DAILY_REWARDS[currentStreak]?.credits} 积分！🎁
                 </motion.p>
               )}
             </div>

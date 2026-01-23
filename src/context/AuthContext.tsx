@@ -43,7 +43,7 @@ function AuthProviderInner({ children }: { children: ReactNode }) {
         } else {
             setUser(null);
         }
-    }, [session]);
+    }, [session?.user]); // 只依赖session.user，而不是整个session对象
 
     const login = () => {
         signIn("google");

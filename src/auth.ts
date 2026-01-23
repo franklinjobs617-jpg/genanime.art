@@ -75,22 +75,25 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
 
     // 💡 JWT 回调：从数据库取出 UUID 放入 Token
-    async jwt({ token, user, account }) {
-      if (token.email) {
-        const dbUser:any= await prisma.user.findUnique({
-          where: {
-            email_type: {
-              email: token.email,
-              type: CURRENT_SITE_TYPE
+    async jwt({ token, user, account, trigger }) {
+      // 只在登录时或手动更新时查询数据库，避免每次都查询
+      if ((user && account) || trigger === "update") {
+        if (token.email) {
+          const dbUser:any= await prisma.user.findUnique({
+            where: {
+              email_type: {
+                email: token.email,
+                type: CURRENT_SITE_TYPE
+              }
             }
-          }
-        });
+          });
 
-        if (dbUser) {
-          token.dbId = dbUser.id; // 数字 ID (464)
-          token.googleUserId = dbUser.googleUserId; 
-          token.credits = dbUser.credits;
-          token.siteType = dbUser.type;
+          if (dbUser) {
+            token.dbId = dbUser.id; // 数字 ID (464)
+            token.googleUserId = dbUser.googleUserId; 
+            token.credits = dbUser.credits;
+            token.siteType = dbUser.type;
+          }
         }
       }
       return token;

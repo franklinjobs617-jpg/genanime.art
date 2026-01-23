@@ -84,6 +84,13 @@ export default function GeneratorClient() {
   >("text-to-image");
 
   const [isGenerating, setIsGenerating] = useState(false);
+  const [currentGeneration, setCurrentGeneration] = useState<{
+    prompt: string;
+    style: string;
+    ratio: string;
+    quantity: number;
+    timestamp: number;
+  } | null>(null);
   const [history, setHistory] = useState<any[]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
@@ -238,18 +245,15 @@ export default function GeneratorClient() {
     setIsGenerating(true);
     setMobileSheetOpen(false);
 
-    const optimisticId = `temp-${Date.now()}`;
-    const optimisticEntry = {
-      id: optimisticId,
-      urls: Array(activeQuantity).fill(""),
+    // 设置当前生成状态，用于UI显示
+    setCurrentGeneration({
       prompt: activePrompt,
-      timestamp: Date.now(),
       style: activeStyle,
       ratio: activeRatio,
-      status: "generating",
-    };
+      quantity: activeQuantity,
+      timestamp: Date.now(),
+    });
 
-    setHistory((prev) => [optimisticEntry, ...prev]);
     const toastId = toast.loading(t("history.aiCasting"));
 
     try {
@@ -305,18 +309,38 @@ export default function GeneratorClient() {
         body: JSON.stringify(requestBody),
       });
 
-      if (!response.ok) throw new Error("Generation failed");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP ${response.status}: Generation failed`);
+      }
 
       const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.error || "Generation failed");
+      }
+
       const urls = data.images || (Array.isArray(data.urls) ? data.urls : [data.url]);
 
-      setHistory((prev) =>
-        prev.map((item) =>
-          item.id === optimisticId
-            ? { ...item, urls, status: "completed" }
-            : item
-        )
-      );
+      if (!urls || urls.length === 0) {
+        throw new Error("No images were generated");
+      }
+
+      // 只有在生成成功后才添加到历史记录
+      const successEntry = {
+        id: `success-${Date.now()}`,
+        urls: urls,
+        prompt: activePrompt,
+        timestamp: Date.now(),
+        style: activeStyle,
+        ratio: activeRatio,
+        status: "completed",
+      };
+
+      setHistory((prev) => [successEntry, ...prev]);
+      
+      // 清除当前生成状态
+      setCurrentGeneration(null);
 
       if (!user) {
         const newCount = guestGenerations + 1;
@@ -370,9 +394,29 @@ export default function GeneratorClient() {
         }, 1000); // 延迟1秒，给积分刷新更多时间
       }
     } catch (err: any) {
-      console.error(err);
-      toast.error(t("history.generationError"), { id: toastId });
-      setHistory((prev) => prev.filter((item) => item.id !== optimisticId));
+      console.error('Generation error:', err);
+      
+      // 根据错误类型显示不同的错误消息
+      let errorMessage = t("history.generationError");
+      
+      if (err.message) {
+        if (err.message.includes("credits") || err.message.includes("Insufficient")) {
+          errorMessage = "Insufficient credits";
+          checkConversionModal("credits_low");
+        } else if (err.message.includes("limit") || err.message.includes("429")) {
+          errorMessage = "Rate limit exceeded. Please try again later.";
+        } else if (err.message.includes("content") || err.message.includes("inappropriate")) {
+          errorMessage = "Content not allowed. Please modify your prompt.";
+        } else if (err.message.includes("No images")) {
+          errorMessage = "No images were generated. Please try again.";
+        } else {
+          errorMessage = err.message;
+        }
+      }
+      
+      toast.error(errorMessage, { id: toastId });
+      
+      // 不需要从历史记录中删除任何条目，因为我们没有预先添加
     } finally {
       setIsGenerating(false);
     }

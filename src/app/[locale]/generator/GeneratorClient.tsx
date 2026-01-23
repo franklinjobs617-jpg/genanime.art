@@ -60,7 +60,7 @@ export default function GeneratorClient() {
   // ... (状态管理逻辑保持不变，直到 return 部分)
   const t = useTranslations("Generator");
   const searchParams = useSearchParams();
-  const { user, isLoading: authLoading, login, refreshUser } = useAuth();
+  const { user, isLoading: authLoading, login, logout, refreshUser } = useAuth();
 
   const [activePrompt, setActivePrompt] = useState("");
   const [activeStyle, setActiveStyle] = useState("Default");
@@ -567,12 +567,31 @@ export default function GeneratorClient() {
             {authLoading ? (
               <div className="w-9 h-9 rounded-full bg-zinc-800 animate-pulse" />
             ) : user ? (
-              <div className="w-9 h-9 rounded-full overflow-hidden border border-zinc-700 hover:border-indigo-500 hover:shadow-[0_0_10px_rgba(99,102,241,0.3)] transition-all cursor-pointer">
-                <img
-                  src={user.picture || "/default-avatar.png"}
-                  alt={user.name}
-                  className="w-full h-full object-cover"
-                />
+              <div className="relative group">
+                <div className="w-9 h-9 rounded-full overflow-hidden border border-zinc-700 hover:border-indigo-500 hover:shadow-[0_0_10px_rgba(99,102,241,0.3)] transition-all cursor-pointer">
+                  <img
+                    src={user.picture || "/default-avatar.png"}
+                    alt={user.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                
+                {/* Simple tooltip showing user info */}
+                <div className="absolute right-0 top-full mt-2 w-48 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                  <div className="p-3">
+                    <div className="text-sm font-medium text-white truncate">{user.name}</div>
+                    <div className="text-xs text-zinc-400 truncate">{user.email}</div>
+                    <div className="text-xs text-indigo-400 mt-1">{user.credits} credits</div>
+                  </div>
+                  <div className="border-t border-zinc-700">
+                    <button
+                      onClick={logout}
+                      className="w-full px-3 py-2 text-left text-sm text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors rounded-b-lg"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
               </div>
             ) : (
               <button

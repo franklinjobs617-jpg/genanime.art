@@ -786,6 +786,34 @@ export default function GeneratorClient() {
           </div>
         </div>
 
+        {/* 移动端生成状态指示器 */}
+        <AnimatePresence>
+          {isGenerating && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="lg:hidden fixed bottom-4 left-4 right-4 z-50 bg-zinc-900/95 backdrop-blur-md border border-zinc-700 rounded-2xl p-4 shadow-2xl"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+                <div className="flex-1">
+                  <div className="text-sm font-bold text-white">Creating your anime art...</div>
+                  <div className="text-xs text-zinc-400 mt-1">This usually takes 20-30 seconds</div>
+                </div>
+              </div>
+              <div className="mt-3 w-full bg-zinc-800 rounded-full h-1">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: 25, ease: "linear" }}
+                  className="h-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <ImageDetailModal
           isOpen={!!selectedDetailItem}
           onClose={() => setSelectedDetailItem(null)}

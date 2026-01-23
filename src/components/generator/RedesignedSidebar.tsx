@@ -37,25 +37,25 @@ const StyleGridItem = memo(({
       onClick={() => onSelect(style.value)}
       className={`
         group relative text-left flex flex-col gap-3 transition-all duration-300
-        ${isActive ? "opacity-100" : "opacity-80 hover:opacity-100"}
+        ${isActive ? "opacity-100" : "opacity-80 md:hover:opacity-100"}
       `}
     >
        <div className={`
          relative aspect-[3/4] rounded-2xl overflow-hidden transition-all duration-300 shadow-lg will-change-transform
          ${isActive 
            ? "ring-2 ring-indigo-500 ring-offset-4 ring-offset-[#09090b] shadow-indigo-500/20 scale-[1.02]" 
-           : "hover:ring-2 hover:ring-white/20 hover:scale-[1.02]"}
+           : "md:hover:ring-2 md:hover:ring-white/20 md:hover:scale-[1.02]"}
        `}>
           <img 
             src={style.img} 
             alt={style.label} 
             loading="lazy"
             decoding="async"
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+            className="w-full h-full object-cover transition-transform duration-700 md:group-hover:scale-110" 
           />
           
-          {/* Overlay Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          {/* Overlay Gradient - 只在桌面端显示hover效果 */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 md:group-hover:opacity-100 transition-opacity duration-300" />
           
           {/* Selection Checkmark */}
           {isActive && (
@@ -68,10 +68,10 @@ const StyleGridItem = memo(({
        </div>
 
        <div>
-         <h4 className={`text-sm font-bold truncate transition-colors ${isActive ? "text-indigo-400" : "text-zinc-300 group-hover:text-white"}`}>
+         <h4 className={`text-sm font-bold truncate transition-colors ${isActive ? "text-indigo-400" : "text-zinc-300 md:group-hover:text-white"}`}>
            {style.label}
          </h4>
-         <p className="text-xs text-zinc-500 line-clamp-2 mt-0.5 leading-relaxed group-hover:text-zinc-400">
+         <p className="text-xs text-zinc-500 line-clamp-2 mt-0.5 leading-relaxed md:group-hover:text-zinc-400">
            {style.desc}
          </p>
        </div>
@@ -117,6 +117,7 @@ const StyleLibraryModal = memo(({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            onClick={(e) => e.stopPropagation()} // 防止点击弹框内容时关闭
             className="relative w-full max-w-7xl h-[85vh] bg-[#09090b] border border-white/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden will-change-transform"
           >
             {/* Modal Header */}
@@ -138,7 +139,7 @@ const StyleLibraryModal = memo(({
             
             {/* Modal Body */}
             <div className="flex flex-1 overflow-hidden">
-               {/* Sidebar Categories */}
+               {/* Sidebar Categories - 移动端隐藏 */}
                <div className="w-64 bg-zinc-900/30 border-r border-white/5 p-4 space-y-1 overflow-y-auto custom-scrollbar hidden md:block shrink-0">
                   <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-4 mb-4 mt-2">Categories</div>
                   {CATEGORIES.map(cat => (
@@ -160,6 +161,26 @@ const StyleLibraryModal = memo(({
 
                {/* Grid */}
                <div className="flex-1 overflow-y-auto p-6 md:p-8 bg-[#09090b]">
+                  {/* 移动端分类选择 */}
+                  <div className="md:hidden mb-6">
+                    <div className="flex gap-2 overflow-x-auto pb-2">
+                      {CATEGORIES.map((cat) => (
+                        <button
+                          key={cat}
+                          onClick={() => setActiveCategory(cat)}
+                          className={`
+                            px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 whitespace-nowrap border shrink-0
+                            ${activeCategory === cat 
+                              ? "bg-white text-black border-white shadow-lg" 
+                              : "bg-zinc-900/50 text-zinc-500 border-zinc-800 hover:text-zinc-300 hover:border-zinc-700"}
+                          `}
+                        >
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                      {filteredStyles.map(style => (
                        <StyleGridItem 
@@ -484,7 +505,7 @@ export default function RedesignedSidebar({
                    <button
                      key={style.value}
                      onClick={() => setActiveStyle(style.value)}
-                     onMouseEnter={() => setHoveredStyle(style.value)}
+                     onMouseEnter={() => window.innerWidth >= 768 && setHoveredStyle(style.value)} // 只在桌面端启用hover
                      onMouseLeave={() => setHoveredStyle(null)}
                      className="group relative flex flex-col items-center gap-2 outline-none"
                    >
@@ -492,7 +513,7 @@ export default function RedesignedSidebar({
                         relative w-full aspect-square rounded-xl overflow-hidden transition-all duration-200
                         ${activeStyle === style.value 
                           ? "ring-2 ring-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.4)] scale-105" 
-                          : "border border-white/10 group-hover:border-indigo-500/50 group-hover:scale-105"}
+                          : "border border-white/10 md:group-hover:border-indigo-500/50 md:group-hover:scale-105"}
                       `}>
                          <img 
                            src={style.img} 
@@ -517,11 +538,11 @@ export default function RedesignedSidebar({
                            )}
                          </AnimatePresence>
 
-                         {/* Hover Overlay */}
-                         <div className={`absolute inset-0 bg-black/20 transition-opacity duration-200 ${activeStyle === style.value ? "opacity-0" : "opacity-0 group-hover:opacity-100"}`} />
+                         {/* Hover Overlay - 只在桌面端显示 */}
+                         <div className={`absolute inset-0 bg-black/20 transition-opacity duration-200 ${activeStyle === style.value ? "opacity-0" : "opacity-0 md:group-hover:opacity-100"}`} />
                       </div>
                       
-                      <span className={`text-[10px] font-medium truncate w-full text-center transition-colors ${activeStyle === style.value ? "text-indigo-400" : "text-zinc-500 group-hover:text-zinc-300"}`}>
+                      <span className={`text-[10px] font-medium truncate w-full text-center transition-colors ${activeStyle === style.value ? "text-indigo-400" : "text-zinc-500 md:group-hover:text-zinc-300"}`}>
                         {style.label}
                       </span>
                    </button>
@@ -530,9 +551,9 @@ export default function RedesignedSidebar({
             </div>
           )}
 
-      {/* --- Hover Preview Tooltip --- */}
+      {/* --- Hover Preview Tooltip - 只在桌面端显示 --- */}
       <AnimatePresence>
-        {hoveredStyleObj && (
+        {hoveredStyleObj && window.innerWidth >= 768 && (
           <StylePreviewTooltip key="preview-tooltip" style={hoveredStyleObj} />
         )}
       </AnimatePresence>

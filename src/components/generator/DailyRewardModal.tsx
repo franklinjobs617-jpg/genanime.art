@@ -134,7 +134,6 @@ export default function DailyRewardModal({ isOpen, onClose }: DailyRewardModalPr
             onClick={onClose}
           />
 
-          {/* 优化的弹框动画 */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}

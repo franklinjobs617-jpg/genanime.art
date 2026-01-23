@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
 import { useAuth } from "@/context/AuthContext";
+import AnimatedBackground from "@/components/home/AnimatedBackground";
 
 // --- 配置部分 ---
 
@@ -191,17 +192,12 @@ export default function PremiumPricing() {
   };
 
   return (
-    <section className="relative py-32 bg-[#050505] text-white overflow-hidden font-sans selection:bg-indigo-500/30 min-h-screen">
+    <section className="relative w-full min-h-screen bg-[#030305] text-white overflow-hidden font-sans selection:bg-indigo-500/30">
       <Toaster position="top-center" toastOptions={{ style: { background: '#18181b', color: '#fff', border: '1px solid #3f3f46' } }} />
+    
 
-      {/* --- Ambient Background (更柔和的光晕) --- */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-[500px] bg-indigo-600/10 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-fuchsia-900/10 blur-[120px] rounded-full pointer-events-none" />
-      
-      {/* 这里的 Grid 只作为页面的大背景，不做在卡片里 */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none mix-blend-overlay"></div>
-
-      <div className="container mx-auto px-6 relative z-10">
+      {/* 内容层 */}
+      <div className="relative z-10 container mx-auto px-6 py-24 md:py-32">
         
         {/* --- Header Section --- */}
         <div className="text-center max-w-4xl mx-auto mb-20">
@@ -211,32 +207,31 @@ export default function PremiumPricing() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            {/* 修复：顶部 Badge 增加对比度 */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/20 to-blue-500/20 border border-emerald-500/30 text-emerald-300 text-[11px] font-bold uppercase tracking-widest mb-8 shadow-lg backdrop-blur-md">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-400" /> 
-              <span className="bg-gradient-to-r from-emerald-200 to-white bg-clip-text text-transparent">🔥 Limited Time: 50% OFF First Month</span>
+            {/* 顶部 Badge - 与首页风格一致 */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-2xl border border-white/10 text-zinc-300 text-xs font-bold uppercase tracking-widest mb-8 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+              <Sparkles className="w-3.5 h-3.5 text-indigo-400" /> 
+              <span className="bg-gradient-to-r from-indigo-200 to-white bg-clip-text text-transparent">🔥 Limited Time: 50% OFF First Month</span>
             </div>
             
-            {/* 修复：标题文字颜色，不再使用深色渐变 */}
-            <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter mb-8 leading-[0.9] text-white drop-shadow-xl">
+            {/* 标题 - 与首页风格一致 */}
+            <h1 className="text-5xl md:text-[100px] font-black text-white leading-[0.95] md:leading-[0.9] mb-8 tracking-tighter">
               CREATE STUNNING <br />
-              {/* 改为白色到浅灰的渐变，防止在黑底消失 */}
-              <span className="text-transparent bg-clip-text bg-gradient-to-b from-amber-300 via-orange-400 to-red-500">
+              <span className="text-transparent bg-clip-text bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 drop-shadow-[0_10px_10px_rgba(99,102,241,0.2)]">
                 AI ARTWORK
               </span>
-            </h2>
+            </h1>
             
-            <p className="text-zinc-300 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
+            <p className="text-zinc-400 text-base md:text-2xl max-w-2xl mx-auto font-medium leading-relaxed">
               Join 50,000+ creators making money with AI art. Start earning from your first image.
             </p>
           </motion.div>
 
-          {/* Toggle Switch */}
+          {/* Toggle Switch - 与首页风格一致 */}
           <div className="mt-12 flex items-center justify-center gap-5 select-none">
             <span className={`text-xs font-bold tracking-widest transition-colors duration-300 ${!isYearly ? "text-white" : "text-zinc-500"}`}>MONTHLY</span>
             <button
               onClick={() => setIsYearly(!isYearly)}
-              className="relative w-16 h-8 bg-zinc-800 rounded-full border border-zinc-600 p-1 cursor-pointer hover:border-zinc-500 transition-colors shadow-inner"
+              className="relative w-16 h-8 bg-white/5 backdrop-blur-2xl rounded-full border border-white/10 p-1 cursor-pointer hover:border-white/20 transition-colors shadow-inner"
             >
               <motion.div
                 animate={{ x: isYearly ? 32 : 0 }}
@@ -281,11 +276,11 @@ export default function PremiumPricing() {
             </div>
             
             <div className="flex flex-wrap justify-center gap-4 text-sm text-zinc-400">
-              <div className="flex items-center gap-2 px-3 py-1 bg-zinc-900/50 rounded-full">
+              <div className="flex items-center gap-2 px-3 py-1 bg-white/5 backdrop-blur-2xl rounded-full border border-white/10">
                 <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
                 <span>127 people upgraded today</span>
               </div>
-              <div className="flex items-center gap-2 px-3 py-1 bg-zinc-900/50 rounded-full">
+              <div className="flex items-center gap-2 px-3 py-1 bg-white/5 backdrop-blur-2xl rounded-full border border-white/10">
                 <Crown className="w-3 h-3 text-amber-400" />
                 <span>Featured on ProductHunt</span>
               </div>
@@ -306,37 +301,36 @@ export default function PremiumPricing() {
             >
               {/* Popular Glow Effect */}
               {plan.isPopular && (
-                <div className="absolute inset-0 -m-[1px] bg-gradient-to-b from-amber-300 via-orange-500 to-amber-700 rounded-[33px] blur-sm opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-0 -m-[1px] bg-gradient-to-b from-indigo-400 via-purple-500 to-pink-500 rounded-[33px] blur-sm opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
               )}
               {plan.isPopular && (
-                 <div className="absolute top-0 inset-x-0 h-full bg-amber-600/10 blur-[80px] rounded-[40px] z-[-1]" />
+                 <div className="absolute top-0 inset-x-0 h-full bg-indigo-600/10 blur-[80px] rounded-[40px] z-[-1]" />
               )}
 
-              {/* Card Container - 移除内部网格，使用纯净深色背景 */}
               <div className={`
                 relative h-full flex flex-col rounded-[32px] p-0.5 transition-colors duration-300 
-                ${!plan.isPopular ? "bg-zinc-800/50 border border-zinc-800 hover:border-zinc-700" : "bg-black"}
+                ${!plan.isPopular ? "bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20" : "bg-black"}
                 ${plan.borderColor}
               `}>
-                <div className="flex-1 flex flex-col p-8 rounded-[30px] bg-[#0c0c0e] relative overflow-hidden">
+                <div className="flex-1 flex flex-col p-8 rounded-[30px] bg-[#030305]/90 backdrop-blur-2xl relative overflow-hidden border border-white/5">
                   
-                  {/* 仅保留极淡的噪点，去掉讨厌的线条网格 */}
+                  {/* 轻微的噪点纹理 */}
                   <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
 
                   {/* Header Badge & Icon */}
                   <div className="flex justify-between items-start mb-8 relative z-10">
                     <div className={`
-                      w-14 h-14 rounded-2xl flex items-center justify-center border
-                      ${plan.themeBg} ${plan.themeColor} border-white/5 shadow-inner
+                      w-14 h-14 rounded-2xl flex items-center justify-center border backdrop-blur-2xl
+                      ${plan.themeBg} ${plan.themeColor} border-white/10 shadow-inner
                     `}>
                       {plan.icon}
                     </div>
                     {plan.badge && (
                       <span className={`
-                        text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border
+                        text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border backdrop-blur-2xl
                         ${plan.isPopular 
-                          ? "bg-amber-400 text-black border-amber-300 shadow-[0_0_20px_rgba(251,191,36,0.3)]" 
-                          : "bg-zinc-800 border-zinc-700 text-zinc-500"}
+                          ? "bg-gradient-to-r from-indigo-400 to-purple-400 text-black border-transparent shadow-[0_0_20px_rgba(99,102,241,0.3)]" 
+                          : "bg-white/5 border-white/10 text-zinc-400"}
                       `}>
                         {plan.badge}
                       </span>
@@ -344,27 +338,27 @@ export default function PremiumPricing() {
                   </div>
 
                   {/* Plan Name & Price */}
-                  <h3 className="text-2xl font-black italic tracking-tight text-white mb-2 relative z-10">{plan.name}</h3>
+                  <h3 className="text-2xl font-black tracking-tight text-white mb-2 relative z-10">{plan.name}</h3>
                   <div className="flex items-baseline gap-1.5 mb-3 relative z-10">
                     <span className="text-5xl font-black tracking-tighter text-white">${isYearly ? plan.price.yearly : plan.price.monthly}</span>
                     <span className="text-zinc-500 font-bold text-sm uppercase">/ mo</span>
                   </div>
                   <p className="text-zinc-400 text-sm font-medium mb-8 min-h-[40px] leading-relaxed relative z-10">{plan.desc}</p>
 
-                  {/* Credits Box - 增加亮度和对比度 */}
-                  <div className="mb-8 p-4 rounded-xl bg-gradient-to-r from-zinc-900 to-zinc-800 border border-zinc-700 flex items-center justify-between relative z-10 group-hover:border-zinc-600 transition-colors shadow-lg">
+                  {/* Credits Box - 与首页风格一致 */}
+                  <div className="mb-8 p-4 rounded-xl bg-white/5 backdrop-blur-2xl border border-white/10 flex items-center justify-between relative z-10 group-hover:border-white/20 transition-colors shadow-lg">
                      <div className="flex flex-col">
                        <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Monthly Credits</span>
                        <span className="text-[10px] text-zinc-500 mt-0.5">≈ {Math.floor(plan.credits / 2)} images</span>
                      </div>
                      <span className="text-lg font-black text-white flex items-center gap-2">
-                        <Zap className={`w-5 h-5 ${plan.isPopular ? "text-amber-400 fill-amber-400" : "text-emerald-400 fill-emerald-400"}`} /> 
+                        <Zap className={`w-5 h-5 ${plan.isPopular ? "text-indigo-400 fill-indigo-400" : "text-emerald-400 fill-emerald-400"}`} /> 
                         {plan.credits}
                      </span>
                   </div>
 
                   {/* Divider */}
-                  <div className="h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent w-full mb-8" />
+                  <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full mb-8" />
 
                   {/* Features */}
                   <ul className="space-y-4 mb-10 flex-1 relative z-10">
@@ -375,11 +369,11 @@ export default function PremiumPricing() {
                           mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0 border transition-colors duration-300
                           ${feature.highlight 
                             ? `${plan.themeBg} ${plan.themeColor} border-transparent` 
-                            : "bg-zinc-900 border-zinc-800 text-zinc-600 group-hover/item:border-zinc-700 group-hover/item:text-zinc-400"}
+                            : "bg-white/5 border-white/10 text-zinc-600 group-hover/item:border-white/20 group-hover/item:text-zinc-400"}
                         `}>
                           <Check className="w-3 h-3 stroke-[3px]" />
                         </div>
-                        {/* Feature Text - 提高亮度 */}
+                        {/* Feature Text */}
                         <span className={`text-sm transition-colors duration-300 ${feature.highlight ? "text-white font-bold" : "text-zinc-400 font-medium group-hover/item:text-zinc-300"}`}>
                           {feature.text}
                         </span>
@@ -387,13 +381,15 @@ export default function PremiumPricing() {
                     ))}
                   </ul>
 
-                  {/* Button */}
+                  {/* Button - 与首页CTA按钮风格一致 */}
                   <button
                     onClick={() => handleCheckout(plan.name, plan.key)}
                     disabled={loadingPlan !== null}
                     className={`
                       w-full py-4 rounded-xl font-black text-sm uppercase tracking-[0.1em] flex items-center justify-center gap-2 group/btn relative overflow-hidden transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]
-                      ${plan.buttonStyle}
+                      ${plan.isPopular 
+                        ? "bg-white text-black hover:bg-indigo-500 hover:text-white" 
+                        : "bg-white/5 backdrop-blur-2xl border border-white/10 text-white hover:bg-white/10 hover:border-white/20"}
                       ${loadingPlan && "opacity-70 cursor-not-allowed"}
                     `}
                   >
@@ -409,9 +405,6 @@ export default function PremiumPricing() {
                   
                   {/* Value Proposition */}
                   <div className="mt-4 text-center">
-                    <div className="text-xs text-zinc-500 mb-1">
-                      ${((isYearly ? plan.price.yearly : plan.price.monthly) / (plan.credits / 2)).toFixed(2)} per image
-                    </div>
                     <div className="flex items-center justify-center gap-2 text-emerald-400">
                       <Check className="w-3 h-3" />
                       <span className="text-[10px] font-bold uppercase tracking-wider">Cancel anytime</span>
@@ -426,7 +419,7 @@ export default function PremiumPricing() {
 
         {/* --- Guarantee & Security --- */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-32">
-            <div className="flex gap-5 items-start p-8 rounded-3xl bg-zinc-900/40 border border-zinc-800 hover:border-zinc-700 transition-all group">
+            <div className="flex gap-5 items-start p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20 transition-all group">
                 <div className="p-3.5 bg-emerald-600 rounded-2xl group-hover:bg-emerald-500 transition-colors">
                     <ShieldCheck className="w-7 h-7 text-white" />
                 </div>
@@ -437,7 +430,7 @@ export default function PremiumPricing() {
                     </p>
                 </div>
             </div>
-            <div className="flex gap-5 items-start p-8 rounded-3xl bg-zinc-900/40 border border-zinc-800 hover:border-zinc-700 transition-all group">
+            <div className="flex gap-5 items-start p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20 transition-all group">
                 <div className="p-3.5 bg-amber-600 rounded-2xl group-hover:bg-amber-500 transition-colors">
                     <Globe className="w-7 h-7 text-white" />
                 </div>
@@ -448,7 +441,7 @@ export default function PremiumPricing() {
                     </p>
                 </div>
             </div>
-            <div className="flex gap-5 items-start p-8 rounded-3xl bg-zinc-900/40 border border-zinc-800 hover:border-zinc-700 transition-all group">
+            <div className="flex gap-5 items-start p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20 transition-all group">
                 <div className="p-3.5 bg-purple-600 rounded-2xl group-hover:bg-purple-500 transition-colors">
                     <Zap className="w-7 h-7 text-white" />
                 </div>
@@ -464,7 +457,7 @@ export default function PremiumPricing() {
         {/* --- FAQ Section --- */}
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">
-            <h3 className="text-4xl font-black italic tracking-tighter mb-4 text-white">FAQ</h3>
+            <h3 className="text-4xl font-black tracking-tighter mb-4 text-white">FAQ</h3>
             <p className="text-zinc-400">Common questions about billing and licenses.</p>
           </div>
 
@@ -472,7 +465,7 @@ export default function PremiumPricing() {
             {faqs.map((faq, i) => (
               <div
                 key={i}
-                className={`group border rounded-2xl bg-zinc-900/20 overflow-hidden transition-all duration-300 ${activeAccordion === i ? 'border-zinc-600 bg-zinc-900/60' : 'border-zinc-800 hover:border-zinc-700'}`}
+                className={`group border rounded-2xl bg-white/5 backdrop-blur-2xl overflow-hidden transition-all duration-300 ${activeAccordion === i ? 'border-white/20 bg-white/10' : 'border-white/10 hover:border-white/15'}`}
               >
                 <button
                   onClick={() => setActiveAccordion(activeAccordion === i ? null : i)}
@@ -481,7 +474,7 @@ export default function PremiumPricing() {
                   <span className={`font-bold text-sm transition-colors ${activeAccordion === i ? 'text-white' : 'text-zinc-300 group-hover:text-white'}`}>
                     {faq.question}
                   </span>
-                  <div className={`p-1 rounded-full transition-colors ${activeAccordion === i ? 'bg-white text-black' : 'bg-zinc-800 text-zinc-400'}`}>
+                  <div className={`p-1 rounded-full transition-colors ${activeAccordion === i ? 'bg-white text-black' : 'bg-white/10 text-zinc-400'}`}>
                      {activeAccordion === i ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                   </div>
                 </button>
@@ -493,7 +486,7 @@ export default function PremiumPricing() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
                     >
-                      <div className="px-6 pb-6 text-sm text-zinc-400 leading-relaxed border-t border-zinc-800/50 pt-4">
+                      <div className="px-6 pb-6 text-sm text-zinc-400 leading-relaxed border-t border-white/10 pt-4">
                         {faq.answer}
                       </div>
                     </motion.div>
@@ -505,7 +498,7 @@ export default function PremiumPricing() {
         </div>
 
         {/* --- Trusted Footer --- */}
-        <div className="mt-32 pt-16 border-t border-zinc-900/50 flex flex-col items-center">
+        <div className="mt-32 pt-16 border-t border-white/10 flex flex-col items-center">
             <div className="flex gap-10 items-center opacity-30 hover:opacity-60 transition-opacity duration-500 grayscale">
                 <span className="font-black text-xl tracking-tighter text-white">STRIPE</span>
                 <span className="font-black text-xl tracking-tighter text-white">VISA</span>

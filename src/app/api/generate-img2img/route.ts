@@ -243,10 +243,33 @@ export async function POST(req: NextRequest) {
 
     if (!isGuest) {
       const totalCost = effectiveQuantity * COST_PER_IMAGE;
-      await prisma.user.update({
-        where: { googleUserId },
-        data: { credits: (Number(user.credits) - totalCost).toString() },
+      console.log('IMG2IMG - Deducting credits:', {
+        userId: googleUserId,
+        currentCredits: user.credits,
+        totalCost,
+        effectiveQuantity,
+        newCredits: Number(user.credits) - totalCost
       });
+      
+      try {
+        const updatedUser = await prisma.user.update({
+          where: { googleUserId },
+          data: { credits: (Number(user.credits) - totalCost).toString() },
+        });
+        
+        console.log('IMG2IMG - Credits deducted successfully:', {
+          userId: googleUserId,
+          oldCredits: user.credits,
+          newCredits: updatedUser.credits
+        });
+      } catch (creditError) {
+        console.error('IMG2IMG - Failed to deduct credits:', creditError);
+        // 积分扣减失败时，应该返回错误而不是继续
+        return NextResponse.json(
+          { success: false, error: "Failed to deduct credits" },
+          { status: 500 }
+        );
+      }
     } else {
       const newCount = guestCount + 1;
       const response = NextResponse.json({ success: true, images: imageUrls });

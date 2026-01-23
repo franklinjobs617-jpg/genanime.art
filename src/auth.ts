@@ -6,8 +6,8 @@ import { setGlobalDispatcher, ProxyAgent } from "undici";
 
 // 1. 开发环境网络代理
 if (process.env.NODE_ENV === "development") {
-    const dispatcher = new ProxyAgent("http://127.0.0.1:7890"); // 替换为你的 VPN 端口
-    setGlobalDispatcher(dispatcher);
+  const dispatcher = new ProxyAgent("http://127.0.0.1:7890"); // 替换为你的 VPN 端口
+  setGlobalDispatcher(dispatcher);
 }
 
 // 将站点类型固定为 4
@@ -54,13 +54,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             create: {
               email: email,
               type: CURRENT_SITE_TYPE,
-              googleUserId: crypto.randomUUID(), 
+              googleUserId: crypto.randomUUID(),
               name: user.name,
               givenName: (profile as any)?.given_name,
               familyName: (profile as any)?.family_name,
               picture: user.image,
               accessToken: account.access_token,
-              credits: "5", 
+              credits: "5",
               ip: "0.0.0.0"
             },
           });
@@ -76,23 +76,34 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
     // 💡 JWT 回调：从数据库取出 UUID 放入 Token
     async jwt({ token, user, account, trigger }) {
-      // 只在登录时或手动更新时查询数据库，避免每次都查询
-      if ((user && account) || trigger === "update") {
+      // 在登录时、手动更新时，或者每次都查询数据库以确保积分是最新的
+      if ((user && account) || trigger === "update" || token.email) {
         if (token.email) {
-          const dbUser:any= await prisma.user.findUnique({
-            where: {
-              email_type: {
-                email: token.email,
-                type: CURRENT_SITE_TYPE
+          try {
+            const dbUser: any = await prisma.user.findUnique({
+              where: {
+                email_type: {
+                  email: token.email,
+                  type: CURRENT_SITE_TYPE
+                }
               }
-            }
-          });
+            });
 
-          if (dbUser) {
-            token.dbId = dbUser.id; // 数字 ID (464)
-            token.googleUserId = dbUser.googleUserId; 
-            token.credits = dbUser.credits;
-            token.siteType = dbUser.type;
+            if (dbUser) {
+              token.dbId = dbUser.id; // 数字 ID (464)
+              token.googleUserId = dbUser.googleUserId;
+              token.credits = dbUser.credits;
+              token.siteType = dbUser.type;
+
+              // 添加调试日志
+              console.log('JWT callback - Updated token credits:', {
+                email: token.email,
+                credits: dbUser.credits,
+                trigger
+              });
+            }
+          } catch (error) {
+            console.error('JWT callback database error:', error);
           }
         }
       }
@@ -102,7 +113,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }: any) {
       if (token && session.user) {
         session.user.id = token.dbId;
-        session.user.googleUserId = token.googleUserId; 
+        session.user.googleUserId = token.googleUserId;
         session.user.credits = token.credits;
         session.user.siteType = token.siteType;
       }

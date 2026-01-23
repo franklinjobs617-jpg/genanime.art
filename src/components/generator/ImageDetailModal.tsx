@@ -117,34 +117,35 @@ export default function ImageDetailModal({
             initial={{ opacity: 0, scale: 0.9, x: 100 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
             exit={{ opacity: 0, scale: 0.9, x: 100 }}
-            className="relative w-full h-full flex flex-col lg:flex-row shadow-2xl"
+            className="relative w-full h-full max-h-screen flex flex-col lg:flex-row shadow-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()} // 阻止内容区点击关闭
           >
             {/* Center: Image Display */}
-            <div className="flex-1 flex items-center justify-center p-4 lg:p-12 relative">
+            <div className="flex-1 flex items-center justify-center p-4 lg:p-8 relative bg-black min-h-0">
               {/* 关闭按钮 */}
               <button
                 onClick={onClose}
-                className="absolute top-6 left-6 z-50 p-3 bg-zinc-900/50 hover:bg-zinc-800 rounded-full border border-white/10 transition-all text-white/50 hover:text-white"
+                className="absolute top-4 left-4 z-50 p-3 bg-black/80 hover:bg-black/90 rounded-full border border-white/20 transition-all text-white shadow-lg backdrop-blur-sm"
               >
                 <X className="w-5 h-5" />
               </button>
 
-              <div className="relative max-h-full max-w-full shadow-[0_0_100px_-20px_rgba(79,70,229,0.3)] rounded-2xl overflow-hidden border border-white/10 flex items-center justify-center">
+              {/* 图片容器 - 使用CSS类确保完整显示 */}
+              <div className="w-full h-full flex items-center justify-center overflow-hidden">
                 <SafeImage
                   src={item.urls[0]}
                   alt={item.prompt}
-                  className="max-h-[80vh] w-auto h-auto max-w-full object-contain"
+                  className="max-w-full max-h-[calc(100vh-8rem)] lg:max-w-[calc(100vw-28rem)] w-auto h-auto object-contain"
                 />
               </div>
 
-              {/* Mobile Bottom Bar Actions - 已修复点击事件 */}
-              <div className="absolute bottom-10 left-6 right-6 flex items-center justify-center gap-4 lg:hidden z-[60]">
+              {/* Mobile Bottom Bar Actions - 固定在底部 */}
+              <div className="absolute bottom-4 left-4 right-4 flex items-center justify-center gap-3 lg:hidden z-[60]">
                 <button
                   onClick={(e) => downloadImg(e, item.urls[0], 0)}
-                  className="p-4 bg-zinc-900/80 rounded-2xl border border-white/10 text-white active:scale-90 transition-all"
+                  className="p-3 bg-black/90 hover:bg-black rounded-xl border border-white/30 text-white active:scale-90 transition-all shadow-xl backdrop-blur-sm"
                 >
-                  <Download className="w-6 h-6" />
+                  <Download className="w-4 h-4" />
                 </button>
                 <button
                   onClick={(e) => {
@@ -152,9 +153,9 @@ export default function ImageDetailModal({
                     onDelete(item.id);
                     onClose();
                   }}
-                  className="p-4 bg-zinc-900/80 rounded-2xl border border-white/10 text-white active:scale-90 transition-all"
+                  className="p-3 bg-black/90 hover:bg-red-600/90 rounded-xl border border-white/30 text-white active:scale-90 transition-all shadow-xl backdrop-blur-sm"
                 >
-                  <Trash2 className="w-6 h-6 text-red-400" />
+                  <Trash2 className="w-4 h-4" />
                 </button>
                 <button
                   onClick={(e) => {
@@ -162,22 +163,22 @@ export default function ImageDetailModal({
                     onRegenerate();
                     onClose();
                   }}
-                  className="flex-1 p-4 bg-indigo-600 rounded-2xl font-black text-white uppercase tracking-widest text-sm shadow-xl active:scale-95 transition-all"
+                  className="flex-1 p-3 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-bold text-white text-sm shadow-xl active:scale-95 transition-all"
                 >
-                  Remix Vision
+                  Remix
                 </button>
               </div>
             </div>
 
             {/* Sidebar: Metadata & Actions (Desktop Only) */}
-            <div className="w-full lg:w-[400px] bg-[#0c0c0e] border-l border-white/5 p-6 lg:p-8 flex flex-col gap-8 overflow-y-auto hidden lg:flex">
+            <div className="w-full lg:w-[400px] bg-[#0a0a0a] border-l border-white/10 p-6 lg:p-8 flex flex-col gap-8 overflow-y-auto hidden lg:flex">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-zinc-500 flex items-center gap-2 uppercase tracking-widest">
-                  <Calendar className="w-3.5 h-3.5" /> {date}
+                <span className="text-xs font-bold text-zinc-400 flex items-center gap-2 uppercase tracking-wider">
+                  <Calendar className="w-4 h-4" /> {date}
                 </span>
                 <button
                   onClick={onClose}
-                  className="p-2 hover:bg-white/5 rounded-lg transition-colors text-zinc-500 hover:text-white"
+                  className="p-2 hover:bg-white/10 rounded-lg transition-colors text-zinc-400 hover:text-white"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -186,22 +187,22 @@ export default function ImageDetailModal({
               {/* Prompt Section */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-[11px] font-black text-white uppercase tracking-[0.2em] flex items-center gap-2">
-                    <Info className="w-3.5 h-3.5 text-indigo-400" /> Prompt
+                  <h4 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
+                    <Info className="w-4 h-4 text-indigo-400" /> Prompt
                   </h4>
                   <button
                     onClick={handleCopy}
-                    className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-all"
+                    className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-all"
                   >
                     {copied ? (
-                      <Check className="w-3.5 h-3.5 text-green-400" />
+                      <Check className="w-4 h-4 text-green-400" />
                     ) : (
-                      <Copy className="w-3.5 h-3.5 text-zinc-400" />
+                      <Copy className="w-4 h-4 text-zinc-300" />
                     )}
                   </button>
                 </div>
-                <div className="p-4 bg-zinc-900/50 rounded-2xl border border-white/5">
-                  <p className="text-sm text-zinc-300 leading-relaxed font-medium line-clamp-6">
+                <div className="p-4 bg-zinc-800/50 rounded-2xl border border-white/10">
+                  <p className="text-sm text-zinc-200 leading-relaxed font-medium">
                     {item.prompt}
                   </p>
                 </div>
@@ -209,19 +210,19 @@ export default function ImageDetailModal({
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <h4 className="text-[10px] uppercase font-black text-zinc-500 tracking-widest flex items-center gap-2">
+                  <h4 className="text-xs uppercase font-black text-zinc-400 tracking-wider flex items-center gap-2">
                     <Cpu className="w-3 h-3" /> Model
                   </h4>
-                  <div className="px-3 py-2.5 bg-zinc-900/50 rounded-xl border border-white/5 text-xs font-bold text-zinc-200 flex items-center gap-2">
-                    <Box className="w-3.5 h-3.5 text-indigo-400" />{" "}
+                  <div className="px-3 py-3 bg-zinc-800/50 rounded-xl border border-white/10 text-sm font-bold text-zinc-100 flex items-center gap-2">
+                    <Box className="w-4 h-4 text-indigo-400" />{" "}
                     {item.model || "Flux v1.0"}
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <h4 className="text-[10px] uppercase font-black text-zinc-500 tracking-widest flex items-center gap-2">
+                  <h4 className="text-xs uppercase font-black text-zinc-400 tracking-wider flex items-center gap-2">
                     <Palette className="w-3 h-3" /> Style
                   </h4>
-                  <div className="px-3 py-2.5 bg-zinc-900/50 rounded-xl border border-white/5 text-xs font-bold text-zinc-200">
+                  <div className="px-3 py-3 bg-zinc-800/50 rounded-xl border border-white/10 text-sm font-bold text-zinc-100">
                     {item.style || "None"}
                   </div>
                 </div>
@@ -234,7 +235,7 @@ export default function ImageDetailModal({
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={(e) => downloadImg(e, item.urls[0], 0)}
-                    className="flex items-center justify-center gap-2 py-3 bg-zinc-900 hover:bg-zinc-800 rounded-xl border border-white/10 text-xs font-bold transition-all"
+                    className="flex items-center justify-center gap-2 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-xl border border-white/20 text-sm font-bold text-white transition-all"
                   >
                     <Download className="w-4 h-4" /> Download
                   </button>
@@ -243,14 +244,14 @@ export default function ImageDetailModal({
                       onDelete(item.id);
                       onClose();
                     }}
-                    className="flex items-center justify-center gap-2 py-3 bg-zinc-900 hover:bg-zinc-800 rounded-xl border border-white/10 text-xs font-bold text-red-400 transition-all"
+                    className="flex items-center justify-center gap-2 py-3 bg-zinc-800 hover:bg-red-600 rounded-xl border border-white/20 text-sm font-bold text-white transition-all"
                   >
                     <Trash2 className="w-4 h-4" /> Delete
                   </button>
                 </div>
                 <button
                   onClick={onRegenerate}
-                  className="w-full flex items-center justify-center gap-3 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-2xl text-[13px] font-black uppercase tracking-[0.2em] shadow-2xl transition-all"
+                  className="w-full flex items-center justify-center gap-3 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-2xl text-sm font-black uppercase tracking-wider shadow-2xl transition-all"
                 >
                   <Wand2 className="w-5 h-5" /> Remix This Art
                 </button>

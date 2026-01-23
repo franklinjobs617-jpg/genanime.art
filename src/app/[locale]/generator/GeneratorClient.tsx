@@ -323,38 +323,51 @@ export default function GeneratorClient() {
         setGuestGenerations(newCount);
         localStorage.setItem("guest_generations", newCount.toString());
       } else {
-        // 只有在生成成功后才刷新用户数据
-        setTimeout(() => {
-          refreshUser();
-        }, 500); // 延迟500ms，避免与其他状态更新冲突
+        // 立即刷新用户数据以获取最新积分
+        console.log('生成成功，刷新用户积分数据');
+        refreshUser().then(() => {
+          console.log('用户积分数据已刷新');
+        }).catch(error => {
+          console.error('刷新用户数据失败:', error);
+        });
       }
 
       toast.success(t("history.artGenerated"), { id: toastId });
       setActivePrompt("");
       
-      // 更精准的转化策略
+      // 延迟执行转化策略，等待积分刷新完成
       if (user) {
-        const remainingCredits = Number(user.credits);
-        const isPremium = remainingCredits > 100;
-        
-        // 如果是免费用户，显示水印提示
-        if (!isPremium) {
-          setShowWatermarkNotice(true);
-          setTimeout(() => setShowWatermarkNotice(false), 8000); // 8秒后自动隐藏
-        }
-        
-        // 第一次生成后就提示升级优势
-        if (remainingCredits === 4) { // 刚用了第一张图
-          setTimeout(() => {
-            checkConversionModal("generation_complete");
-          }, 1500);
-        }
-        // 积分快用完时再次提示
-        else if (remainingCredits <= 2) { // 只剩1张图时
-          setTimeout(() => {
-            checkConversionModal("credits_low");
-          }, 1000);
-        }
+        setTimeout(() => {
+          // 这里应该使用刷新后的积分数据，但由于异步问题，我们先用计算值
+          const estimatedRemainingCredits = Number(user.credits) - currentTotalCost;
+          const isPremium = estimatedRemainingCredits > 100;
+          
+          console.log('转化策略检查:', {
+            originalCredits: user.credits,
+            totalCost: currentTotalCost,
+            estimatedRemaining: estimatedRemainingCredits,
+            isPremium
+          });
+          
+          // 如果是免费用户，显示水印提示
+          if (!isPremium) {
+            setShowWatermarkNotice(true);
+            setTimeout(() => setShowWatermarkNotice(false), 8000); // 8秒后自动隐藏
+          }
+          
+          // 第一次生成后就提示升级优势
+          if (estimatedRemainingCredits === 4) { // 刚用了第一张图
+            setTimeout(() => {
+              checkConversionModal("generation_complete");
+            }, 1500);
+          }
+          // 积分快用完时再次提示
+          else if (estimatedRemainingCredits <= 2) { // 只剩1张图时
+            setTimeout(() => {
+              checkConversionModal("credits_low");
+            }, 1000);
+          }
+        }, 1000); // 延迟1秒，给积分刷新更多时间
       }
     } catch (err: any) {
       console.error(err);

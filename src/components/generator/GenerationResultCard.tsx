@@ -306,19 +306,19 @@ export default function GenerationResultCard({
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 src={urls[selectedImgIndex]}
-                className="max-w-full max-h-[60vh] object-contain rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/5"
+                className="max-w-[95vw] max-h-[75vh] w-auto h-auto object-contain rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/10"
               />
             </div>
 
             {/* 底部：操作栏容器 (通过 z-index 确保在最上层) */}
-            <div className="relative z-[180] w-full px-6 pt-10 pb-12 bg-gradient-to-t from-black via-black/90 to-transparent">
+            <div className="relative z-[180] w-full px-6 pt-8 pb-12 bg-gradient-to-t from-black via-black/95 to-transparent">
               <div className="max-w-md mx-auto space-y-4">
                 {/* 主要操作按钮 */}
                 <div className="flex items-center gap-3">
                   {/* 下载按钮 - 专门加大高度以适配移动端 */}
                   <button
                     onClick={(e) => handleDownload(e, urls[selectedImgIndex!])}
-                    className="h-16 flex-1 bg-white text-black rounded-2xl flex items-center justify-center gap-3 font-black text-[11px] uppercase tracking-widest active:scale-95 transition-transform shadow-xl"
+                    className="h-16 flex-1 bg-white text-black rounded-2xl flex items-center justify-center gap-3 font-black text-sm uppercase tracking-wider active:scale-95 transition-transform shadow-xl"
                   >
                     <Download className="w-5 h-5" />
                     Save Image
@@ -331,7 +331,7 @@ export default function GenerationResultCard({
                       onDelete?.();
                       setSelectedImgIndex(null);
                     }}
-                    className="h-16 w-16 bg-red-500/10 text-red-500 rounded-2xl flex items-center justify-center border border-red-500/20 active:scale-95"
+                    className="h-16 w-16 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-2xl flex items-center justify-center border border-red-500/30 active:scale-95 backdrop-blur-sm"
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>
@@ -343,7 +343,7 @@ export default function GenerationResultCard({
                       onRegenerate?.();
                       setSelectedImgIndex(null);
                     }}
-                    className="h-16 px-6 bg-indigo-600 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest active:scale-95 shadow-lg shadow-indigo-500/20"
+                    className="h-16 px-6 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-sm uppercase tracking-wider active:scale-95 shadow-lg shadow-indigo-500/30"
                   >
                     <Wand2 className="w-5 h-5" />
                   </button>
@@ -380,7 +380,7 @@ export default function GenerationResultCard({
                   </div>
                 )}
               </div>
-              <p className="text-center text-zinc-500 text-[9px] mt-6 font-bold uppercase tracking-[0.3em] opacity-50">
+              <p className="text-center text-zinc-300 text-xs mt-6 font-semibold uppercase tracking-wider opacity-80">
                 Tap Background to Close
               </p>
             </div>

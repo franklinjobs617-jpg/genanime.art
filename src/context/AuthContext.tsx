@@ -30,20 +30,32 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 function AuthProviderInner({ children }: { children: ReactNode }) {
     const { data: session, status, update } = useSession();
     const [user, setUser] = useState<AppUser | null>(null);
-    console.log("Session data:", session);
     useEffect(() => {
         if (session?.user) {
-            setUser({
+            const newUser = {
                 name: session.user.name || "",
                 picture: session.user.image || "",
                 credits: session.user.credits || 0,
                 googleUserId: session.user.googleUserId || "",
                 email: session.user.email || "",
+            };
+            
+            // 只有在用户数据真正变化时才更新状态
+            setUser(prevUser => {
+                if (!prevUser || 
+                    prevUser.name !== newUser.name ||
+                    prevUser.picture !== newUser.picture ||
+                    prevUser.credits !== newUser.credits ||
+                    prevUser.googleUserId !== newUser.googleUserId ||
+                    prevUser.email !== newUser.email) {
+                    return newUser;
+                }
+                return prevUser;
             });
         } else {
             setUser(null);
         }
-    }, [session?.user]); // 只依赖session.user，而不是整个session对象
+    }, [session?.user?.name, session?.user?.image, session?.user?.credits, session?.user?.googleUserId, session?.user?.email]); // 只依赖具体的用户属性
 
     const login = () => {
         signIn("google");
@@ -55,7 +67,10 @@ function AuthProviderInner({ children }: { children: ReactNode }) {
 
     const refreshUser = async () => {
         try {
-            await update(); // 触发服务端刷新，重新执行 jwt/session 回调
+            // 只有在真正需要更新时才调用update
+            if (session?.user) {
+                await update(); // 触发服务端刷新，重新执行 jwt/session 回调
+            }
         } catch (e) {
             console.error("Session update error:", e);
         }

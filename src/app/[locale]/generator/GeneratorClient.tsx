@@ -158,7 +158,8 @@ export default function GeneratorClient() {
     }
 
     if (user) {
-      refreshUser();
+      // 移除这里的refreshUser调用，避免无限循环
+      // refreshUser();
       // 用户登录后检查每日奖励
       checkDailyReward();
     }
@@ -322,7 +323,10 @@ export default function GeneratorClient() {
         setGuestGenerations(newCount);
         localStorage.setItem("guest_generations", newCount.toString());
       } else {
-        await refreshUser();
+        // 只有在生成成功后才刷新用户数据
+        setTimeout(() => {
+          refreshUser();
+        }, 500); // 延迟500ms，避免与其他状态更新冲突
       }
 
       toast.success(t("history.artGenerated"), { id: toastId });

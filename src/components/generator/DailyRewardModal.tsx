@@ -139,8 +139,8 @@ export default function DailyRewardModal({ isOpen, onClose }: DailyRewardModalPr
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ 
-              type: "spring", 
+            transition={{
+              type: "spring",
               duration: 0.3,
               stiffness: 300,
               damping: 30
@@ -148,7 +148,7 @@ export default function DailyRewardModal({ isOpen, onClose }: DailyRewardModalPr
             className="relative w-full max-w-sm bg-white rounded-2xl shadow-xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* 简化的彩纸效果 */}
+            {/* Simplified confetti effect */}
             {showConfetti && (
               <div className="absolute inset-0 pointer-events-none z-10">
                 {Array.from({ length: 8 }).map((_, i) => (
@@ -178,25 +178,25 @@ export default function DailyRewardModal({ isOpen, onClose }: DailyRewardModalPr
               </div>
             )}
 
-            {/* 优化的关闭按钮 */}
+            {/* Close Button */}
             <button
               onClick={onClose}
               className="absolute top-3 right-3 z-20 p-2 text-white/80 hover:text-white hover:bg-white/20 rounded-full transition-all duration-200 backdrop-blur-sm"
-              aria-label="关闭弹框"
+              aria-label="Close modal"
             >
               <X className="w-5 h-5" />
             </button>
 
-            {/* 简化的头部渐变 */}
+            {/* Simplified header gradient */}
             <div className="relative bg-gradient-to-br from-purple-500 to-pink-500 p-6 text-center text-white">
-              {/* 简化的背景装饰 */}
+              {/* Simplified background decoration */}
               <div className="absolute inset-0 overflow-hidden opacity-20">
                 <div className="absolute -top-8 -right-8 w-16 h-16 bg-white rounded-full" />
                 <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-white rounded-full" />
               </div>
 
               <div className="relative z-10">
-                {/* 图标 */}
+                {/* Icon */}
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
@@ -208,7 +208,7 @@ export default function DailyRewardModal({ isOpen, onClose }: DailyRewardModalPr
                   </div>
                 </motion.div>
 
-                {/* 标题 */}
+                {/* Title */}
                 <motion.h2
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -227,7 +227,7 @@ export default function DailyRewardModal({ isOpen, onClose }: DailyRewardModalPr
                   {currentReward.desc}
                 </motion.p>
 
-                {/* 连续签到显示 */}
+                {/* Streak display */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -235,14 +235,14 @@ export default function DailyRewardModal({ isOpen, onClose }: DailyRewardModalPr
                   className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full text-sm"
                 >
                   <Calendar className="w-4 h-4" />
-                  <span>第 {currentStreak} 天</span>
+                  <span>Day {currentStreak}</span>
                 </motion.div>
               </div>
             </div>
 
-            {/* 内容区域 */}
+            {/* Content area */}
             <div className="p-5 bg-white">
-              {/* 奖励显示 */}
+              {/* Reward display */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -255,15 +255,15 @@ export default function DailyRewardModal({ isOpen, onClose }: DailyRewardModalPr
                     <div className="text-2xl font-bold text-gray-800">
                       +{currentReward.credits}
                     </div>
-                    <div className="text-xs text-gray-600">积分</div>
+                    <div className="text-xs text-gray-600">Credits</div>
                   </div>
                 </div>
                 <p className="text-xs text-gray-500 mt-2">
-                  可生成 {Math.floor(currentReward.credits / 2)} 张图片
+                  Generate {Math.floor(currentReward.credits / 2)} images
                 </p>
               </motion.div>
 
-              {/* 简化的进度条 */}
+              {/* Simplified progress bar */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -271,7 +271,7 @@ export default function DailyRewardModal({ isOpen, onClose }: DailyRewardModalPr
                 className="mb-5"
               >
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-medium text-gray-700">本周进度</span>
+                  <span className="text-sm font-medium text-gray-700">Weekly Progress</span>
                   <span className="text-sm text-gray-500">{currentStreak}/7</span>
                 </div>
 
@@ -284,7 +284,7 @@ export default function DailyRewardModal({ isOpen, onClose }: DailyRewardModalPr
                   />
                 </div>
 
-                {/* 奖励点 */}
+                {/* Reward points */}
                 <div className="flex justify-between">
                   {DAILY_REWARDS.map((reward, index) => (
                     <motion.div
@@ -305,7 +305,7 @@ export default function DailyRewardModal({ isOpen, onClose }: DailyRewardModalPr
                 </div>
               </motion.div>
 
-              {/* 领取按钮 */}
+              {/* Claim button */}
               <motion.button
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -317,17 +317,17 @@ export default function DailyRewardModal({ isOpen, onClose }: DailyRewardModalPr
                 {isClaimingReward ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    领取中...
+                    Claiming...
                   </>
                 ) : (
                   <>
                     <Sparkles className="w-4 h-4" />
-                    领取奖励
+                    Claim Reward
                   </>
                 )}
               </motion.button>
 
-              {/* 明日提示 */}
+              {/* Tomorrow hint */}
               {currentStreak < 7 && (
                 <motion.p
                   initial={{ opacity: 0 }}
@@ -335,7 +335,7 @@ export default function DailyRewardModal({ isOpen, onClose }: DailyRewardModalPr
                   transition={{ delay: 1 }}
                   className="text-center text-xs text-gray-500 mt-3"
                 >
-                  明天回来可获得 {DAILY_REWARDS[currentStreak]?.credits} 积分！🎁
+                  Come back tomorrow for {DAILY_REWARDS[currentStreak]?.credits} credits! 🎁
                 </motion.p>
               )}
             </div>

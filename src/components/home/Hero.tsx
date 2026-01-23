@@ -12,6 +12,7 @@ export default function Hero() {
   const t = useTranslations("Hero");
   const router = useRouter();
   const [inputValue, setInputValue] = useState("");
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (inputValue.trim()) {
@@ -54,22 +55,6 @@ export default function Hero() {
         prompt
       )}&model=${encodeURIComponent(model)}`
     );
-  };
-
-  const handleStartCreating = () => {
-    // 首次访问显示引导
-    const hasVisited = localStorage.getItem('hasVisitedGenerator');
-    if (!hasVisited) {
-      setShowGuestGuide(true);
-    } else {
-      router.push("/generator");
-    }
-  };
-
-  const handleGuestGuideClose = () => {
-    setShowGuestGuide(false);
-    localStorage.setItem('hasVisitedGenerator', 'true');
-    router.push("/generator");
   };
 
   return (

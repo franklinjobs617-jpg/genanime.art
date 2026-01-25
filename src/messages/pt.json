@@ -36,14 +36,15 @@
     "description": "Crie <span1>waifus, chibis e arte pony</span1> em segundos com os modelos mais avançados do mundo.",
     "searchPlaceholder": "Descreva seu sonho... ex: cabelo prateado, cyberpunk",
     "features": {
-      "noSignUp": "Sem cadastro",
+      "noSignUp": "Grátis para Testar",
       "noWatermark": "Sem marca d'água",
       "quality": "Qualidade 4K"
     },
     "buttons": {
       "startCreating": "Começar a Criar",
       "imageToImage": "Imagem para Prompt"
-    }
+    },
+    "creditCardNote": "Não é necessário cartão de crédito para testes gratuitos."
   },
   "FeatureSection": {
     "title": "Crie <span1>Ilustrações de Anime</span1> Incríveis",

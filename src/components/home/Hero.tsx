@@ -161,15 +161,20 @@ export default function Hero() {
 
             {/* 行动按钮 - 优化移动端布局 */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-5 pt-2">
-              <button
-                onClick={() => router.push("/generator")}
-                className="group w-full sm:w-auto"
-              >
-                <div className="flex items-center justify-center gap-2 md:gap-3 px-6 sm:px-8 md:px-10 py-3 md:py-4 lg:py-5 bg-white text-black rounded-2xl font-black text-sm sm:text-base md:text-lg transition-all duration-300 hover:bg-indigo-500 hover:text-white transform hover:scale-105 shadow-2xl">
-                  <PenTool className="w-4 h-4 md:w-5 md:h-5" />
-                  <span>{t("buttons.startCreating")}</span>
-                </div>
-              </button>
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => router.push("/generator")}
+                  className="group w-full sm:w-auto"
+                >
+                  <div className="flex items-center justify-center gap-2 md:gap-3 px-6 sm:px-8 md:px-10 py-3 md:py-4 lg:py-5 bg-white text-black rounded-2xl font-black text-sm sm:text-base md:text-lg transition-all duration-300 hover:bg-indigo-500 hover:text-white transform hover:scale-105 shadow-2xl">
+                    <PenTool className="w-4 h-4 md:w-5 md:h-5" />
+                    <span>{t("buttons.startCreating")}</span>
+                  </div>
+                </button>
+                <p className="text-xs text-zinc-500 text-center sm:text-left font-medium">
+                  {t("creditCardNote")}
+                </p>
+              </div>
 
               <Link href="/generator?mode=upload" className="group w-full sm:w-auto">
                 <div className="flex items-center justify-center gap-2 md:gap-3 px-6 sm:px-8 md:px-10 py-3 md:py-4 lg:py-5 bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 text-white rounded-2xl font-black text-sm sm:text-base md:text-lg transition-all duration-300 transform hover:scale-105">

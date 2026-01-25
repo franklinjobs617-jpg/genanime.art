@@ -39,14 +39,15 @@
         "description": "Erstelle <span1>Waifus, Chibis & Pony-Kunst</span1> in Sekunden mit den weltweit fortschrittlichsten Modellen.",
         "searchPlaceholder": "Beschreibe deinen Traum... z.B. silbernes Haar, Cyberpunk",
         "features": {
-            "noSignUp": "Ohne Anmeldung",
+            "noSignUp": "Kostenlos Testen",
             "noWatermark": "Kein Wasserzeichen",
             "quality": "4K Qualität"
         },
         "buttons": {
             "startCreating": "Jetzt Erstellen",
             "imageToImage": "Bild-zu-Prompt"
-        }
+        },
+        "creditCardNote": "Keine Kreditkarte für kostenlose Tests erforderlich."
     },
     "FeatureSection": {
         "title": "Erstelle atemberaubende <span1>Anime-Illustrationen</span1>",

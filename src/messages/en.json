@@ -36,14 +36,15 @@
     "description": "Create <span1>waifu, chibi, & pony art</span1> in seconds with the world's most advanced models.",
     "searchPlaceholder": "Describe your dream... e.g. silver hair, cyberpunk",
     "features": {
-      "noSignUp": "No sign-up",
+      "noSignUp": "Free to Try",
       "noWatermark": "No watermark",
       "quality": "4K Quality"
     },
     "buttons": {
       "startCreating": "Start Creating",
       "imageToImage": "Image to Prompt"
-    }
+    },
+    "creditCardNote": "No credit card required for free trials."
   },
   "FeatureSection": {
     "title": "Create Stunning <span1>Anime Illustrations</span1>",

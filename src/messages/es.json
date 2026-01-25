@@ -39,14 +39,15 @@
         "description": "Crea <span1>waifus, chibis y arte</span1> de alta calidad en segundos con los modelos de IA más avanzados.",
         "searchPlaceholder": "Describe lo que imaginas... ej. chica de pelo azul, estilo ciberpunk",
         "features": {
-            "noSignUp": "SIN REGISTRO",
+            "noSignUp": "GRATIS PARA PROBAR",
             "noWatermark": "SIN MARCA DE AGUA",
             "quality": "CALIDAD 4K"
         },
         "buttons": {
             "startCreating": "Empezar a Crear",
             "imageToImage": "Imagen a Prompt"
-        }
+        },
+        "creditCardNote": "No se requiere tarjeta de crédito para pruebas gratuitas."
     },
     "FeatureSection": {
         "title": "Crea Increíbles <span1>Ilustraciones de Anime</span1>",

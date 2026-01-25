@@ -38,14 +38,15 @@
         "description": "Buat <span1>waifu, chibi, & seni pony</span1> dalam hitungan detik dengan model tercanggih di dunia.",
         "searchPlaceholder": "Jelaskan impianmu... contoh: rambut perak, cyberpunk",
         "features": {
-            "noSignUp": "Tanpa Daftar",
+            "noSignUp": "Gratis Dicoba",
             "noWatermark": "Tanpa Watermark",
             "quality": "Kualitas 4K"
         },
         "buttons": {
             "startCreating": "Mulai Membuat",
             "imageToImage": "Gambar ke Prompt"
-        }
+        },
+        "creditCardNote": "Tidak perlu kartu kredit untuk uji coba gratis."
     },
     "FeatureSection": {
         "title": "Buat Ilustrasi <span1>Anime Menakjubkan</span1>",

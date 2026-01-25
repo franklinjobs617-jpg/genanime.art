@@ -60,6 +60,174 @@ interface FilterOption {
   icon?: React.ReactNode;
 }
 
+// --- 优化后的单个图片卡片组件 ---
+// 独立处理加载状态，互不影响
+const GalleryCard = ({ 
+  item, 
+  onClick, 
+  onLike, 
+  isLiked, 
+  onRemix 
+}: { 
+  item: GalleryItem; 
+  onClick: () => void;
+  onLike: (e: React.MouseEvent) => void;
+  isLiked: boolean;
+  onRemix: (e: React.MouseEvent) => void;
+}) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // 解析 Tailwind 的 aspect 类名转换为 CSS 样式，确保占位符比例正确
+  const getAspectRatioStyle = (aspectClass: string) => {
+    if (aspectClass.includes('[')) {
+      // 处理 aspect-[3/4] 这种格式
+      return aspectClass.replace('aspect-[', '').replace(']', '').replace('/', ' / ');
+    }
+    if (aspectClass === 'aspect-square') return '1 / 1';
+    if (aspectClass === 'aspect-video') return '16 / 9';
+    return '3 / 4'; // 默认回退
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "100px" }}
+      className="mb-4 md:mb-8 group relative cursor-pointer"
+      onClick={onClick}
+    >
+      {/* Image Container: 使用 aspect-ratio 强制撑开高度 */}
+      <div 
+        className="relative w-full rounded-xl md:rounded-2xl overflow-hidden bg-[#121217] border border-white/5 group-hover:border-indigo-500/30 transition-all duration-300 shadow-lg group-hover:shadow-2xl group-hover:shadow-indigo-500/10"
+        style={{ aspectRatio: getAspectRatioStyle(item.aspect) }}
+      >
+        
+        {/* 骨架屏占位符：只在图片未加载时显示 */}
+        {!isLoaded && (
+          <div className="absolute inset-0 bg-zinc-900 animate-pulse flex items-center justify-center z-0">
+            <ImageIcon className="w-8 h-8 text-zinc-800" />
+          </div>
+        )}
+        
+        {/* Premium Badge */}
+        {item.premium && (
+          <div className="absolute top-3 left-3 z-20 bg-gradient-to-r from-yellow-500 to-orange-500 text-black text-xs font-black px-2 py-1 rounded-full flex items-center gap-1">
+            <Star className="w-3 h-3 fill-current" />
+            PRO
+          </div>
+        )}
+
+        {/* Featured Badge */}
+        {item.featured && (
+          <div className="absolute top-3 right-3 z-20 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs font-black px-2 py-1 rounded-full flex items-center gap-1">
+            <Award className="w-3 h-3" />
+            Featured
+          </div>
+        )}
+
+        <img
+          src={item.image}
+          alt={item.title}
+          className={`w-full h-full object-cover transition-all duration-700 ease-out md:group-hover:scale-110 relative z-10 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          loading="lazy"
+          onLoad={() => setIsLoaded(true)}
+          onError={(e) => {
+            // 简单的错误处理占位
+            e.currentTarget.src = `https://placehold.co/400x600/1a1a1a/666?text=Error`;
+            setIsLoaded(true);
+          }}
+        />
+
+        {/* Enhanced Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20" />
+
+        {/* Desktop Hover Actions */}
+        <div className="absolute inset-0 z-30 opacity-0 md:group-hover:opacity-100 transition-all duration-300 hidden md:flex flex-col justify-end p-4 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+            <div className="transform translate-y-6 group-hover:translate-y-0 transition-transform duration-300 space-y-3">
+                {/* Title and Author */}
+                <div>
+                  <h3 className="text-white font-bold text-base line-clamp-1 mb-1">{item.title}</h3>
+                  <div className="flex items-center gap-2">
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-xs font-bold">
+                      {item.author[0]}
+                    </div>
+                    <span className="text-zinc-300 text-xs">@{item.author}</span>
+                  </div>
+                </div>
+
+                {/* Stats */}
+                <div className="flex items-center gap-4 text-xs text-zinc-400">
+                  <div className="flex items-center gap-1">
+                    <Heart className="w-3 h-3" />
+                    <span>{item.likes.toLocaleString()}</span>
+                  </div>
+                  {item.views && (
+                    <div className="flex items-center gap-1">
+                      <Eye className="w-3 h-3" />
+                      <span>{item.views.toLocaleString()}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-2">
+                    <button 
+                        onClick={onRemix}
+                        className="flex-1 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white py-2.5 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2"
+                    >
+                        <Zap className="w-4 h-4" /> Remix
+                    </button>
+                    <button 
+                        onClick={onLike}
+                        className={`p-2.5 rounded-lg backdrop-blur-md border transition-all ${isLiked ? 'bg-pink-500/20 border-pink-500/50 text-pink-500' : 'bg-black/20 border-white/10 text-white hover:bg-white/20'}`}
+                    >
+                        <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
+                    </button>
+                </div>
+            </div>
+        </div>
+      </div>
+      
+      {/* Enhanced Mobile Info Bar */}
+      <div className="md:hidden mt-3 space-y-2">
+         <div className="flex justify-between items-start">
+             <div className="flex-1 pr-2">
+                 <h3 className="text-sm font-bold text-white line-clamp-1 leading-tight">{item.title}</h3>
+                 <div className="flex items-center gap-2 mt-1">
+                   <div className="w-4 h-4 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-xs font-bold">
+                     {item.author[0]}
+                   </div>
+                   <span className="text-xs text-zinc-500">@{item.author}</span>
+                 </div>
+             </div>
+             <button 
+                onClick={onLike}
+                className="text-zinc-500 active:scale-90 transition-transform"
+             >
+                 <Heart className={`w-4 h-4 ${isLiked ? "fill-pink-500 text-pink-500" : ""}`} />
+             </button>
+         </div>
+
+         <div className="flex items-center justify-between">
+           <div className="flex items-center gap-3 text-xs text-zinc-500">
+             <div className="flex items-center gap-1">
+               <Heart className="w-3 h-3" />
+               <span>{item.likes.toLocaleString()}</span>
+             </div>
+           </div>
+           
+           <button 
+             onClick={onRemix}
+             className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 active:scale-95 transition-transform"
+           >
+             <Zap className="w-3 h-3" /> Remix
+           </button>
+         </div>
+      </div>
+    </motion.div>
+  );
+};
+
 export default function GalleryPage() {
   const router = useRouter();
   const t = useTranslations("GalleryPage");
@@ -70,7 +238,6 @@ export default function GalleryPage() {
   const [likedItems, setLikedItems] = useState<Set<string>>(new Set());
   const [mounted, setMounted] = useState(false);
   const [activeFilter, setActiveFilter] = useState("all");
-  const [viewMode, setViewMode] = useState<"masonry" | "grid">("masonry");
   const [sortBy, setSortBy] = useState<"trending" | "newest" | "popular" | "featured">("trending");
 
   // 防止水合不匹配
@@ -98,30 +265,8 @@ export default function GalleryPage() {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [selectedImage]);
 
-  // 无限滚动检测
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000) {
-        // 这里可以加载更多内容
-        console.log('Near bottom - could load more content');
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // 分类过滤器
-  const filterOptions: FilterOption[] = [
-    { id: "all", label: "All Styles", count: 120, icon: <Palette className="w-4 h-4" /> },
-    { id: "waifu", label: "Waifu", count: 45, icon: <Heart className="w-4 h-4" /> },
-    { id: "cyberpunk", label: "Cyberpunk", count: 28, icon: <Zap className="w-4 h-4" /> },
-    { id: "fantasy", label: "Fantasy", count: 32, icon: <Wand2 className="w-4 h-4" /> },
-    { id: "chibi", label: "Chibi", count: 15, icon: <Star className="w-4 h-4" /> },
-  ];
-
   // --- 完整数据 ---
-const baseImages: GalleryItem[] = [
+  const baseImages: GalleryItem[] = [
     {
       id: "u1",
       title: "Ethereal Starlight Soul",
@@ -278,7 +423,7 @@ const baseImages: GalleryItem[] = [
       author: "StudioFan",
       image:
         "/gallery/ghibli-inspired-nostalgic-countryside-bus-stop-scenery.webp",
-      aspect: "aspect-[5/3]", // 16:9 改为更合适的比例
+      aspect: "aspect-[5/3]", 
       likes: 3120,
       prompt:
         "studio ghibli style, nostalgic scenery, countryside bus stop, summer clouds, lush green nature, watercolor texture, hand painted background, hayao miyazaki style, peaceful atmosphere",
@@ -303,7 +448,7 @@ const baseImages: GalleryItem[] = [
       author: "ConceptArtist",
       image:
         "/gallery/anime-magical-girl-character-reference-sheet-opal-jellyfish-fantasy.webp",
-      aspect: "aspect-[4/5]", // 设定图通常较宽，调整为更合适的比例
+      aspect: "aspect-[4/5]", 
       likes: 1450,
       prompt:
         "character reference sheet, magical girl, opal jellyfish theme, front view, back view, side view, detailed costume design, frills, staff, accessories breakdown, anime character design, flat color",
@@ -445,7 +590,7 @@ const baseImages: GalleryItem[] = [
     {
       id: "21",
       title:
-        "A thrilling 3D cartoon scene: [CHARACTER1] runs through a narrow corridor inside [Place], chased at high speed by [CHARACTER2]. Their facial expressions reflect tension and focus, with beads of sweat glistening under dramatic lighting.",
+        "A thrilling 3D cartoon scene",
       author: "3DAction",
       image: "/gallery/3D cartoon scene.webp",
       aspect: "aspect-video",
@@ -456,7 +601,7 @@ const baseImages: GalleryItem[] = [
     {
       id: "22",
       title:
-        "A futuristic 3D cartoon scene: [CHARACTER1] and [CHARACTER2] are in a high-tech laboratory, with advanced equipment and holographic displays. They are working on a groundbreaking project, with intense concentration on their faces.",
+        "A futuristic 3D cartoon scene",
       author: "3DAction",
       image: "/gallery/anime-figure-1-7-scale-zbrush-desk-setup.webp",
       aspect: "aspect-video",
@@ -768,6 +913,143 @@ const baseImages: GalleryItem[] = [
       ratio: "9:16",
       image: "/gallery/anime-night-pool-party.webp",
     },
+    
+    // 新添加的压缩测试图片 - SEO 优化
+    {
+      id: "anime-portrait-masterpiece-digital",
+      title: "Anime Portrait Masterpiece Digital Art",
+      author: "DigitalArtist",
+      image: "/gallery/anime-portrait-masterpiece-digital-art.jpg",
+      aspect: "aspect-[3/4]",
+      likes: 1250,
+      views: 3800,
+      category: "waifu",
+      tags: ["anime portrait", "digital art", "masterpiece", "detailed"],
+      prompt:
+        "Beautiful anime character portrait with detailed facial features, expressive eyes, soft lighting, high quality digital illustration, masterpiece artwork",
+    },
+    {
+      id: "anime-character-design-vibrant", 
+      title: "Anime Character Design Vibrant Colors",
+      author: "CharacterDesigner",
+      image: "/gallery/anime-character-design-vibrant-colors.jpg",
+      aspect: "aspect-[3/4]",
+      likes: 1180,
+      views: 3200,
+      category: "waifu",
+      tags: ["character design", "vibrant colors", "anime art", "professional"],
+      prompt:
+        "Detailed anime character design with unique styling, vibrant colors, professional digital art, high resolution illustration",
+    },
+    {
+      id: "high-quality-anime-digital-artwork",
+      title: "High Quality Anime Digital Artwork", 
+      author: "ArtMaster",
+      image: "/gallery/high-quality-anime-digital-artwork.jpg",
+      aspect: "aspect-[3/4]",
+      likes: 1320,
+      views: 4100,
+      category: "fantasy",
+      tags: ["high quality", "anime artwork", "digital painting", "artistic"],
+      prompt:
+        "High quality anime digital artwork, detailed character illustration, professional rendering, artistic composition, masterpiece quality",
+    },
+    {
+      id: "professional-anime-illustration",
+      title: "Professional Anime Illustration Art",
+      author: "IllustrationPro",
+      image: "/gallery/professional-anime-illustration-art.jpg", 
+      aspect: "aspect-[3/4]",
+      likes: 1450,
+      views: 4500,
+      category: "waifu",
+      tags: ["professional illustration", "anime art", "excellence", "detailed"],
+      prompt:
+        "Professional anime illustration with detailed character design, vibrant colors, high quality digital painting, artistic excellence",
+    },
+
+    // 最新添加的新图片 - SEO 优化
+    {
+      id: "anime-character-portrait-detailed",
+      title: "Anime Character Portrait Detailed Art",
+      author: "PortraitMaster",
+      image: "/gallery/anime-character-portrait-detailed-art.webp",
+      aspect: "aspect-[9/16]",
+      likes: 1680,
+      views: 5200,
+      category: "waifu",
+      tags: ["character portrait", "detailed art", "anime illustration", "masterpiece"],
+      prompt:
+        "Detailed anime character portrait with expressive features, professional digital art, high quality illustration, masterpiece artwork",
+    },
+    {
+      id: "fantasy-anime-girl-magical", 
+      title: "Fantasy Anime Girl Magical Style",
+      author: "FantasyArtist",
+      image: "/gallery/fantasy-anime-girl-magical-style.webp",
+      aspect: "aspect-[9/16]",
+      likes: 1520,
+      views: 4800,
+      category: "fantasy",
+      tags: ["fantasy anime", "magical girl", "enchanting design", "vibrant colors"],
+      prompt:
+        "Fantasy anime girl with magical elements, enchanting design, vibrant colors, detailed character illustration, high quality digital art",
+    },
+    {
+      id: "beautiful-anime-character-digital",
+      title: "Beautiful Anime Character Digital Painting",
+      author: "DigitalPainter", 
+      image: "/gallery/beautiful-anime-character-digital-painting.webp",
+      aspect: "aspect-[9/16]",
+      likes: 1890,
+      views: 6100,
+      category: "waifu",
+      tags: ["beautiful anime", "digital painting", "professional art", "high quality"],
+      prompt:
+        "Beautiful anime character digital painting, detailed artwork, professional illustration, high quality rendering, artistic masterpiece",
+    },
+    {
+      id: "artistic-anime-illustration-masterpiece",
+      title: "Artistic Anime Illustration Masterpiece",
+      author: "MasterpieceArt",
+      image: "/gallery/artistic-anime-illustration-masterpiece.jpg", 
+      aspect: "aspect-[3/4]",
+      likes: 2100,
+      views: 7200,
+      category: "waifu",
+      tags: ["artistic illustration", "masterpiece", "exceptional detail", "professional"],
+      featured: true,
+      prompt:
+        "Artistic anime illustration masterpiece, exceptional detail, professional digital art, high quality character design, stunning artwork",
+    },
+    {
+      id: "stylish-anime-girl-character",
+      title: "Stylish Anime Girl Character Design",
+      author: "StyleDesigner",
+      image: "/gallery/stylish-anime-girl-character-design.webp",
+      aspect: "aspect-[9/16]",
+      likes: 1750,
+      views: 5600,
+      category: "waifu", 
+      tags: ["stylish anime", "character design", "modern aesthetic", "detailed"],
+      prompt:
+        "Stylish anime girl character design, modern aesthetic, detailed illustration, professional digital art, high quality artwork",
+    },
+    {
+      id: "premium-anime-artwork-quality",
+      title: "Premium Anime Artwork High Quality", 
+      author: "PremiumArt",
+      image: "/gallery/premium-anime-artwork-high-quality.webp",
+      aspect: "aspect-[9/16]",
+      likes: 2250,
+      views: 8100,
+      category: "waifu",
+      tags: ["premium artwork", "high quality", "exceptional detail", "stunning"],
+      premium: true,
+      featured: true,
+      prompt:
+        "Premium anime artwork high quality, exceptional detail, professional illustration, masterpiece digital art, stunning character design",
+    },
   ];
 
   const galleryImages = [...baseImages];
@@ -825,71 +1107,12 @@ const baseImages: GalleryItem[] = [
     setLikedItems(newLikes);
   };
 
-  const modes = [
-    {
-      label: t("modes.generation"),
-      icon: <ImageIcon className="w-5 h-5" />,
-      active: true,
-      href: "/generator",
-      disabled: false,
-    },
-    {
-      label: t("modes.video"),
-      icon: <Video className="w-5 h-5" />,
-      active: false,
-      href: "#",
-      badge: t("modes.soon"),
-      disabled: true,
-    },
-    {
-      label: t("modes.upscaler"),
-      icon: <Maximize2 className="w-5 h-5" />,
-      active: false,
-      href: "#",
-      disabled: true,
-    },
-  ];
-
   if (!mounted) {
     return (
       <div className="min-h-screen bg-[#050505] text-white font-sans">
-        {/* 骨架屏占位符 */}
-        <div className="pt-28 md:pt-32 pb-8 px-4">
-          {/* Hero 骨架屏 */}
-          <div className="max-w-4xl mx-auto text-center space-y-6 mb-12">
-            <div className="w-20 h-6 bg-zinc-800 rounded-full mx-auto animate-pulse"></div>
-            <div className="w-80 h-12 bg-zinc-800 rounded-lg mx-auto animate-pulse"></div>
-            <div className="w-96 h-4 bg-zinc-800 rounded mx-auto animate-pulse"></div>
-            <div className="w-full max-w-xl h-12 bg-zinc-800 rounded-2xl mx-auto animate-pulse"></div>
-            <div className="flex gap-2 justify-center">
-              {[1,2,3,4,5].map(i => (
-                <div key={i} className="w-16 h-6 bg-zinc-800 rounded-full animate-pulse"></div>
-              ))}
-            </div>
-          </div>
-          
-          {/* 图片网格骨架屏 */}
-          <div className="max-w-[2400px] mx-auto">
-            <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 space-y-4">
-              {Array.from({length: 20}).map((_, i) => (
-                <div key={i} className="break-inside-avoid mb-4 bg-zinc-900 rounded-2xl overflow-hidden animate-pulse">
-                  <div 
-                    className="w-full bg-zinc-800" 
-                    style={{height: `${200 + Math.random() * 200}px`}}
-                  ></div>
-                  <div className="p-4 space-y-2">
-                    <div className="w-3/4 h-3 bg-zinc-800 rounded"></div>
-                    <div className="w-1/2 h-2 bg-zinc-800 rounded"></div>
-                    <div className="w-full h-8 bg-zinc-800 rounded"></div>
-                    <div className="flex justify-between items-center">
-                      <div className="w-12 h-3 bg-zinc-800 rounded"></div>
-                      <div className="w-8 h-6 bg-zinc-800 rounded"></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+        {/* 简单的初始化占位 */}
+        <div className="pt-32 flex justify-center">
+            <Loader2 className="animate-spin w-8 h-8 text-indigo-500" />
         </div>
       </div>
     );
@@ -897,8 +1120,6 @@ const baseImages: GalleryItem[] = [
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-indigo-500/30 relative overflow-x-hidden">
-      
-     
       
       {/* 全局加载遮罩 */}
       <AnimatePresence>
@@ -929,12 +1150,11 @@ const baseImages: GalleryItem[] = [
       {/* 噪点纹理背景 */}
       <div className="fixed inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none z-0 mix-blend-overlay"></div>
 
-      {/* Simplified Hero Section */}
+      {/* Hero Section */}
       <section className="relative w-full pt-28 md:pt-32 pb-8 flex flex-col items-center justify-center px-4 z-10">
         <div className="relative z-10 w-full max-w-4xl text-center space-y-6">
 
           <div className="space-y-6">
-            {/* 更吸引人的标题 */}
             <motion.h1 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -980,7 +1200,7 @@ const baseImages: GalleryItem[] = [
             </motion.div>
           </div>
 
-          {/* Enhanced Search Bar */}
+          {/* Search Bar */}
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1042,188 +1262,26 @@ const baseImages: GalleryItem[] = [
       {/* Gallery Section */}
       <section className="px-3 md:px-8 pb-32 max-w-[2400px] mx-auto z-10 relative">
         
-
-        {/* Gallery Grid */}
+        {/* Gallery Grid - 使用优化后的 GalleryCard 组件 */}
         <Masonry
           breakpointCols={breakpointColumnsObj}
           className="flex w-auto -ml-3 md:-ml-6"
           columnClassName="pl-3 md:pl-6 bg-clip-padding"
         >
           {sortedImages.map((item, index) => (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "100px" }}
-              transition={{ duration: 0.5, delay: (index % 4) * 0.05 }}
+            <GalleryCard 
               key={`${item.id}-${index}`}
-              className="mb-4 md:mb-8 group relative cursor-pointer"
+              item={item}
               onClick={() => setSelectedImage(item)}
-            >
-              {/* Image Container - 移除固定aspect，让图片保持原始比例 */}
-              <div className="relative w-full rounded-xl md:rounded-2xl overflow-hidden bg-[#121217] border border-white/5 group-hover:border-indigo-500/30 transition-all duration-300 shadow-lg group-hover:shadow-2xl group-hover:shadow-indigo-500/10">
-                
-                {/* 图片加载占位符 */}
-                <div className="absolute inset-0 bg-gradient-to-br from-zinc-800 to-zinc-900 animate-pulse flex items-center justify-center">
-                  <div className="w-8 h-8 border-2 border-zinc-600 border-t-indigo-500 rounded-full animate-spin"></div>
-                </div>
-                
-                {/* Premium Badge */}
-                {item.premium && (
-                  <div className="absolute top-3 left-3 z-20 bg-gradient-to-r from-yellow-500 to-orange-500 text-black text-xs font-black px-2 py-1 rounded-full flex items-center gap-1">
-                    <Star className="w-3 h-3 fill-current" />
-                    PRO
-                  </div>
-                )}
-
-                {/* Featured Badge */}
-                {item.featured && (
-                  <div className="absolute top-3 right-3 z-20 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs font-black px-2 py-1 rounded-full flex items-center gap-1">
-                    <Award className="w-3 h-3" />
-                    Featured
-                  </div>
-                )}
-
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-auto object-cover transition-all duration-700 ease-out md:group-hover:scale-110 relative z-10"
-                  loading={index < 8 ? "eager" : "lazy"}
-                  onLoad={(e) => {
-                    const img = e.target as HTMLImageElement;
-                    const placeholder = img.previousElementSibling as HTMLElement;
-                    if (placeholder) {
-                      placeholder.style.display = 'none';
-                    }
-                  }}
-                  onError={(e) => {
-                    const img = e.target as HTMLImageElement;
-                    img.src = `https://placehold.co/400x600/1a1a1a/666?text=${encodeURIComponent(item.title)}`;
-                  }}
-                />
-
-                {/* Enhanced Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-                {/* Desktop Hover Actions */}
-                <div className="absolute inset-0 opacity-0 md:group-hover:opacity-100 transition-all duration-300 hidden md:flex flex-col justify-end p-4 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
-                    <div className="transform translate-y-6 group-hover:translate-y-0 transition-transform duration-300 space-y-3">
-                        {/* Title and Author */}
-                        <div>
-                          <h3 className="text-white font-bold text-base line-clamp-1 mb-1">{item.title}</h3>
-                          <div className="flex items-center gap-2">
-                            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-xs font-bold">
-                              {item.author[0]}
-                            </div>
-                            <span className="text-zinc-300 text-xs">@{item.author}</span>
-                          </div>
-                        </div>
-
-                        {/* Stats */}
-                        <div className="flex items-center gap-4 text-xs text-zinc-400">
-                          <div className="flex items-center gap-1">
-                            <Heart className="w-3 h-3" />
-                            <span>{item.likes.toLocaleString()}</span>
-                          </div>
-                          {item.views && (
-                            <div className="flex items-center gap-1">
-                              <Eye className="w-3 h-3" />
-                              <span>{item.views.toLocaleString()}</span>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Tags */}
-                        {item.tags && (
-                          <div className="flex flex-wrap gap-1">
-                            {item.tags.slice(0, 3).map((tag) => (
-                              <span key={tag} className="bg-white/10 text-white text-xs px-2 py-0.5 rounded-full">
-                                #{tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-
-                        {/* Action Buttons */}
-                        <div className="flex gap-2">
-                            <button 
-                                onClick={(e) => { e.stopPropagation(); handleRemix(item.prompt); }}
-                                className="flex-1 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white py-2.5 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2"
-                            >
-                                <Zap className="w-4 h-4" /> Remix
-                            </button>
-                            <button 
-                                onClick={(e) => toggleLike(e, item.id)}
-                                className={`p-2.5 rounded-lg backdrop-blur-md border transition-all ${likedItems.has(item.id) ? 'bg-pink-500/20 border-pink-500/50 text-pink-500' : 'bg-black/20 border-white/10 text-white hover:bg-white/20'}`}
-                            >
-                                <Heart className={`w-4 h-4 ${likedItems.has(item.id) ? "fill-current" : ""}`} />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-              </div>
-              
-              {/* Enhanced Mobile Info Bar */}
-              <div className="md:hidden mt-3 space-y-2">
-                 <div className="flex justify-between items-start">
-                     <div className="flex-1 pr-2">
-                         <h3 className="text-sm font-bold text-white line-clamp-1 leading-tight">{item.title}</h3>
-                         <div className="flex items-center gap-2 mt-1">
-                           <div className="w-4 h-4 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-xs font-bold">
-                             {item.author[0]}
-                           </div>
-                           <span className="text-xs text-zinc-500">@{item.author}</span>
-                         </div>
-                     </div>
-                     <button 
-                        onClick={(e) => toggleLike(e, item.id)}
-                        className="text-zinc-500 active:scale-90 transition-transform"
-                     >
-                         <Heart className={`w-4 h-4 ${likedItems.has(item.id) ? "fill-pink-500 text-pink-500" : ""}`} />
-                     </button>
-                 </div>
-
-                 {/* Mobile Stats */}
-                 <div className="flex items-center justify-between">
-                   <div className="flex items-center gap-3 text-xs text-zinc-500">
-                     <div className="flex items-center gap-1">
-                       <Heart className="w-3 h-3" />
-                       <span>{item.likes.toLocaleString()}</span>
-                     </div>
-                     {item.views && (
-                       <div className="flex items-center gap-1">
-                         <Eye className="w-3 h-3" />
-                         <span>{item.views.toLocaleString()}</span>
-                       </div>
-                     )}
-                   </div>
-                   
-                   <button 
-                     onClick={(e) => { e.stopPropagation(); handleRemix(item.prompt); }}
-                     className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1 active:scale-95 transition-transform"
-                   >
-                     <Zap className="w-3 h-3" /> Remix
-                   </button>
-                 </div>
-
-                 {/* Mobile Tags */}
-                 {item.tags && (
-                   <div className="flex flex-wrap gap-1">
-                     {item.tags.slice(0, 3).map((tag) => (
-                       <span key={tag} className="bg-zinc-800 text-zinc-400 text-xs px-2 py-0.5 rounded-full">
-                         #{tag}
-                       </span>
-                     ))}
-                   </div>
-                 )}
-              </div>
-
-            </motion.div>
+              onLike={(e) => toggleLike(e, item.id)}
+              isLiked={likedItems.has(item.id)}
+              onRemix={(e) => { e.stopPropagation(); handleRemix(item.prompt); }}
+            />
           ))}
         </Masonry>
         
         {/* Enhanced Load More Section */}
         <div className="mt-12 md:mt-20 text-center space-y-8">
-            {/* Stats Summary */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto mb-8">
                 <div className="p-4 bg-zinc-900/50 rounded-xl border border-zinc-800">
                     <div className="text-2xl font-black text-white mb-1">10K+</div>
@@ -1243,22 +1301,12 @@ const baseImages: GalleryItem[] = [
                 </div>
             </div>
 
-            {/* Load More Button */}
             <div className="space-y-4">
-                <button className="group relative px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 rounded-full text-sm font-bold uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full opacity-20 group-hover:opacity-40 blur-lg transition duration-500" />
-                    <span className="relative text-white flex items-center gap-2">
-                        <TrendingUp className="w-4 h-4" />
-                        Load More Inspiration
-                    </span>
-                </button>
-                
                 <p className="text-sm text-zinc-500">
                     Showing {sortedImages.length} of 10,000+ artworks
                 </p>
             </div>
 
-            {/* Call to Action */}
             <div className="mt-16 p-8 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 rounded-2xl border border-indigo-500/20 max-w-2xl mx-auto">
                 <h3 className="text-xl md:text-2xl font-black text-white mb-3">
                     Ready to Create Your Own?
@@ -1278,7 +1326,7 @@ const baseImages: GalleryItem[] = [
 
       </section>
 
-      {/* Image Detail Modal (Lightbox) */}
+      {/* Image Detail Modal (Lightbox) - 完全保留原始样式 */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div
@@ -1454,6 +1502,22 @@ const baseImages: GalleryItem[] = [
           </motion.div>
         )}
       </AnimatePresence>
+
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #27272a;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #3f3f46;
+        }
+      `}</style>
     </div>
   );
 }

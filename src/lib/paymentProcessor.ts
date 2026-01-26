@@ -93,6 +93,13 @@ export class PaymentProcessor {
   ): Promise<PaymentResult> {
     const planKey = PlanKeyMapper.mapPlanKey(plan.key, 'paypal', cycle as 'monthly' | 'yearly');
     
+    console.log('PayPal Payment Request:', {
+      planKey,
+      originalPlanKey: plan.key,
+      cycle,
+      userId: user.googleUserId
+    });
+    
     const requestBody: PayPalPaymentRequest = {
       type: planKey,
       googleUserId: user.googleUserId
@@ -108,12 +115,51 @@ export class PaymentProcessor {
     );
 
     const resData: PaymentResponse = await response.json();
+    
+    console.log('PayPal API Response:', {
+      code: resData.code,
+      msg: resData.msg,
+      id: resData.id,
+      status: resData.status,
+      links: resData.links,
+      fullResponse: resData
+    });
 
-    if (resData.code === 200 && resData.msg) {
-      return {
-        success: true,
-        redirectUrl: resData.msg
-      };
+    if (resData.code === 200) {
+      let redirectUrl: string | undefined;
+
+      // 方法1：从 links 数组中找到支付链接（推荐）
+      if (resData.links && Array.isArray(resData.links)) {
+        const approvalLink = resData.links.find(link => 
+          link.rel === 'payer-action' || 
+          link.rel === 'approve' || 
+          link.href.includes('paypal.com/checkoutnow')
+        );
+        if (approvalLink) {
+          redirectUrl = approvalLink.href;
+        }
+      }
+
+      // 方法2：如果 links 中没找到，尝试从 msg 字段获取
+      if (!redirectUrl && resData.msg) {
+        redirectUrl = resData.msg;
+      }
+
+      console.log('Final PayPal Redirect URL:', redirectUrl);
+      
+      if (redirectUrl) {
+        // 检查返回的 URL 是否是有效的 PayPal URL
+        if (!redirectUrl.includes('paypal.com')) {
+          console.warn('Warning: PayPal redirect URL does not appear to be a PayPal URL:', redirectUrl);
+        }
+        
+        return {
+          success: true,
+          redirectUrl: redirectUrl
+        };
+      } else {
+        throw new Error('No PayPal approval URL found in response');
+      }
     } else {
       throw new Error(resData.msg || 'PayPal payment initialization failed');
     }

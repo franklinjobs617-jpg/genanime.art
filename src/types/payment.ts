@@ -57,6 +57,14 @@ export interface PaymentResponse {
   code: number;
   data?: string; // Stripe redirect URL
   msg?: string;  // PayPal redirect URL or error message
+  // PayPal specific response structure
+  id?: string;
+  status?: string;
+  links?: Array<{
+    href: string;
+    rel: string;
+    method: string;
+  }>;
 }
 
 // Error handling

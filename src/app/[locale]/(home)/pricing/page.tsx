@@ -18,6 +18,9 @@ import {
 } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
 import { useAuth } from "@/context/AuthContext";
+import PaymentMethodModal from "@/components/PaymentMethodModal";
+import { PaymentProcessor } from "@/lib/paymentProcessor";
+import type { PaymentMethod, Plan as PaymentPlan } from "@/types/payment";
 
 // --- 配置部分 ---
 
@@ -26,21 +29,9 @@ interface PlanFeatures {
   highlight?: boolean;
 }
 
-interface Plan {
-  name: string;
-  key: string;
-  price: { monthly: number; yearly: number };
-  desc: string;
-  credits: number;
+interface Plan extends PaymentPlan {
   badge?: string;
   isPopular?: boolean;
-  features: PlanFeatures[];
-  icon: React.ReactNode;
-  // 样式配置
-  themeColor: string; // 图标颜色
-  themeBg: string;    // 图标背景
-  borderColor: string; // 边框颜色
-  buttonStyle: string;
 }
 
 const plans: Plan[] = [
@@ -143,51 +134,58 @@ export default function PremiumPricing() {
   const [isYearly, setIsYearly] = useState(true);
   const [activeAccordion, setActiveAccordion] = useState<number | null>(0);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
 
   const { user, login } = useAuth();
 
-  const handleCheckout = async (planName: string, planKey: string) => {
+  const handlePlanSelect = (plan: Plan) => {
     if (!user) {
       toast("Please sign in to upgrade.", { icon: "🔒" });
       login();
       return;
     }
 
-    if (!user.googleUserId) {
-      toast.error("User session expired. Please re-login.");
+    setSelectedPlan(plan);
+    setIsPaymentModalOpen(true);
+  };
+
+  const handlePaymentMethodSelect = async (method: PaymentMethod) => {
+    if (!selectedPlan || !user?.googleUserId) {
+      toast.error("Session expired. Please refresh and try again.");
       return;
     }
 
-    setLoadingPlan(planName);
-    const toastId = toast.loading("Securing connection...");
-    const typeParam = `plan_${planKey}_${isYearly ? "yearly" : "monthly"}`;
+    setLoadingPlan(selectedPlan.name);
+    const toastId = toast.loading(`Connecting to ${method.name}...`);
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/stripe/getPayUrl`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            type: typeParam,
-            googleUserId: user.googleUserId,
-          }),
-        }
+      const result = await PaymentProcessor.processPayment(
+        method,
+        selectedPlan,
+        isYearly,
+        { googleUserId: user.googleUserId }
       );
 
-      const resData = await response.json();
-
-      if (resData.code === 200 && resData.data) {
-        toast.success("Redirecting to Stripe...", { id: toastId });
-        window.location.href = resData.data;
+      if (result.success && result.redirectUrl) {
+        toast.success(`Redirecting to ${method.name}...`, { id: toastId });
+        window.location.href = result.redirectUrl;
       } else {
-        throw new Error(resData.msg || "Server response error");
+        throw new Error(result.error || "Payment initialization failed");
       }
     } catch (error: any) {
-      console.error("Checkout Error:", error);
-      toast.error(error.message || "Payment initiation failed.", { id: toastId });
+      console.error("Payment Error:", error);
+      toast.error(error.message || "Payment failed. Please try again.", { id: toastId });
       setLoadingPlan(null);
+      setIsPaymentModalOpen(false);
     }
+  };
+
+  const handleModalClose = () => {
+    if (loadingPlan) return; // Prevent closing during payment processing
+    setIsPaymentModalOpen(false);
+    setSelectedPlan(null);
+    setLoadingPlan(null);
   };
 
   return (
@@ -348,7 +346,7 @@ export default function PremiumPricing() {
 
                   {/* Button - Mobile optimized touch area */}
                   <button
-                    onClick={() => handleCheckout(plan.name, plan.key)}
+                    onClick={() => handlePlanSelect(plan)}
                     disabled={loadingPlan !== null}
                     className={`
                       w-full py-4 md:py-4 px-4 rounded-xl font-black text-sm md:text-sm uppercase tracking-[0.1em] flex items-center justify-center gap-2 group/btn relative overflow-hidden transition-all duration-300 transform hover:scale-105 active:scale-95 hover:shadow-lg min-h-[48px] md:min-h-[auto]
@@ -526,6 +524,18 @@ export default function PremiumPricing() {
         </div>
 
       </div>
+
+      {/* Payment Method Modal */}
+      {selectedPlan && (
+        <PaymentMethodModal
+          isOpen={isPaymentModalOpen}
+          onClose={handleModalClose}
+          selectedPlan={selectedPlan}
+          isYearly={isYearly}
+          onPaymentMethodSelect={handlePaymentMethodSelect}
+          isLoading={loadingPlan !== null}
+        />
+      )}
     </section>
   );
 }

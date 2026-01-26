@@ -105,63 +105,88 @@ export class PaymentProcessor {
       googleUserId: user.googleUserId
     };
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/paypal/createOrder`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody)
-      }
-    );
+    console.log('Sending request to:', `${process.env.NEXT_PUBLIC_API_BASE_URL}/paypal/createOrder`);
+    console.log('Request body:', JSON.stringify(requestBody));
 
-    const resData: PaymentResponse = await response.json();
-    
-    console.log('PayPal API Response:', {
-      code: resData.code,
-      msg: resData.msg,
-      id: resData.id,
-      status: resData.status,
-      links: resData.links,
-      fullResponse: resData
-    });
-
-    if (resData.code === 200) {
-      let redirectUrl: string | undefined;
-
-      // 方法1：从 links 数组中找到支付链接（推荐）
-      if (resData.links && Array.isArray(resData.links)) {
-        const approvalLink = resData.links.find(link => 
-          link.rel === 'payer-action' || 
-          link.rel === 'approve' || 
-          link.href.includes('paypal.com/checkoutnow')
-        );
-        if (approvalLink) {
-          redirectUrl = approvalLink.href;
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/paypal/createOrder`,
+        {
+          method: 'POST',
+          body: JSON.stringify(requestBody),
         }
+      );
+
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // 方法2：如果 links 中没找到，尝试从 msg 字段获取
-      if (!redirectUrl && resData.msg) {
-        redirectUrl = resData.msg;
-      }
+      // 先获取响应文本，然后尝试解析 JSON
+      const responseText = await response.text();
+      console.log('Raw response text:', responseText);
 
-      console.log('Final PayPal Redirect URL:', redirectUrl);
+      let resData: PaymentResponse;
+      try {
+        resData = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('JSON parse error:', parseError);
+        throw new Error('Invalid JSON response from server');
+      }
       
-      if (redirectUrl) {
-        // 检查返回的 URL 是否是有效的 PayPal URL
-        if (!redirectUrl.includes('paypal.com')) {
-          console.warn('Warning: PayPal redirect URL does not appear to be a PayPal URL:', redirectUrl);
+      console.log('Parsed PayPal API Response:', {
+        code: resData.code,
+        msg: resData.msg,
+        id: resData.id,
+        status: resData.status,
+        links: resData.links,
+        fullResponse: resData
+      });
+
+      if (resData.code === 200) {
+        let redirectUrl: string | undefined;
+
+        // 方法1：从 links 数组中找到支付链接（推荐）
+        if (resData.links && Array.isArray(resData.links)) {
+          const approvalLink = resData.links.find(link => 
+            link.rel === 'payer-action' || 
+            link.rel === 'approve' || 
+            link.href.includes('paypal.com/checkoutnow')
+          );
+          if (approvalLink) {
+            redirectUrl = approvalLink.href;
+          }
         }
+
+        // 方法2：如果 links 中没找到，尝试从 msg 字段获取
+        if (!redirectUrl && resData.msg) {
+          redirectUrl = resData.msg;
+        }
+
+        console.log('Final PayPal Redirect URL:', redirectUrl);
         
-        return {
-          success: true,
-          redirectUrl: redirectUrl
-        };
+        if (redirectUrl) {
+          // 检查返回的 URL 是否是有效的 PayPal URL
+          if (!redirectUrl.includes('paypal.com')) {
+            console.warn('Warning: PayPal redirect URL does not appear to be a PayPal URL:', redirectUrl);
+          }
+          
+          return {
+            success: true,
+            redirectUrl: redirectUrl
+          };
+        } else {
+          throw new Error('No PayPal approval URL found in response');
+        }
       } else {
-        throw new Error('No PayPal approval URL found in response');
+        throw new Error(resData.msg || 'PayPal payment initialization failed');
       }
-    } else {
-      throw new Error(resData.msg || 'PayPal payment initialization failed');
+    } catch (error) {
+      console.error('PayPal payment request failed:', error);
+      throw error;
     }
   }
 

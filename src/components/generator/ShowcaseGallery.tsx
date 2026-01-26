@@ -173,7 +173,6 @@ lowres, (worst quality,bad quality,low quality:1.2), bad anatomy, text, signatur
     image: "/gallery/premium-anime-artwork-high-quality.webp",
   },
 
-  // 原有的经典图片
   {
     id: "tpl-10",
     title: "Abstract Digital Art",

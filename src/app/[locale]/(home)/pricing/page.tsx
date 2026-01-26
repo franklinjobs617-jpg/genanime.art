@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
 import { useAuth } from "@/context/AuthContext";
-import AnimatedBackground from "@/components/home/AnimatedBackground";
 
 // --- 配置部分 ---
 
@@ -47,7 +46,7 @@ interface Plan {
 const plans: Plan[] = [
   {
     name: "Starter",
-    key: "initiate", 
+    key: "initiate",
     price: { monthly: 12, yearly: 9 },
     desc: "Perfect for exploring AI art creation",
     credits: 120,
@@ -194,13 +193,13 @@ export default function PremiumPricing() {
   return (
     <section className="relative w-full min-h-screen bg-[#030305] text-white overflow-hidden font-sans selection:bg-indigo-500/30">
       <Toaster position="top-center" toastOptions={{ style: { background: '#18181b', color: '#fff', border: '1px solid #3f3f46' } }} />
-    
+
 
       {/* 内容层 */}
-      <div className="relative z-10 container mx-auto px-6 py-24 md:py-32">
-        
+      <div className="relative z-10 container mx-auto px-4 md:px-6 py-8 md:py-16 lg:py-20">
+
         {/* --- Header Section --- */}
-        <div className="text-center max-w-4xl mx-auto mb-20">
+        <div className="text-center max-w-4xl mx-auto mb-6 md:mb-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -208,88 +207,48 @@ export default function PremiumPricing() {
             transition={{ duration: 0.6 }}
           >
             {/* 顶部 Badge - 与首页风格一致 */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-2xl border border-white/10 text-zinc-300 text-xs font-bold uppercase tracking-widest mb-8 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-400" /> 
+            <div className="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-white/5 backdrop-blur-2xl border border-white/10 text-zinc-300 text-[10px] md:text-xs font-bold uppercase tracking-widest mb-4 md:mb-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+              <Sparkles className="w-3 md:w-3.5 h-3 md:h-3.5 text-indigo-400" />
               <span className="bg-gradient-to-r from-indigo-200 to-white bg-clip-text text-transparent">🔥 Limited Time: 50% OFF First Month</span>
             </div>
-            
+
             {/* 标题 - 与首页风格一致 */}
-            <h1 className="text-5xl md:text-[100px] font-black text-white leading-[0.95] md:leading-[0.9] mb-8 tracking-tighter">
+            <h1 className="text-3xl md:text-4xl lg:text-7xl font-black text-white leading-[0.95] md:leading-[0.9] mb-3 md:mb-6 tracking-tighter">
               CREATE STUNNING <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 drop-shadow-[0_10px_10px_rgba(99,102,241,0.2)]">
                 AI ARTWORK
               </span>
             </h1>
-            
-            <p className="text-zinc-400 text-base md:text-2xl max-w-2xl mx-auto font-medium leading-relaxed">
+
+            <p className="text-zinc-400 text-sm md:text-base lg:text-xl max-w-2xl mx-auto font-medium leading-relaxed px-4 md:px-0">
               Join 50,000+ creators making money with AI art. Start earning from your first image.
             </p>
           </motion.div>
-
-          {/* Toggle Switch - 与首页风格一致 */}
-          <div className="mt-12 flex items-center justify-center gap-5 select-none">
-            <span className={`text-xs font-bold tracking-widest transition-colors duration-300 ${!isYearly ? "text-white" : "text-zinc-500"}`}>MONTHLY</span>
-            <button
-              onClick={() => setIsYearly(!isYearly)}
-              className="relative w-16 h-8 bg-white/5 backdrop-blur-2xl rounded-full border border-white/10 p-1 cursor-pointer hover:border-white/20 transition-colors shadow-inner"
-            >
-              <motion.div
-                animate={{ x: isYearly ? 32 : 0 }}
-                transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                className="w-5 h-5 bg-white rounded-full shadow-md"
-              />
-            </button>
-            <span className={`text-xs font-bold tracking-widest transition-colors duration-300 ${isYearly ? "text-white" : "text-zinc-500"}`}>
-              YEARLY 
-              <span className="ml-2 px-2 py-0.5 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[10px] rounded-full">
-                SAVE 25%
-              </span>
-            </span>
-          </div>
         </div>
 
-        {/* --- Social Proof Section --- */}
-        <div className="text-center mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-4xl mx-auto"
+        {/* --- Toggle Switch - Moved above pricing cards --- */}
+        <div className="flex items-center justify-center gap-3 md:gap-5 select-none mb-6 md:mb-8">
+          <span className={`text-[10px] md:text-xs font-bold tracking-widest transition-colors duration-300 ${!isYearly ? "text-white" : "text-zinc-500"}`}>MONTHLY</span>
+          <button
+            onClick={() => setIsYearly(!isYearly)}
+            className="relative w-14 md:w-16 h-7 md:h-8 bg-white/5 backdrop-blur-2xl rounded-full border border-white/10 p-1 cursor-pointer hover:border-white/20 transition-colors shadow-inner"
           >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-              <div className="text-center">
-                <div className="text-3xl font-black text-white mb-2">50K+</div>
-                <div className="text-sm text-zinc-400">Active Creators</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-black text-white mb-2">2M+</div>
-                <div className="text-sm text-zinc-400">Images Generated</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-black text-white mb-2">$500K+</div>
-                <div className="text-sm text-zinc-400">Creator Earnings</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-black text-white mb-2">4.9★</div>
-                <div className="text-sm text-zinc-400">User Rating</div>
-              </div>
-            </div>
-            
-            <div className="flex flex-wrap justify-center gap-4 text-sm text-zinc-400">
-              <div className="flex items-center gap-2 px-3 py-1 bg-white/5 backdrop-blur-2xl rounded-full border border-white/10">
-                <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                <span>127 people upgraded today</span>
-              </div>
-              <div className="flex items-center gap-2 px-3 py-1 bg-white/5 backdrop-blur-2xl rounded-full border border-white/10">
-                <Crown className="w-3 h-3 text-amber-400" />
-                <span>Featured on ProductHunt</span>
-              </div>
-            </div>
-          </motion.div>
+            <motion.div
+              animate={{ x: isYearly ? 28 : 0 }}
+              transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              className="w-4 h-4 bg-white rounded-full shadow-md md:w-5 md:h-5"
+            />
+          </button>
+          <span className={`text-[10px] md:text-xs font-bold tracking-widest transition-colors duration-300 ${isYearly ? "text-white" : "text-zinc-500"}`}>
+            YEARLY
+            <span className="ml-1 md:ml-2 px-1.5 md:px-2 py-0.5 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[8px] md:text-[10px] rounded-full">
+              SAVE 25%
+            </span>
+          </span>
         </div>
 
         {/* --- Pricing Cards --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mb-32 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 max-w-7xl mx-auto mb-12 md:mb-16 items-center">
           {plans.map((plan, i) => (
             <motion.div
               key={plan.name}
@@ -299,21 +258,27 @@ export default function PremiumPricing() {
               transition={{ delay: i * 0.1, duration: 0.5 }}
               className={`relative group ${plan.isPopular ? "lg:-mt-8 lg:mb-8 z-10" : "z-0"}`}
             >
-              {/* Popular Glow Effect */}
+              {/* Enhanced Popular Glow Effect */}
               {plan.isPopular && (
-                <div className="absolute inset-0 -m-[1px] bg-gradient-to-b from-indigo-400 via-purple-500 to-pink-500 rounded-[33px] blur-sm opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
-              )}
-              {plan.isPopular && (
-                 <div className="absolute top-0 inset-x-0 h-full bg-indigo-600/10 blur-[80px] rounded-[40px] z-[-1]" />
+                <>
+                  {/* Gradient border */}
+                  <div className="absolute inset-0 -m-[2px] bg-gradient-to-br from-indigo-400 via-purple-500 to-indigo-600 rounded-[34px] opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
+                  {/* Purple glow background */}
+                  <div className="absolute top-0 inset-x-0 h-full bg-gradient-to-br from-indigo-600/20 via-purple-600/30 to-indigo-600/20 blur-[100px] rounded-[50px] z-[-1] animate-pulse" />
+                  {/* Additional outer glow */}
+                  <div className="absolute inset-0 -m-8 bg-gradient-to-br from-indigo-500/10 via-purple-500/20 to-indigo-500/10 blur-[120px] rounded-[60px] z-[-2]" />
+                </>
               )}
 
               <div className={`
-                relative h-full flex flex-col rounded-[32px] p-0.5 transition-colors duration-300 
-                ${!plan.isPopular ? "bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20" : "bg-black"}
+                relative h-full flex flex-col rounded-[32px] transition-colors duration-300 
+                ${!plan.isPopular
+                  ? "bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20 p-0.5"
+                  : "bg-transparent p-0.5"}
                 ${plan.borderColor}
               `}>
                 <div className="flex-1 flex flex-col p-8 rounded-[30px] bg-[#030305]/90 backdrop-blur-2xl relative overflow-hidden border border-white/5">
-                  
+
                   {/* 轻微的噪点纹理 */}
                   <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
 
@@ -328,8 +293,8 @@ export default function PremiumPricing() {
                     {plan.badge && (
                       <span className={`
                         text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border backdrop-blur-2xl
-                        ${plan.isPopular 
-                          ? "bg-gradient-to-r from-indigo-400 to-purple-400 text-black border-transparent shadow-[0_0_20px_rgba(99,102,241,0.3)]" 
+                        ${plan.isPopular
+                          ? "bg-gradient-to-r from-indigo-400 to-purple-400 text-black border-transparent shadow-[0_0_20px_rgba(99,102,241,0.3)]"
                           : "bg-white/5 border-white/10 text-zinc-400"}
                       `}>
                         {plan.badge}
@@ -347,14 +312,14 @@ export default function PremiumPricing() {
 
                   {/* Credits Box - 与首页风格一致 */}
                   <div className="mb-8 p-4 rounded-xl bg-white/5 backdrop-blur-2xl border border-white/10 flex items-center justify-between relative z-10 group-hover:border-white/20 transition-colors shadow-lg">
-                     <div className="flex flex-col">
-                       <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Monthly Credits</span>
-                       <span className="text-[10px] text-zinc-500 mt-0.5">≈ {Math.floor(plan.credits / 2)} images</span>
-                     </div>
-                     <span className="text-lg font-black text-white flex items-center gap-2">
-                        <Zap className={`w-5 h-5 ${plan.isPopular ? "text-indigo-400 fill-indigo-400" : "text-emerald-400 fill-emerald-400"}`} /> 
-                        {plan.credits}
-                     </span>
+                    <div className="flex flex-col">
+                      <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Monthly Credits</span>
+                      <span className="text-[10px] text-zinc-500 mt-0.5">≈ {Math.floor(plan.credits / 2)} images</span>
+                    </div>
+                    <span className="text-lg font-black text-white flex items-center gap-2">
+                      <Zap className={`w-5 h-5 ${plan.isPopular ? "text-indigo-400 fill-indigo-400" : "text-emerald-400 fill-emerald-400"}`} />
+                      {plan.credits}
+                    </span>
                   </div>
 
                   {/* Divider */}
@@ -367,8 +332,8 @@ export default function PremiumPricing() {
                         {/* Checkmark Container */}
                         <div className={`
                           mt-0.5 w-5 h-5 rounded-full flex items-center justify-center shrink-0 border transition-colors duration-300
-                          ${feature.highlight 
-                            ? `${plan.themeBg} ${plan.themeColor} border-transparent` 
+                          ${feature.highlight
+                            ? `${plan.themeBg} ${plan.themeColor} border-transparent`
                             : "bg-white/5 border-white/10 text-zinc-600 group-hover/item:border-white/20 group-hover/item:text-zinc-400"}
                         `}>
                           <Check className="w-3 h-3 stroke-[3px]" />
@@ -381,28 +346,28 @@ export default function PremiumPricing() {
                     ))}
                   </ul>
 
-                  {/* Button - 与首页CTA按钮风格一致 */}
+                  {/* Button - Mobile optimized touch area */}
                   <button
                     onClick={() => handleCheckout(plan.name, plan.key)}
                     disabled={loadingPlan !== null}
                     className={`
-                      w-full py-4 rounded-xl font-black text-sm uppercase tracking-[0.1em] flex items-center justify-center gap-2 group/btn relative overflow-hidden transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]
-                      ${plan.isPopular 
-                        ? "bg-white text-black hover:bg-indigo-500 hover:text-white" 
-                        : "bg-white/5 backdrop-blur-2xl border border-white/10 text-white hover:bg-white/10 hover:border-white/20"}
-                      ${loadingPlan && "opacity-70 cursor-not-allowed"}
+                      w-full py-4 md:py-4 px-4 rounded-xl font-black text-sm md:text-sm uppercase tracking-[0.1em] flex items-center justify-center gap-2 group/btn relative overflow-hidden transition-all duration-300 transform hover:scale-105 active:scale-95 hover:shadow-lg min-h-[48px] md:min-h-[auto]
+                      ${plan.isPopular
+                        ? "bg-white text-black hover:bg-indigo-500 hover:text-white hover:shadow-[0_0_30px_rgba(99,102,241,0.5)]"
+                        : "bg-white/5 backdrop-blur-2xl border border-white/10 text-white hover:bg-white/15 hover:border-white/30 hover:brightness-110"}
+                      ${loadingPlan && "opacity-70 cursor-not-allowed hover:scale-100"}
                     `}
                   >
                     {loadingPlan === plan.name ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
                     ) : (
                       <>
-                        <span className="relative z-10">Start Creating Now</span>
+                        <span className="relative z-10">Choose This Plan</span>
                         <ArrowRight className="w-4 h-4 relative z-10 transition-transform group-hover/btn:translate-x-1" />
                       </>
                     )}
                   </button>
-                  
+
                   {/* Value Proposition */}
                   <div className="mt-4 text-center">
                     <div className="flex items-center justify-center gap-2 text-emerald-400">
@@ -417,41 +382,91 @@ export default function PremiumPricing() {
           ))}
         </div>
 
+        {/* --- Trust Badges Section (mobile optimized) --- */}
+        <div className="text-center mb-12 md:mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-4xl mx-auto"
+          >
+            {/* Mobile: Single row compact layout */}
+            <div className="md:hidden flex items-center justify-center gap-4 mb-4 text-xs">
+              <span className="text-white font-bold">50K+ Creators</span>
+              <span className="text-zinc-500">•</span>
+              <span className="text-white font-bold">2M+ Images</span>
+              <span className="text-zinc-500">•</span>
+              <span className="text-white font-bold">4.9★</span>
+            </div>
+
+            {/* Desktop: Original grid layout */}
+            <div className="hidden md:grid grid-cols-4 gap-8 mb-8">
+              <div className="text-center">
+                <div className="text-2xl md:text-3xl font-black text-white mb-2">50K+</div>
+                <div className="text-xs md:text-sm text-zinc-400">Active Creators</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl md:text-3xl font-black text-white mb-2">2M+</div>
+                <div className="text-xs md:text-sm text-zinc-400">Images Generated</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl md:text-3xl font-black text-white mb-2">$500K+</div>
+                <div className="text-xs md:text-sm text-zinc-400">Creator Earnings</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl md:text-3xl font-black text-white mb-2">4.9★</div>
+                <div className="text-xs md:text-sm text-zinc-400">User Rating</div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-2 md:gap-4 text-xs md:text-sm text-zinc-400">
+              <div className="flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1 bg-white/5 backdrop-blur-2xl rounded-full border border-white/10">
+                <div className="w-1.5 md:w-2 h-1.5 md:h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                <span className="text-[10px] md:text-sm">127 people upgraded today</span>
+              </div>
+              <div className="flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1 bg-white/5 backdrop-blur-2xl rounded-full border border-white/10">
+                <Crown className="w-2.5 md:w-3 h-2.5 md:h-3 text-amber-400" />
+                <span className="text-[10px] md:text-sm">Featured on ProductHunt</span>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
         {/* --- Guarantee & Security --- */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-32">
-            <div className="flex gap-5 items-start p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20 transition-all group">
-                <div className="p-3.5 bg-emerald-600 rounded-2xl group-hover:bg-emerald-500 transition-colors">
-                    <ShieldCheck className="w-7 h-7 text-white" />
-                </div>
-                <div>
-                    <h4 className="font-bold text-white mb-2 text-lg">7-Day Money-Back</h4>
-                    <p className="text-sm text-zinc-400 leading-relaxed">
-                        Not happy? Get a full refund within 7 days, no questions asked. We're that confident you'll love it.
-                    </p>
-                </div>
+          <div className="flex gap-5 items-start p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20 transition-all group">
+            <div className="p-3.5 bg-emerald-600 rounded-2xl group-hover:bg-emerald-500 transition-colors">
+              <ShieldCheck className="w-7 h-7 text-white" />
             </div>
-            <div className="flex gap-5 items-start p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20 transition-all group">
-                <div className="p-3.5 bg-amber-600 rounded-2xl group-hover:bg-amber-500 transition-colors">
-                    <Globe className="w-7 h-7 text-white" />
-                </div>
-                <div>
-                    <h4 className="font-bold text-white mb-2 text-lg">Commercial Rights</h4>
-                    <p className="text-sm text-zinc-400 leading-relaxed">
-                        Own everything you create. Sell on Etsy, use for clients, or license to others. No royalties ever.
-                    </p>
-                </div>
+            <div>
+              <h4 className="font-bold text-white mb-2 text-lg">7-Day Money-Back</h4>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                Not happy? Get a full refund within 7 days, no questions asked. We're that confident you'll love it.
+              </p>
             </div>
-            <div className="flex gap-5 items-start p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20 transition-all group">
-                <div className="p-3.5 bg-purple-600 rounded-2xl group-hover:bg-purple-500 transition-colors">
-                    <Zap className="w-7 h-7 text-white" />
-                </div>
-                <div>
-                    <h4 className="font-bold text-white mb-2 text-lg">Lightning Fast</h4>
-                    <p className="text-sm text-zinc-400 leading-relaxed">
-                        Generate images 3-10x faster than free tools. More creations = more earning potential.
-                    </p>
-                </div>
+          </div>
+          <div className="flex gap-5 items-start p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20 transition-all group">
+            <div className="p-3.5 bg-amber-600 rounded-2xl group-hover:bg-amber-500 transition-colors">
+              <Globe className="w-7 h-7 text-white" />
             </div>
+            <div>
+              <h4 className="font-bold text-white mb-2 text-lg">Commercial Rights</h4>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                Own everything you create. Sell on Etsy, use for clients, or license to others. No royalties ever.
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-5 items-start p-8 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 hover:border-white/20 transition-all group">
+            <div className="p-3.5 bg-purple-600 rounded-2xl group-hover:bg-purple-500 transition-colors">
+              <Zap className="w-7 h-7 text-white" />
+            </div>
+            <div>
+              <h4 className="font-bold text-white mb-2 text-lg">Lightning Fast</h4>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                Generate images 3-10x faster than free tools. More creations = more earning potential.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* --- FAQ Section --- */}
@@ -475,7 +490,7 @@ export default function PremiumPricing() {
                     {faq.question}
                   </span>
                   <div className={`p-1 rounded-full transition-colors ${activeAccordion === i ? 'bg-white text-black' : 'bg-white/10 text-zinc-400'}`}>
-                     {activeAccordion === i ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                    {activeAccordion === i ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                   </div>
                 </button>
                 <AnimatePresence>
@@ -499,15 +514,15 @@ export default function PremiumPricing() {
 
         {/* --- Trusted Footer --- */}
         <div className="mt-32 pt-16 border-t border-white/10 flex flex-col items-center">
-            <div className="flex gap-10 items-center opacity-30 hover:opacity-60 transition-opacity duration-500 grayscale">
-                <span className="font-black text-xl tracking-tighter text-white">STRIPE</span>
-                <span className="font-black text-xl tracking-tighter text-white">VISA</span>
-                <span className="font-black text-xl tracking-tighter text-white">MASTERCARD</span>
-                <span className="font-black text-xl tracking-tighter text-white">PAYPAL</span>
-            </div>
-            <p className="mt-8 text-[10px] text-zinc-600 uppercase tracking-widest font-bold flex items-center gap-2">
-               <Lock className="w-3 h-3" /> Encrypted Secure Checkout
-            </p>
+          <div className="flex gap-10 items-center opacity-30 hover:opacity-60 transition-opacity duration-500 grayscale">
+            <span className="font-black text-xl tracking-tighter text-white">STRIPE</span>
+            <span className="font-black text-xl tracking-tighter text-white">VISA</span>
+            <span className="font-black text-xl tracking-tighter text-white">MASTERCARD</span>
+            <span className="font-black text-xl tracking-tighter text-white">PAYPAL</span>
+          </div>
+          <p className="mt-8 text-[10px] text-zinc-600 uppercase tracking-widest font-bold flex items-center gap-2">
+            <Lock className="w-3 h-3" /> Encrypted Secure Checkout
+          </p>
         </div>
 
       </div>

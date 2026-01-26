@@ -103,21 +103,27 @@ export default async function RootLayout(props: {
 
   return (
     <html lang={locale} className={`${inter.variable} ${plusJakarta.variable} ${outfit.variable}`}>
+      <head>
+        {/* Google Tag Manager */}
+        <Script id="google-tag-manager" strategy="beforeInteractive">
+          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-N5NNBQQL');`}
+        </Script>
+      </head>
       <body className="font-sans bg-[#050505] text-white antialiased selection:bg-indigo-500/30">
-        <NextIntlClientProvider messages={messages}>
-          {/* Google Analytics */}
-          <Script
-            src="https://www.googletagmanager.com/gtag/js?id=G-9LHJ5181VL"
-            strategy="afterInteractive"
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe 
+            src="https://www.googletagmanager.com/ns.html?id=GTM-N5NNBQQL"
+            height="0" 
+            width="0" 
+            style={{display:'none',visibility:'hidden'}}
           />
-          <Script id="google-analytics" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-9LHJ5181VL');
-            `}
-          </Script>
+        </noscript>
+        <NextIntlClientProvider messages={messages}>
 
           {/* Microsoft Clarity */}
           <Script id="microsoft-clarity" strategy="lazyOnload">

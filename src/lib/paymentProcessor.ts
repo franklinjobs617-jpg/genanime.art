@@ -105,18 +105,21 @@ export class PaymentProcessor {
       googleUserId: user.googleUserId
     };
 
-    console.log('Sending request to:', `${process.env.NEXT_PUBLIC_API_BASE_URL}/paypal/createOrder`);
+    console.log('Sending request to:', '/api/paypal/createOrder');
     console.log('Request body:', JSON.stringify(requestBody));
+
+    const requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+    console.log('Request headers:', requestHeaders);
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/paypal/createOrder`,
+        '/api/paypal/createOrder',
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(requestBody),
         }
       );

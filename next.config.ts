@@ -20,6 +20,10 @@ const nextConfig: NextConfig = {
         source: "/stripePayment.html",
         destination: "/stripePayment",
       },
+      {
+        source: "/api/paypal/createOrder",
+        destination: "https://api.genanime.art/prod-api/paypal/createOrder",
+      },
     ];
   },
 };

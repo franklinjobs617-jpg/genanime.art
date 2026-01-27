@@ -158,8 +158,12 @@ export class PaymentProcessor {
       if (resData.code === 200) {
         let redirectUrl: string | undefined;
 
-        // 方法1：从 links 数组中找到支付链接（推荐）
-        if (resData.links && Array.isArray(resData.links)) {
+        // 优先从 data 字段获取跳转链接
+        if (resData.data && typeof resData.data === 'string') {
+          redirectUrl = resData.data;
+        }
+        // 备用方案：从 links 数组中找到支付链接
+        else if (resData.links && Array.isArray(resData.links)) {
           const approvalLink = resData.links.find(link =>
             link.rel === 'payer-action' ||
             link.rel === 'approve' ||
@@ -169,9 +173,8 @@ export class PaymentProcessor {
             redirectUrl = approvalLink.href;
           }
         }
-
-        // 方法2：如果 links 中没找到，尝试从 msg 字段获取
-        if (!redirectUrl && resData.msg) {
+        // 最后备用方案：从 msg 字段获取
+        else if (resData.msg && resData.msg !== 'ok') {
           redirectUrl = resData.msg;
         }
 

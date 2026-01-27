@@ -1,13 +1,12 @@
 import { Link } from "@/i18n/routing";
 import { Calendar, BookOpen, Sparkles } from "lucide-react";
 
-// 示例博客文章数据
 const blogPosts = [
   {
     id: 1,
     title: "Mastering Anime AI Without an RTX 8090",
     excerpt: "Stop waiting for next-gen GPUs. Learn how to generate top-tier anime art using professional workflows and cloud acceleration.",
-    date: "Jan 9, 2026",
+    date: "Jan 25, 2026",
     readTime: "15 min read",
     category: "AI Guide",
     slug: "/blog/how-to-make-anime-art-ai-rtx-8090-guide"
@@ -16,10 +15,19 @@ const blogPosts = [
     id: 2,
     title: "How to Reverse Engineer Anime Prompts from Images",
     excerpt: "Learn the techniques to extract high-quality prompts from existing anime images to recreate similar styles and compositions.",
-    date: "Jan 5, 2026",
+    date: "Jan 19, 2026",
     readTime: "12 min read",
     category: "Tutorial",
-    slug: "/how-to-reverse-image-to-prompt-anime-guide"
+    slug: "/image-to-prompt"
+  },
+  {
+    id: 4,
+    title: "AI Ad Backgrounds: Scaling Luxury Brand Assets",
+    excerpt: "How enterprise brands are using generative anime backgrounds to drive 2.4x higher conversion rates in digital advertising.",
+    date: "Jan 10, 2026",
+    readTime: "8 min read",
+    category: "Enterprise",
+    slug: "/ai-ad-background-anime"
   },
 ];
 
@@ -37,7 +45,7 @@ export default function BlogPage() {
             Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-400">Anime AI</span> Guides
           </h1>
           <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed">
-            Expert tips, tutorials, and insights on creating stunning anime art with AI technology. 
+            Expert tips, tutorials, and insights on creating stunning anime art with AI technology.
             Stay updated with the latest trends and techniques in anime generation.
           </p>
         </div>
@@ -45,9 +53,9 @@ export default function BlogPage() {
         {/* Blog Posts Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {blogPosts.map((post) => (
-            <Link 
-              href={post.slug} 
-              key={post.id} 
+            <Link
+              href={post.slug}
+              key={post.id}
               className="group bg-[#0A0A0C] border border-white/10 rounded-3xl overflow-hidden hover:border-white/20 transition-all duration-500 hover:-translate-y-2 h-full flex flex-col"
             >
               <div className="p-8 flex flex-col h-full">
@@ -62,15 +70,15 @@ export default function BlogPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 <h2 className="text-2xl font-black text-white mb-4 group-hover:text-indigo-300 transition-colors line-clamp-2">
                   {post.title}
                 </h2>
-                
+
                 <p className="text-zinc-400 mb-6 flex-grow line-clamp-3">
                   {post.excerpt}
                 </p>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-zinc-500 text-sm">
                     <BookOpen className="w-4 h-4" />

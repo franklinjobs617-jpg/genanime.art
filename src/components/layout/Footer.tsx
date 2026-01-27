@@ -34,10 +34,10 @@ export default function Footer() {
   // Custom links for Portuguese (BR)
   if (locale === 'pt') {
     footerLinks.resources = [
-        { name: "Guia IA Anime", href: "/como-fazer-anime-ia" },
-        { name: "Avatar Anime", href: "/foto-de-perfil-anime" },
-        { name: "Filtro Ghibli", href: "/filtro-ia-ghibli" },
-        { name: "Filtro Desenho", href: "/transformar-foto-em-desenho" },
+      { name: "Guia IA Anime", href: "/como-fazer-anime-ia" },
+      { name: "Avatar Anime", href: "/foto-de-perfil-anime" },
+      { name: "Filtro Ghibli", href: "/filtro-ia-ghibli" },
+      { name: "Filtro Desenho", href: "/transformar-foto-em-desenho" },
     ];
   }
 

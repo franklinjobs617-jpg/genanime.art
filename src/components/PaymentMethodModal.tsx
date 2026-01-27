@@ -5,10 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   X, 
   CreditCard, 
-  ArrowRight, 
   Loader2,
   Check,
-  Zap
+  Zap,
+  Shield,
+  Sparkles
 } from "lucide-react";
 import type { PaymentMethod, Plan } from "@/types/payment";
 
@@ -72,139 +73,156 @@ export default function PaymentMethodModal({
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
+          {/* Enhanced Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-md"
+            className="absolute inset-0 bg-black/40 backdrop-blur-xl"
           />
 
-          {/* Modal */}
+          {/* Modal Container */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ type: "spring", duration: 0.5 }}
-            className="relative w-full max-w-md bg-gradient-to-br from-zinc-900/95 to-zinc-800/95 backdrop-blur-2xl border border-white/20 rounded-3xl overflow-hidden shadow-2xl shadow-black/50"
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ type: "spring", duration: 0.5, bounce: 0.1 }}
+            className="relative w-full max-w-lg mx-auto"
           >
-            {/* Gradient overlay for extra visual appeal */}
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+            {/* Glow Effects */}
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 via-purple-500/10 to-pink-500/20 blur-3xl rounded-3xl" />
+            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/10 rounded-3xl" />
             
-            {/* Header */}
-            <div className="relative p-6 pb-4 border-b border-white/20 bg-white/5">
-              <button
-                onClick={handleClose}
-                disabled={isLoading}
-                className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-sm"
-              >
-                <X className="w-4 h-4 text-zinc-300 hover:text-white transition-colors" />
-              </button>
+            {/* Main Modal */}
+            <div className="relative bg-white/95 backdrop-blur-2xl border border-white/20 rounded-3xl overflow-hidden shadow-2xl shadow-black/20">
+              {/* Subtle gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 via-white/30 to-purple-50/50 pointer-events-none" />
+              
+              {/* Header */}
+              <div className="relative p-8 pb-6 border-b border-gray-200/50">
+                <button
+                  onClick={handleClose}
+                  disabled={isLoading}
+                  className="absolute top-6 right-6 p-2 rounded-full bg-gray-100/80 hover:bg-gray-200/80 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group"
+                >
+                  <X className="w-5 h-5 text-gray-600 group-hover:text-gray-800 transition-colors" />
+                </button>
 
-              <h2 className="text-xl font-bold text-white mb-2">Choose Payment Method</h2>
-              <p className="text-sm text-zinc-300">Select how you'd like to pay for your plan</p>
-            </div>
-
-            {/* Plan Summary */}
-            <div className="relative p-6 pb-4 bg-gradient-to-r from-white/10 to-white/5 border-b border-white/20">
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <h3 className="font-bold text-white text-lg">{selectedPlan?.name} Plan</h3>
-                  <p className="text-xs text-zinc-300 capitalize font-medium">{billingCycle} billing</p>
-                </div>
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-white">${price}</div>
-                  <div className="text-xs text-zinc-300">per month</div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg shadow-indigo-500/25">
+                    <Sparkles className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900">Complete Your Purchase</h2>
+                    <p className="text-sm text-gray-600 mt-1">Choose your preferred payment method</p>
+                  </div>
                 </div>
               </div>
 
-              {isYearly && savings > 0 && (
-                <div className="flex items-center gap-2 px-3 py-2 bg-emerald-500/20 border border-emerald-400/30 rounded-lg backdrop-blur-sm">
-                  <Check className="w-3 h-3 text-emerald-300" />
-                  <span className="text-xs text-emerald-200 font-medium">
-                    Save ${savings}/month with yearly billing
+              {/* Plan Summary */}
+              <div className="relative p-8 py-6 bg-gradient-to-r from-indigo-50/80 to-purple-50/80 border-b border-gray-200/50">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="font-bold text-gray-900 text-xl">{selectedPlan?.name} Plan</h3>
+                    <p className="text-sm text-gray-600 capitalize font-medium">{billingCycle} billing</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-3xl font-bold text-gray-900">${price}</div>
+                    <div className="text-sm text-gray-600">per month</div>
+                  </div>
+                </div>
+
+                {isYearly && savings > 0 && (
+                  <div className="flex items-center gap-2 px-4 py-3 bg-emerald-100/80 border border-emerald-200/50 rounded-xl mb-4">
+                    <Check className="w-4 h-4 text-emerald-600" />
+                    <span className="text-sm text-emerald-700 font-medium">
+                      Save ${savings}/month with yearly billing
+                    </span>
+                  </div>
+                )}
+
+                <div className="flex items-center gap-3 px-4 py-3 bg-white/60 rounded-xl border border-gray-200/50">
+                  <Zap className="w-5 h-5 text-amber-500 fill-amber-500" />
+                  <span className="text-sm text-gray-700 font-medium">
+                    {selectedPlan?.credits} credits monthly (~{Math.floor((selectedPlan?.credits || 0) / 2)} images)
                   </span>
                 </div>
-              )}
-
-              <div className="flex items-center gap-2 mt-3 px-3 py-2 bg-white/10 rounded-lg backdrop-blur-sm border border-white/20">
-                <Zap className="w-4 h-4 text-amber-400 fill-amber-400" />
-                <span className="text-sm text-zinc-200 font-medium">
-                  {selectedPlan?.credits} credits monthly (~{Math.floor((selectedPlan?.credits || 0) / 2)} images)
-                </span>
               </div>
-            </div>
 
-            {/* Payment Methods */}
-            <div className="relative p-6">
-              <div className="space-y-3 mb-6">
-                {paymentMethods.map((method) => (
-                  <button
-                    key={method.id}
-                    onClick={() => handleMethodSelect(method)}
-                    disabled={isLoading}
-                    className={`
-                      w-full p-4 rounded-xl border transition-all text-left group relative overflow-hidden
-                      ${selectedMethod?.id === method.id
-                        ? 'border-indigo-400/50 bg-gradient-to-r from-indigo-500/20 to-purple-500/10 shadow-lg shadow-indigo-500/20'
-                        : 'border-white/20 bg-white/10 hover:border-white/30 hover:bg-white/15 hover:shadow-lg'
-                      }
-                      ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02] active:scale-[0.98]'}
-                    `}
-                  >
-                    {/* Loading overlay for selected method */}
-                    {isLoading && selectedMethod?.id === method.id && (
-                      <div className="absolute inset-0 bg-black/30 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                        <div className="flex items-center gap-2 text-white">
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          <span className="text-sm font-medium">Processing...</span>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="flex items-center gap-4">
-                      <div className={`
-                        p-3 rounded-lg transition-colors backdrop-blur-sm
+              {/* Payment Methods */}
+              <div className="relative p-8">
+                <h4 className="text-lg font-semibold text-gray-900 mb-6">Payment Methods</h4>
+                
+                <div className="space-y-4 mb-8">
+                  {paymentMethods.map((method) => (
+                    <button
+                      key={method.id}
+                      onClick={() => handleMethodSelect(method)}
+                      disabled={isLoading}
+                      className={`
+                        w-full p-5 rounded-2xl border-2 transition-all duration-200 text-left group relative overflow-hidden
                         ${selectedMethod?.id === method.id
-                          ? 'bg-indigo-500/30 text-indigo-300 border border-indigo-400/30'
-                          : 'bg-white/15 text-zinc-300 group-hover:text-white group-hover:bg-white/20 border border-white/20'
+                          ? 'border-indigo-300 bg-gradient-to-r from-indigo-50 to-purple-50 shadow-lg shadow-indigo-500/10'
+                          : 'border-gray-200 bg-white/60 hover:border-indigo-200 hover:bg-gradient-to-r hover:from-indigo-50/50 hover:to-purple-50/50 hover:shadow-md'
                         }
-                      `}>
-                        {method.icon}
-                      </div>
-                      <div className="flex-1">
+                        ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02] active:scale-[0.98]'}
+                      `}
+                    >
+                      {/* Loading overlay for selected method */}
+                      {isLoading && selectedMethod?.id === method.id && (
+                        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+                          <div className="flex items-center gap-3 text-gray-700">
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            <span className="text-sm font-medium">Processing...</span>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="flex items-center gap-4">
                         <div className={`
-                          font-semibold transition-colors text-base
-                          ${selectedMethod?.id === method.id ? 'text-white' : 'text-zinc-200 group-hover:text-white'}
+                          p-4 rounded-xl transition-all duration-200
+                          ${selectedMethod?.id === method.id
+                            ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/25'
+                            : 'bg-gray-100 text-gray-600 group-hover:bg-gradient-to-br group-hover:from-indigo-500 group-hover:to-purple-600 group-hover:text-white'
+                          }
                         `}>
-                          {method.name}
+                          {method.icon}
                         </div>
-                        <div className="text-xs text-zinc-400 mt-0.5">
-                          {method.description}
+                        <div className="flex-1">
+                          <div className={`
+                            font-semibold transition-colors text-lg
+                            ${selectedMethod?.id === method.id ? 'text-gray-900' : 'text-gray-800 group-hover:text-gray-900'}
+                          `}>
+                            {method.name}
+                          </div>
+                          <div className="text-sm text-gray-600 mt-1">
+                            {method.description}
+                          </div>
+                        </div>
+                        <div className={`
+                          w-6 h-6 rounded-full border-2 transition-all duration-200 flex items-center justify-center
+                          ${selectedMethod?.id === method.id
+                            ? 'border-indigo-500 bg-indigo-500 shadow-lg shadow-indigo-500/25'
+                            : 'border-gray-300 group-hover:border-indigo-400'
+                          }
+                        `}>
+                          {selectedMethod?.id === method.id && (
+                            <Check className="w-4 h-4 text-white" />
+                          )}
                         </div>
                       </div>
-                      <div className={`
-                        w-5 h-5 rounded-full border-2 transition-colors flex items-center justify-center
-                        ${selectedMethod?.id === method.id
-                          ? 'border-indigo-400 bg-indigo-500 shadow-lg shadow-indigo-500/30'
-                          : 'border-zinc-500 group-hover:border-zinc-400'
-                        }
-                      `}>
-                        {selectedMethod?.id === method.id && (
-                          <Check className="w-3 h-3 text-white" />
-                        )}
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
+                    </button>
+                  ))}
+                </div>
 
-              {/* Security Notice */}
-              <div className="text-center">
-                <p className="text-xs text-zinc-400 bg-white/5 px-3 py-2 rounded-lg border border-white/10">
-                  🔒 Click to pay securely with your preferred method
-                </p>
+                {/* Security Notice */}
+                <div className="flex items-center justify-center gap-3 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200/50">
+                  <Shield className="w-5 h-5 text-green-600" />
+                  <p className="text-sm text-green-700 font-medium">
+                    Secure 256-bit SSL encrypted payment
+                  </p>
+                </div>
               </div>
             </div>
           </motion.div>

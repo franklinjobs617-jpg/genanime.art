@@ -1,14 +1,14 @@
 // Centralized payment processing logic
 
 import { PlanKeyMapper } from './planKeyMapper';
-import type { 
-  PaymentMethod, 
-  PaymentResult, 
-  Plan, 
+import type {
+  PaymentMethod,
+  PaymentResult,
+  Plan,
   PaymentError,
   StripePaymentRequest,
   PayPalPaymentRequest,
-  PaymentResponse 
+  PaymentResponse
 } from '@/types/payment';
 
 interface User {
@@ -30,7 +30,7 @@ export class PaymentProcessor {
       this.validatePaymentInputs(method, plan, user);
 
       const cycle = isYearly ? 'yearly' : 'monthly';
-      
+
       if (method.id === 'stripe') {
         return await this.processStripePayment(plan, cycle, user);
       } else if (method.id === 'paypal') {
@@ -56,7 +56,7 @@ export class PaymentProcessor {
     user: User
   ): Promise<PaymentResult> {
     const planKey = PlanKeyMapper.mapPlanKey(plan.key, 'stripe', cycle as 'monthly' | 'yearly');
-    
+
     const requestBody: StripePaymentRequest = {
       type: planKey,
       googleUserId: user.googleUserId
@@ -92,14 +92,14 @@ export class PaymentProcessor {
     user: User
   ): Promise<PaymentResult> {
     const planKey = PlanKeyMapper.mapPlanKey(plan.key, 'paypal', cycle as 'monthly' | 'yearly');
-    
+
     console.log('PayPal Payment Request:', {
       planKey,
       originalPlanKey: plan.key,
       cycle,
       userId: user.googleUserId
     });
-    
+
     const requestBody: PayPalPaymentRequest = {
       type: planKey,
       googleUserId: user.googleUserId
@@ -113,6 +113,10 @@ export class PaymentProcessor {
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/paypal/createOrder`,
         {
           method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
           body: JSON.stringify(requestBody),
         }
       );
@@ -122,7 +126,9 @@ export class PaymentProcessor {
       console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        console.error('HTTP error response:', errorText);
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
       }
 
       // 先获取响应文本，然后尝试解析 JSON
@@ -136,7 +142,7 @@ export class PaymentProcessor {
         console.error('JSON parse error:', parseError);
         throw new Error('Invalid JSON response from server');
       }
-      
+
       console.log('Parsed PayPal API Response:', {
         code: resData.code,
         msg: resData.msg,
@@ -151,9 +157,9 @@ export class PaymentProcessor {
 
         // 方法1：从 links 数组中找到支付链接（推荐）
         if (resData.links && Array.isArray(resData.links)) {
-          const approvalLink = resData.links.find(link => 
-            link.rel === 'payer-action' || 
-            link.rel === 'approve' || 
+          const approvalLink = resData.links.find(link =>
+            link.rel === 'payer-action' ||
+            link.rel === 'approve' ||
             link.href.includes('paypal.com/checkoutnow')
           );
           if (approvalLink) {
@@ -167,13 +173,13 @@ export class PaymentProcessor {
         }
 
         console.log('Final PayPal Redirect URL:', redirectUrl);
-        
+
         if (redirectUrl) {
           // 检查返回的 URL 是否是有效的 PayPal URL
           if (!redirectUrl.includes('paypal.com')) {
             console.warn('Warning: PayPal redirect URL does not appear to be a PayPal URL:', redirectUrl);
           }
-          
+
           return {
             success: true,
             redirectUrl: redirectUrl
@@ -230,7 +236,7 @@ export class PaymentProcessor {
     if (error?.type === 'AUTH_ERROR') {
       return 'Please sign in to continue with your purchase.';
     }
-    
+
     if (error?.type === 'VALIDATION_ERROR') {
       return 'Invalid plan selection. Please refresh and try again.';
     }

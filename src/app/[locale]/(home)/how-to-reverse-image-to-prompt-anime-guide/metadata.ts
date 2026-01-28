@@ -33,6 +33,17 @@ export async function generateMetadata({
         type: "article",
         locale: "es_ES",
         url: "https://genanime.art/es/how-to-reverse-image-to-prompt-anime-guide",
+        images: [
+          {
+            url: "https://genanime.art/how-to-reverse-image-to-prompt-flux-ai-anime-tutorial.webp",
+            width: 1200,
+            height: 630,
+            alt: "Guía Flux IA",
+          },
+        ],
+      },
+      other: {
+        'preload': '/how-to-reverse-image-to-prompt-flux-ai-anime-tutorial.webp',
       },
     };
   }
@@ -56,6 +67,17 @@ export async function generateMetadata({
       type: "article",
       locale: "en_US",
       url: "https://genanime.art/how-to-reverse-image-to-prompt-anime-guide",
+      images: [
+        {
+          url: "https://genanime.art/how-to-reverse-image-to-prompt-flux-ai-anime-tutorial.webp",
+          width: 1200,
+          height: 630,
+          alt: "Mastering Flux AI Anime Prompt Engineering Guide Hero Image",
+        },
+      ],
+    },
+    other: {
+      'preload': '/how-to-reverse-image-to-prompt-flux-ai-anime-tutorial.webp',
     },
   };
 }

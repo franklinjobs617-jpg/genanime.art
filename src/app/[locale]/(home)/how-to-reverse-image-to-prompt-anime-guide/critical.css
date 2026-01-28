@@ -1,0 +1,133 @@
+/* 关键 CSS - 内联到页面头部以改善 LCP */
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.bg-\[#020203\] {
+  background-color: #020203;
+}
+
+.text-zinc-300 {
+  color: rgb(212 212 216);
+}
+
+.relative {
+  position: relative;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.py-28 {
+  padding-top: 7rem;
+  padding-bottom: 7rem;
+}
+
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.top-0 {
+  top: 0px;
+}
+
+.left-1\/2 {
+  left: 50%;
+}
+
+.-translate-x-1\/2 {
+  transform: translateX(-50%);
+}
+
+.bg-purple-600\/10 {
+  background-color: rgb(147 51 234 / 0.1);
+}
+
+.blur-\[120px\] {
+  filter: blur(120px);
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.max-w-4xl {
+  max-width: 56rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-5xl {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.font-extrabold {
+  font-weight: 800;
+}
+
+.text-white {
+  color: rgb(255 255 255);
+}
+
+.leading-\[1\.1\] {
+  line-height: 1.1;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.tracking-tight {
+  letter-spacing: -0.025em;
+}
+
+@media (min-width: 768px) {
+  .md\:text-7xl {
+    font-size: 4.5rem;
+    line-height: 1;
+  }
+}
+
+/* 预加载动画 */
+@keyframes pulse {
+  50% {
+    opacity: .5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* 图片优化 */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 字体显示优化 */
+.font-display-swap {
+  font-display: swap;
+}

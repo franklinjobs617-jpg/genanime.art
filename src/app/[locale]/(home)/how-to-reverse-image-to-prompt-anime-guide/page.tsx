@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import {
   ArrowRight,
   Sparkles,
@@ -11,7 +11,20 @@ import {
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
 
-// --- 1. 元数据生成 (服务端逻辑，支持 SEO) ---
+// --- 辅助组件 (为了保证代码完整性添加) ---
+const LazySection = ({ children, fallback }: { children: React.ReactNode; fallback: React.ReactNode }) => (
+  <Suspense fallback={fallback}>{children}</Suspense>
+);
+
+const PreloadResources = ({ images }: { images: string[] }) => (
+  <div className="hidden">
+    {images.map((src) => (
+      <link key={src} rel="preload" href={src} as="image" />
+    ))}
+  </div>
+);
+
+// --- 1. 元数据生成 ---
 export async function generateMetadata({
   params,
 }: {
@@ -30,17 +43,16 @@ export async function generateMetadata({
   };
 }
 
-// --- 2. 页面主组件 (服务端组件) ---
+// --- 2. 页面主组件 ---
 export default async function AnimePromptEngineeringGuide({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  // 关键：await params 确保在切换语言时获取最新的 locale
   const { locale } = await params;
 
   // ----------------------------------------------------------------
-  // 1. 完整的英文内容 (English Content)
+  // 英语内容 (English Content)
   // ----------------------------------------------------------------
   const englishContent = (
     <>
@@ -136,8 +148,10 @@ export default async function AnimePromptEngineeringGuide({
               alt="Mastering Flux AI Anime Prompt Engineering Guide Hero Image"
               fill
               priority
-              sizes="(max-width: 768px) 100vw, 1200px"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              placeholder="blur"
+              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#020203] via-transparent to-transparent opacity-80" />
             <div className="absolute bottom-6 left-6 flex items-center gap-3">
@@ -154,36 +168,38 @@ export default async function AnimePromptEngineeringGuide({
           </div>
         </section>
 
-        <section className="mb-20 bg-gradient-to-br from-zinc-900 to-black p-10 rounded-[40px] border border-white/5">
-          <h2 className="text-3xl font-bold text-white mb-8">
-            Introducing GenAnime's Visual DNA Extraction
-          </h2>
-          <div className="grid md:grid-cols-2 gap-10">
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-purple-600/20 flex items-center justify-center">
-                <Terminal className="text-purple-400" />
+        <LazySection fallback={<div className="h-96 bg-zinc-900/30 rounded-3xl animate-pulse" />}>
+          <section className="mb-20 bg-gradient-to-br from-zinc-900 to-black p-10 rounded-[40px] border border-white/5">
+            <h2 className="text-3xl font-bold text-white mb-8">
+              Introducing GenAnime's Visual DNA Extraction
+            </h2>
+            <div className="grid md:grid-cols-2 gap-10">
+              <div className="space-y-4">
+                <div className="w-12 h-12 rounded-2xl bg-purple-600/20 flex items-center justify-center">
+                  <Terminal className="text-purple-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white">
+                  Technical Tagging
+                </h3>
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  Uses our custom-tuned WD-14 vision base to identify thousands of
+                  specific anime traits used by models like Stable Diffusion.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-white">
-                Technical Tagging
-              </h3>
-              <p className="text-zinc-400 text-sm leading-relaxed">
-                Uses our custom-tuned WD-14 vision base to identify thousands of
-                specific anime traits used by models like Stable Diffusion.
-              </p>
-            </div>
-            <div className="space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-blue-600/20 flex items-center justify-center">
-                <Zap className="text-blue-400" />
+              <div className="space-y-4">
+                <div className="w-12 h-12 rounded-2xl bg-blue-600/20 flex items-center justify-center">
+                  <Zap className="text-blue-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white">LLM Refinement</h3>
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  Our "Brain" layer organizes raw tags into a structured,
+                  professional prompt that mimics how expert artists describe
+                  scenes.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-white">LLM Refinement</h3>
-              <p className="text-zinc-400 text-sm leading-relaxed">
-                Our "Brain" layer organizes raw tags into a structured,
-                professional prompt that mimics how expert artists describe
-                scenes.
-              </p>
             </div>
-          </div>
-        </section>
+          </section>
+        </LazySection>
 
         <section className="mb-32">
           <h2 className="text-4xl font-bold text-white mb-16 text-center">
@@ -216,7 +232,11 @@ export default async function AnimePromptEngineeringGuide({
                     src="/find-anime-art-muse-inspiration-genanime.webp"
                     alt="Anime Muse"
                     fill
+                    sizes="(max-width: 768px) 100vw, 500px"
                     className="object-cover"
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                   />
                 </div>
               </div>
@@ -245,7 +265,11 @@ export default async function AnimePromptEngineeringGuide({
                     src="/extracting-ai-prompts-from-images-genanime-analysis.webp"
                     alt="AI Analysis"
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 60vw, 800px"
                     className="object-contain"
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                   />
                 </div>
               </div>
@@ -276,7 +300,11 @@ export default async function AnimePromptEngineeringGuide({
                     src="/refine-anime-ai-tags-interactive-editor-genanime.webp"
                     alt="Refine Tags"
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 66vw, 900px"
                     className="object-contain"
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                   />
                 </div>
               </div>
@@ -284,47 +312,51 @@ export default async function AnimePromptEngineeringGuide({
           </div>
         </section>
 
-        <section className="mb-20">
-          <h2 className="text-3xl font-bold text-white mb-10 text-center">
-            Pro Tip: The "Remix" Method
-          </h2>
-          <div className="bg-purple-900/10 border border-purple-500/20 rounded-3xl p-8">
-            <p className="text-zinc-300 mb-6">
-              Don't just copy. <strong>Remix.</strong> Upload an image of a
-              character you like, extract the prompt, but then replace the
-              "Subject" tags.
-            </p>
-            <div className="bg-black/40 rounded-xl p-6 font-mono text-sm border border-white/5">
-              <p className="text-purple-300">
-                masterpiece, best quality,{" "}
-                <span className="text-white underline decoration-blue-500">
-                  1boy, solo, white hoodie
-                </span>
-                , pink long hair, magical girl, frills, holding staff, cinematic
-                lighting, (genanime_style:1.2)
+        <LazySection fallback={<div className="h-64 bg-zinc-900/30 rounded-3xl animate-pulse mb-20" />}>
+          <section className="mb-20">
+            <h2 className="text-3xl font-bold text-white mb-10 text-center">
+              Pro Tip: The "Remix" Method
+            </h2>
+            <div className="bg-purple-900/10 border border-purple-500/20 rounded-3xl p-8">
+              <p className="text-zinc-300 mb-6">
+                Don't just copy. <strong>Remix.</strong> Upload an image of a
+                character you like, extract the prompt, but then replace the
+                "Subject" tags.
               </p>
+              <div className="bg-black/40 rounded-xl p-6 font-mono text-sm border border-white/5">
+                <p className="text-purple-300">
+                  masterpiece, best quality,{" "}
+                  <span className="text-white underline decoration-blue-500">
+                    1boy, solo, white hoodie
+                  </span>
+                  , pink long hair, magical girl, frills, holding staff, cinematic
+                  lighting, (genanime_style:1.2)
+                </p>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </LazySection>
 
-        <section className="mb-20 py-20 border-t border-white/5">
-          <h2 className="text-3xl font-bold text-white mb-12 text-center flex items-center justify-center gap-3">
-            <HelpCircle className="text-blue-500" /> FAQ: Stable Diffusion vs.
-            Flux
-          </h2>
-          <div className="grid gap-6">
-            <div className="bg-zinc-900/30 p-8 rounded-3xl border border-white/5">
-              <h4 className="text-white font-bold mb-3">
-                Q: Does this work for both models?
-              </h4>
-              <p className="text-zinc-400">
-                Absolutely. While Stable Diffusion prefers shorter tags, Flux
-                excels with descriptive sentences. Our tool provides a
-                structured list that works remarkably well for both.
-              </p>
+        <LazySection fallback={<div className="h-48 bg-zinc-900/30 rounded-3xl animate-pulse mb-20" />}>
+          <section className="mb-20 py-20 border-t border-white/5">
+            <h2 className="text-3xl font-bold text-white mb-12 text-center flex items-center justify-center gap-3">
+              <HelpCircle className="text-blue-500" /> FAQ: Stable Diffusion vs.
+              Flux
+            </h2>
+            <div className="grid gap-6">
+              <div className="bg-zinc-900/30 p-8 rounded-3xl border border-white/5">
+                <h4 className="text-white font-bold mb-3">
+                  Q: Does this work for both models?
+                </h4>
+                <p className="text-zinc-400">
+                  Absolutely. While Stable Diffusion prefers shorter tags, Flux
+                  excels with descriptive sentences. Our tool provides a
+                  structured list that works remarkably well for both.
+                </p>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </LazySection>
 
         <footer className="relative rounded-[50px] overflow-hidden bg-gradient-to-r from-purple-600 to-blue-700 p-12 text-center">
           <div className="relative z-10">
@@ -356,7 +388,7 @@ export default async function AnimePromptEngineeringGuide({
   );
 
   // ----------------------------------------------------------------
-  // 2. 完整的西班牙语内容 (Spanish Content)
+  // 西班牙语内容 (Spanish Content)
   // ----------------------------------------------------------------
   const spanishContent = (
     <>
@@ -440,14 +472,15 @@ export default async function AnimePromptEngineeringGuide({
             descubrir las frases descriptivas específicas que Flux desea.
           </p>
           <div className="group relative w-full aspect-[16/7] mb-12 overflow-hidden rounded-3xl border border-white/10 bg-zinc-950 transition-all duration-500 hover:border-purple-500/30 hover:shadow-[0_0_50px_rgba(168,85,247,0.15)]">
-            {/* 注意：此处 src 已更正为英文路径，确保显示图片 */}
             <Image
               src="/how-to-reverse-image-to-prompt-flux-ai-anime-tutorial.webp"
               alt="Guía Flux IA"
               fill
               priority
-              sizes="(max-width: 768px) 100vw, 1200px"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              placeholder="blur"
+              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#020203] via-transparent to-transparent opacity-80" />
           </div>
@@ -479,12 +512,15 @@ export default async function AnimePromptEngineeringGuide({
               </div>
               <div className="flex-1 w-full max-w-[500px]">
                 <div className="group relative aspect-square overflow-hidden rounded-[2rem] border border-white/10 bg-zinc-900 shadow-2xl transition-transform duration-500 hover:-translate-y-2">
-                  {/* 注意：此处 src 已更正为英文路径，确保显示图片 */}
                   <Image
                     src="/find-anime-art-muse-inspiration-genanime.webp"
                     alt="Inspiración"
                     fill
+                    sizes="(max-width: 768px) 100vw, 500px"
                     className="object-cover"
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                   />
                 </div>
               </div>
@@ -511,12 +547,15 @@ export default async function AnimePromptEngineeringGuide({
               </div>
               <div className="lg:flex-[1.5] w-full">
                 <div className="relative aspect-[16/9] overflow-hidden rounded-[1.8rem] bg-zinc-900 border border-white/10">
-                  {/* 注意：此处 src 已更正为英文路径，确保显示图片 */}
                   <Image
                     src="/extracting-ai-prompts-from-images-genanime-analysis.webp"
                     alt="Análisis"
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 60vw, 800px"
                     className="object-contain"
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                   />
                 </div>
               </div>
@@ -542,12 +581,15 @@ export default async function AnimePromptEngineeringGuide({
               </div>
               <div className="lg:flex-[2] w-full">
                 <div className="relative aspect-[16/8] overflow-hidden rounded-[1.8rem] bg-zinc-900 border border-white/10">
-                  {/* 注意：此处 src 已更正为英文路径，确保显示图片 */}
                   <Image
                     src="/refine-anime-ai-tags-interactive-editor-genanime.webp"
                     alt="Refinar Etiquetas"
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 66vw, 900px"
                     className="object-contain"
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                   />
                 </div>
               </div>
@@ -585,6 +627,14 @@ export default async function AnimePromptEngineeringGuide({
 
   return (
     <article className="min-h-screen bg-[#020203] text-zinc-300 selection:bg-purple-500/40 pb-20">
+      <PreloadResources
+        images={[
+          '/how-to-reverse-image-to-prompt-flux-ai-anime-tutorial.webp',
+          '/find-anime-art-muse-inspiration-genanime.webp',
+          '/extracting-ai-prompts-from-images-genanime-analysis.webp',
+          '/refine-anime-ai-tags-interactive-editor-genanime.webp'
+        ]}
+      />
       {locale === "es" ? spanishContent : englishContent}
     </article>
   );

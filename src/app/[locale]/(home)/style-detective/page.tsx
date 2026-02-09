@@ -1,3 +1,4 @@
+'use client'
 import React, { useState, useCallback } from "react";
 import {
   ArrowRight,
@@ -281,7 +282,7 @@ export default async function StyleDetectivePage({ params }: { params: Promise<{
             <div className="w-20 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto"></div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {t.steps.list.map((step, index) => {
+            {t.steps.list.map((step:any, index:any) => {
               const IconComponent = step.icon;
               return (
                 <motion.div

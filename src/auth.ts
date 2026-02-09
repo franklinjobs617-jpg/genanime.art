@@ -38,32 +38,39 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           const email = user.email;
           if (!email) return false;
 
-          // 使用 upsert 原子操作
-          await prisma.user.upsert({
-            where: {
-              email_type: {
-                email: email,
-                type: CURRENT_SITE_TYPE
-              }
-            },
-            update: {
-              accessToken: account.access_token,
-              picture: user.image,
-              name: user.name,
-            },
-            create: {
-              email: email,
-              type: CURRENT_SITE_TYPE,
-              googleUserId: crypto.randomUUID(),
-              name: user.name,
-              givenName: (profile as any)?.given_name,
-              familyName: (profile as any)?.family_name,
-              picture: user.image,
-              accessToken: account.access_token,
-              credits: "5",
-              ip: "0.0.0.0"
-            },
+          // 先查找是否存在该邮箱的用户
+          const existingUser = await prisma.user.findUnique({
+            where: { email: email }
           });
+
+          if (existingUser) {
+            // 如果用户存在，更新信息
+            await prisma.user.update({
+              where: { email: email },
+              data: {
+                accessToken: account.access_token,
+                picture: user.image,
+                name: user.name,
+                type: CURRENT_SITE_TYPE, // 更新站点类型
+              }
+            });
+          } else {
+            // 如果用户不存在，创建新用户
+            await prisma.user.create({
+              data: {
+                email: email,
+                type: CURRENT_SITE_TYPE,
+                googleUserId: crypto.randomUUID(),
+                name: user.name,
+                givenName: (profile as any)?.given_name,
+                familyName: (profile as any)?.family_name,
+                picture: user.image,
+                accessToken: account.access_token,
+                credits: "5",
+                ip: "0.0.0.0"
+              }
+            });
+          }
 
           return true;
         } catch (error) {
@@ -81,15 +88,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (token.email) {
           try {
             const dbUser: any = await prisma.user.findUnique({
-              where: {
-                email_type: {
-                  email: token.email,
-                  type: CURRENT_SITE_TYPE
-                }
-              }
+              where: { email: token.email }
             });
 
-            if (dbUser) {
+            // 检查用户是否属于当前站点类型
+            if (dbUser && dbUser.type === CURRENT_SITE_TYPE) {
               token.dbId = dbUser.id; // 数字 ID (464)
               token.googleUserId = dbUser.googleUserId;
               token.credits = dbUser.credits;

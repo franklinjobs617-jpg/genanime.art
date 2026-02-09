@@ -88,6 +88,9 @@ export async function generateMetadata(props: {
         'max-snippet': -1,
       },
     },
+    other: {
+      'google-adsense-account': 'ca-pub-3383070348689557',
+    },
   };
 }
 
@@ -104,6 +107,9 @@ export default async function RootLayout(props: {
   return (
     <html lang={locale} className={`${inter.variable} ${plusJakarta.variable} ${outfit.variable}`}>
       <head>
+        {/* Google AdSense Meta Tag */}
+        <meta name="google-adsense-account" content="ca-pub-3383070348689557" />
+        
         {/* Google Tag Manager */}
         <Script id="google-tag-manager" strategy="beforeInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -112,6 +118,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-N5NNBQQL');`}
         </Script>
+
+        {/* Google AdSense */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3383070348689557"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
       </head>
       <body className="font-sans bg-[#050505] text-white antialiased selection:bg-indigo-500/30">
         {/* Google Tag Manager (noscript) */}

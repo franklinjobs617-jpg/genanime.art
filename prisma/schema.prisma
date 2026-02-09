@@ -9,24 +9,39 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model user {
-  id            Int      @id @default(autoincrement())
-   googleUserId   String?   @unique @map("google_user_id") 
-  email         String?
-  name          String?
-  givenName     String?  @map("given_name")
-  familyName    String?  @map("family_name")
-  picture       String?
-  credits       String   @default("5")
-  accessToken   String?  @db.Text @map("access_token")
-  ip            String?  @default("0.0.0.0")
-  type          String   @default("1") // 对应网站类型：1.removermarca 2.genanime 等
-  lastDailyReward DateTime? @map("last_daily_reward") // 最后一次领取每日奖励的时间
-  currentStreak   Int?     @default(0) @map("current_streak") // 当前连续签到天数
-  createTime    DateTime @default(now()) @map("create_time")
-  updateTime    DateTime @updatedAt @map("update_time")
+model User {
+  id              Int      @id @default(autoincrement())
+  googleUserId    String?  @unique @map("google_user_id") 
+  email           String?  @unique
+  name            String?
+  givenName       String?  @map("given_name")
+  familyName      String?  @map("family_name")
+  picture         String?
+  credits         String   @default("5")  // 初始积分
+  accessToken     String?  @db.Text @map("access_token")
+  ip              String?  @default("0.0.0.0")
+  type            String   @default("1") // 网站类型标识
+  lastDailyReward DateTime? @map("last_daily_reward") // 最后签到时间
+  currentStreak   Int?     @default(0) @map("current_streak") // 连续签到天数
+  createTime      DateTime @default(now()) @map("create_time")
+  updateTime      DateTime @updatedAt @map("update_time")
 
-  // 【关键】联合唯一索引：保证同一个 email + type 组合只有一条记录
-   @@unique([email, type], name: "email_type") 
-  @@map("google_user")
+  // 交易记录
+  transactions    Transaction[]
+
+  @@map("users")
+}
+
+// 积分交易记录表
+model Transaction {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  type        String   // "deduct" | "add" | "purchase" | "daily_reward"
+  amount      Int      // 积分数量
+  description String?  // 交易描述
+  metadata    Json?    // 额外信息 (如订单ID等)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("transactions")
 }

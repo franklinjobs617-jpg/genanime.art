@@ -7,7 +7,6 @@ import {
     Download, Heart, Globe, Cpu, Zap, Info, Lightbulb,
     Target, BarChart3, Smartphone, Camera, Wand2,
     Crown, ExternalLink, ImageIcon
-
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@/i18n/routing";
@@ -45,7 +44,6 @@ const backgroundStyles = [
         title: "Cyberpunk Cityscapes",
         desc: "A sprawling cyberpunk city at night, illuminated by vibrant neon signs and holographic ads, with flying vehicles creating light trails between towering skyscrapers.",
         features: ["Neon lighting", "Urban depth", "Futuristic UI elements"],
-        // Placeholder for user image
         placeholderId: "style-cyberpunk",
         href: "/ai-ad/cyberpunk-cityscape-neon-lights-futuristic-ui.webp"
     },
@@ -53,7 +51,6 @@ const backgroundStyles = [
         title: "Ethereal Fantasy",
         desc: "A magical fantasy landscape featuring majestic islands floating in a soft, pastel-colored sky, with mystical light particles drifting in the air.",
         features: ["Soft lighting", "Floating islands", "Mystical particles"],
-        // Placeholder for user image
         placeholderId: "style-fantasy",
         href: "/ai-ad/ethereal-fantasy-landscape-floating-islands-soft-light.webp"
     },
@@ -61,7 +58,6 @@ const backgroundStyles = [
         title: "Modern Slice of Life",
         desc: "A clean and minimalist modern interior bathed in bright daylight from large windows, showcasing clean lines and a relatable, serene living space.",
         features: ["Bright daylight", "Modern architecture", "Clean lines"],
-        // Placeholder for user image
         placeholderId: "style-modern",
         href: "/ai-ad/modern-slice-of-life-clean-architecture-bright-daylight.webp"
     }
@@ -112,7 +108,7 @@ export default function AIAdBackgroundAnimePage() {
 
                         <div className="flex flex-col sm:flex-row items-center gap-4">
                             <Link
-                                href="/pricing"
+                                href="/generator"
                                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-indigo-500 transition-all shadow-lg hover:shadow-indigo-500/25 hover:scale-105"
                             >
                                 Start Creating

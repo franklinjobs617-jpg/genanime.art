@@ -11,6 +11,7 @@ export default function Footer() {
   const footerLinks = {
     product: [
       { name: t('generator'), href: "/generator" },
+      { name: "Anime Name Generator", href: "/anime-name-generator" },
       { name: t('voiceChanger'), href: "/tools/anime-voice-changer" },
       { name: t('gallery'), href: "/gallery" },
       { name: t('promptLibrary'), href: "/prompt-library" },

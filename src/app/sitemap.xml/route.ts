@@ -14,6 +14,7 @@ const siteMapData = {
   translatedPages: [
     { url: "", changefreq: "daily", priority: 1.0 },
     { url: "/generator", changefreq: "daily", priority: 1.0 },
+    { url: "/anime-name-generator", changefreq: "daily", priority: 1.0 },
     { url: "/gallery", changefreq: "daily", priority: 0.9 },
     { url: "/pricing", changefreq: "daily", priority: 0.9 },
     { url: "/prompt-library", changefreq: "daily", priority: 0.8 },

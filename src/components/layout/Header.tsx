@@ -62,6 +62,7 @@ export default function Header() {
     { name: t("home"), href: "/" },
     { name: t("gallery"), href: "/gallery" },
     { name: t("generator"), href: "/generator" },
+    { name: "Anime Name Generator", href: "/anime-name-generator" },
   ];
 
   if (locale === 'pt') {

@@ -94,7 +94,7 @@ const UNISEX_NAMES: NameEntry[] = [
 // ==========================================
 // 5. Style Modifiers
 // ==========================================
-const STYLE_MODIFIERS = {
+const STYLE_MODIFIERS: Record<string, StyleModifier> = {
   traditional: {
     preferredTags: ["traditional", "virtue", "honor", "family", "common"],
     excludedTags: ["sci-fi", "cyber", "digital"],
@@ -115,7 +115,7 @@ const STYLE_MODIFIERS = {
     excludedTags: ["traditional", "ancient", "mythical"],
     frequencyBoost: 2
   }
-} as const;
+};
 
 export const NAME_DATABASE: NameDatabase = {
   surnames: SURNAMES,

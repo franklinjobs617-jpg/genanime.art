@@ -287,7 +287,7 @@ export function generateBalancedNames(settings: GenerationSettings): GeneratedNa
         return generateAnimeNames(settings);
     }
 
-    const styles = ['traditional', 'modern', 'fantasy', 'sci-fi'];
+    const styles: Array<'traditional' | 'modern' | 'fantasy' | 'sci-fi'> = ['traditional', 'modern', 'fantasy', 'sci-fi'];
     const names: GeneratedName[] = [];
     const namesPerStyle = Math.floor(settings.quantity / styles.length);
     const remainder = settings.quantity % styles.length;

@@ -74,6 +74,7 @@ export default function Header() {
     );
   } else {
     navLinks.push(
+      { name: "Character Generator", href: "/random-anime-character-generator" },
       { name: t("voiceChanger"), href: "/tools/anime-voice-changer" },
       { name: t("pricing"), href: "/pricing" },
       { name: t("blog"), href: "/blog" },

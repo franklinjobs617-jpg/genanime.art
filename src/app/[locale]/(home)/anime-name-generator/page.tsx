@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Generate authentic anime character names with meanings and cultural context. Free anime name generator with male, female, and unisex options across traditional, modern, fantasy, and sci-fi styles. Perfect for stories, games, and creative projects.",
   keywords: [
     "anime name generator",
-    "anime character name generator", 
+    "anime character name generator",
     "random anime name generator",
     "japanese name generator",
     "anime names generator",
@@ -70,10 +70,6 @@ export const metadata: Metadata = {
   authors: [{ name: "GenAnime.art Team" }],
   category: "Entertainment",
   classification: "Free Anime Name Generator Tool",
-  other: {
-    "google-site-verification": "your-google-verification-code",
-    "msvalidate.01": "your-bing-verification-code"
-  }
 };
 
 export default function AnimeNameGeneratorPage() {
@@ -109,13 +105,6 @@ export default function AnimeNameGeneratorPage() {
       "url": "https://genanime.art"
     },
     "keywords": "anime name generator, japanese names, character names, manga names, anime character creator, japanese name meanings",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "ratingCount": "1250",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
     "featureList": [
       "Generate authentic Japanese anime names",
       "Male, female, and unisex name options",
@@ -222,7 +211,43 @@ export default function AnimeNameGeneratorPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      
+
+      {/* Static SEO content - crawlable by Google, visually hidden */}
+      <section className="sr-only" aria-hidden="false">
+        <h1>Anime Name Generator - Free Japanese Character Names with Meanings</h1>
+        <p>
+          Generate authentic anime character names with kanji, romanized readings, and cultural meanings.
+          Choose your character type — Hero, Warrior, Mage, Villain, Idol, or Mysterious — and get
+          Japanese names that match your character concept instantly. Free to use for stories, games, manga, and creative projects.
+        </p>
+        <h2>Random Anime Character Generator by Type</h2>
+        <ul>
+          <li><strong>Hero</strong> – Modern Japanese names for brave protagonists and main characters in shonen and adventure anime.</li>
+          <li><strong>Warrior</strong> – Traditional Japanese names with strength and honor meanings, ideal for samurai and fighter characters.</li>
+          <li><strong>Mage</strong> – Fantasy-inspired names with mystical and elemental meanings, perfect for wizards and magic users.</li>
+          <li><strong>Villain</strong> – Dark and powerful names suited for antagonists and anti-heroes in any anime genre.</li>
+          <li><strong>Idol</strong> – Bright, contemporary Japanese names for performers, idols, and slice-of-life characters.</li>
+          <li><strong>Mysterious</strong> – Enigmatic names with layered meanings for complex or unknown characters.</li>
+        </ul>
+        <h2>Generate Anime Character Art from Any Name</h2>
+        <p>
+          Unlike other anime name generators, every name includes a one-click button to generate
+          AI character art. Turn your character name into a full visual character using our
+          AI anime art generator — no other tool offers this.
+        </p>
+        <h2>Frequently Asked Questions</h2>
+        <dl>
+          <dt>Are the generated anime names authentic?</dt>
+          <dd>Yes. All names use real Japanese kanji with proper romanized readings and cultural meanings.</dd>
+          <dt>What is a random anime character generator?</dt>
+          <dd>A tool that instantly creates unique Japanese character names. Our generator goes further by letting you generate character art from any name with one click.</dd>
+          <dt>Can I use these names commercially?</dt>
+          <dd>Yes. All generated names are free to use for any purpose including games, stories, manga, and anime.</dd>
+          <dt>How many names can I generate at once?</dt>
+          <dd>Up to 20 names per batch. The default is 6 for the best variety and selection.</dd>
+        </dl>
+      </section>
+
       {/* Main Content */}
       <main role="main" aria-label="Anime Name Generator">
         <StorageErrorBoundary>

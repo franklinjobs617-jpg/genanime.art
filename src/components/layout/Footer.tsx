@@ -12,6 +12,7 @@ export default function Footer() {
     product: [
       { name: t('generator'), href: "/generator" },
       { name: "Anime Name Generator", href: "/anime-name-generator" },
+      { name: "Character Generator", href: "/random-anime-character-generator" },
       { name: t('voiceChanger'), href: "/tools/anime-voice-changer" },
       { name: t('gallery'), href: "/gallery" },
       { name: t('promptLibrary'), href: "/prompt-library" },

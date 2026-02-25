@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { type NextRequest, NextResponse } from "next/server";
 import { addWatermark } from "@/lib/watermark";
 import OpenAI from "openai";

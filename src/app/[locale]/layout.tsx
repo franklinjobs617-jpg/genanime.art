@@ -36,6 +36,14 @@ export async function generateMetadata(props: {
   const params = await props.params;
   const { locale } = params;
   const t = await getTranslations({ locale, namespace: 'Metadata' });
+  const languageAlternates = {
+    en: '/',
+    id: '/id',
+    de: '/de',
+    es: '/es',
+    ru: '/ru',
+    pt: '/pt',
+  };
 
   return {
     metadataBase: new URL('https://genanime.art'),
@@ -46,19 +54,12 @@ export async function generateMetadata(props: {
     description: t('description'),
     keywords: t.raw('keywords'),
     alternates: {
-      canonical: `/${locale === 'en' ? '' : locale}`,
-      languages: {
-        'en': '/',
-        'id': '/id',
-        'de': '/de',
-        'es': '/es'
-      },
+      languages: languageAlternates,
     },
     openGraph: {
       type: 'website',
       locale: locale === 'en' ? 'en_US' : locale === 'id' ? 'id_ID' : locale === 'de' ? 'de_DE' : locale === 'es' ? 'es_ES' : 'ru_RU',
-      url: 'https://genanime.art/',
-      siteName: 'AnimeAI - AI Anime Generator',
+      siteName: 'GenAnime - AI Anime Generator',
       title: t('title'),
       description: t('description'),
       images: [
@@ -66,7 +67,7 @@ export async function generateMetadata(props: {
           url: 'https://genanime.art/images/prompts/anime_waifu_16.webp',
           width: 1200,
           height: 630,
-          alt: 'AnimeAI - AI Anime Art Generator',
+          alt: 'GenAnime - AI Anime Art Generator',
         }
       ],
     },
@@ -162,15 +163,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 "name": st('websiteName'),
                 "alternateName": st('alternateName'),
                 "url": "https://genanime.art",
-                "description": st('description'),
-                "potentialAction": {
-                  "@type": "SearchAction",
-                  "target": {
-                    "@type": "EntryPoint",
-                    "urlTemplate": "https://genanime.art/search?q={search_term_string}"
-                  },
-                  "query-input": "required name=search_term_string"
-                }
+                "description": st('description')
               })
             }}
           />
@@ -218,13 +211,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                   "price": "0",
                   "priceCurrency": "USD",
                   "description": "Free tier available"
-                },
-                "aggregateRating": {
-                  "@type": "AggregateRating",
-                  "ratingValue": "4.8",
-                  "ratingCount": "15420",
-                  "bestRating": "5",
-                  "worstRating": "1"
                 }
               })
             }}

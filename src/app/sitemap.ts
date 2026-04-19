@@ -43,6 +43,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...buildEntry("/anime-name-generator", { priority: 0.9, changeFrequency: "weekly" }),
     ...buildEntry("/random-anime-character-generator", { priority: 0.9, changeFrequency: "weekly" }),
     ...buildEntry("/prompt-library", { priority: 0.85, changeFrequency: "weekly" }),
+    ...buildEntry("/seedance", { priority: 0.86, changeFrequency: "weekly" }),
+    ...buildEntry("/seedance-anime-prompts", { priority: 0.84, changeFrequency: "weekly" }),
+    ...buildEntry("/anime-image-to-video", { priority: 0.88, changeFrequency: "weekly" }),
 
     // Tools
     ...buildEntry("/tools/anime-voice-changer", { priority: 0.75, changeFrequency: "monthly" }),

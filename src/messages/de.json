@@ -265,16 +265,16 @@
                 "label": "Jetzt verfügbar"
             },
             {
-                "title": "KI-Anime-Videogenerator",
-                "description": "Demnächst: Erstellen Sie professionelle Anime-Openings und dynamische Bewegungsclips direkt aus Ihren Text-Prompts.",
-                "label": "Demnächst",
-                "button": "Benachrichtigung erhalten"
+                "title": "KI-Anime-Video-Workflow (Beta)",
+                "description": "Beta-Warteliste: Wir testen Anime-Bild-zu-Video-Workflows derzeit mit ausgewählten Nutzerinnen und Nutzern. Treten Sie der Warteliste für Early Access in unterstützten Regionen bei.",
+                "label": "Beta-Warteliste",
+                "button": "Zur Beta anmelden"
             }
         ],
         "seoTitle": "Führend in der",
         "seoHighlight": "KI-Anime-Revolution",
         "seoParagraph1": "Unsere Plattform ist der vielseitigste KI-Anime-Kunstgenerator. Wir spezialisieren uns auf hochauflösende Bilderstellung, von KI-generierten animierten Sprite-Bögen bis hin zu professionellen Charakterdesigns. Ob Sie eine KI-generierte Anime-Geschäftsfrau in voller Länge oder ein individuelles Maskottchen benötigen – wir haben Sie abgedeckt.",
-        "seoParagraph2": "Die Zukunft ist Bewegung. Wir entwickeln aktiv unser KI-Videogenerator-Modul für Anime-Openings. Bald können Sie Ihre statischen KI-generierten Anime-Kreationen in kinoreife Sequenzen verwandeln. Treten Sie unserer Warteliste bei, um als Erster die Kraft der KI-Animationsgenerator-Technologie zu erleben."
+        "seoParagraph2": "Motion-Workflows sind aktuell in einer kontrollierten Beta. Wir testen <strong>KI-Videogenerator für Anime-Openings</strong> zuerst mit Wartelisten-Nutzern und rollen danach regional aus. Wenn Sie Bild-zu-Video für <strong>KI-generierte Anime-Inhalte</strong> benötigen, treten Sie der Warteliste bei."
     },
     "Generator": {
         "mode": "Generierungsmodus",

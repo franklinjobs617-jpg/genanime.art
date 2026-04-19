@@ -1,5 +1,5 @@
 import { Link } from "@/i18n/routing";
-import { Github, Twitter, MessageSquare, Sparkles, Send } from "lucide-react";
+import { Github, Twitter, MessageSquare } from "lucide-react";
 
 import { useTranslations, useLocale } from 'next-intl';
 
@@ -22,6 +22,8 @@ export default function Footer() {
       { name: t('blog'), href: "/blog" },
       { name: t('aiGuide'), href: "/blog/how-to-make-anime-art-ai-rtx-8090-guide" },
       { name: t('howToExtract'), href: "/how-to-reverse-image-to-prompt-anime-guide" },
+      { name: "Seedance Hub", href: "/seedance" },
+      { name: "Anime Image to Video", href: "/anime-image-to-video" },
     ],
     support: [
       { name: t('contact'), href: "/contact" },
@@ -54,7 +56,7 @@ export default function Footer() {
               Anime<span className="text-indigo-500 font-black not-italic">AI</span>
             </Link>
             <p className="text-sm leading-relaxed max-w-sm text-zinc-500 font-medium">
-              The world's most advanced AI anime art generator. Create stunning high-fidelity illustrations, characters, and wallpapers in seconds using state-of-the-art cloud H100 clusters.
+              A world-class AI anime art generator. Create stunning high-fidelity illustrations, characters, and wallpapers in seconds using state-of-the-art cloud H100 clusters.
             </p>
             <div className="flex items-center gap-4">
               <SocialLink href="#" icon={<Twitter className="w-4 h-4" />} />

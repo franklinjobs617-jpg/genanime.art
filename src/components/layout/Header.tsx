@@ -12,22 +12,21 @@ import {
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useTheme } from "@/context/ThemeContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 
 export default function Header() {
   const { user, isLoading, login, logout } = useAuth();
-  const { theme } = useTheme();
   const t = useTranslations("Navigation");
-  const locale = useLocale();
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isSeedanceOpen, setIsSeedanceOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const seedanceRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -53,48 +52,48 @@ export default function Header() {
       ) {
         setIsDropdownOpen(false);
       }
+      if (
+        seedanceRef.current &&
+        !seedanceRef.current.contains(event.target as Node)
+      ) {
+        setIsSeedanceOpen(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const navLinks = [
+  const mainLinks = [
     { name: t("home"), href: "/" },
-    { name: t("gallery"), href: "/gallery" },
     { name: t("generator"), href: "/generator" },
-    { name: "Anime Name Generator", href: "/anime-name-generator" },
+    { name: t("gallery"), href: "/gallery" },
+    { name: t("pricing"), href: "/pricing" },
   ];
 
-  if (locale === 'pt') {
-    navLinks.push(
-      { name: "Avatar", href: "/foto-de-perfil-anime" },
-      { name: "Ghibli", href: "/filtro-ia-ghibli" },
-      { name: "Desenho", href: "/transformar-foto-em-desenho" },
-      { name: "Guia", href: "/como-fazer-anime-ia" }
-    );
-  } else {
-    navLinks.push(
-      { name: "Character Generator", href: "/random-anime-character-generator" },
-      { name: t("voiceChanger"), href: "/tools/anime-voice-changer" },
-      { name: t("pricing"), href: "/pricing" },
-      { name: t("blog"), href: "/blog" },
-      { name: t("promptLibrary"), href: "/prompt-library" },
-    );
-  }
+  const seedanceLinks = [
+    { name: "Seedance Hub", href: "/seedance" },
+    { name: "Seedance Prompts", href: "/seedance-anime-prompts" },
+    { name: "Anime Image to Video", href: "/anime-image-to-video" },
+  ];
+
+  const mobileHeaderClasses = isMobileMenuOpen
+    ? "bg-[#050505] border-b border-white/10"
+    : "bg-[#050505]/92 backdrop-blur-xl border-b border-white/10";
+
+  const desktopHeaderClasses =
+    isScrolled || isMobileMenuOpen
+      ? "lg:bg-[#050505]/90 lg:backdrop-blur-xl lg:py-3 lg:shadow-lg lg:shadow-black/50"
+      : "lg:bg-transparent lg:py-5";
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-300 ease-in-out ${
-        isScrolled || isMobileMenuOpen
-          ? "bg-[#050505]/90 backdrop-blur-xl py-3 shadow-lg shadow-black/50"
-          : "bg-transparent py-5"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-[120] h-16 lg:h-auto py-0 transition-all duration-300 ease-in-out ${mobileHeaderClasses} ${desktopHeaderClasses}`}
     >
-      <div className="container mx-auto px-6 flex items-center justify-between">
+      <div className="container mx-auto h-full lg:h-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 text-xl font-bold text-white tracking-tight group relative z-[70]"
+          className="flex items-center gap-2 text-lg sm:text-xl font-bold text-white tracking-tight group relative z-[130]"
           onClick={() => setIsMobileMenuOpen(false)}
         >
           <span className="group-hover:opacity-80 transition-opacity">
@@ -102,23 +101,63 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-8">
-          {navLinks.map((link) => (
+        <nav className="hidden lg:flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-full px-3 py-1.5 backdrop-blur-xl">
+          {mainLinks.map((link) => (
             <Link
-              key={link.name}
+              key={link.href}
               href={link.href}
               className={`text-sm font-semibold transition-colors ${
                 isScrolled
-                  ? "text-zinc-400 hover:text-white"
-                  : "text-white/80 hover:text-white"
+                  ? "text-zinc-300 hover:text-white"
+                  : "text-white/85 hover:text-white"
               }`}
+              onClick={() => setIsSeedanceOpen(false)}
             >
-              {link.name}
+              <span className="px-3 py-2 rounded-full hover:bg-white/10 transition-colors inline-flex">
+                {link.name}
+              </span>
             </Link>
           ))}
+
+          <div className="relative" ref={seedanceRef}>
+            <button
+              type="button"
+              onClick={() => setIsSeedanceOpen((prev) => !prev)}
+              className="text-sm font-semibold text-white"
+            >
+              <span className="px-3.5 py-2 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-200 hover:bg-indigo-500/30 transition-colors inline-flex items-center gap-1.5">
+                Seedance
+                <ChevronDown
+                  className={`w-3.5 h-3.5 transition-transform ${isSeedanceOpen ? "rotate-180" : ""}`}
+                />
+              </span>
+            </button>
+
+            <AnimatePresence>
+              {isSeedanceOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                  className="absolute top-full right-0 mt-2 w-64 bg-[#101012] border border-zinc-800 rounded-2xl shadow-2xl p-2 z-[90]"
+                >
+                  {seedanceLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="block px-3 py-2.5 rounded-xl text-sm font-medium text-zinc-300 hover:text-white hover:bg-white/5 transition-colors"
+                      onClick={() => setIsSeedanceOpen(false)}
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </nav>
 
-        <div className="flex items-center gap-3 lg:gap-6 relative z-[70]">
+        <div className="flex items-center gap-3 lg:gap-6 relative z-[130]">
           <div className="hidden lg:flex items-center gap-4">
             <LanguageSwitcher />
             {isLoading ? (
@@ -202,17 +241,17 @@ export default function Header() {
             )}
           </div>
 
-          {/* Mobile Actions - 按钮始终在最上层 */}
+          {/* Mobile Actions */}
           <div className="lg:hidden flex items-center gap-3">
             <button
-              className="text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
+              className="text-white p-2 hover:bg-white/10 rounded-xl transition-colors border border-white/10 bg-white/5"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle Menu"
             >
               {isMobileMenuOpen ? (
-                <X className="w-7 h-7 text-indigo-400" />
+                <X className="w-6 h-6 text-indigo-300" />
               ) : (
-                <Menu className="w-7 h-7" />
+                <Menu className="w-6 h-6" />
               )}
             </button>
           </div>
@@ -223,39 +262,58 @@ export default function Header() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, x: "100%" }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 bg-[#050505] z-[55] flex flex-col p-6 pt-28 h-[100dvh]"
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            className="absolute left-0 right-0 top-full h-[calc(100dvh-4rem)] z-[110] lg:hidden bg-[#060608] border-t border-white/10"
           >
-            {/* 装饰性背景 */}
-            <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-indigo-600/10 blur-[100px] rounded-full pointer-events-none" />
+            <div className="absolute top-[-20%] right-[-12%] w-[280px] h-[280px] bg-indigo-600/15 blur-[110px] rounded-full pointer-events-none" />
+            <div className="h-full min-h-0 overflow-y-auto px-5 py-5 pb-[calc(env(safe-area-inset-bottom)+20px)] space-y-6">
+              <nav className="space-y-2">
+                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600 px-1 pb-1">
+                  Main
+                </div>
+                {mainLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-base font-semibold text-zinc-100 hover:bg-white/10 transition-colors flex items-center justify-between"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <span className="truncate pr-4">{link.name}</span>
+                    <ChevronDown className="w-4 h-4 -rotate-90 opacity-70 flex-shrink-0" />
+                  </Link>
+                ))}
+              </nav>
 
-            <nav className="flex flex-col gap-2 relative z-10">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="text-xl md:text-2xl font-black italic text-zinc-300 py-4 border-b border-white/5 hover:text-white transition-all flex justify-between items-center group"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <span className="truncate pr-4">{link.name}</span>
-                  <ChevronDown className="w-5 h-5 -rotate-90 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
-                </Link>
-              ))}
+              <nav className="space-y-2">
+                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600 px-1 pb-1">
+                  Seedance
+                </div>
+                {seedanceLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-medium text-zinc-200 hover:bg-white/10 transition-colors flex items-center justify-between"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <span className="truncate pr-4">{link.name}</span>
+                    <ChevronDown className="w-4 h-4 -rotate-90 opacity-60 flex-shrink-0" />
+                  </Link>
+                ))}
+              </nav>
 
-              {/* Mobile Auth Section */}
-              <div className="mt-8">
+              <div className="bg-zinc-900/70 border border-zinc-800 rounded-3xl p-5">
                 {user ? (
-                  <div className="bg-zinc-900/80 border border-zinc-800 rounded-3xl p-6 space-y-6">
-                    <div className="flex items-center gap-4">
-                      <UserAvatar user={user} size="large" />
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <UserAvatar user={user} />
                       <div className="overflow-hidden">
-                        <div className="text-white font-bold text-lg truncate">
+                        <div className="text-white font-semibold text-sm truncate">
                           {user.name}
                         </div>
-                        <div className="text-sm text-zinc-500 truncate">
+                        <div className="text-xs text-zinc-500 truncate">
                           {user.email}
                         </div>
                       </div>
@@ -263,14 +321,11 @@ export default function Header() {
 
                     <Link
                       href="/pricing"
-                      className="flex items-center justify-between bg-black/40 p-4 rounded-2xl border border-white/5 hover:bg-black/60 transition-colors"
+                      className="flex items-center justify-between rounded-xl border border-white/10 bg-black/30 p-3 text-sm"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <span className="text-zinc-400 font-bold uppercase text-[10px] tracking-widest">
-                        Balance
-                      </span>
-                      <span className="text-indigo-400 font-black">
-                        {user.credits} Credits
-                      </span>
+                      <span className="text-zinc-400">Credits</span>
+                      <span className="text-indigo-300 font-bold">{user.credits}</span>
                     </Link>
 
                     <button
@@ -278,7 +333,7 @@ export default function Header() {
                         logout();
                         setIsMobileMenuOpen(false);
                       }}
-                      className="w-full py-4 bg-zinc-800 hover:bg-red-500/10 hover:text-red-400 text-white rounded-2xl text-sm font-bold transition-all flex items-center justify-center gap-2 border border-white/5"
+                      className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-zinc-200 hover:bg-red-500/10 hover:text-red-300 transition-colors flex items-center justify-center gap-2"
                     >
                       <LogOut className="w-4 h-4" />
                       Log out
@@ -290,20 +345,18 @@ export default function Header() {
                       login();
                       setIsMobileMenuOpen(false);
                     }}
-                    className="w-full py-5 bg-white text-black rounded-2xl font-black text-xl text-center shadow-xl active:scale-95 transition-transform"
+                    className="w-full rounded-xl bg-white text-black px-4 py-3.5 text-sm font-bold hover:bg-zinc-200 transition-colors"
                   >
                     Login with Google
                   </button>
                 )}
               </div>
 
-              {/* Mobile Language Switcher */}
               <LanguageSwitcher isMobile={true} />
-            </nav>
 
-            {/* 底部版权或简单信息 */}
-            <div className="mt-auto text-center pb-8 text-zinc-600 text-[10px] font-bold uppercase tracking-[0.2em]">
-              © 2026 AnimeAI Labs
+              <div className="pt-2 text-center text-zinc-600 text-[10px] font-semibold tracking-wider">
+                © 2026 AnimeAI Labs
+              </div>
             </div>
           </motion.div>
         )}
@@ -313,17 +366,25 @@ export default function Header() {
 }
 
 // 头像组件
+interface HeaderUser {
+  name?: string | null;
+  email?: string | null;
+  picture?: string | null;
+  credits?: string | number;
+}
+
 function UserAvatar({
   user,
   size = "small",
 }: {
-  user: any;
+  user: HeaderUser;
   size?: "small" | "large";
 }) {
-  const [imgError, setImgError] = useState(false);
-  useEffect(() => {
-    setImgError(false);
-  }, [user.picture]);
+  const [failedImageSources, setFailedImageSources] = useState<
+    Record<string, boolean>
+  >({});
+  const pictureSource = user.picture || "";
+  const hasImageError = pictureSource ? failedImageSources[pictureSource] : false;
 
   const sizeClasses = size === "small" ? "w-9 h-9" : "w-16 h-16";
   const initial = user.name ? user.name.charAt(0).toUpperCase() : "U";
@@ -332,13 +393,18 @@ function UserAvatar({
     <div
       className={`${sizeClasses} rounded-full overflow-hidden border border-white/20 relative flex-shrink-0 bg-zinc-800 shadow-lg shadow-black/20`}
     >
-      {user.picture && !imgError ? (
+      {pictureSource && !hasImageError ? (
         <img
-          src={user.picture}
-          alt={user.name}
+          src={pictureSource}
+          alt={user.name ?? "User avatar"}
           className="w-full h-full object-cover"
           referrerPolicy="no-referrer"
-          onError={() => setImgError(true)}
+          onError={() =>
+            setFailedImageSources((previous) => ({
+              ...previous,
+              [pictureSource]: true,
+            }))
+          }
         />
       ) : (
         <div className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black">

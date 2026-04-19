@@ -167,12 +167,6 @@ export default function AnimeVoiceChangerClient() {
               "priceCurrency": "USD",
               "description": "100% Free with no limitations"
             },
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "4.9",
-              "ratingCount": "8420",
-              "bestRating": "5"
-            },
             "featureList": [
               "Real-time voice changing",
               "Anime character voices",

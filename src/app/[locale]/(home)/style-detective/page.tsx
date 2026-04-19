@@ -136,7 +136,7 @@ const DICTIONARIES: any = {
       h1_sub: "for Anime Art",
       subtitle: "Upload any anime image and let our AI analyze its style. Get recommended models, LoRAs, and prompts for perfect replication.",
       cta: "Upload Image & Analyze",
-      note: "Supports all anime art styles",
+      note: "Beta preview: uses a curated rule set while full model analysis is in progress.",
     },
     steps: {
       title: "How It Works",
@@ -178,7 +178,8 @@ const DICTIONARIES: any = {
       extracting: "Extracting style keywords...",
       matching: "Matching with style database...",
       generating: "Generating recommendations...",
-      success: "Style analysis completed!",
+      success: "Preview analysis completed!",
+      preview: "This page currently runs a beta preview analysis.",
       error: "Analysis failed. Please try again with a different image.",
     },
   },
@@ -193,7 +194,7 @@ const DICTIONARIES: any = {
       h1_sub: "para Arte Anime",
       subtitle: "Sube cualquier imagen de anime y deja que nuestra IA analice su estilo. Obtén modelos recomendados, LoRAs y prompts para una replicación perfecta.",
       cta: "Subir Imagen y Analizar",
-      note: "Compatible con todos los estilos de arte anime",
+      note: "Vista previa beta: usa reglas curadas mientras completamos el análisis con modelo completo.",
     },
     steps: {
       title: "Cómo Funciona",
@@ -235,7 +236,8 @@ const DICTIONARIES: any = {
       extracting: "Extrayendo palabras clave de estilo...",
       matching: "Coincidiendo con base de datos de estilos...",
       generating: "Generando recomendaciones...",
-      success: "¡Análisis de estilo completado!",
+      success: "¡Análisis de vista previa completado!",
+      preview: "Esta página actualmente ejecuta un análisis en vista previa beta.",
       error: "El análisis falló. Por favor, inténtalo de nuevo con una imagen diferente.",
     },
   },
@@ -339,8 +341,8 @@ function StyleDetectiveClient({ locale }: { locale: string }) {
     setAnalysisResult(null);
   };
 
-  // --- 模拟分析过程 --- 
-  const simulateAnalysisProcess = useCallback(async (): Promise<AnalysisResult> => {
+  // --- 预览分析过程（Beta） --- 
+  const runPreviewAnalysis = useCallback(async (): Promise<AnalysisResult> => {
     // 步骤 1: 模拟调用图转提示词接口
     await new Promise(resolve => setTimeout(resolve, 1000));
     setCurrentAnalysisStep(t.analysis.analyzing);
@@ -390,7 +392,8 @@ function StyleDetectiveClient({ locale }: { locale: string }) {
     setAnalysisResult(null);
     
     try {
-      const result = await simulateAnalysisProcess();
+      toast(t.analysis.preview, { icon: "ℹ️" });
+      const result = await runPreviewAnalysis();
       setAnalysisResult(result);
       toast.success(t.analysis.success);
     } catch (error) {

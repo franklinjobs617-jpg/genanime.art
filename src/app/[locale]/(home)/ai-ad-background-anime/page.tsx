@@ -19,7 +19,7 @@ const faqs = [
     },
     {
         q: "What file formats are available for anime ad backgrounds?",
-        a: "We provide PNG, JPEG, SVG formats for static backgrounds, and MP4, GIF options for animated backgrounds. All formats are optimized for different advertising platforms including Instagram, Facebook, Google Ads, TikTok, and print media."
+        a: "Current production exports are static images (PNG, JPEG, WebP). Animated exports are in waitlist beta and may vary by region and account tier."
     },
     {
         q: "How do I ensure the background matches my brand colors?",
@@ -35,7 +35,7 @@ const faqs = [
     },
     {
         q: "Can I create animated anime backgrounds for video ads?",
-        a: "Yes! Our premium plans include animated background generation. You can create subtle animations, particle effects, and dynamic lighting that work perfectly for video advertisements and social media content."
+        a: "Animated background generation is currently in beta waitlist. You can join the waitlist to get notified when your account gets access."
     }
 ];
 
@@ -229,7 +229,7 @@ export default function AIAdBackgroundAnimePage() {
                             <div>
                                 <div className="inline-flex items-center gap-2 text-indigo-400 font-bold tracking-wider text-sm uppercase mb-6">
                                     <TrendingUp className="w-4 h-4" />
-                                    Proven Results
+                                    Creative Outcomes
                                 </div>
                                 <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 leading-tight">
                                     Why Top Brands Choose <br />
@@ -242,10 +242,10 @@ export default function AIAdBackgroundAnimePage() {
                                             <Users className="w-8 h-8 text-indigo-500" />
                                         </div>
                                         <div>
-                                            <div className="text-3xl font-bold text-white mb-1">67%</div>
+                                            <div className="text-3xl font-bold text-white mb-1">Higher</div>
                                             <h4 className="text-lg font-semibold text-zinc-200 mb-2">Higher Engagement</h4>
                                             <p className="text-zinc-400 text-sm leading-relaxed">
-                                                Campaigns using anime-style visuals consistently outperform traditional stock photography in social media engagement metrics.
+                                                Anime-style creatives can increase engagement when matched to audience, channel, and message quality.
                                             </p>
                                         </div>
                                     </div>
@@ -255,10 +255,10 @@ export default function AIAdBackgroundAnimePage() {
                                             <Target className="w-8 h-8 text-indigo-500" />
                                         </div>
                                         <div>
-                                            <div className="text-3xl font-bold text-white mb-1">2.4x</div>
-                                            <h4 className="text-lg font-semibold text-zinc-200 mb-2">Conversion Rate</h4>
+                                            <div className="text-3xl font-bold text-white mb-1">Better Fit</div>
+                                            <h4 className="text-lg font-semibold text-zinc-200 mb-2">Creative-to-Audience Match</h4>
                                             <p className="text-zinc-400 text-sm leading-relaxed">
-                                                For Gen Z and Millennial demographics, authentically styled anime content drives significantly higher conversion actions.
+                                                For Gen Z and Millennial audiences, authentic anime direction often improves click and conversion quality in tests.
                                             </p>
                                         </div>
                                     </div>
@@ -281,9 +281,9 @@ export default function AIAdBackgroundAnimePage() {
                                     <div className="absolute top-10 right-10 bg-black/80 backdrop-blur border border-indigo-500/30 p-4 rounded-xl shadow-2xl">
                                         <div className="flex items-center gap-3">
                                             <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
-                                            <span className="text-white font-mono text-xs">Live Analytics</span>
+                                            <span className="text-white font-mono text-xs">Benchmark Snapshot</span>
                                         </div>
-                                        <div className="mt-2 text-2xl font-bold text-green-400">+128%</div>
+                                        <div className="mt-2 text-2xl font-bold text-green-400">Case-by-case</div>
                                     </div>
                                 </div>
                                 <div className="absolute -bottom-8 -left-8 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl -z-10" />
@@ -297,7 +297,7 @@ export default function AIAdBackgroundAnimePage() {
                     <div className="max-w-7xl mx-auto px-6">
                         <div className="text-center mb-16">
                             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                                Enterprise-Grade Features
+                                Production Features & Roadmap
                             </h2>
                         </div>
 
@@ -315,22 +315,22 @@ export default function AIAdBackgroundAnimePage() {
                                 },
                                 {
                                     title: "Brand Consistency",
-                                    desc: "Train the AI on your brand colors and specific character styles.",
+                                    desc: "Use palette-aware prompts and reference images to keep outputs visually consistent.",
                                     icon: <Palette className="w-6 h-6" />
                                 },
                                 {
                                     title: "Batch Production",
-                                    desc: "Generate hundreds of variations in minutes for A/B testing.",
+                                    desc: "Generate multiple prompt variations quickly for creative testing workflows.",
                                     icon: <Layers className="w-6 h-6" />
                                 },
                                 {
-                                    title: "Vector Export",
-                                    desc: "Convert anime backgrounds to SVG for infinite scalability.",
+                                    title: "Prompt Packs",
+                                    desc: "Save reusable prompt structures for repeatable campaign production.",
                                     icon: <Wand2 className="w-6 h-6" />
                                 },
                                 {
-                                    title: "API Access",
-                                    desc: "Integrate generation directly into your marketing tools.",
+                                    title: "API Access (Planned)",
+                                    desc: "Developer API is on the roadmap. Contact support to join the early-access list.",
                                     icon: <Terminal className="w-6 h-6" />
                                 }
                             ].map((feature, i) => (

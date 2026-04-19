@@ -250,16 +250,16 @@
                 "label": "Disponible Ahora"
             },
             {
-                "title": "Generador de Video Anime IA",
-                "description": "Próximamente: Crea openings de anime profesionales y clips de movimiento dinámico directamente desde tus prompts de texto.",
-                "label": "Próximamente",
-                "button": "Recibir Notificación"
+                "title": "Flujo de Video Anime IA (Beta)",
+                "description": "Lista de espera beta: estamos probando flujos de imagen a video para anime con usuarios seleccionados. Únete para acceso anticipado en regiones compatibles.",
+                "label": "Lista de Espera Beta",
+                "button": "Unirme a la Beta"
             }
         ],
         "seoTitle": "Liderando la",
         "seoHighlight": "Revolución del Anime IA",
         "seoParagraph1": "Nuestra plataforma es el generador de arte anime IA más versátil. Nos especializamos en creación de imágenes de alta resolución, desde hojas de sprites animados generados por IA hasta diseños de personajes profesionales. Ya sea que necesites una mujer de negocios anime generada por IA de cuerpo completo o una mascota personalizada, te tenemos cubierto.",
-        "seoParagraph2": "El futuro es el movimiento. Estamos desarrollando activamente nuestro módulo de generador de video IA para openings de anime. Pronto, podrás transformar tus creaciones de anime generadas por IA estáticas en secuencias cinemáticas. Únete a nuestra lista de espera para ser el primero en experimentar el poder de la tecnología de generador de animación IA."
+        "seoParagraph2": "Los flujos de movimiento están en beta controlada. Estamos probando experiencias de <strong>generador de video IA para openings de anime</strong> primero con usuarios en lista de espera y luego por región. Si buscas imagen a video para <strong>anime generado por IA</strong>, únete para recibir novedades del lanzamiento."
     },
     "Generator": {
         "mode": "Modo de Generación",

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 import { Sparkles, Quote } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -171,6 +171,35 @@ const originalCards = [
   },
 ];
 
+const showcaseOrder = [
+  "portrait",
+  "waifu",
+  "cyberpunk",
+  "animagine",
+  "action",
+  "chibi",
+  "photo",
+  "pony",
+  "couple",
+  "idol",
+  "school",
+  "kimono_waifu",
+  "cyberpunk_waifu",
+  "beach_waifu",
+  "bedroom_waifu",
+  "sticker",
+  "emoticons",
+  "mage",
+  "knight",
+  "christmas",
+] as const;
+
+const cardById = Object.fromEntries(originalCards.map((card) => [card.id, card]));
+
+const orderedCards = showcaseOrder
+  .map((id) => cardById[id])
+  .filter((card): card is (typeof originalCards)[number] => Boolean(card));
+
 const TypewriterInput = ({ text }: { text: string }) => {
   const [displayedText, setDisplayedText] = useState("");
   useEffect(() => {
@@ -198,9 +227,8 @@ const TypewriterInput = ({ text }: { text: string }) => {
 export default function FeatureSection() {
   const router = useRouter();
   const t = useTranslations("FeatureSection");
-  const [activeIndex, setActiveIndex] = useState(
-    Math.floor(originalCards.length / 2)
-  );
+  const cards = orderedCards.length === originalCards.length ? orderedCards : originalCards;
+  const [activeIndex, setActiveIndex] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -228,9 +256,12 @@ export default function FeatureSection() {
     return containerWidth / 2 - offset - CARD_WIDTH_EXPANDED / 2;
   })();
 
-  const handleDragEnd = (event: any, info: any) => {
+  const handleDragEnd = (
+    _event: MouseEvent | TouchEvent | PointerEvent,
+    info: PanInfo
+  ) => {
     const threshold = 50;
-    if (info.offset.x < -threshold && activeIndex < originalCards.length - 1)
+    if (info.offset.x < -threshold && activeIndex < cards.length - 1)
       setActiveIndex((prev) => prev + 1);
     else if (info.offset.x > threshold && activeIndex > 0)
       setActiveIndex((prev) => prev - 1);
@@ -240,8 +271,11 @@ export default function FeatureSection() {
     router.push(`/generator?prompt=${encodeURIComponent(prompt)}`);
   };
 
+  const getCardTitle = (id: string) => t.raw(`cards.${id}`) as string;
+
   return (
     <section className="py-16 md:py-32 bg-[#050505] overflow-hidden relative font-sans selection:bg-purple-500/30">
+      <div className="pointer-events-none absolute left-1/2 top-[36%] h-[340px] w-[760px] -translate-x-1/2 rounded-full bg-purple-500/10 blur-[120px]" />
       <div className="container mx-auto px-6 mb-12 md:mb-16 text-center">
         <h1 className="text-4xl md:text-7xl font-bold text-white tracking-tight mb-4">
           {t.rich("title", {
@@ -259,7 +293,7 @@ export default function FeatureSection() {
 
       {/* ===================== MOBILE VIEW ===================== */}
       <div className="md:hidden w-full overflow-x-auto snap-x snap-mandatory flex gap-4 px-4 pb-12 scroll-smooth no-scrollbar">
-        {originalCards.map((card) => (
+        {cards.map((card) => (
           <div
             key={card.id}
             className="relative shrink-0 w-[85vw] sm:w-[320px] snap-center flex flex-col group"
@@ -269,7 +303,7 @@ export default function FeatureSection() {
               <div className="relative aspect-[2/3] w-full bg-zinc-800">
                 <Image
                   src={card.image}
-                  alt={t(`cards.${card.id}` as any)}
+                  alt={getCardTitle(card.id)}
                   fill
                   className="object-cover"
                   sizes="(max-width: 640px) 85vw, 320px"
@@ -287,7 +321,7 @@ export default function FeatureSection() {
                 <div className="flex items-center gap-2 mb-3">
                   <Quote className="w-3.5 h-3.5 text-purple-500 fill-purple-500 rotate-180" />
                   <h3 className="text-zinc-900 font-bold text-lg tracking-tight truncate">
-                    {t(`cards.${card.id}` as any)}
+                    {getCardTitle(card.id)}
                   </h3>
                 </div>
                 <div className="bg-zinc-50 p-3 rounded-xl border border-zinc-100 mb-4 h-20 overflow-hidden relative">
@@ -320,14 +354,14 @@ export default function FeatureSection() {
           animate={{ x: translateX }}
           drag="x"
           dragConstraints={{
-            left: -(originalCards.length * (CARD_WIDTH_COLLAPSED + GAP)),
+            left: -(cards.length * (CARD_WIDTH_COLLAPSED + GAP)),
             right: 100000,
           }}
           onDragEnd={handleDragEnd}
           style={{ cursor: "grab" }}
           whileTap={{ cursor: "grabbing" }}
         >
-          {originalCards.map((card, index) => {
+          {cards.map((card, index) => {
             const isActive = index === activeIndex;
 
             if (Math.abs(activeIndex - index) > 6)
@@ -347,8 +381,8 @@ export default function FeatureSection() {
                 animate={{
                   width: isActive ? CARD_WIDTH_EXPANDED : CARD_WIDTH_COLLAPSED,
                   height: isActive ? 580 : 420,
-                  filter: isActive ? "brightness(1)" : "brightness(0.35)",
-                  opacity: isActive ? 1 : 0.8,
+                  filter: isActive ? "brightness(1)" : "brightness(0.45)",
+                  opacity: isActive ? 1 : 0.82,
                   zIndex: isActive ? 10 : 0,
                 }}
                 transition={{ type: "spring", stiffness: 280, damping: 30 }}
@@ -363,7 +397,7 @@ export default function FeatureSection() {
                   {/* Layer 1: 背景填充 (Always visible) */}
                   <Image
                     src={card.image}
-                    alt={t(`cards.${card.id}` as any)}
+                    alt={getCardTitle(card.id)}
                     fill
                     className={`object-cover object-center transition-all duration-500 ${isActive ? 'blur-xl scale-110 opacity-60' : ''}`}
                     draggable={false}
@@ -380,7 +414,7 @@ export default function FeatureSection() {
                     >
                       <Image
                         src={card.image}
-                        alt={t(`cards.${card.id}` as any)}
+                        alt={getCardTitle(card.id)}
                         fill
                         className="object-contain drop-shadow-2xl" 
                         draggable={false}
@@ -404,7 +438,7 @@ export default function FeatureSection() {
                   }`}
                 >
                   <span className="text-white text-xl font-bold leading-tight drop-shadow-xl line-clamp-2">
-                    {t(`cards.${card.id}` as any)}
+                    {getCardTitle(card.id)}
                   </span>
                 </div>
               </motion.div>
@@ -438,19 +472,19 @@ export default function FeatureSection() {
                       Prompt
                     </span>
                     <span className="text-xs font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md">
-                      {originalCards[activeIndex].tags[0]}
+                      {cards[activeIndex].tags[0]}
                     </span>
                   </div>
                 </div>
                 
                 <div className="mb-4 min-h-[60px]">
-                  <TypewriterInput text={originalCards[activeIndex].prompt} />
+                  <TypewriterInput text={cards[activeIndex].prompt} />
                 </div>
                 
                 <div className="flex justify-between items-center pt-4 border-t border-zinc-100/80">
                   <button
                     onClick={() =>
-                      handleGenerate(originalCards[activeIndex].prompt)
+                      handleGenerate(cards[activeIndex].prompt)
                     }
                     className="px-4 py-2 rounded-full bg-zinc-50 border border-zinc-200 text-zinc-600 text-xs font-bold hover:bg-zinc-100 hover:text-purple-600 transition-colors hover:border-purple-200"
                   >
@@ -459,7 +493,7 @@ export default function FeatureSection() {
                   <div className="flex flex-col items-end gap-1.5">
                     <button
                       onClick={() =>
-                        handleGenerate(originalCards[activeIndex].prompt)
+                        handleGenerate(cards[activeIndex].prompt)
                       }
                       className="group flex items-center gap-2 px-6 py-2.5 bg-[#0a0a0a] hover:bg-black text-white text-sm font-bold rounded-full transition-all active:scale-95 shadow-xl hover:shadow-2xl hover:shadow-purple-500/20"
                     >

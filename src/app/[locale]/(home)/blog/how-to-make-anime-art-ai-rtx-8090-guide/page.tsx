@@ -10,6 +10,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@/i18n/routing";
 import { useState, useEffect } from "react";
+import Script from "next/script";
 
 // --- FAQ 数据 ---
 const faqs = [
@@ -45,6 +46,41 @@ export default function EnhancedBlogGuide() {
     const [openFaq, setOpenFaq] = useState<number | null>(0);
     const [copied, setCopied] = useState(false);
     const [activeSection, setActiveSection] = useState("");
+    const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqs.map((faq) => ({
+            "@type": "Question",
+            name: faq.q,
+            acceptedAnswer: {
+                "@type": "Answer",
+                text: faq.a,
+            },
+        })),
+    };
+    const articleJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: "Mastering Anime AI Without an RTX 8090",
+        description: "A practical 2026 workflow for generating professional anime art with cloud acceleration, prompt systems, and model strategy.",
+        author: {
+            "@type": "Organization",
+            name: "AnimeAI Tech Lab",
+        },
+        publisher: {
+            "@type": "Organization",
+            name: "GenAnime",
+            logo: {
+                "@type": "ImageObject",
+                url: "https://genanime.art/logo.png",
+            },
+        },
+        image: "https://genanime.art/gallery/modern-anime-girl-iridescent-jacket-holographic-aesthetic.webp",
+        datePublished: "2026-01-09",
+        dateModified: "2026-04-21",
+        mainEntityOfPage: "https://genanime.art/blog/how-to-make-anime-art-ai-rtx-8090-guide",
+        inLanguage: "en",
+    };
 
     const handleCopy = () => {
         navigator.clipboard.writeText("masterpiece, best quality, ultra-detailed, 1girl, vibrant colors, cinematic lighting, depth of field, sharp focus, 8k wallpaper");
@@ -56,6 +92,18 @@ export default function EnhancedBlogGuide() {
         <div className="min-h-screen bg-[#020204] text-zinc-200 font-sans selection:bg-indigo-500/30">
 
             <main className="relative">
+                <Script
+                    id="blog-guide-faq-schema"
+                    type="application/ld+json"
+                    strategy="beforeInteractive"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+                />
+                <Script
+                    id="blog-guide-article-schema"
+                    type="application/ld+json"
+                    strategy="beforeInteractive"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+                />
 
                 {/* --- Hero Section --- */}
                 <section className="relative w-full h-[85vh] flex flex-col items-center justify-center px-6 overflow-hidden">

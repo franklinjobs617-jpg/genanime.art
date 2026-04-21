@@ -29,7 +29,7 @@ const DICTIONARIES: any = {
       h1: "Image to Prompt Generator",
       h1_sub: "for Anime Art",
       subtitle:
-        "Stop guessing how your favorite anime art was made. Upload any image and let our AI reverse-engineer the perfect prompt for Flux, Midjourney, or Niji V6.",
+        "Stop guessing how your favorite anime art was made. Upload any image and use our image to prompt AI workflow to reverse-engineer prompts for Flux, Midjourney, or Niji V6.",
       cta: "Upload Image & Extract Prompt",
       note: "Compatible with all major AI models",
     },
@@ -37,8 +37,28 @@ const DICTIONARIES: any = {
     seo_intro: {
       title: "How Does Anime Prompt Extraction Work?",
       p1: "In the world of AI art, the 'prompt' is your source code. But often, we see a masterpiece and wonder: 'What magic words created this?' This is where our **image to prompt generator** comes in.",
-      p2: "Unlike generic photo analyzers, GenAnime's engine is specifically trained on 100,000+ anime aesthetic pairs. We don't just see 'a girl'; we identify 'Kyoto Animation style', 'cinematic lighting', 'volumetric fog', and specific artist influences.",
-      p3: "Whether you are using **Flux AI** for realistic textures or **Midjourney Niji** for stylized illustration, our tool bridges the gap between visual inspiration and text generation.",
+      p2: "Unlike generic photo analyzers, GenAnime's engine is specifically trained on 100,000+ anime aesthetic pairs. We don't just see 'a girl'; we identify 'Kyoto Animation style', 'cinematic lighting', 'volumetric fog', and specific artist influences. If you search for **ai image to prompt** or **image-to-prompt** tools, this page is built for that exact intent.",
+      p3: "Whether you are using **Flux AI** for realistic textures or **Midjourney Niji** for stylized illustration, our tool bridges the gap between visual inspiration and text generation and works as a practical **free image to prompt generator** for creators.",
+    },
+    related_links: {
+      title: "Next Steps for Different User Intent",
+      items: [
+        {
+          href: "/generator?mode=upload",
+          label: "Use the tool now",
+          desc: "Upload an image and get an editable prompt draft in minutes.",
+        },
+        {
+          href: "/how-to-reverse-image-to-prompt-anime-guide",
+          label: "Learn the full method",
+          desc: "Read the complete reverse-engineering workflow with examples.",
+        },
+        {
+          href: "/seedance-anime-prompts",
+          label: "Use prompt templates",
+          desc: "Take extracted prompts and adapt them into production-ready templates.",
+        },
+      ],
     },
     features: {
       title: "Why Artists Choose Our Extractor",
@@ -124,6 +144,10 @@ const DICTIONARIES: any = {
           a: "Yes! Flux AI prefers natural language descriptions over comma-separated tags. Our tool outputs descriptive sentences perfect for Flux workflows.",
         },
         {
+          q: "What is the difference between image to prompt AI and ai image to prompt?",
+          a: "There is no practical difference in intent. They are variant phrasings for the same workflow: upload an image, analyze style and structure, then output an editable prompt.",
+        },
+        {
           q: "Is this reverse image prompt tool free?",
           a: "Yes, it is completely free. We monetize through our premium generation features, allowing us to keep this utility tool free for the community.",
         },
@@ -140,10 +164,19 @@ const DICTIONARIES: any = {
     },
     tags: [
       "image to prompt",
-      "anime prompt extractor",
-      "flux ai image to prompt",
-      "midjourney compatible",
-      "free ai tool",
+      "image to prompt generator",
+      "image to prompt ai",
+      "ai image to prompt",
+      "image-to-prompt",
+      "free image to prompt generator",
+    ],
+    keywordTargets: [
+      "image to prompt",
+      "image to prompt generator",
+      "image to prompt ai",
+      "ai image to prompt",
+      "image-to-prompt",
+      "free image to prompt generator",
     ],
   },
   es: {
@@ -157,15 +190,35 @@ const DICTIONARIES: any = {
       h1: "Generador de Imagen a Prompt",
       h1_sub: "para Arte Anime",
       subtitle:
-        "Deja de adivinar cómo se hizo ese arte. Sube cualquier imagen y deja que nuestra IA haga ingeniería inversa del prompt perfecto para Flux o Midjourney.",
+        "Deja de adivinar cómo se hizo ese arte. Sube cualquier imagen y usa nuestro flujo image to prompt AI para extraer prompts listos para Flux o Midjourney.",
       cta: "Subir Imagen y Extraer",
       note: "Compatible con todos los modelos principales",
     },
     seo_intro: {
       title: "¿Cómo funciona la extracción de prompts?",
       p1: "En el mundo del arte IA, el 'prompt' es tu código fuente. A menudo vemos una obra maestra y nos preguntamos: '¿Qué palabras mágicas crearon esto?'. Aquí es donde entra nuestro **generador de imagen a prompt**.",
-      p2: "A diferencia de los analizadores genéricos, el motor de GenAnime está entrenado en más de 100,000 pares de estética anime. No solo vemos 'una chica'; identificamos 'estilo Kyoto Animation', 'iluminación cinematográfica' y niebla volumétrica.",
-      p3: "Ya sea que uses **Flux AI** para texturas realistas o **Midjourney Niji** para ilustraciones estilizadas, nuestra herramienta cierra la brecha entre la inspiración visual y el texto.",
+      p2: "A diferencia de los analizadores genéricos, el motor de GenAnime está entrenado en más de 100,000 pares de estética anime. No solo vemos 'una chica'; identificamos 'estilo Kyoto Animation', 'iluminación cinematográfica' y niebla volumétrica. Si buscas **ai image to prompt** o **image-to-prompt**, esta página está alineada con esa intención.",
+      p3: "Ya sea que uses **Flux AI** para texturas realistas o **Midjourney Niji** para ilustraciones estilizadas, nuestra herramienta cierra la brecha entre la inspiración visual y el texto y funciona como **free image to prompt generator**.",
+    },
+    related_links: {
+      title: "Siguientes pasos según intención",
+      items: [
+        {
+          href: "/generator?mode=upload",
+          label: "Usar la herramienta ahora",
+          desc: "Sube una imagen y obtén un prompt editable en minutos.",
+        },
+        {
+          href: "/how-to-reverse-image-to-prompt-anime-guide",
+          label: "Aprender el método completo",
+          desc: "Guía paso a paso de ingeniería inversa con ejemplos.",
+        },
+        {
+          href: "/seedance-anime-prompts",
+          label: "Usar plantillas de prompt",
+          desc: "Convierte prompts extraídos en plantillas reutilizables.",
+        },
+      ],
     },
     features: {
       title: "Por qué los Artistas Nos Eligen",
@@ -250,6 +303,10 @@ const DICTIONARIES: any = {
           a: "¡Sí! Flux AI prefiere descripciones en lenguaje natural. Nuestra herramienta genera oraciones descriptivas perfectas para flujos de trabajo Flux.",
         },
         {
+          q: "¿Cuál es la diferencia entre image to prompt AI y ai image to prompt?",
+          a: "No hay diferencia práctica de intención. Son dos formas de buscar el mismo flujo: subir imagen, analizar estilo y obtener un prompt editable.",
+        },
+        {
           q: "¿Es gratis esta herramienta?",
           a: "Sí, es completamente gratis. Monetizamos a través de nuestras funciones de generación premium.",
         },
@@ -266,9 +323,19 @@ const DICTIONARIES: any = {
     },
     tags: [
       "imagen a prompt",
-      "extractor anime",
-      "flux ai prompt",
-      "midjourney compatible",
+      "image to prompt generator",
+      "image to prompt ai",
+      "ai image to prompt",
+      "image-to-prompt",
+      "free image to prompt generator",
+    ],
+    keywordTargets: [
+      "image to prompt",
+      "image to prompt generator",
+      "image to prompt ai",
+      "ai image to prompt",
+      "image-to-prompt",
+      "free image to prompt generator",
     ],
   },
 };
@@ -284,6 +351,7 @@ export async function generateMetadata({
   return {
     title: t.meta.title,
     description: t.meta.description,
+    keywords: t.keywordTargets,
   };
 }
 
@@ -295,9 +363,54 @@ export default async function ImageToPromptPage({
 }) {
   const { locale } = await params;
   const t = DICTIONARIES[locale] || DICTIONARIES.en;
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: t.faq.items.map((item: { q: string; a: string }) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+  };
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: t.meta.title,
+    description: t.meta.description,
+    author: {
+      "@type": "Organization",
+      name: "GenAnime Editorial",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "GenAnime",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://genanime.art/logo.png",
+      },
+    },
+    datePublished: "2026-01-19",
+    dateModified: "2026-04-21",
+    mainEntityOfPage:
+      locale === "es"
+        ? "https://genanime.art/es/image-to-prompt"
+        : "https://genanime.art/image-to-prompt",
+    inLanguage: locale,
+  };
 
   return (
     <article className="min-h-screen bg-[#020203] text-zinc-300 selection:bg-indigo-500/40 pb-20 font-sans">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <header className="relative w-full pt-32 pb-24 px-6 overflow-hidden">
         {/* 背景光效 */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-indigo-600/10 blur-[120px] rounded-full pointer-events-none" />
@@ -385,6 +498,27 @@ export default async function ImageToPromptPage({
                   {model.desc}
                 </p>
               </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-24">
+          <h2 className="text-3xl font-bold text-white mb-8 text-center">
+            {t.related_links.title}
+          </h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            {t.related_links.items.map((item: any) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="block bg-zinc-900/40 border border-white/10 rounded-2xl p-6 hover:bg-zinc-900/70 transition-colors"
+              >
+                <h3 className="text-white font-bold mb-3 flex items-center gap-2">
+                  {item.label}
+                  <ArrowRight className="w-4 h-4 text-indigo-300" />
+                </h3>
+                <p className="text-sm text-zinc-400 leading-relaxed">{item.desc}</p>
+              </Link>
             ))}
           </div>
         </section>

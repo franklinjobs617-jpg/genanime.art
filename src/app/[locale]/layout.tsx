@@ -36,13 +36,13 @@ export async function generateMetadata(props: {
   const params = await props.params;
   const { locale } = params;
   const t = await getTranslations({ locale, namespace: 'Metadata' });
-  const languageAlternates = {
-    en: '/',
-    id: '/id',
-    de: '/de',
-    es: '/es',
-    ru: '/ru',
-    pt: '/pt',
+  const openGraphLocaleMap: Record<string, string> = {
+    en: 'en_US',
+    id: 'id_ID',
+    de: 'de_DE',
+    es: 'es_ES',
+    ru: 'ru_RU',
+    pt: 'pt_PT',
   };
 
   return {
@@ -53,12 +53,9 @@ export async function generateMetadata(props: {
     title: t('title'),
     description: t('description'),
     keywords: t.raw('keywords'),
-    alternates: {
-      languages: languageAlternates,
-    },
     openGraph: {
       type: 'website',
-      locale: locale === 'en' ? 'en_US' : locale === 'id' ? 'id_ID' : locale === 'de' ? 'de_DE' : locale === 'es' ? 'es_ES' : 'ru_RU',
+      locale: openGraphLocaleMap[locale] ?? 'en_US',
       siteName: 'GenAnime - AI Anime Generator',
       title: t('title'),
       description: t('description'),
@@ -163,7 +160,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 "name": st('websiteName'),
                 "alternateName": st('alternateName'),
                 "url": "https://genanime.art",
-                "description": st('description')
+                "description": st('description'),
+                "inLanguage": locale
+              })
+            }}
+          />
+
+          <Script
+            id="structured-data-webpage"
+            type="application/ld+json"
+            strategy="beforeInteractive"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "WebPage",
+                "name": st('websiteName'),
+                "url": locale === 'en' ? "https://genanime.art" : `https://genanime.art/${locale}`,
+                "inLanguage": locale,
+                "isPartOf": {
+                  "@type": "WebSite",
+                  "url": "https://genanime.art"
+                }
               })
             }}
           />

@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@/i18n/routing";
 import { useState } from "react";
 import Image from "next/image";
+import Script from "next/script";
 const faqs = [
     {
         q: "Can I use AI anime backgrounds for commercial advertising?",
@@ -66,6 +67,40 @@ const backgroundStyles = [
 export default function AIAdBackgroundAnimePage() {
     const [openFaq, setOpenFaq] = useState<number | null>(null);
     const [copied, setCopied] = useState(false);
+    const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqs.map((faq) => ({
+            "@type": "Question",
+            name: faq.q,
+            acceptedAnswer: {
+                "@type": "Answer",
+                text: faq.a,
+            },
+        })),
+    };
+    const articleJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: "AI Ad Background Anime: Scale High-Performing Creative Assets",
+        description: "Create commercial-ready anime ad backgrounds with brand-aligned prompts, high-resolution outputs, and workflow guidance.",
+        author: {
+            "@type": "Organization",
+            name: "GenAnime Editorial",
+        },
+        publisher: {
+            "@type": "Organization",
+            name: "GenAnime",
+            logo: {
+                "@type": "ImageObject",
+                url: "https://genanime.art/logo.png",
+            },
+        },
+        datePublished: "2026-01-10",
+        dateModified: "2026-04-21",
+        mainEntityOfPage: "https://genanime.art/ai-ad-background-anime",
+        inLanguage: "en",
+    };
 
     const handleCopy = () => {
         navigator.clipboard.writeText("cyberpunk anime cityscape, neon lights, advertising background, professional quality, 4k resolution");
@@ -76,6 +111,18 @@ export default function AIAdBackgroundAnimePage() {
     return (
         <div className="min-h-screen bg-[#030305] text-white font-sans selection:bg-indigo-500/30">
             <main className="relative">
+                <Script
+                    id="ai-ad-background-faq-schema"
+                    type="application/ld+json"
+                    strategy="beforeInteractive"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+                />
+                <Script
+                    id="ai-ad-background-article-schema"
+                    type="application/ld+json"
+                    strategy="beforeInteractive"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+                />
 
                 {/* Hero Section */}
                 <section className="relative w-full min-h-screen flex flex-col lg:flex-row items-center justify-center px-6 py-20 lg:py-0 gap-12 max-w-7xl mx-auto">
@@ -421,7 +468,7 @@ export default function AIAdBackgroundAnimePage() {
                     <a
                         href="https://theresanaiforthat.com/ai/animeai/?ref=featured&v=7340698"
                         target="_blank"
-                        rel="nofollow"
+                        rel="nofollow noopener noreferrer"
                         className="hover:opacity-80 transition-opacity"
                     >
                         <img

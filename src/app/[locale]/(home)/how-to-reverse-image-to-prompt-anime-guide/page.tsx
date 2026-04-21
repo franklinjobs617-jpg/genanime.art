@@ -50,6 +50,63 @@ export default async function AnimePromptEngineeringGuide({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const faqItems =
+    locale === "es"
+      ? [
+          {
+            q: "¿Funciona esto para Stable Diffusion y Flux?",
+            a: "Sí. Stable Diffusion suele funcionar mejor con etiquetas cortas, mientras que Flux prefiere frases descriptivas. Esta guía y flujo de trabajo están diseñados para ambos.",
+          },
+        ]
+      : [
+          {
+            q: "Does this work for both Stable Diffusion and Flux?",
+            a: "Absolutely. Stable Diffusion often prefers shorter tags, while Flux excels with descriptive sentences. This workflow is designed to support both.",
+          },
+        ];
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+  };
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline:
+      locale === "es"
+        ? "Cómo Convertir Foto a Anime con IA: Guía Completa"
+        : "Master the Art of Reverse Engineering: Flux AI Image to Prompt",
+    description:
+      locale === "es"
+        ? "Aprende a usar Flux AI para convertir cualquier imagen en un prompt de alta calidad para anime con ingeniería inversa."
+        : "Learn how to deconstruct anime artwork into reusable prompts for Flux AI and Stable Diffusion.",
+    author: {
+      "@type": "Organization",
+      name: "GenAnime Editorial",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "GenAnime",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://genanime.art/logo.png",
+      },
+    },
+    datePublished: "2026-01-16",
+    dateModified: "2026-04-21",
+    mainEntityOfPage:
+      locale === "es"
+        ? "https://genanime.art/es/how-to-reverse-image-to-prompt-anime-guide"
+        : "https://genanime.art/how-to-reverse-image-to-prompt-anime-guide",
+    inLanguage: locale,
+  };
 
   // ----------------------------------------------------------------
   // 英语内容 (English Content)
@@ -627,6 +684,14 @@ export default async function AnimePromptEngineeringGuide({
 
   return (
     <article className="min-h-screen bg-[#020203] text-zinc-300 selection:bg-purple-500/40 pb-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <PreloadResources
         images={[
           '/how-to-reverse-image-to-prompt-flux-ai-anime-tutorial.webp',

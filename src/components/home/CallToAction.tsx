@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import { Link } from "@/i18n/routing";
@@ -6,20 +6,19 @@ import { Sparkles, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export default function CallToAction() {
-  const t = useTranslations('CallToAction');
+  const t = useTranslations("CallToAction");
 
   return (
     <section className="relative py-32 overflow-hidden">
-      {/* Background Image Container - 请在这里放入一张横向的、史诗感的动漫图 */}
+      {/* Background image container */}
       <div className="absolute inset-0 bg-zinc-900">
-        {/* 占位符：请替换为 <img src="..." /> */}
+        {/* Placeholder: replace with a real background image */}
         <div className="absolute inset-0 flex items-center justify-center opacity-30">
           <span className="text-zinc-700 font-mono text-xl">[Epic Anime Background Image]</span>
         </div>
-        {/* 如果你有图片，解开下面这行注释并替换 src */}
-        {/* <img src="/images/cta-bg.jpg" className="w-full h-full object-cover opacity-40 mix-blend-overlay" /> */}
+        {/* Example: <img src="/images/cta-bg.jpg" alt="Epic anime background" className="w-full h-full object-cover opacity-40 mix-blend-overlay" /> */}
 
-        {/* Gradient Overlay for Text Readability */}
+        {/* Gradient overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-purple-900/20" />
       </div>
 
@@ -30,9 +29,9 @@ export default function CallToAction() {
           viewport={{ once: true }}
           className="text-4xl md:text-7xl font-bold text-white mb-6 tracking-tight drop-shadow-2xl"
         >
-          {t('title')} <br />
+          {t("title")} <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-300">
-            {t('highlight')}
+            {t("highlight")}
           </span>
         </motion.h2>
 
@@ -42,9 +41,9 @@ export default function CallToAction() {
           transition={{ delay: 0.2 }}
           className="text-xl text-zinc-300 mb-12 max-w-2xl mx-auto font-medium"
         >
-          {t('description')}
+          {t("description")}
           <br className="hidden md:block" />
-          {t('subdescription')}
+          {t("subdescription")}
         </motion.p>
 
         <motion.div
@@ -57,16 +56,16 @@ export default function CallToAction() {
             href="/generator"
             className="group relative inline-flex items-center gap-3 px-10 py-5 bg-white text-black rounded-full text-lg font-bold shadow-[0_0_50px_rgba(168,85,247,0.4)] hover:shadow-[0_0_80px_rgba(168,85,247,0.6)] hover:scale-105 transition-all duration-300 overflow-hidden"
           >
-            {/* Button Shine Effect */}
+            {/* Button shine effect */}
             <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/50 to-transparent -translate-x-full group-hover:animate-shimmer" />
 
             <Sparkles className="w-5 h-5 text-purple-600" />
-            <span>{t('button')}</span>
+            <span>{t("button")}</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
 
           <span className="text-sm text-zinc-500 font-medium mt-4 md:mt-0 md:ml-4">
-            {t('note')}
+            {t("note")}
           </span>
         </motion.div>
       </div>

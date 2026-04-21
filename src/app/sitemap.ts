@@ -2,8 +2,9 @@ import { MetadataRoute } from "next";
 
 const BASE_URL = "https://genanime.art";
 const LOCALES = ["en", "id", "de", "es", "ru", "pt"] as const;
+type Locale = (typeof LOCALES)[number];
 
-function localizedUrl(path: string, locale: string): string {
+function localizedUrl(path: string, locale: Locale): string {
   if (locale === "en") return `${BASE_URL}${path}`;
   return `${BASE_URL}/${locale}${path}`;
 }
@@ -14,20 +15,32 @@ function buildEntry(
     priority?: number;
     changeFrequency?: MetadataRoute.Sitemap[number]["changeFrequency"];
     lastModified?: Date;
+    locales?: readonly Locale[];
   } = {}
 ): MetadataRoute.Sitemap[number][] {
-  const { priority = 0.7, changeFrequency = "weekly", lastModified = new Date() } = options;
+  const {
+    priority = 0.7,
+    changeFrequency = "weekly",
+    lastModified = new Date(),
+    locales = LOCALES,
+  } = options;
 
-  return LOCALES.map((locale) => ({
+  const alternates =
+    locales.length > 1
+      ? {
+          languages: Object.fromEntries([
+            ...locales.map((locale) => [locale, localizedUrl(path, locale)]),
+            ["x-default", localizedUrl(path, locales.includes("en") ? "en" : locales[0])],
+          ]),
+        }
+      : undefined;
+
+  return locales.map((locale) => ({
     url: localizedUrl(path, locale),
     lastModified,
     changeFrequency,
     priority,
-    alternates: {
-      languages: Object.fromEntries(
-        LOCALES.map((l) => [l === "en" ? "x-default" : l, localizedUrl(path, l)])
-      ),
-    },
+    alternates,
   }));
 }
 
@@ -46,9 +59,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...buildEntry("/seedance", { priority: 0.86, changeFrequency: "weekly" }),
     ...buildEntry("/seedance-anime-prompts", { priority: 0.84, changeFrequency: "weekly" }),
     ...buildEntry("/anime-image-to-video", { priority: 0.88, changeFrequency: "weekly" }),
+    ...buildEntry("/ai-ad-background-anime", { priority: 0.82, changeFrequency: "weekly" }),
+    ...buildEntry("/image-to-prompt", { priority: 0.82, changeFrequency: "weekly" }),
 
     // Tools
     ...buildEntry("/tools/anime-voice-changer", { priority: 0.75, changeFrequency: "monthly" }),
+    ...buildEntry("/models/pony-diffusion", { priority: 0.7, changeFrequency: "monthly" }),
 
     // Content
     ...buildEntry("/blog", { priority: 0.7, changeFrequency: "weekly" }),
@@ -59,17 +75,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...[
       "/foto-de-perfil-anime",
       "/filtro-ia-ghibli",
+      "/transformar-foto-em-anime",
       "/transformar-foto-em-desenho",
       "/como-fazer-anime-ia",
-    ].map((path) => ({
-      url: `${BASE_URL}/pt${path}`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    })),
+      "/imagens-de-anime-ia",
+    ].flatMap((path) =>
+      buildEntry(path, {
+        locales: ["pt"] as const,
+        priority: 0.7,
+        changeFrequency: "monthly",
+      })
+    ),
 
     // Support
     ...buildEntry("/contact", { priority: 0.5, changeFrequency: "monthly" }),
+    ...buildEntry("/support", { priority: 0.45, changeFrequency: "monthly" }),
     ...buildEntry("/privacy", { priority: 0.4, changeFrequency: "yearly" }),
     ...buildEntry("/terms", { priority: 0.4, changeFrequency: "yearly" }),
   ];

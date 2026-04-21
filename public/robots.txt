@@ -1,10 +1,29 @@
 # *
 User-agent: *
 Allow: /
+Disallow: /api/
+
+# AI bots
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
 
 # Host
 Host: https://genanime.art
 
 # Sitemaps
 Sitemap: https://genanime.art/sitemap.xml
-Sitemap: https://genanime.art/server-sitemap.xml

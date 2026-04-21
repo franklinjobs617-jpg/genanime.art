@@ -38,8 +38,8 @@ export default function AnimatedBackground() {
         quality={75}
         sizes="(max-width: 768px) 640px, 1920px"
         className={`object-cover transition-opacity duration-1000 ${
-          imageLoaded ? 'opacity-50' : 'opacity-0'
-        } brightness-125 contrast-110 saturate-125`}
+          imageLoaded ? "opacity-75" : "opacity-0"
+        } brightness-110 contrast-105 saturate-115`}
         placeholder="blur"
         blurDataURL="data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAAAAAAfQ//73v/+BiOh/AAA="
         onLoad={() => setImageLoaded(true)}
@@ -51,8 +51,8 @@ export default function AnimatedBackground() {
       />
 
       {/* 渐变遮罩 - 确保文字可读性 */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#030305]/50 via-transparent to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#030305]/70" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#030305]/36 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#030305]/58" />
     </div>
   );
 }

@@ -1,5 +1,7 @@
 import dynamic from 'next/dynamic';
 import Hero from "@/components/home/Hero";
+import Script from "next/script";
+import { getTranslations } from "next-intl/server";
 
 // 优化动态导入 - 保持SSR但延迟加载非关键组件
 const FeatureSection = dynamic(() => import("@/components/home/FeatureSection"), {
@@ -37,6 +39,20 @@ const BrHomePage = dynamic(() => import("@/components/home/br/BrHomePage"), {
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
   const { locale } = resolvedParams;
+  const faqTranslations = await getTranslations({ locale, namespace: "FAQ" });
+  const faqItems = faqTranslations.raw("items") as Array<{ q: string; a: string }>;
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+  };
 
   if (locale === 'pt') {
     return <BrHomePage />;
@@ -44,6 +60,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <main className="relative min-h-screen bg-[#050505]">
+      <Script
+        id="home-faq-structured-data"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
       <Hero />
       
       <FeatureSection />
@@ -59,7 +82,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <a 
             href="https://theresanaiforthat.com/ai/animeai/?ref=featured&v=7340698" 
             target="_blank" 
-            rel="nofollow"
+            rel="nofollow noopener noreferrer"
             className="hover:opacity-80 transition-opacity" 
           >
             <img 

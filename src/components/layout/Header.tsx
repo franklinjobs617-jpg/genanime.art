@@ -77,12 +77,12 @@ export default function Header() {
   ];
 
   const mobileHeaderClasses = isMobileMenuOpen
-    ? "bg-[#050505] border-b border-white/10"
-    : "bg-[#050505]/92 backdrop-blur-xl border-b border-white/10";
+    ? "bg-[#050505] border-b border-white/10 lg:bg-transparent lg:border-transparent"
+    : "bg-[#050505]/88 backdrop-blur-xl border-b border-white/10 lg:bg-transparent lg:backdrop-blur-none lg:border-transparent";
 
   const desktopHeaderClasses =
     isScrolled || isMobileMenuOpen
-      ? "lg:bg-[#050505]/90 lg:backdrop-blur-xl lg:py-3 lg:shadow-lg lg:shadow-black/50"
+      ? "lg:bg-[#090b13]/45 lg:backdrop-blur-md lg:py-3 lg:shadow-[0_8px_30px_rgba(0,0,0,0.35)]"
       : "lg:bg-transparent lg:py-5";
 
   return (

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "+1000 Imagens de Anime IA Grátis para Download (2026)",
   description: "Baixe gratuitamente mais de 1000 imagens de anime geradas por IA. Alta resolução (4K), diversos estilos (Cyberpunk, Ghibli, Shonen) e prompts incluídos.",
   alternates: {
-    canonical: "https://genanime.art/pt/imagens-de-anime-ia"
+    canonical: "https://genanime.art/pt/imagens-de-anime-ia/"
   },
   keywords: ["imagens de anime grátis", "anime ai art download", "wallpaper anime 4k", "fundo de tela anime", "anime generated images"]
 };

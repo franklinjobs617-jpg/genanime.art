@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "+500 Fotos de Perfil Anime (PFP) para Discord e WhatsApp 2026",
   description: "Encontre a foto de perfil anime (PFP) perfeita. Milhares de opções para Discord, WhatsApp e TikTok. Use nossa IA para criar seu próprio avatar anime grátis!",
   alternates: {
-    canonical: "https://genanime.art/pt/foto-de-perfil-anime"
+    canonical: "https://genanime.art/pt/foto-de-perfil-anime/"
   },
   keywords: ["foto de perfil anime", "anime pfp", "foto de perfil discord anime", "metadinhas anime", "avatar anime", "pfp anime boy", "pfp anime girl", "dark anime pfp"]
 };

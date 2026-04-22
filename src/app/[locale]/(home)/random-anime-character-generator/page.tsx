@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     creator: "@genanime_art",
   },
   alternates: {
-    canonical: "https://genanime.art/random-anime-character-generator",
+    canonical: "https://genanime.art/random-anime-character-generator/",
   },
   robots: {
     index: true,

@@ -2,59 +2,82 @@ import { Metadata } from "next";
 import AnimeNameGeneratorClient from "./components/AnimeNameGeneratorClient";
 import StorageErrorBoundary from "./components/StorageErrorBoundary";
 
+const FAQ_JSON_LD_ITEMS = [
+  {
+    q: "What is an anime name generator?",
+    a: "An anime name generator creates character-style names based on anime-inspired naming patterns. On this page, each output includes kanji, romaji, and meaning so you can use names directly in writing, games, and character design.",
+  },
+  {
+    q: "How is this different from a random anime name generator?",
+    a: "A basic random generator gives unfiltered name output. This page adds intent-based modes, style filters, meaning focus, and from-my-name logic so results match your task with fewer retries.",
+  },
+  {
+    q: "Can I generate male and female anime names separately?",
+    a: "Yes. Choose Male or Female mode in Step 1 to force output direction. If you want broader exploration, use Random or Character mode.",
+  },
+  {
+    q: "Can I generate anime names from my real name?",
+    a: "Yes. Select From My Name mode and enter your input name. The generator prioritizes outputs with closer phonetic patterns while preserving anime-style readability.",
+  },
+  {
+    q: "Can I get anime names with meaning and kanji?",
+    a: "Yes. Every result card includes kanji, romaji, and meaning. You can also set a meaning focus like nature, power, mystery, light, or nobility for more controlled outputs.",
+  },
+  {
+    q: "Can I generate only last names / surnames?",
+    a: "Yes. Switch to Last Name mode to prioritize surname-style output. This is useful for family systems, clan naming, and worldbuilding tasks.",
+  },
+  {
+    q: "Can I use generated names for commercial projects?",
+    a: "Yes, the tool is free and generated names can be used in creator and commercial workflows. Before release, always run your own legal and brand checks for final compliance.",
+  },
+  {
+    q: "What should I do if I need anime attack/ability names?",
+    a: "Use Fantasy style plus meaning focus as a temporary workaround for dramatic naming tone. For dedicated attack/ability naming, route users to your planned attack-name spoke page.",
+  },
+];
+
 export const metadata: Metadata = {
-  title: "Anime Name Generator - Create Authentic Japanese Character Names | Free Tool",
-  description: "Generate authentic anime character names with meanings and cultural context. Free anime name generator with male, female, and unisex options across traditional, modern, fantasy, and sci-fi styles. Perfect for stories, games, and creative projects.",
+  title: "Anime Name Generator - Free Anime Character Names",
+  description:
+    "Free anime name generator for random, character, male, female, from-my-name, and last-name modes. Generate anime names with kanji, romaji, and meaning.",
   keywords: [
     "anime name generator",
     "anime character name generator",
     "random anime name generator",
-    "japanese name generator",
-    "anime names generator",
-    "manga character names",
-    "japanese character names",
-    "anime name creator",
-    "fantasy name generator",
-    "japanese names with meanings",
-    "anime character creator",
-    "japanese name meanings",
-    "anime name ideas",
-    "character name generator",
-    "japanese anime names",
-    "free name generator",
-    "anime character names male",
-    "anime character names female",
-    "unisex anime names",
-    "traditional japanese names",
-    "modern anime names",
-    "fantasy anime names",
-    "sci-fi character names"
+    "female anime name generator",
+    "male anime name generator",
+    "anime name generator with meaning",
+    "anime last name generator",
+    "anime name generator from my name",
   ].join(", "),
   openGraph: {
-    title: "Anime Name Generator - Create Authentic Japanese Character Names",
-    description: "Generate authentic anime character names with meanings and cultural context. Free tool with male, female, and unisex options across multiple anime styles.",
+    title: "Anime Name Generator - Free Anime Character Names",
+    description:
+      "Generate anime names by mode and style. Includes random, male/female, from-my-name, and last-name output.",
     type: "website",
-    url: "https://genanime.art/anime-name-generator",
+    url: "https://genanime.art/anime-name-generator/",
     siteName: "GenAnime.art",
     images: [
       {
         url: "/anime-name-generator-og.jpg",
         width: 1200,
         height: 630,
-        alt: "Anime Name Generator - Create Authentic Japanese Names with Meanings"
-      }
+        alt: "Anime Name Generator",
+      },
     ],
-    locale: "en_US"
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Anime Name Generator - Create Authentic Japanese Character Names",
-    description: "Generate authentic anime character names with meanings and cultural context. Free tool with multiple styles and gender options.",
+    title: "Anime Name Generator - Free Tool",
+    description:
+      "Generate anime names with random/male/female/from-my-name/last-name modes and meaning output.",
     images: ["/anime-name-generator-og.jpg"],
-    creator: "@genanime_art"
+    creator: "@genanime_art",
   },
   alternates: {
-    canonical: "https://genanime.art/anime-name-generator"
+    canonical: "https://genanime.art/anime-name-generator/",
   },
   robots: {
     index: true,
@@ -67,188 +90,113 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  authors: [{ name: "GenAnime.art Team" }],
-  category: "Entertainment",
-  classification: "Free Anime Name Generator Tool",
 };
 
 export default function AnimeNameGeneratorPage() {
-  const jsonLd = {
+  const webAppJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Anime Name Generator",
-    "alternateName": "Japanese Character Name Generator",
-    "description": "Generate authentic anime character names with meanings and cultural context. Free anime name generator with male, female, and unisex options across traditional, modern, fantasy, and sci-fi styles.",
-    "url": "https://genanime.art/anime-name-generator",
-    "applicationCategory": "Entertainment",
-    "operatingSystem": "Any",
-    "browserRequirements": "Requires JavaScript",
-    "softwareVersion": "1.0",
-    "datePublished": "2024-01-01",
-    "dateModified": new Date().toISOString().split('T')[0],
-    "inLanguage": "en-US",
-    "isAccessibleForFree": true,
-    "offers": {
+    name: "Anime Name Generator",
+    description:
+      "Free anime name generator with random, character, male, female, from-my-name, and last-name modes.",
+    url: "https://genanime.art/anime-name-generator/",
+    applicationCategory: "Entertainment",
+    operatingSystem: "Any",
+    isAccessibleForFree: true,
+    offers: {
       "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD",
-      "availability": "https://schema.org/InStock"
+      price: "0",
+      priceCurrency: "USD",
     },
-    "creator": {
-      "@type": "Organization",
-      "name": "GenAnime.art",
-      "url": "https://genanime.art"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "GenAnime.art",
-      "url": "https://genanime.art"
-    },
-    "keywords": "anime name generator, japanese names, character names, manga names, anime character creator, japanese name meanings",
-    "featureList": [
-      "Generate authentic Japanese anime names",
-      "Male, female, and unisex name options",
-      "Traditional, modern, fantasy, and sci-fi styles",
-      "Name meanings and cultural context",
-      "Favorites and history tracking",
-      "Copy and share functionality",
-      "Pronunciation guide",
-      "Free to use"
-    ],
-    "screenshot": "https://genanime.art/anime-name-generator-screenshot.jpg",
-    "applicationSubCategory": "Name Generator",
-    "downloadUrl": "https://genanime.art/anime-name-generator",
-    "installUrl": "https://genanime.art/anime-name-generator",
-    "memoryRequirements": "Minimal",
-    "processorRequirements": "Any modern browser",
-    "storageRequirements": "Local storage for favorites and history"
-  };
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "https://genanime.art"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "Tools",
-        "item": "https://genanime.art/tools"
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": "Anime Name Generator",
-        "item": "https://genanime.art/anime-name-generator"
-      }
-    ]
   };
 
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": [
+    mainEntity: FAQ_JSON_LD_ITEMS.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
       {
-        "@type": "Question",
-        "name": "How does the anime name generator work?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Our anime name generator uses a comprehensive database of authentic Japanese names with meanings and cultural context. You can select gender preferences (male, female, unisex, or random) and style categories (traditional, modern, fantasy, or sci-fi) to generate names that fit your specific needs."
-        }
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://genanime.art/",
       },
       {
-        "@type": "Question",
-        "name": "Are the generated anime names authentic?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes, all names in our database are based on authentic Japanese naming conventions. Each name includes proper kanji characters, romanized readings, and cultural meanings to ensure authenticity and cultural respect."
-        }
+        "@type": "ListItem",
+        position: 2,
+        name: "Anime Name Generator",
+        item: "https://genanime.art/anime-name-generator/",
       },
-      {
-        "@type": "Question",
-        "name": "Can I use these names for commercial projects?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes, the names generated by our tool are free to use for any purpose, including commercial projects like games, stories, manga, or anime. The names are based on traditional Japanese naming patterns and are not copyrighted."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What's the difference between the style categories?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Traditional style uses classical Japanese naming patterns with virtue-based meanings. Modern style features contemporary names with nature themes. Fantasy style includes mystical elements perfect for supernatural characters. Sci-fi style offers futuristic names suitable for cyberpunk or space settings."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How many names can I generate at once?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "You can generate between 1 and 20 names at once. We recommend generating 6-10 names for the best variety and selection. The tool prevents duplicates within each generation batch."
-        }
-      }
-    ]
+    ],
   };
 
   return (
     <>
-      {/* Structured Data */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
 
-      {/* Static SEO content - crawlable by Google, visually hidden */}
       <section className="sr-only" aria-hidden="false">
-        <h1>Anime Name Generator - Free Japanese Character Names with Meanings</h1>
+        <h1>Anime Name Generator</h1>
         <p>
-          Generate authentic anime character names with kanji, romanized readings, and cultural meanings.
-          Choose your character type — Hero, Warrior, Mage, Villain, Idol, or Mysterious — and get
-          Japanese names that match your character concept instantly. Free to use for stories, games, manga, and creative projects.
+          Generate anime character names instantly — random, male/female, with
+          meaning, or from your name.
         </p>
-        <h2>Random Anime Character Generator by Type</h2>
+        <h2>What is an Anime Name Generator?</h2>
+        <p>
+          It helps creators generate usable anime names with kanji, romaji, and
+          meaning in one workflow.
+        </p>
+        <h2>Random / Male / Female Anime Name Generator</h2>
+        <p>
+          Use Random for broad ideation, Male/Female for direct targeting, and
+          Character mode for general naming tasks.
+        </p>
+        <h2>Anime Name Generator From My Name</h2>
+        <p>
+          Enter your base name and generate anime-style outputs with phonetic
+          similarity.
+        </p>
+        <h2>Anime Names With Meaning</h2>
+        <p>
+          Add meaning focus to guide output by narrative tone and story intent.
+        </p>
+        <h2>Use Cases</h2>
+        <p>
+          Ideal for OC naming, protagonist drafts, game NPC pools, and story
+          worldbuilding.
+        </p>
+        <h2>FAQ</h2>
         <ul>
-          <li><strong>Hero</strong> – Modern Japanese names for brave protagonists and main characters in shonen and adventure anime.</li>
-          <li><strong>Warrior</strong> – Traditional Japanese names with strength and honor meanings, ideal for samurai and fighter characters.</li>
-          <li><strong>Mage</strong> – Fantasy-inspired names with mystical and elemental meanings, perfect for wizards and magic users.</li>
-          <li><strong>Villain</strong> – Dark and powerful names suited for antagonists and anti-heroes in any anime genre.</li>
-          <li><strong>Idol</strong> – Bright, contemporary Japanese names for performers, idols, and slice-of-life characters.</li>
-          <li><strong>Mysterious</strong> – Enigmatic names with layered meanings for complex or unknown characters.</li>
+          {FAQ_JSON_LD_ITEMS.map((item) => (
+            <li key={item.q}>
+              <strong>{item.q}</strong> {item.a}
+            </li>
+          ))}
         </ul>
-        <h2>Generate Anime Character Art from Any Name</h2>
-        <p>
-          Unlike other anime name generators, every name includes a one-click button to generate
-          AI character art. Turn your character name into a full visual character using our
-          AI anime art generator — no other tool offers this.
-        </p>
-        <h2>Frequently Asked Questions</h2>
-        <dl>
-          <dt>Are the generated anime names authentic?</dt>
-          <dd>Yes. All names use real Japanese kanji with proper romanized readings and cultural meanings.</dd>
-          <dt>What is a random anime character generator?</dt>
-          <dd>A tool that instantly creates unique Japanese character names. Our generator goes further by letting you generate character art from any name with one click.</dd>
-          <dt>Can I use these names commercially?</dt>
-          <dd>Yes. All generated names are free to use for any purpose including games, stories, manga, and anime.</dd>
-          <dt>How many names can I generate at once?</dt>
-          <dd>Up to 20 names per batch. The default is 6 for the best variety and selection.</dd>
-        </dl>
       </section>
 
-      {/* Main Content */}
       <main role="main" aria-label="Anime Name Generator">
         <StorageErrorBoundary>
           <AnimeNameGeneratorClient />

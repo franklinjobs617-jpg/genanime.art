@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     "Style Detective is currently a beta preview. Join waitlist updates for full model-powered anime style analysis.",
   alternates: {
-    canonical: "https://genanime.art/style-detective",
+    canonical: "https://genanime.art/style-detective/",
   },
   robots: {
     index: false,

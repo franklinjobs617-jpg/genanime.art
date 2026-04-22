@@ -352,6 +352,12 @@ export async function generateMetadata({
     title: t.meta.title,
     description: t.meta.description,
     keywords: t.keywordTargets,
+    alternates: {
+      canonical:
+        locale === "es"
+          ? "https://genanime.art/es/image-to-prompt/"
+          : "https://genanime.art/image-to-prompt/",
+    },
   };
 }
 

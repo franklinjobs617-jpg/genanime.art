@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "seedance workflow tool",
   ],
   alternates: {
-    canonical: "https://genanime.art/anime-image-to-video",
+    canonical: "https://genanime.art/anime-image-to-video/",
   },
   openGraph: {
     type: "website",

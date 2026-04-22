@@ -40,6 +40,11 @@ export async function generateMetadata({
     description: isEs
       ? "Aprende a usar Flux AI para convertir cualquier imagen en un prompt de alta calidad para anime con ingeniería inversa."
       : "Learn how to deconstruct any anime masterpiece into a high-octane magic spell using Flux AI.",
+    alternates: {
+      canonical: isEs
+        ? "https://genanime.art/es/how-to-reverse-image-to-prompt-anime-guide/"
+        : "https://genanime.art/how-to-reverse-image-to-prompt-anime-guide/",
+    },
   };
 }
 

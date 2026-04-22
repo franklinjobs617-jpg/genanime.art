@@ -1,6 +1,9 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://genanime.art/stripePayment/",
+  },
   robots: {
     index: false,
     follow: false,

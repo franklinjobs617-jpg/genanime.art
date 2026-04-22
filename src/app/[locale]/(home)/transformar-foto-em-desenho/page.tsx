@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "IA para Transformar Foto em Desenho Online e Grátis (2026)",
   description: "Transforme fotos em desenhos realistas com IA. Converta foto em esboço a lápis, nanquim ou arte digital em segundos. Ferramenta gratuita para artistas e criativos.",
   alternates: {
-    canonical: "https://genanime.art/pt/transformar-foto-em-desenho"
+    canonical: "https://genanime.art/pt/transformar-foto-em-desenho/"
   },
   keywords: ["transformar foto em desenho", "foto para esboço", "converter foto em desenho online", "ia desenho", "sketch ai", "foto em desenho gratis"]
 };

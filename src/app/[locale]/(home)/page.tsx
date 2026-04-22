@@ -36,6 +36,22 @@ const BrHomePage = dynamic(() => import("@/components/home/br/BrHomePage"), {
   loading: () => <div className="min-h-screen bg-[#050505] animate-pulse" />
 });
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return {
+    alternates: {
+      canonical:
+        locale === "en"
+          ? "https://genanime.art/"
+          : `https://genanime.art/${locale}/`,
+    },
+  };
+}
+
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const resolvedParams = await params;
   const { locale } = resolvedParams;

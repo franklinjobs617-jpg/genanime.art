@@ -12,7 +12,7 @@ export const metadata = {
     "waifu generator",
   ],
   alternates: {
-    canonical: 'https://genanime.art/models/pony-diffusion',
+    canonical: 'https://genanime.art/models/pony-diffusion/',
   },
 };
 

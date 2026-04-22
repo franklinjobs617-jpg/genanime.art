@@ -126,16 +126,16 @@ export function generateAnimeNames(settings: GenerationSettings): GeneratedName[
 function generateCulturalContext(surname: NameEntry, givenName: NameEntry, style: string): string {
     const contexts: { [key: string]: string[] } = {
         traditional: [
-            "A classic Japanese name combination reflecting traditional values and family heritage.",
-            "This name follows ancient Japanese naming conventions, often used in historical periods.",
-            "A traditional pairing that emphasizes virtue and family honor in Japanese culture.",
-            "This combination represents the timeless beauty of classical Japanese naming traditions."
+            "A classic anime-style name combination reflecting legacy, values, and family heritage.",
+            "This name follows traditional naming patterns often used in historical anime settings.",
+            "A traditional pairing that emphasizes virtue, honor, and lineage.",
+            "This combination carries a timeless tone inspired by classic anime naming."
         ],
         modern: [
-            "A contemporary Japanese name that reflects modern sensibilities and aspirations.",
-            "This name combination is popular among younger generations in modern Japan.",
-            "A fresh take on Japanese naming that balances tradition with contemporary appeal.",
-            "This modern pairing reflects current trends in Japanese naming practices."
+            "A contemporary anime-style name that reflects modern sensibilities and aspirations.",
+            "This pairing fits modern character archetypes and current storytelling trends.",
+            "A fresh take on anime naming that balances tradition with contemporary appeal.",
+            "This modern combination matches current anime naming aesthetics."
         ],
         fantasy: [
             "A mystical name combination often found in anime and manga with supernatural themes.",
@@ -201,8 +201,8 @@ export function generateSemanticMatch(settings: GenerationSettings, theme?: stri
 
     if (theme && themeMap[theme]) {
         // Apply theme-based filtering
-        let surnames = filterNamesByTags(getSurnames(), themeMap[theme]);
-        let givenNames = filterNamesByTags(getAllGivenNames(), themeMap[theme]);
+        const surnames = filterNamesByTags(getSurnames(), themeMap[theme]);
+        const givenNames = filterNamesByTags(getAllGivenNames(), themeMap[theme]);
 
         if (surnames.length > 0 && givenNames.length > 0) {
             const surname = getWeightedRandom(surnames);

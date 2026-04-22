@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     creator: "@genanime_art",
   },
   alternates: {
-    canonical: "https://genanime.art/prompt-library",
+    canonical: "https://genanime.art/prompt-library/",
   },
   robots: {
     index: true,

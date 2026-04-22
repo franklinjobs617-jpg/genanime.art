@@ -1,5 +1,12 @@
 import { Link } from "@/i18n/routing";
 import { Calendar, BookOpen, Sparkles } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://genanime.art/blog/",
+  },
+};
 
 const blogPosts = [
   {

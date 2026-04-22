@@ -1,436 +1,871 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Heart, Copy, Check, Sparkles, Wand2, Zap, ArrowRight } from "lucide-react";
-import { GeneratedName, GenerationSettings, GenerationHistoryEntry, LocalStorageData } from "../lib/types";
-import { generateAnimeNames } from "../lib/nameGenerator";
+import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Link } from "@/i18n/routing";
+import type {
+  GeneratedName,
+  GenerationHistoryEntry,
+  GenerationSettings,
+  LocalStorageData,
+} from "../lib/types";
+import { generateAnimeNames, generateSemanticMatch } from "../lib/nameGenerator";
 import { AnimeNameStorage } from "../lib/storage";
-import HistoryPanel from "./HistoryPanel";
 import DataManager from "./DataManager";
+import HistoryPanel from "./HistoryPanel";
 
-const ROLES = [
-  { id: "hero",        label: "Hero",        emoji: "🌟", style: "modern"      as const, prompt: "brave anime protagonist, heroic pose, determined expression, vibrant colors" },
-  { id: "warrior",     label: "Warrior",     emoji: "⚔️", style: "traditional" as const, prompt: "anime warrior, traditional Japanese armor, fierce battle stance, determined eyes" },
-  { id: "mage",        label: "Mage",        emoji: "🔮", style: "fantasy"     as const, prompt: "anime mage, magical aura, mystical robes, glowing spell effects, fantasy" },
-  { id: "villain",     label: "Villain",     emoji: "😈", style: "fantasy"     as const, prompt: "anime villain, dark mysterious aura, powerful and menacing, dramatic lighting" },
-  { id: "idol",        label: "Idol",        emoji: "🎤", style: "modern"      as const, prompt: "anime idol, cute energetic expression, colorful outfit, sparkling stage" },
-  { id: "mysterious",  label: "Mysterious",  emoji: "🌙", style: "mixed"       as const, prompt: "mysterious anime character, enigmatic expression, ethereal atmosphere, soft lighting" },
+type TabType = "results" | "favorites" | "history";
+type GenerationMode =
+  | "random"
+  | "character"
+  | "male"
+  | "female"
+  | "from-name"
+  | "last-name";
+type MeaningTheme = "none" | "nature" | "power" | "mystery" | "light" | "nobility";
+type VisibleStyle = Exclude<GenerationSettings["style"], "mixed">;
+
+const MODE_OPTIONS: Array<{ id: GenerationMode; label: string; helper: string }> = [
+  {
+    id: "random",
+    label: "Random",
+    helper: "Best for quick idea exploration",
+  },
+  {
+    id: "character",
+    label: "Character",
+    helper: "General anime character naming",
+  },
+  {
+    id: "male",
+    label: "Male",
+    helper: "Male-focused name generation",
+  },
+  {
+    id: "female",
+    label: "Female",
+    helper: "Female-focused name generation",
+  },
+  {
+    id: "from-name",
+    label: "From My Name",
+    helper: "Convert your input into anime style",
+  },
+  {
+    id: "last-name",
+    label: "Last Name",
+    helper: "Surname-only output format",
+  },
 ];
 
-const DEFAULT_SETTINGS: GenerationSettings = { gender: "random", style: "mixed", quantity: 6 };
+const STYLE_OPTIONS: Array<{
+  id: VisibleStyle;
+  label: string;
+}> = [
+  { id: "traditional", label: "Traditional" },
+  { id: "modern", label: "Modern" },
+  { id: "fantasy", label: "Fantasy" },
+  { id: "sci-fi", label: "Sci-Fi" },
+];
+
+const DEFAULT_SETTINGS: GenerationSettings = {
+  gender: "random",
+  style: "modern",
+  quantity: 6,
+};
+
+const FAQ_ITEMS = [
+  {
+    question: "What is an anime name generator?",
+    answer:
+      "An anime name generator creates character-style names using anime-inspired naming patterns. This page gives you kanji, romaji, and meaning in one result card, so names are usable immediately.",
+  },
+  {
+    question: "How is this different from a random anime name generator?",
+    answer:
+      "A basic random generator only outputs names. This page adds mode controls, style filters, meaning focus, and from-my-name logic, so output matches your task instead of pure randomness.",
+  },
+  {
+    question: "Can I generate male and female anime names separately?",
+    answer:
+      "Yes. Choose Male or Female mode in Step 1 and run generation. If you want mixed options, use Random or Character mode.",
+  },
+  {
+    question: "Can I generate anime names from my real name?",
+    answer:
+      "Yes. Use From My Name mode and enter your input name before generating. The engine prioritizes phonetic closeness while keeping anime-friendly output.",
+  },
+  {
+    question: "Can I get anime names with meaning and kanji?",
+    answer:
+      "Yes. Every result includes kanji, romaji, and meaning text. For stronger intent, set Meaning Focus to nature, power, mystery, light, or nobility.",
+  },
+  {
+    question: "Can I generate only last names / surnames?",
+    answer:
+      "Yes. Select Last Name mode and the output card will prioritize surname-style results. This is useful for family-name-first character worldbuilding.",
+  },
+  {
+    question: "Can I use generated names for commercial projects?",
+    answer:
+      "Yes, this tool is free and the generated names can be used in creator workflows. Before publishing, you should still run your own legal and brand checks for final release.",
+  },
+  {
+    question: "What should I do if I need anime attack/ability names?",
+    answer:
+      "Use Fantasy style plus Meaning Focus as a temporary method for dramatic naming patterns. For dedicated skill/attack naming, use the planned attack-name subtool page in your hub-and-spoke structure.",
+  },
+];
+
+function normalizeText(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function clampQuantity(quantity: number): number {
+  if (quantity < 1) return 1;
+  if (quantity > 20) return 20;
+  return quantity;
+}
+
+function sanitizeStoredSettings(stored: GenerationSettings): GenerationSettings {
+  const validStyles: VisibleStyle[] = ["traditional", "modern", "fantasy", "sci-fi"];
+  const validGenders: GenerationSettings["gender"][] = [
+    "random",
+    "male",
+    "female",
+    "unisex",
+  ];
+
+  return {
+    gender: validGenders.includes(stored.gender) ? stored.gender : "random",
+    style: validStyles.includes(stored.style as VisibleStyle) ? stored.style : "modern",
+    quantity: clampQuantity(stored.quantity),
+  };
+}
+
+function dedupeByFullName(names: GeneratedName[]): GeneratedName[] {
+  const used = new Set<string>();
+  return names.filter((name) => {
+    if (used.has(name.fullName)) return false;
+    used.add(name.fullName);
+    return true;
+  });
+}
+
+function getResolvedGender(mode: GenerationMode): GenerationSettings["gender"] {
+  if (mode === "male") return "male";
+  if (mode === "female") return "female";
+  if (mode === "character") return "unisex";
+  return "random";
+}
+
+function calculateSeedScore(name: GeneratedName, seed: string): number {
+  const normalizedSeed = normalizeText(seed);
+  if (!normalizedSeed) return 0;
+
+  const reading = normalizeText(`${name.surnameReading}${name.givenNameReading}`);
+  const firstChar = normalizedSeed.slice(0, 1);
+  const firstTwo = normalizedSeed.slice(0, 2);
+  const lastChar = normalizedSeed.slice(-1);
+  const middleChar = normalizedSeed.slice(
+    Math.floor(normalizedSeed.length / 2),
+    Math.floor(normalizedSeed.length / 2) + 1,
+  );
+
+  let score = 0;
+
+  if (firstTwo && reading.startsWith(firstTwo)) score += 7;
+  if (firstChar && reading.startsWith(firstChar)) score += 4;
+  if (lastChar && reading.includes(lastChar)) score += 3;
+  if (middleChar && reading.includes(middleChar)) score += 1;
+
+  return score;
+}
 
 export default function AnimeNameGeneratorClient() {
-  const [settings, setSettings]             = useState<GenerationSettings>(DEFAULT_SETTINGS);
-  const [selectedRole, setSelectedRole]     = useState("hero");
+  const [storedData] = useState<LocalStorageData>(() => {
+    try {
+      return AnimeNameStorage.validateAndMigrateData();
+    } catch {
+      return {
+        favorites: [],
+        history: [],
+        settings: DEFAULT_SETTINGS,
+      };
+    }
+  });
+
+  const [settings, setSettings] = useState<GenerationSettings>(
+    sanitizeStoredSettings(storedData.settings),
+  );
+  const [mode, setMode] = useState<GenerationMode>("random");
+  const [meaningTheme, setMeaningTheme] = useState<MeaningTheme>("none");
+  const [fromNameInput, setFromNameInput] = useState("");
   const [generatedNames, setGeneratedNames] = useState<GeneratedName[]>([]);
-  const [favorites, setFavorites]           = useState<GeneratedName[]>([]);
-  const [history, setHistory]               = useState<GenerationHistoryEntry[]>([]);
-  const [isGenerating, setIsGenerating]     = useState(false);
-  const [activeTab, setActiveTab]           = useState<"generator" | "favorites" | "history">("generator");
-  const [copiedId, setCopiedId]             = useState<string | null>(null);
+  const [favorites, setFavorites] = useState<GeneratedName[]>(storedData.favorites);
+  const [history, setHistory] = useState<GenerationHistoryEntry[]>(storedData.history);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabType>("results");
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   useEffect(() => {
-    try {
-      const data = AnimeNameStorage.validateAndMigrateData();
-      setFavorites(data.favorites);
-      setHistory(data.history);
-      setSettings(data.settings);
-    } catch {
-      setFavorites([]); setHistory([]); setSettings(DEFAULT_SETTINGS);
-    }
-  }, []);
+    AnimeNameStorage.saveSettings(settings);
+  }, [settings]);
 
-  useEffect(() => { if (settings !== DEFAULT_SETTINGS) AnimeNameStorage.saveSettings(settings); }, [settings]);
-  useEffect(() => { AnimeNameStorage.saveFavorites(favorites); }, [favorites]);
-  useEffect(() => { AnimeNameStorage.saveHistory(history); }, [history]);
+  useEffect(() => {
+    AnimeNameStorage.saveFavorites(favorites);
+  }, [favorites]);
+
+  useEffect(() => {
+    AnimeNameStorage.saveHistory(history);
+  }, [history]);
+
+  const modeHelper = useMemo(
+    () => MODE_OPTIONS.find((option) => option.id === mode)?.helper ?? "",
+    [mode],
+  );
+
+  const generateWithMeaningTheme = useCallback(
+    (activeSettings: GenerationSettings): GeneratedName[] => {
+      const pool: GeneratedName[] = [];
+      const poolSize = Math.max(activeSettings.quantity * 4, 20);
+
+      for (let index = 0; index < poolSize; index += 1) {
+        pool.push(
+          meaningTheme === "none"
+            ? generateAnimeNames({ ...activeSettings, quantity: 1 })[0]
+            : generateSemanticMatch(activeSettings, meaningTheme),
+        );
+      }
+
+      return dedupeByFullName(pool).slice(0, activeSettings.quantity);
+    },
+    [meaningTheme],
+  );
 
   const handleGenerate = useCallback(async () => {
-    setIsGenerating(true);
-    await new Promise(r => setTimeout(r, 500));
-    try {
-      const role = ROLES.find(r => r.id === selectedRole) ?? ROLES[0];
-      const activeSettings: GenerationSettings = { ...settings, style: role.style };
-      const newNames = generateAnimeNames(activeSettings);
-      setGeneratedNames(newNames);
-      setHistory(prev => [{
-        id: `history-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-        names: newNames,
-        settings: activeSettings,
-        timestamp: Date.now(),
-      }, ...prev].slice(0, 50));
-      setActiveTab("generator");
-    } finally {
-      setIsGenerating(false);
+    if (mode === "from-name" && fromNameInput.trim().length < 2) {
+      setValidationError("Please enter at least 2 characters in From My Name mode.");
+      return;
     }
-  }, [settings, selectedRole]);
+
+    setValidationError(null);
+    setIsGenerating(true);
+    await new Promise((resolve) => setTimeout(resolve, 220));
+
+    const activeSettings: GenerationSettings = {
+      ...settings,
+      gender: getResolvedGender(mode),
+    };
+
+    let nextNames: GeneratedName[];
+
+    if (mode === "from-name") {
+      const pool = generateWithMeaningTheme(activeSettings);
+      const ranked = [...pool].sort(
+        (left, right) =>
+          calculateSeedScore(right, fromNameInput) - calculateSeedScore(left, fromNameInput),
+      );
+      nextNames = ranked.slice(0, activeSettings.quantity);
+    } else {
+      nextNames = generateWithMeaningTheme(activeSettings);
+    }
+
+    const uniqueNames = dedupeByFullName(nextNames).slice(0, activeSettings.quantity);
+    setGeneratedNames(uniqueNames);
+    setHistory((previousHistory) =>
+      [
+        {
+          id: `history-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+          names: uniqueNames,
+          settings: activeSettings,
+          timestamp: Date.now(),
+        },
+        ...previousHistory,
+      ].slice(0, 50),
+    );
+    setActiveTab("results");
+    setIsGenerating(false);
+  }, [fromNameInput, generateWithMeaningTheme, mode, settings]);
 
   const handleFavorite = useCallback((name: GeneratedName) => {
-    setFavorites(prev =>
-      prev.find(f => f.id === name.id)
-        ? prev.filter(f => f.id !== name.id)
-        : [name, ...prev]
+    setFavorites((previousFavorites) =>
+      previousFavorites.some((favorite) => favorite.id === name.id)
+        ? previousFavorites.filter((favorite) => favorite.id !== name.id)
+        : [name, ...previousFavorites],
     );
   }, []);
 
-  const handleCopy = useCallback(async (name: GeneratedName) => {
-    const text = `${name.fullName} (${name.surnameReading} ${name.givenNameReading})`;
-    try { await navigator.clipboard.writeText(text); } catch { /* ignore */ }
-    setCopiedId(name.id);
-    setTimeout(() => setCopiedId(null), 2000);
-  }, []);
+  const handleCopy = useCallback(
+    async (name: GeneratedName) => {
+      const outputText =
+        mode === "last-name"
+          ? `${name.surname} (${name.surnameReading})`
+          : `${name.fullName} (${name.surnameReading} ${name.givenNameReading})`;
+      try {
+        await navigator.clipboard.writeText(outputText);
+        setCopiedId(name.id);
+        setTimeout(() => setCopiedId(null), 1500);
+      } catch {
+        setCopiedId(null);
+      }
+    },
+    [mode],
+  );
 
   const handleDataImported = useCallback((data: LocalStorageData) => {
-    setFavorites(data.favorites); setHistory(data.history); setSettings(data.settings);
+    setFavorites(data.favorites);
+    setHistory(data.history);
+    setSettings(sanitizeStoredSettings(data.settings));
   }, []);
 
   const handleDataCleared = useCallback(() => {
-    setFavorites([]); setHistory([]); setGeneratedNames([]); setSettings(DEFAULT_SETTINGS);
+    setFavorites([]);
+    setHistory([]);
+    setGeneratedNames([]);
+    setSettings(DEFAULT_SETTINGS);
+    setMode("random");
+    setMeaningTheme("none");
+    setFromNameInput("");
   }, []);
 
-  const isFavorited  = useCallback((id: string) => favorites.some(f => f.id === id), [favorites]);
-  const currentRole  = ROLES.find(r => r.id === selectedRole) ?? ROLES[0];
-
   return (
-    <div className="min-h-screen bg-[#02040a] text-white">
-      {/* Ambient background */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-indigo-900/20 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[10%] -right-[5%] w-[40%] h-[40%] bg-fuchsia-900/20 rounded-full blur-[120px]" />
-      </div>
+    <div className="min-h-screen bg-[#040507] text-zinc-100">
+      <main className="mx-auto w-full max-w-6xl px-4 pb-20 pt-14 md:px-6 md:pt-20">
+        <section className="rounded-3xl border border-white/10 bg-[#0a0b10]/75 p-6 md:p-10">
+          <p className="inline-flex rounded-full border border-emerald-400/25 bg-emerald-400/10 px-3 py-1 text-xs font-semibold tracking-wide text-emerald-200">
+            Free Tool · No Login · Unlimited Generation
+          </p>
+          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-white md:text-5xl">
+            Anime Name Generator
+          </h1>
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-zinc-300 md:text-base">
+            Generate anime character names instantly — random, male/female, with meaning, or from your name.
+          </p>
+        </section>
 
-      <main className="relative z-10 max-w-6xl mx-auto px-4 py-12 md:py-20">
-
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-6 mb-12">
-          <div>
-            <div className="flex gap-2 mb-4 flex-wrap">
-              {["JAPANESE", "AUTHENTIC", "FREE"].map(tag => (
-                <span key={tag} className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-wider text-zinc-400">
-                  {tag}
-                </span>
-              ))}
+        <section className="mt-6 rounded-3xl border border-white/10 bg-[#0a0b10]/75 p-6 md:p-8">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-semibold text-white md:text-2xl">
+                Generate in 3 Steps
+              </h2>
+              <p className="mt-2 text-sm text-zinc-400">
+                One clear path: choose mode, choose style, generate and use.
+              </p>
             </div>
-            <h1 className="text-5xl md:text-6xl font-black tracking-tight mb-4 leading-tight">
-              Anime Name{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-indigo-500">
-                Generator
-              </span>
-            </h1>
-            <p className="text-zinc-400 text-lg max-w-xl leading-relaxed">
-              Pick your character type, get authentic Japanese names with meanings —
-              then bring them to life with AI art.
-            </p>
-          </div>
-          <div className="shrink-0">
             <DataManager onDataImported={handleDataImported} onDataCleared={handleDataCleared} />
           </div>
-        </div>
 
-        {/* Generator Card */}
-        <div className="bg-[#0f1119]/80 border border-white/5 rounded-3xl p-6 md:p-8 mb-8 shadow-2xl backdrop-blur-sm">
-
-          {/* Step 1: Role */}
-          <div className="mb-8">
-            <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-4">
-              1 — Choose Character Type
-            </p>
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
-              {ROLES.map(role => (
-                <button
-                  key={role.id}
-                  onClick={() => setSelectedRole(role.id)}
-                  className={`flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all duration-200 ${
-                    selectedRole === role.id
-                      ? "bg-fuchsia-500/20 border-fuchsia-500/50 text-white shadow-lg shadow-fuchsia-900/20"
-                      : "bg-white/[0.03] border-white/5 text-zinc-400 hover:border-white/20 hover:text-white hover:bg-white/5"
-                  }`}
-                >
-                  <span className="text-2xl leading-none">{role.emoji}</span>
-                  <span className="text-xs font-bold">{role.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Step 2: Gender + Generate */}
-          <div className="flex flex-col sm:flex-row gap-4 items-end">
-            <div className="flex-1">
-              <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-3">
-                2 — Gender
+          <div className="mt-6 space-y-6">
+            <div>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+                Step 1 · Choose Mode
               </p>
-              <div className="flex gap-2 flex-wrap">
-                {(["random", "male", "female"] as const).map(g => (
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                {MODE_OPTIONS.map((option) => (
                   <button
-                    key={g}
-                    onClick={() => setSettings(s => ({ ...s, gender: g }))}
-                    className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all ${
-                      settings.gender === g
-                        ? "bg-white text-black"
-                        : "bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white"
+                    key={option.id}
+                    type="button"
+                    onClick={() => setMode(option.id)}
+                    className={`rounded-xl border px-3 py-3 text-left transition-colors ${
+                      mode === option.id
+                        ? "border-white/40 bg-white/10 text-white"
+                        : "border-white/10 bg-[#0b0c12] text-zinc-300 hover:border-white/20"
                     }`}
                   >
-                    {g === "random" ? "Any" : g.charAt(0).toUpperCase() + g.slice(1)}
+                    <p className="text-sm font-semibold">{option.label}</p>
+                    <p className="mt-1 text-xs text-zinc-400">{option.helper}</p>
+                  </button>
+                ))}
+              </div>
+              <p className="mt-2 text-xs text-zinc-500">{modeHelper}</p>
+            </div>
+
+            <div>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+                Step 2 · Choose Style
+              </p>
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                {STYLE_OPTIONS.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() =>
+                      setSettings((previousSettings) => ({
+                        ...previousSettings,
+                        style: option.id,
+                      }))
+                    }
+                    className={`rounded-xl border px-3 py-3 text-left transition-colors ${
+                      settings.style === option.id
+                        ? "border-white/40 bg-white/10 text-white"
+                        : "border-white/10 bg-[#0b0c12] text-zinc-300 hover:border-white/20"
+                    }`}
+                  >
+                    <p className="text-sm font-semibold">{option.label}</p>
                   </button>
                 ))}
               </div>
             </div>
-            <button
-              onClick={handleGenerate}
-              disabled={isGenerating}
-              className="h-12 px-8 bg-gradient-to-r from-fuchsia-600 to-indigo-600 hover:from-fuchsia-500 hover:to-indigo-500 text-white rounded-full font-bold text-sm transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg shadow-fuchsia-900/30 shrink-0"
-            >
-              {isGenerating ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <Zap className="w-4 h-4 fill-white" />
-                  Generate Names
-                </>
-              )}
-            </button>
-          </div>
-        </div>
 
-        {/* Tabs */}
-        {(generatedNames.length > 0 || favorites.length > 0 || history.length > 0) && (
-          <div className="flex gap-2 mb-6 flex-wrap">
-            {([
-              { id: "generator" as const, label: "Results" },
-              { id: "favorites" as const, label: `Saved (${favorites.length})` },
-              { id: "history"   as const, label: "History" },
-            ]).map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-5 py-2 rounded-full text-sm font-bold transition-all ${
-                  activeTab === tab.id ? "bg-zinc-800 text-white" : "text-zinc-500 hover:text-zinc-300"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
+            <div className="grid gap-5 md:grid-cols-2">
+              <div>
+                <label
+                  htmlFor="meaning-theme"
+                  className="mb-2 block text-xs font-semibold uppercase tracking-wider text-zinc-500"
+                >
+                  Optional · Meaning Focus
+                </label>
+                <select
+                  id="meaning-theme"
+                  value={meaningTheme}
+                  onChange={(event) => setMeaningTheme(event.target.value as MeaningTheme)}
+                  className="w-full rounded-xl border border-white/10 bg-[#0b0c12] px-4 py-3 text-sm text-zinc-100 focus:border-white/30 focus:outline-none"
+                >
+                  <option value="none">No specific meaning focus</option>
+                  <option value="nature">Nature / calm</option>
+                  <option value="power">Power / strength</option>
+                  <option value="mystery">Mystery / dark</option>
+                  <option value="light">Light / hopeful</option>
+                  <option value="nobility">Noble / royal</option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="quantity"
+                  className="mb-2 block text-xs font-semibold uppercase tracking-wider text-zinc-500"
+                >
+                  Optional · Quantity ({settings.quantity})
+                </label>
+                <input
+                  id="quantity"
+                  type="range"
+                  min={1}
+                  max={20}
+                  step={1}
+                  value={settings.quantity}
+                  onChange={(event) =>
+                    setSettings((previousSettings) => ({
+                      ...previousSettings,
+                      quantity: clampQuantity(Number(event.target.value)),
+                    }))
+                  }
+                  className="w-full accent-white"
+                />
+              </div>
+            </div>
+
+            {mode === "from-name" && (
+              <div>
+                <label
+                  htmlFor="from-name-input"
+                  className="mb-2 block text-xs font-semibold uppercase tracking-wider text-zinc-500"
+                >
+                  From My Name Input
+                </label>
+                <input
+                  id="from-name-input"
+                  type="text"
+                  value={fromNameInput}
+                  onChange={(event) => setFromNameInput(event.target.value)}
+                  placeholder="e.g. Alex / Lina / Jun"
+                  className="w-full rounded-xl border border-white/10 bg-[#0b0c12] px-4 py-3 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-white/30 focus:outline-none"
+                />
+              </div>
+            )}
+
+            {validationError && (
+              <p className="rounded-xl border border-red-400/25 bg-red-400/10 px-3 py-2 text-xs text-red-200">
+                {validationError}
+              </p>
+            )}
+
+            <div className="rounded-2xl border border-white/10 bg-[#0b0c12] p-4">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+                Step 3 · Generate + Copy + Use
+              </p>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="text-xs text-zinc-400 md:text-sm">
+                  Primary flow: generate names, copy your favorite, and open character art.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleGenerate}
+                  disabled={isGenerating}
+                  className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-zinc-200 disabled:cursor-not-allowed disabled:bg-zinc-400"
+                >
+                  {isGenerating ? "Generating..." : "Generate Names"}
+                </button>
+              </div>
+            </div>
           </div>
+        </section>
+
+    
+
+        {(generatedNames.length > 0 || favorites.length > 0 || history.length > 0) && (
+          <section className="mt-6">
+            <div className="flex flex-wrap gap-2">
+              {[
+                { id: "results", label: `Results (${generatedNames.length})` },
+                { id: "favorites", label: `Favorites (${favorites.length})` },
+                { id: "history", label: "History" },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id as TabType)}
+                  className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    activeTab === tab.id
+                      ? "bg-white text-black"
+                      : "border border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </section>
         )}
 
-        {/* Results */}
         <AnimatePresence mode="wait">
-          {activeTab === "generator" && (
-            <motion.div key="gen" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          {activeTab === "results" && (
+            <motion.section
+              key="results"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className="mt-6"
+            >
               {generatedNames.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
-                  {generatedNames.map((name, i) => (
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                  {generatedNames.map((name) => (
                     <NameCard
-                      key={name.id} name={name} idx={i}
-                      rolePrompt={currentRole.prompt}
-                      isFavorited={isFavorited(name.id)}
-                      isCopied={copiedId === name.id}
-                      onFav={() => handleFavorite(name)}
+                      key={name.id}
+                      mode={mode}
+                      copied={copiedId === name.id}
+                      favorited={favorites.some((favorite) => favorite.id === name.id)}
+                      name={name}
                       onCopy={() => handleCopy(name)}
+                      onFavorite={() => handleFavorite(name)}
                     />
                   ))}
                 </div>
               ) : (
-                <EmptyState onGenerate={handleGenerate} />
+                <div className="rounded-2xl border border-white/10 bg-[#0a0b10]/75 p-10 text-center">
+                  <p className="text-base font-semibold text-white">
+                    Generate your first batch to see result cards here.
+                  </p>
+                  <p className="mt-2 text-sm text-zinc-400">
+                    Start with Random mode if you are not sure.
+                  </p>
+                </div>
               )}
-            </motion.div>
+            </motion.section>
           )}
 
           {activeTab === "favorites" && (
-            <motion.div key="fav" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <motion.section
+              key="favorites"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className="mt-6"
+            >
               {favorites.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
-                  {favorites.map((name, i) => (
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                  {favorites.map((name) => (
                     <NameCard
-                      key={name.id} name={name} idx={i}
-                      rolePrompt={currentRole.prompt}
-                      isFavorited={true}
-                      isCopied={copiedId === name.id}
-                      onFav={() => handleFavorite(name)}
+                      key={name.id}
+                      mode={mode}
+                      copied={copiedId === name.id}
+                      favorited={true}
+                      name={name}
                       onCopy={() => handleCopy(name)}
+                      onFavorite={() => handleFavorite(name)}
                     />
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-20 text-zinc-500 mb-16">No saved names yet.</div>
+                <div className="rounded-2xl border border-white/10 bg-[#0a0b10]/75 p-10 text-center text-sm text-zinc-400">
+                  No favorites yet.
+                </div>
               )}
-            </motion.div>
+            </motion.section>
           )}
 
           {activeTab === "history" && (
-            <motion.div key="hist" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mb-16">
+            <motion.section
+              key="history"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className="mt-6"
+            >
               <HistoryPanel
                 history={history}
-                onRestoreGeneration={(entry) => { setGeneratedNames(entry.names); setActiveTab("generator"); }}
+                onRestoreGeneration={(entry) => {
+                  setGeneratedNames(entry.names);
+                  setActiveTab("results");
+                }}
                 onClearHistory={() => setHistory([])}
-                onRemoveEntry={(id) => setHistory(prev => prev.filter(e => e.id !== id))}
+                onRemoveEntry={(entryId) =>
+                  setHistory((previousHistory) =>
+                    previousHistory.filter((entry) => entry.id !== entryId),
+                  )
+                }
               />
-            </motion.div>
+            </motion.section>
           )}
         </AnimatePresence>
 
-        <RelatedTools />
-
-        {/* SEO Content */}
-        <article className="grid md:grid-cols-2 gap-12 mb-16 pt-16 border-t border-white/5">
-          <div>
-            <h2 className="text-2xl font-bold mb-4">About This Anime Name Generator</h2>
-            <p className="text-zinc-400 leading-relaxed mb-4">
-              Our <strong>anime name generator</strong> creates authentic Japanese character names based on real naming
-              conventions. Each name includes kanji, romanized reading, and cultural meaning — perfect for writers,
-              gamers, and creators.
-            </p>
-            <p className="text-zinc-400 leading-relaxed">
-              Unlike other generators, you can instantly <strong>generate character art</strong> for any name using our
-              AI image generator. Turn a name into a full character in seconds.
-            </p>
+        <section className="mt-6 rounded-3xl border border-white/10 bg-[#0a0b10]/75 p-6 md:p-8">
+          <h2 className="text-xl font-semibold text-white md:text-2xl">
+            Mode Comparison
+          </h2>
+          <p className="mt-2 text-sm text-zinc-400">
+            Pick mode by user intent, not by guesswork.
+          </p>
+          <div className="mt-4 overflow-hidden rounded-xl border border-white/10">
+            <table className="w-full text-left text-xs md:text-sm">
+              <thead className="bg-white/[0.03] text-zinc-300">
+                <tr>
+                  <th className="px-3 py-2 font-medium">Mode</th>
+                  <th className="px-3 py-2 font-medium">Best Use Case</th>
+                  <th className="px-3 py-2 font-medium">Output Style</th>
+                </tr>
+              </thead>
+              <tbody className="text-zinc-400">
+                {[
+                  ["Random", "Quick ideation", "Mixed variation set"],
+                  ["Character", "OC/protagonist naming", "Balanced character names"],
+                  ["Male", "Male character naming", "Male-priority outputs"],
+                  ["Female", "Female character naming", "Female-priority outputs"],
+                  ["From My Name", "Personalized naming", "Phonetic similarity priority"],
+                  ["Last Name", "Family/worldbuilding", "Surname-first output"],
+                ].map((row) => (
+                  <tr key={row[0]} className="border-t border-white/10">
+                    <td className="px-3 py-2">{row[0]}</td>
+                    <td className="px-3 py-2">{row[1]}</td>
+                    <td className="px-3 py-2">{row[2]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
-            <div className="space-y-3">
+        </section>
+
+        <section className="mt-10 grid gap-6 rounded-3xl border border-white/10 bg-[#0a0b10]/75 p-6 md:p-8">
+          <article>
+            <h2 className="text-xl font-semibold text-white md:text-2xl">
+              What is an Anime Name Generator?
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-300">
+              It is a tool that generates anime-style names with practical output format (kanji, romaji, meaning) in one run.
+            </p>
+            <ol className="mt-3 list-decimal space-y-1 pl-5 text-sm text-zinc-400">
+              <li>Set mode based on your intent.</li>
+              <li>Set style and optional meaning focus.</li>
+              <li>Generate, copy, and move to art generation.</li>
+            </ol>
+          </article>
+
+          <article>
+            <h2 className="text-xl font-semibold text-white md:text-2xl">
+              Random / Male / Female Anime Name Generator
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-300">
+              Use these modes when you need fast filtering by gender intent without extra setup.
+            </p>
+            <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-zinc-400">
+              <li>Random: broad ideation for early concept stage.</li>
+              <li>Male/Female: direct targeting for specific character briefs.</li>
+              <li>Character: neutral baseline for OC and protagonist drafts.</li>
+            </ul>
+          </article>
+
+          <article>
+            <h2 className="text-xl font-semibold text-white md:text-2xl">
+              Anime Name Generator From My Name
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-300">
+              From My Name mode gives you personalized naming by matching your input phonetics.
+            </p>
+            <ol className="mt-3 list-decimal space-y-1 pl-5 text-sm text-zinc-400">
+              <li>Switch mode to From My Name.</li>
+              <li>Enter at least 2 characters (e.g., Alex, Lina, Ken).</li>
+              <li>Generate and choose the closest output rhythm.</li>
+            </ol>
+          </article>
+
+          <article>
+            <h2 className="text-xl font-semibold text-white md:text-2xl">
+              Anime Names With Meaning
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-300">
+              Meaning Focus gives semantic direction so names fit story tone, not just sound.
+            </p>
+            <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {[
-                { q: "Are the names authentic?",                    a: "Yes. All names use real Japanese kanji with proper readings and cultural meanings." },
-                { q: "Can I use these names commercially?",         a: "Yes, all generated names are free to use for any purpose including games, stories, and manga." },
-                { q: "What is a random anime character generator?", a: "A tool that creates unique Japanese character names instantly. Our generator also lets you create character art from any name." },
-                { q: "How many names can I generate?",              a: "Up to 20 names per batch. The default is 6 for the best variety." },
-              ].map((item, i) => (
-                <div key={i} className="bg-[#0f1119] border border-white/5 rounded-xl p-4">
-                  <p className="font-bold text-white text-sm mb-1">{item.q}</p>
-                  <p className="text-zinc-400 text-sm leading-relaxed">{item.a}</p>
+                "Nature: calm, elegant worldbuilding",
+                "Power: action and battle protagonists",
+                "Mystery: dark or hidden identity roles",
+                "Light: hopeful or healing characters",
+                "Nobility: royal and high-status personas",
+                "None: neutral variety for fast iteration",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-xl border border-white/10 bg-[#0b0c12] px-3 py-2 text-xs text-zinc-400"
+                >
+                  {item}
                 </div>
               ))}
             </div>
-          </div>
-        </article>
+          </article>
 
+          <article>
+            <h2 className="text-xl font-semibold text-white md:text-2xl">
+              Use Cases
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-300">
+              Choose mode by final output scenario to reduce retries and improve naming consistency.
+            </p>
+            <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-zinc-400">
+              <li>OC creation: Character mode + Modern style.</li>
+              <li>Protagonist naming: Male/Female mode + Traditional style.</li>
+              <li>Game NPC pool: Random mode + high quantity.</li>
+              <li>Story lore: Last Name mode + Meaning Focus.</li>
+            </ul>
+          </article>
+
+          <article>
+            <h2 className="text-xl font-semibold text-white md:text-2xl">FAQ</h2>
+            <p className="mt-2 text-sm leading-relaxed text-zinc-300">
+              Practical answers for execution, not generic marketing text.
+            </p>
+            <div className="mt-3 space-y-2">
+              {FAQ_ITEMS.map((item) => (
+                <details
+                  key={item.question}
+                  className="rounded-xl border border-white/10 bg-[#0b0c12] px-4 py-3"
+                >
+                  <summary className="cursor-pointer list-none text-sm font-medium text-zinc-100">
+                    {item.question}
+                  </summary>
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400">{item.answer}</p>
+                </details>
+              ))}
+            </div>
+          </article>
+        </section>
+
+        <section className="mt-8 rounded-3xl border border-white/10 bg-[#0a0b10]/75 p-6 md:p-8">
+          <h2 className="text-xl font-semibold text-white md:text-2xl">
+            Related Tools
+          </h2>
+          <p className="mt-2 text-sm text-zinc-400">
+            Continue the workflow after naming.
+          </p>
+          <div className="mt-4 grid gap-3 md:grid-cols-4">
+            {[
+              {
+                label: "Anime Art Generator",
+                href: "/generator",
+                desc: "Turn selected names into character visuals.",
+              },
+              {
+                label: "Image to Prompt",
+                href: "/image-to-prompt",
+                desc: "Extract prompt structures from references.",
+              },
+              {
+                label: "Prompt Library",
+                href: "/prompt-library",
+                desc: "Reuse prompt templates for consistency.",
+              },
+              {
+                label: "Anime Gallery",
+                href: "/gallery",
+                desc: "Review style and naming inspiration.",
+              },
+            ].map((tool) => (
+              <Link
+                key={tool.href}
+                href={tool.href}
+                className="rounded-xl border border-white/10 bg-[#0b0c12] p-4 transition-colors hover:border-white/20"
+              >
+                <p className="text-sm font-semibold text-white">{tool.label}</p>
+                <p className="mt-2 text-xs leading-relaxed text-zinc-400">{tool.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
       </main>
     </div>
   );
 }
 
-// ── Sub-components ──────────────────────────────────────────────────────────
-
-interface NameCardProps {
+function NameCard({
+  mode,
+  name,
+  copied,
+  favorited,
+  onCopy,
+  onFavorite,
+}: {
+  mode: GenerationMode;
   name: GeneratedName;
-  idx: number;
-  rolePrompt: string;
-  isFavorited: boolean;
-  isCopied: boolean;
-  onFav: () => void;
+  copied: boolean;
+  favorited: boolean;
   onCopy: () => void;
-}
-
-function NameCard({ name, idx, rolePrompt, isFavorited, isCopied, onFav, onCopy }: NameCardProps) {
+  onFavorite: () => void;
+}) {
+  const displayName = mode === "last-name" ? name.surname : name.fullName;
   const prompt = encodeURIComponent(
-    `anime character ${name.surnameReading} ${name.givenNameReading}, ${rolePrompt}, ${name.surnameMeaning} ${name.givenNameMeaning}, masterpiece, best quality`
+    `anime character ${name.surnameReading} ${name.givenNameReading}, ${name.surnameMeaning}, ${name.givenNameMeaning}, masterpiece, best quality`,
   );
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: idx * 0.04, duration: 0.3 }}
-      className="group flex flex-col bg-[#0f1119] border border-white/5 hover:border-fuchsia-500/30 rounded-2xl p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-fuchsia-900/10"
-    >
-      {/* Name + action buttons */}
-      <div className="flex justify-between items-start mb-4">
-        <div className="min-w-0 flex-1 pr-2">
-          <h3 className="text-2xl font-black text-white tracking-tight leading-tight">{name.fullName}</h3>
-          <p className="text-fuchsia-400 text-xs font-bold uppercase tracking-wider mt-1">
-            {name.surnameReading} {name.givenNameReading}
-          </p>
-        </div>
-        <div className="flex gap-1 shrink-0">
-          <button
-            onClick={onFav}
-            aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
-            className={`p-2 rounded-full transition-all ${
-              isFavorited
-                ? "bg-pink-500/20 text-pink-400"
-                : "bg-white/5 text-zinc-500 hover:text-white hover:bg-white/10"
-            }`}
-          >
-            <Heart className={`w-4 h-4 ${isFavorited ? "fill-current" : ""}`} />
-          </button>
-          <button
-            onClick={onCopy}
-            aria-label="Copy name"
-            className="p-2 rounded-full bg-white/5 text-zinc-500 hover:text-white hover:bg-white/10 transition-all"
-          >
-            {isCopied
-              ? <Check className="w-4 h-4 text-green-400" />
-              : <Copy className="w-4 h-4" />
-            }
-          </button>
-        </div>
-      </div>
-
-      {/* Meaning */}
-      <p className="flex-1 text-zinc-500 text-xs leading-relaxed border-t border-white/5 pt-3 mb-4">
+    <article className="rounded-2xl border border-white/10 bg-[#0a0b10]/75 p-5">
+      <h3 className="truncate text-2xl font-semibold tracking-tight text-white">
+        {displayName}
+      </h3>
+      <p className="mt-1 text-xs uppercase tracking-wide text-zinc-400">
+        {name.surnameReading} {name.givenNameReading}
+      </p>
+      <p className="mt-3 text-xs leading-relaxed text-zinc-400">
         {name.surnameMeaning} · {name.givenNameMeaning}
       </p>
-
-      {/* Generate Art CTA — the key differentiator */}
-      <a
-        href={`/generator?prompt=${prompt}`}
-        className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-gradient-to-r from-fuchsia-600/10 to-indigo-600/10 border border-fuchsia-500/20 text-fuchsia-300 text-sm font-bold hover:from-fuchsia-600/25 hover:to-indigo-600/25 hover:border-fuchsia-500/40 transition-all"
-      >
-        <Sparkles className="w-3.5 h-3.5" />
-        Generate Character Art
-        <ArrowRight className="w-3.5 h-3.5" />
-      </a>
-    </motion.div>
-  );
-}
-
-function EmptyState({ onGenerate }: { onGenerate: () => void }) {
-  return (
-    <div className="text-center py-24 mb-16">
-      <div className="relative inline-block mb-6">
-        <div className="absolute inset-0 bg-fuchsia-500/20 blur-xl rounded-full" />
-        <Wand2 className="relative w-12 h-12 text-fuchsia-500" />
+      <div className="mt-4 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={onCopy}
+          className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium text-zinc-200 transition-colors hover:bg-white/10"
+        >
+          {copied ? "Copied" : "Copy"}
+        </button>
+        <button
+          type="button"
+          onClick={onFavorite}
+          className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+            favorited
+              ? "border-rose-300/40 bg-rose-300/10 text-rose-200"
+              : "border-white/15 bg-white/5 text-zinc-200 hover:bg-white/10"
+          }`}
+        >
+          {favorited ? "Saved" : "Save"}
+        </button>
+        <a
+          href={`/generator?prompt=${prompt}`}
+          className="rounded-lg border border-white/15 bg-white px-3 py-1.5 text-xs font-semibold text-black transition hover:bg-zinc-200"
+        >
+          Generate Art
+        </a>
       </div>
-      <h3 className="text-xl font-bold text-white mb-2">Pick a character type and generate</h3>
-      <p className="text-zinc-500 mb-6 max-w-sm mx-auto">
-        Each name comes with kanji, meaning, and a one-click art generator.
-      </p>
-      <button
-        onClick={onGenerate}
-        className="px-6 py-3 bg-fuchsia-600 hover:bg-fuchsia-500 text-white rounded-full font-bold transition-all"
-      >
-        Generate Now
-      </button>
-    </div>
-  );
-}
-
-function RelatedTools() {
-  const tools = [
-    { label: "AI Anime Art Generator", href: "/generator",      emoji: "🎨", desc: "Generate anime art from text" },
-    { label: "Image to Prompt",        href: "/image-to-prompt", emoji: "🔍", desc: "Reverse-engineer any image" },
-    { label: "Prompt Library",         href: "/prompt-library",  emoji: "📚", desc: "Browse curated prompts" },
-    { label: "Anime Gallery",          href: "/gallery",         emoji: "🖼️", desc: "Explore community art" },
-  ];
-
-  return (
-    <section className="mb-16 pt-8 border-t border-white/5">
-      <h2 className="text-xl font-bold text-white mb-6">Related Tools</h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {tools.map(tool => (
-          <a
-            key={tool.href}
-            href={tool.href}
-            className="bg-[#0f1119] border border-white/5 hover:border-fuchsia-500/20 rounded-2xl p-4 transition-all hover:-translate-y-0.5 group"
-          >
-            <span className="text-2xl mb-2 block">{tool.emoji}</span>
-            <p className="font-bold text-white text-sm group-hover:text-fuchsia-400 transition-colors">{tool.label}</p>
-            <p className="text-zinc-500 text-xs mt-1">{tool.desc}</p>
-          </a>
-        ))}
-      </div>
-    </section>
+    </article>
   );
 }

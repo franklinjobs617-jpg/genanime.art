@@ -1,5 +1,6 @@
 import ImageToVideoWorkflowClient from "@/components/seedance/ImageToVideoWorkflowClient";
 import { Link } from "@/i18n/routing";
+export { metadata } from "./metadata";
 
 const FAQ_ITEMS = [
   {

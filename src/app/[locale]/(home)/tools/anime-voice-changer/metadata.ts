@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     "voice transformation tool"
   ],
   alternates: {
-    canonical: 'https://genanime.art/tools/anime-voice-changer',
+    canonical: 'https://genanime.art/tools/anime-voice-changer/',
   },
   openGraph: {
     type: 'website',

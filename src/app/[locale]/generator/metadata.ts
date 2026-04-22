@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: "Create Anime Art - Professional AI Image Generator & Tool",
   description: "Turn your imagination into reality. Support for Pony Diffusion, Niji Style, and Scenery generation. Fast, uncensored creativity, and high-resolution downloads.",
   alternates: {
-    canonical: 'https://genanime.art/generator',
+    canonical: 'https://genanime.art/generator/',
   },
   openGraph: {
     type: 'website',

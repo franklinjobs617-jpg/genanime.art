@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "seedance prompt guide",
   ],
   alternates: {
-    canonical: "https://genanime.art/seedance",
+    canonical: "https://genanime.art/seedance/",
   },
   openGraph: {
     type: "website",

@@ -1,6 +1,7 @@
 import PromptLibraryClient from "@/components/seedance/PromptLibraryClient";
 import { Link } from "@/i18n/routing";
 import { SEEDANCE_PROMPT_TEMPLATES } from "@/lib/seedancePrompts";
+export { metadata } from "./metadata";
 
 export default function SeedanceAnimePromptsPage() {
   const itemListJsonLd = {

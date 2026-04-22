@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "Como Transformar Foto em Anime Online Grátis: Guia 2026",
   description: "Aprenda como transformar foto em anime online e grátis com este guia passo a passo. Descubra as melhores técnicas de IA para criar avatares incríveis em segundos.",
   alternates: {
-    canonical: "https://genanime.art/pt/como-fazer-anime-ia"
+    canonical: "https://genanime.art/pt/como-fazer-anime-ia/"
   }
 };
 

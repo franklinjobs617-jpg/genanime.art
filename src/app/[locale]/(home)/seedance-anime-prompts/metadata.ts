@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "seedance camera motion prompt",
   ],
   alternates: {
-    canonical: "https://genanime.art/seedance-anime-prompts",
+    canonical: "https://genanime.art/seedance-anime-prompts/",
   },
   openGraph: {
     type: "website",

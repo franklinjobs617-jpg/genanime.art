@@ -2,7 +2,7 @@ import PrivacyClient from "./PrivacyClient";
 
 export const metadata = {
     alternates: {
-        canonical: 'https://genanime.art/privacy',
+    canonical: 'https://genanime.art/privacy/',
     },
 };
 

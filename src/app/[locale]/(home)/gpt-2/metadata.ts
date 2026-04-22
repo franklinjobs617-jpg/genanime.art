@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     "chatgpt images 2.0 prompt template",
   ],
   alternates: {
-    canonical: "https://genanime.art/gpt-2",
+    canonical: "https://genanime.art/gpt-2/",
   },
   openGraph: {
     type: "website",

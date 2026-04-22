@@ -1,4 +1,5 @@
 import GeneratorClient from "./GeneratorClient"
+export { metadata } from "./metadata";
 
 import { Suspense } from 'react';
 

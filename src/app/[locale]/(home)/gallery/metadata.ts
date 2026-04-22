@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: "Anime AI Art Gallery: Prompts, Styles & Remixes | Community Showcase",
   description: "Explore thousands of AI-generated anime artworks with prompts. Copy prompts, view settings, and remix high-quality images directly in our Anime AI Generator.",
   alternates: {
-    canonical: 'https://genanime.art/gallery',
+    canonical: 'https://genanime.art/gallery/',
   },
   openGraph: {
     type: 'website',

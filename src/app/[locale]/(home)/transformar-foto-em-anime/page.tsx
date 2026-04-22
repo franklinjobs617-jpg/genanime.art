@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "Transformar Foto em Anime Online Grátis - IA 2026 - GenAnime",
   description: "Transforme foto em anime instantaneamente com nossa IA avançada. Use o gerador estilo Studio Ghibli e Shonen. Grátis, sem registro e 100% online em 2026.",
   alternates: {
-    canonical: "https://genanime.art/pt/transformar-foto-em-anime"
+    canonical: "https://genanime.art/pt/transformar-foto-em-anime/"
   }
 };
 

@@ -2,7 +2,7 @@ import SupportClient from "./SupportClient";
 
 export const metadata = {
     alternates: {
-        canonical: 'https://genanime.art/support',
+    canonical: 'https://genanime.art/support/',
     },
 };
 

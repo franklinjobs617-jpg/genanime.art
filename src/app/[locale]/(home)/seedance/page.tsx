@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/routing";
 import { Sparkles, Workflow, Target, ArrowRight, CheckCircle2 } from "lucide-react";
 import type { ReactNode } from "react";
+export { metadata } from "./metadata";
 
 const FAQ_ITEMS = [
   {

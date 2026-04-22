@@ -20,7 +20,7 @@ export async function generateMetadata({
         "convertir foto a anime, app para convertir foto a anime, convertir imagen a dibujo animado, generador de anime con IA",
       alternates: {
         canonical:
-          "https://genanime.art/how-to-reverse-image-to-prompt-anime-guide",
+          "https://genanime.art/how-to-reverse-image-to-prompt-anime-guide/",
         languages: {
           en: "https://genanime.art/how-to-reverse-image-to-prompt-anime-guide",
           es: "https://genanime.art/es/how-to-reverse-image-to-prompt-anime-guide",
@@ -54,7 +54,7 @@ export async function generateMetadata({
       'Learn how to deconstruct any anime masterpiece into a high-octane "magic spell" for your next generation.',
     alternates: {
       canonical:
-        "https://genanime.art/how-to-reverse-image-to-prompt-anime-guide",
+        "https://genanime.art/how-to-reverse-image-to-prompt-anime-guide/",
       languages: {
         en: "https://genanime.art/how-to-reverse-image-to-prompt-anime-guide",
         es: "https://genanime.art/es/how-to-reverse-image-to-prompt-anime-guide",

@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     images: ['https://genanime.art/gallery/cyberpunk-street.webp']
   },
   alternates: {
-    canonical: 'https://genanime.art/ai-ad-background-anime'
+    canonical: 'https://genanime.art/ai-ad-background-anime/'
   },
   robots: {
     index: false,

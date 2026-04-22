@@ -190,3 +190,29 @@
     }
   }
 }
+
+@keyframes gpt2-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.gpt2-marquee-track {
+  animation: gpt2-marquee 36s linear infinite;
+  will-change: transform;
+}
+
+@media (max-width: 768px) {
+  .gpt2-marquee-track {
+    animation-duration: 28s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gpt2-marquee-track {
+    animation: none;
+  }
+}

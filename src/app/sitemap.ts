@@ -61,6 +61,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...buildEntry("/anime-image-to-video", { priority: 0.88, changeFrequency: "weekly" }),
     ...buildEntry("/ai-ad-background-anime", { priority: 0.82, changeFrequency: "weekly" }),
     ...buildEntry("/image-to-prompt", { priority: 0.82, changeFrequency: "weekly" }),
+    ...buildEntry("/gpt-2", { priority: 0.86, changeFrequency: "weekly" }),
 
     // Tools
     ...buildEntry("/tools/anime-voice-changer", { priority: 0.75, changeFrequency: "monthly" }),

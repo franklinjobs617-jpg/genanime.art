@@ -68,6 +68,7 @@ export default function Header() {
     { name: t("generator"), href: "/generator" },
     { name: t("gallery"), href: "/gallery" },
     { name: t("pricing"), href: "/pricing" },
+    { name: "GPT-2", href: "/gpt-2" },
   ];
 
   const seedanceLinks = [

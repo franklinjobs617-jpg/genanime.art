@@ -5,7 +5,8 @@ import OpenAI from "openai";
 import { prisma } from "@/lib/prisma";
 
 const apiKey = process.env.DOUBAO_API_KEY;
-const endpointId = process.env.ARK_IMAGE_ANALYZE_MODEL || "doubao-seed-1-6-vision-250815";
+// const endpointId = process.env.ARK_IMAGE_ANALYZE_MODEL || "doubao-seedream-5-0-260128";
+const endpointId =  "doubao-seedance-1-5-pro-251215";
 const COST_PER_ANALYSIS = 2;
 const GUEST_FREE_LIMIT = 2;
 

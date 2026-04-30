@@ -178,7 +178,7 @@ export async function POST(req: NextRequest) {
     const isAnimeStyle = ANIME_STYLES.includes(style);
 
     const baseParams: any = {
-      model: process.env.DOUBAO_ENDPOINT_ID, // 使用和文生图相同的端点 doubao-seedream-4-0-250828
+      model: "doubao-seedream-5-0-260128", // 使用和文生图相同的端点 doubao-seedream-4-0-250828
       prompt: finalPrompt,
       image: image, // 确保原始图片被传递
       strength: Number(strength), // 添加 strength 参数控制变化程度

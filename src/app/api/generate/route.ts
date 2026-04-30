@@ -177,7 +177,7 @@ export async function POST(req: NextRequest) {
     const effectiveQuantity = isGuest ? 1 : quantity;
 
     const client = new OpenAI({
-      apiKey: process.env.DOUBAO_API_KEY,
+      apiKey: "doubao-seedream-5-0-260128",
       baseURL: process.env.ARK_BASE_URL,
     });
 

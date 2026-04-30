@@ -301,8 +301,8 @@ export default function AnimeNameGeneratorClient() {
     async (name: GeneratedName) => {
       const outputText =
         mode === "last-name"
-          ? `${name.surname} (${name.surnameReading})`
-          : `${name.fullName} (${name.surnameReading} ${name.givenNameReading})`;
+          ? `${name.surnameReading} (${name.surname})`
+          : `${name.surnameReading} ${name.givenNameReading} (${name.fullName})`;
       try {
         await navigator.clipboard.writeText(outputText);
         setCopiedId(name.id);
@@ -824,7 +824,11 @@ function NameCard({
   onCopy: () => void;
   onFavorite: () => void;
 }) {
-  const displayName = mode === "last-name" ? name.surname : name.fullName;
+  const displayName =
+    mode === "last-name"
+      ? name.surnameReading
+      : `${name.surnameReading} ${name.givenNameReading}`;
+  const kanjiName = mode === "last-name" ? name.surname : name.fullName;
   const prompt = encodeURIComponent(
     `anime character ${name.surnameReading} ${name.givenNameReading}, ${name.surnameMeaning}, ${name.givenNameMeaning}, masterpiece, best quality`,
   );
@@ -835,7 +839,7 @@ function NameCard({
         {displayName}
       </h3>
       <p className="mt-1 text-xs uppercase tracking-wide text-zinc-400">
-        {name.surnameReading} {name.givenNameReading}
+        Kanji: {kanjiName}
       </p>
       <p className="mt-3 text-xs leading-relaxed text-zinc-400">
         {name.surnameMeaning} · {name.givenNameMeaning}
